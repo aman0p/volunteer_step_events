@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16
+    container_name: volunteer-step-events
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: volunteer-step-events
+    ports:
+      - "5432:5432"
+    volumes:
+      - volunteer-step-events-data:/var/lib/postgresql/data
+
+volumes:
+  volunteer-step-events-data:
