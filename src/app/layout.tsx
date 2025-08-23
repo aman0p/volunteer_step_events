@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${exo.className} antialiased bg-black text-white min-h-screen`}>{children}</body>
+      <body className={`${exo.className} antialiased`}>{children}</body>
     </html>
   );
 }

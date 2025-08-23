@@ -1,31 +1,24 @@
 import Link from "next/link";
 import Image from "next/image";
-// import { signOut } from "@/auth";
-import { Button } from "@/components/ui/button";
+import { UserIcon } from "lucide-react";
+import { FaSignOutAlt, FaUser } from "react-icons/fa";
+import { PiSignOutBold } from "react-icons/pi";
 
-const Header = () => {
+export function Header() {
   return (
-    <header className="my-10 flex justify-between gap-5">
-      <Link href="/">
-        <Image src="/icons/logo.svg" alt="logo" width={40} height={40} />
+    <header className="flex justify-between items-center w-full">
+      <Link href="/" className="space-x-2 flex items-center w-fit">
+        <Image src="/icons/logo.svg" alt="logo" width={20} height={20} className="w-6 h-6 invert" />
+        <h1 className="font-bold text-lg">Volunteer Step Events</h1>
       </Link>
 
-      <ul className="flex flex-row items-center gap-8">
-        <li>
-          <form
-            action={async () => {
-              "use server";
-
-            //   await signOut();
-            }}
-            className="mb-10"
-          >
-            <Button>Logout</Button>
-          </form>
-        </li>
-      </ul>
+      <div className="flex items-center justify-center gap-5 md:gap-10 w-fit text-sm">
+        <Link href="/" className="hidden md:block">Home</Link>
+        <Link href="/events">Events</Link>
+        <FaUser className="w-5 h-5 mb-0.5" />
+        <PiSignOutBold className="w-5 h-5 mb-0.5" />
+      </div>
     </header>
-  );
-};
 
-export default Header;
+  )
+}

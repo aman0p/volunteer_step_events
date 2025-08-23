@@ -1,15 +1,13 @@
-import Header from "@/components/Header";
+import { Header } from "@/components/Header";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main className="root-container">
-    <div className="mx-auto max-w-7xl">
+    <div className="flex flex-col items-center justify-center w-full max-w-6xl mx-auto h-full px-3 py-5">
       {/* <Header session={session} /> */}
       <Header />
 
-      <div className="mt-20 pb-20">{children}</div>
+      <div className="mt-10">{children}</div>
     </div>
-  </main>
   );
 }
 
