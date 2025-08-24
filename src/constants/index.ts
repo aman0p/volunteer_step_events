@@ -39,60 +39,9 @@ export const adminSideBarLinks = [
   },
 ];
 
-export const FIELD_NAMES = {
-  fullName: "Full name",
-  email: "Email",
-  phone: "Phone number",
-  password: "Password",
-  profileImage: "Profile Image",
-  skills: "Skills",
-  address: "Address",
-  gender: "Gender",
-  govIdImage: "Government ID Image",
-  govIdType: "Government ID Type",
-  title: "Event Title",
-  description: "Event Description",
-  location: "Event Location",
-  startDate: "Start Date",
-  endDate: "End Date",
-  dressCode: "Dress Code",
-  category: "Event Category",
-  maxVolunteers: "Maximum Volunteers",
-};
 
-export const FIELD_TYPES = {
-  fullName: "text",
-  email: "email",
-  phone: "tel",
-  password: "password",
-  profileImage: "file",
-  skills: "text",
-  address: "text",
-  gender: "select",
-  govIdImage: "file",
-  govIdType: "select",
-  title: "text",
-  description: "textarea",
-  location: "text",
-  startDate: "datetime-local",
-  endDate: "datetime-local",
-  dressCode: "text",
-  category: "text",
-  maxVolunteers: "number",
-};
 
-export const GENDER_OPTIONS = [
-  { value: "MALE", label: "Male" },
-  { value: "FEMALE", label: "Female" },
-  { value: "OTHER", label: "Other" },
-];
 
-export const GOV_ID_OPTIONS = [
-  { value: "AADHAR_CARD", label: "Aadhar Card" },
-  { value: "PASSPORT", label: "Passport" },
-  { value: "DRIVING_LICENSE", label: "Driving License" },
-  { value: "PAN_CARD", label: "PAN Card" },
-];
 
 export const ROLE_OPTIONS = [
   { value: "VOLUNTEER", label: "Volunteer" },
@@ -232,4 +181,52 @@ export const SAMPLE_VOLUNTEERS = [
     role: "VOLUNTEER",
     createdAt: "2024-01-15T14:15:00Z",
   },
+];
+
+
+
+
+
+
+
+
+
+
+//  *******************AUTH FORM FIELDS*******************
+
+export const FIELD_NAMES = {
+  fullName: "Full name",
+  email: "Email",
+  password: "Password",
+  phone: "Phone number",
+  address: "Address",
+  gender: "Gender",
+  govIdType: "Government ID Type",
+  govIdImage: "Government ID Image",
+  profileImage: "Profile Image",
+};
+
+export const FIELD_TYPES = {
+  fullName: "text",
+  email: "email",
+  password: "password",
+  phone: "tel",
+  address: "text",
+  gender: "select",
+  govIdType: "select",
+  govIdImage: "file",
+  profileImage: "file",
+};
+
+export const GENDER_OPTIONS = [
+  { value: "MALE", label: "Male" },
+  { value: "FEMALE", label: "Female" },
+  { value: "OTHER", label: "Other" },
+];
+
+export const GOV_ID_OPTIONS = [
+  { value: "AADHAR_CARD", label: "Aadhar Card" },
+  { value: "PASSPORT", label: "Passport" },
+  { value: "DRIVING_LICENSE", label: "Driving License" },
+  { value: "PAN_CARD", label: "PAN Card" },
 ];

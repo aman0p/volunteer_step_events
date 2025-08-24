@@ -121,6 +121,11 @@
   }
 }
 
+@layer components {
+  .form-input {
+    @apply w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-lg bg-white text-gray-900 shadow-sm transition-all duration-200 placeholder:text-gray-500 focus:outline-none;
+  }
+}
 
 
 /* Gradients ------------------------------------->  */
@@ -136,3 +141,23 @@
 .gradient-blue {
   background: linear-gradient(180deg, #11131c 5%, #11131c 100%);
 } */
+
+
+/* Custom select dropdown styling */
+select option {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #111827;
+  background-color: white;
+  cursor: pointer;
+}
+
+select option:checked {
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-weight: 500;
+}
+
+select option:hover {
+  background-color: #eff6ff;
+}
