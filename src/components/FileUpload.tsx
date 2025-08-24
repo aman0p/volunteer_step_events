@@ -1,10 +1,11 @@
 "use client";
 
 import config from "@/lib/config";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { upload, Image as IKImage, Video as IKVideo } from "@imagekit/next";
 
 const {
   env: {
@@ -14,7 +15,7 @@ const {
 
 const authenticator = async () => {
   try {
-    const response = await fetch(`${config.env.apiEndpoint}/api/auth/imagekit`);
+    const response = await fetch(`${config.env.apiEndpoint}/api/imagekit-auth`);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -25,16 +26,16 @@ const authenticator = async () => {
     }
 
     const data = await response.json();
+    const { token, expire, signature, publicKey } = data;
+    return { token, expire, signature, publicKey };
 
-    const { signature, expire, token } = data;
-
-    return { token, expire, signature };
   } catch (error: any) {
+    console.error("Authentication error:", error);
     throw new Error(`Authentication request failed: ${error.message}`);
   }
 };
 
-interface Props {
+interface FileUploadProps {
   type: "image" | "video";
   accept: string;
   placeholder: string;
@@ -42,6 +43,7 @@ interface Props {
   variant: "dark" | "light";
   onFileChange: (filePath: string) => void;
   value?: string;
+  className?: string;
 }
 
 const FileUpload = ({
@@ -52,24 +54,33 @@ const FileUpload = ({
   variant,
   onFileChange,
   value,
-}: Props) => {
-  const ikUploadRef = useRef(null);
+  className,
+}: FileUploadProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<{ filePath: string | null }>({
     filePath: value ?? null,
   });
   const [progress, setProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+
+  // Sync internal state with value prop changes
+  useEffect(() => {
+    setFile({ filePath: value ?? null });
+  }, [value]);
 
   const styles = {
     button:
       variant === "dark"
         ? "bg-dark-300"
         : "bg-light-600 border-gray-100 border",
-    placeholder: variant === "dark" ? "text-light-100" : "text-slate-500",
+    placeholder: variant === "dark" ? "text-light-100 text-sm" : "text-slate-500 text-sm",
     text: variant === "dark" ? "text-light-100" : "text-dark-400",
   };
 
   const onError = (error: any) => {
     console.log(error);
+    setIsUploading(false);
+    setProgress(0);
 
     toast({
       title: `${type} upload failed`,
@@ -79,8 +90,10 @@ const FileUpload = ({
   };
 
   const onSuccess = (res: any) => {
-    setFile(res);
+    setFile({ filePath: res.filePath });
     onFileChange(res.filePath);
+    setIsUploading(false);
+    setProgress(0);
 
     toast({
       title: `${type} uploaded successfully`,
@@ -113,80 +126,138 @@ const FileUpload = ({
     return true;
   };
 
+  const handleFileUpload = async (selectedFile: File) => {
+    if (!onValidate(selectedFile)) {
+      return;
+    }
+
+    setIsUploading(true);
+    setProgress(0);
+
+    try {
+      const authParams = await authenticator();
+      const { token, expire, signature, publicKey } = authParams;
+
+      const uploadResponse = await upload({
+        file: selectedFile,
+        fileName: selectedFile.name,
+        token,
+        expire,
+        signature,
+        publicKey,
+        folder,
+        useUniqueFileName: true,
+        onProgress: (event: { loaded: number; total: number }) => {
+          const percent = Math.round((event.loaded / event.total) * 100);
+          setProgress(percent);
+        },
+      });
+
+      onSuccess(uploadResponse);
+    } catch (error: any) {
+      console.error("Upload error:", error);
+      onError(error);
+    }
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      handleFileUpload(selectedFile);
+    }
+  };
+
   return (
-    <></>
-    // <ImageKitProvider
-    //   publicKey={publicKey}
-    //   urlEndpoint={urlEndpoint}
-    //   authenticator={authenticator}
-    // >
-    //   <IKUpload
-    //     ref={ikUploadRef}
-    //     onError={onError}
-    //     onSuccess={onSuccess}
-    //     useUniqueFileName={true}
-    //     validateFile={onValidate}
-    //     onUploadStart={() => setProgress(0)}
-    //     onUploadProgress={({ loaded, total }) => {
-    //       const percent = Math.round((loaded / total) * 100);
+    <>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={accept}
+        onChange={handleFileSelect}
+        className="hidden"
+      />
 
-    //       setProgress(percent);
-    //     }}
-    //     folder={folder}
-    //     accept={accept}
-    //     className="hidden"
-    //   />
+      {!file.filePath ? (
+        <button
+          className={cn("flex min-h-9 w-full items-center justify-center gap-1.5 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none relative overflow-hidden", styles.button)}
+          onClick={(e) => {
+            e.preventDefault();
+            if (fileInputRef.current) {
+              fileInputRef.current.click();
+            }
+          }}
+          disabled={isUploading}
+        >
+          {/* Progress bar background */}
+          {isUploading && (
+            <div className="absolute inset-0 bg-green-100 transition-all duration-300 ease-out" />
+          )}
+          
+          {/* Progress bar fill */}
+          {isUploading && (
+            <div 
+              className="absolute inset-0 bg-green-300 transition-all duration-300 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          )}
 
-    //   <button
-    //     className={cn("upload-btn", styles.button)}
-    //     onClick={(e) => {
-    //       e.preventDefault();
+          <Image
+            src="/icons/upload.svg"
+            alt="upload-icon"
+            width={15}
+            height={15}
+            className="object-contain relative z-10"
+          />
 
-    //       if (ikUploadRef.current) {
-    //         // @ts-ignore
-    //         ikUploadRef.current?.click();
-    //       }
-    //     }}
-    //   >
-    //     <Image
-    //       src="/icons/upload.svg"
-    //       alt="upload-icon"
-    //       width={20}
-    //       height={20}
-    //       className="object-contain"
-    //     />
+          <p className={cn("text-sm relative z-10", styles.placeholder)}>
+            {isUploading ? `${progress}% Uploading...` : placeholder}
+          </p>
+        </button>
+      ) : (
+        <div className="relative">
+          <div className="relative w-full aspect-video rounded-md overflow-hidden border">
+            {type === "image" ? (
+              <IKImage
+                src={file.filePath}
+                urlEndpoint={urlEndpoint}
+                alt={file.filePath}
+                width={400}
+                height={225}
+                className="object-cover w-full h-full"
+              />
+            ) : type === "video" ? (
+              <IKVideo
+                src={file.filePath}
+                urlEndpoint={urlEndpoint}
+                controls={true}
+                className="w-full h-full object-cover"
+              />
+            ) : null}
+            
+            {/* Change button overlay */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                if (fileInputRef.current) {
+                  fileInputRef.current.click();
+                }
+              }}
+              className="absolute top-2 right-2 bg-black/70 hover:bg-black/90 text-white rounded-full p-2 transition-colors duration-200"
+              title="Change file"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                <path d="M21 3v5h-5"/>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                <path d="M3 21v-5h5"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
 
-    //     <p className={cn("text-base", styles.placeholder)}>{placeholder}</p>
-
-    //     {file && (
-    //       <p className={cn("upload-filename", styles.text)}>{file.filePath}</p>
-    //     )}
-    //   </button>
-
-    //   {progress > 0 && progress !== 100 && (
-    //     <div className="w-full rounded-full bg-green-200">
-    //       <div className="progress" style={{ width: `${progress}%` }}>
-    //         {progress}%
-    //       </div>
-    //     </div>
-    //   )}
-
-    //   {file &&
-    //     (type === "image" ? (
-    //       <IKImage
-    //         alt={file.filePath}
-    //         path={file.filePath}
-    //         width={500}
-    //         height={300}
-    //       />
-    //     ) : type === "video" ? (
-    //       <IKVideo
-    //         path={file.filePath}
-    //         controls={true}
-    //         className="h-96 w-full rounded-xl"
-    //       />
-    //     ) : null)}
-    // </ImageKitProvider>
+      {/* Progress is now shown inside the button */}
+    </>
   );
 };
 

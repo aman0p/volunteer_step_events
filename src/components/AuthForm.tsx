@@ -91,18 +91,18 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                         onSubmit={form.handleSubmit(handleSubmit)}
                         className="flex flex-col gap-4"
                     >
-                        {Object.keys(defaultValues).map((field) => (
+                        {Object.keys(defaultValues).map((fieldName) => (
                             <FormField
-                                key={field}
+                                key={fieldName}
                                 control={form.control}
-                                name={field as Path<T>}
+                                name={fieldName as Path<T>}
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col gap-1">
                                         <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
-                                            {FIELD_NAMES[field.name as keyof typeof FIELD_NAMES]}
+                                            {FIELD_NAMES[fieldName as keyof typeof FIELD_NAMES]}
                                         </FormLabel>
                                         <FormControl>
-                                            {field.name === "govIdImage" ? (
+                                            {fieldName === "govIdImage" ? (
                                                 <FileUpload
                                                     type="image"
                                                     accept="image/*"
@@ -110,8 +110,9 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                                                     folder="ids"
                                                     variant="dark"
                                                     onFileChange={field.onChange}
+                                                    value={field.value}
                                                 />
-                                            ) : field.name === "profileImage" ? (
+                                            ) : fieldName === "profileImage" ? (
                                                 <FileUpload
                                                     type="image"
                                                     accept="image/*"
@@ -119,13 +120,14 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                                                     folder="profile"
                                                     variant="dark"
                                                     onFileChange={field.onChange}
+                                                    value={field.value}
                                                 />
                                             )
-                                            : field.name === "gender" ? (
+                                            : fieldName === "gender" ? (
                                                 <Select
                                                     value={field.value}
                                                     onChange={field.onChange}
-                                                    className="form-input"
+                                                    className="w-full px-4 py-2 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
                                                 >
                                                     <option value="">Select gender</option>
                                                     {GENDER_OPTIONS.map((option) => (
@@ -134,11 +136,11 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                                                         </option>
                                                     ))}
                                                 </Select>
-                                            ) : field.name === "govIdType" ? (
+                                            ) : fieldName === "govIdType" ? (
                                                 <Select
                                                     value={field.value}
                                                     onChange={field.onChange}
-                                                    className="form-input"
+                                                    className="w-full px-4 py-2 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
                                                 >
                                                     <option value="">Select ID type</option>
                                                     {GOV_ID_OPTIONS.map((option) => (
@@ -151,10 +153,10 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                                                 <Input
                                                     required
                                                     type={
-                                                        FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]
+                                                        FIELD_TYPES[fieldName as keyof typeof FIELD_TYPES]
                                                     }
                                                     {...field}
-                                                    className="form-input"
+                                                    className="w-full px-4 py-2 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
                                                 />
                                             )}
                                         </FormControl>
