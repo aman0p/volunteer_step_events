@@ -27,7 +27,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FIELD_NAMES, FIELD_TYPES, GENDER_OPTIONS, GOV_ID_OPTIONS } from "@/constants";
 import FileUpload from "./FileUpload";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import Image from "next/image";
 
 interface Props<T extends FieldValues> {
@@ -51,8 +51,7 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
         const result = await onSubmit(data);
 
         if (result.success) {
-            toast({
-                title: "Success",
+            toast.success("Success", {
                 description: isSignIn
                     ? "You have successfully signed in."
                     : "You have successfully signed up.",
@@ -60,10 +59,8 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
 
             router.push("/");
         } else {
-            toast({
-                title: `Error ${isSignIn ? "signing in" : "signing up"}`,
+            toast.error(`Error ${isSignIn ? "signing in" : "signing up"}`, {
                 description: result.error ?? "An error occurred.",
-                variant: "destructive",
             });
         }
     };
@@ -77,12 +74,12 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                 </div>
                 <div className="">
                     <h1 className="text-2xl font-bold">
-                        {isSignIn ? "Create your account" : "Sign in to your account"}
+                        {isSignIn ? "Sign in to your account" : "Create your account"}
                     </h1>
                     <p className="text-sm text-gray-600 mt-1">
                         {isSignIn
-                            ? "Please complete all fields and upload required documents"
-                            : "Please enter your email and password to sign in"}
+                            ? "Please enter your email and password to sign in"
+                            : "Please complete all fields and upload required documents"}
                     </p>
                 </div>
 

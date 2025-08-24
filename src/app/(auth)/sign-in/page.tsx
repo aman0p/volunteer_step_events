@@ -4,6 +4,7 @@ import React from "react";
 
 import { signInSchema } from "@/lib/validations";
 import { AuthForm } from "@/components/AuthForm";
+import { signInWithCredentials } from "@/lib/action/auth";
 
 export default function SignInPage() {
     return (
@@ -14,16 +15,10 @@ export default function SignInPage() {
                 email: "",
                 password: "",
             }}
-            onSubmit={async(data) => {
-                return {
-                    success: true,
-                    error: undefined
-                };
-            }}
+            onSubmit={signInWithCredentials}
         />
     )
 }
-
 
 
 

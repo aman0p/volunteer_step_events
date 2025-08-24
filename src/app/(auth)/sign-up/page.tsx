@@ -3,6 +3,8 @@
 import React from "react";
 import { signUpSchema } from "@/lib/validations";
 import { AuthForm } from "@/components/AuthForm";
+import { signUpWithCredentials } from "@/lib/action/auth";
+import { Gender, GovId } from "@/generated/prisma";
 
 export default function SignUpPage() {
     return (
@@ -13,19 +15,14 @@ export default function SignUpPage() {
                 fullName: "",
                 email: "",
                 password: "",
-                phone: "",
+                phoneNumber: "",
                 address: "",
-                gender: "",
-                govIdType: "",
+                gender: Gender.MALE,
+                govIdType: GovId.AADHAR_CARD,
                 govIdImage: "",
                 profileImage: "",
             }}
-            onSubmit={async(data) => {
-                return {
-                    success: true,
-                    error: undefined
-                };
-            }}
+            onSubmit={signUpWithCredentials}
         />
     )
 }

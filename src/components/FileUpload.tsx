@@ -3,7 +3,7 @@
 import config from "@/lib/config";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { upload, Image as IKImage, Video as IKVideo } from "@imagekit/next";
 
@@ -82,10 +82,8 @@ const FileUpload = ({
     setIsUploading(false);
     setProgress(0);
 
-    toast({
-      title: `${type} upload failed`,
+    toast.error(`${type} upload failed`, {
       description: `Your ${type} could not be uploaded. Please try again.`,
-      variant: "destructive",
     });
   };
 
@@ -95,8 +93,7 @@ const FileUpload = ({
     setIsUploading(false);
     setProgress(0);
 
-    toast({
-      title: `${type} uploaded successfully`,
+    toast.success(`${type} uploaded successfully`, {
       description: `${res.filePath} uploaded successfully!`,
     });
   };
@@ -104,20 +101,16 @@ const FileUpload = ({
   const onValidate = (file: File) => {
     if (type === "image") {
       if (file.size > 20 * 1024 * 1024) {
-        toast({
-          title: "File size too large",
+        toast.error("File size too large", {
           description: "Please upload a file that is less than 20MB in size",
-          variant: "destructive",
         });
 
         return false;
       }
     } else if (type === "video") {
       if (file.size > 50 * 1024 * 1024) {
-        toast({
-          title: "File size too large",
+        toast.error("File size too large", {
           description: "Please upload a file that is less than 50MB in size",
-          variant: "destructive",
         });
         return false;
       }

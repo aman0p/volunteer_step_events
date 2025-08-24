@@ -1,7 +1,0 @@
-{
-    "prettier.jsxSingleQuote": true,
-    "prettier.singleQuote": true,
-    "prettier.tabWidth": 1,
-    "prettier.trailingComma": "es5",
-    "prettier.withNodeModules": true
-}
