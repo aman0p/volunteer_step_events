@@ -5,7 +5,8 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { upload, Image as IKImage, Video as IKVideo } from "@imagekit/next";
+import { Image as IKImage, Video as IKVideo } from "@imagekit/next";
+import useSingleFileUpload from "@/lib/hooks/useSingleFileUpload";
 
 const {
   env: {
@@ -13,26 +14,16 @@ const {
   },
 } = config;
 
+// Legacy authenticator kept for backward compatibility, now unused internally
 const authenticator = async () => {
-  try {
-    const response = await fetch(`${config.env.apiEndpoint}/api/imagekit-auth`);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-
-      throw new Error(
-        `Request failed with status ${response.status}: ${errorText}`,
-      );
-    }
-
-    const data = await response.json();
-    const { token, expire, signature, publicKey } = data;
-    return { token, expire, signature, publicKey };
-
-  } catch (error: any) {
-    console.error("Authentication error:", error);
-    throw new Error(`Authentication request failed: ${error.message}`);
+  const response = await fetch(`${config.env.apiEndpoint}/api/imagekit-auth`);
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Request failed with status ${response.status}: ${errorText}`);
   }
+  const data = await response.json();
+  const { token, expire, signature, publicKey } = data;
+  return { token, expire, signature, publicKey };
 };
 
 interface FileUploadProps {
@@ -44,6 +35,8 @@ interface FileUploadProps {
   onFileChange: (filePath: string) => void;
   value?: string;
   className?: string;
+  overlayMode?: "change" | "remove"; // which overlay button to show when file is present
+  onRemove?: () => void; // called when overlayMode is remove and user clicks
 }
 
 const FileUpload = ({
@@ -55,6 +48,8 @@ const FileUpload = ({
   onFileChange,
   value,
   className,
+  overlayMode = "change",
+  onRemove,
 }: FileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<{ filePath: string | null }>({
@@ -119,38 +114,21 @@ const FileUpload = ({
     return true;
   };
 
+  const { isUploading: isUploadingHook, startUpload } = useSingleFileUpload({
+    type,
+    folder,
+    onProgress: (p) => setProgress(p),
+    onSuccess: onSuccess,
+    onError,
+  });
+
+  useEffect(() => {
+    setIsUploading(isUploadingHook);
+  }, [isUploadingHook]);
+
   const handleFileUpload = async (selectedFile: File) => {
-    if (!onValidate(selectedFile)) {
-      return;
-    }
-
-    setIsUploading(true);
-    setProgress(0);
-
-    try {
-      const authParams = await authenticator();
-      const { token, expire, signature, publicKey } = authParams;
-
-      const uploadResponse = await upload({
-        file: selectedFile,
-        fileName: selectedFile.name,
-        token,
-        expire,
-        signature,
-        publicKey,
-        folder,
-        useUniqueFileName: true,
-        onProgress: (event: { loaded: number; total: number }) => {
-          const percent = Math.round((event.loaded / event.total) * 100);
-          setProgress(percent);
-        },
-      });
-
-      onSuccess(uploadResponse);
-    } catch (error: any) {
-      console.error("Upload error:", error);
-      onError(error);
-    }
+    if (!onValidate(selectedFile)) return;
+    await startUpload(selectedFile);
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,7 +150,7 @@ const FileUpload = ({
 
       {!file.filePath ? (
         <button
-          className={cn("flex min-h-9 w-full items-center justify-center gap-1.5 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none relative overflow-hidden", styles.button)}
+          className={cn("flex min-h-9 w-full items-center justify-center gap-1.5 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none relative overflow-hidden", styles.button, className)}
           onClick={(e) => {
             e.preventDefault();
             if (fileInputRef.current) {
@@ -207,7 +185,7 @@ const FileUpload = ({
           </p>
         </button>
       ) : (
-        <div className="relative">
+        <div className={cn("relative", className)}>
           <div className="relative w-full aspect-video rounded-md overflow-hidden border">
             {type === "image" ? (
               <IKImage
@@ -227,24 +205,43 @@ const FileUpload = ({
               />
             ) : null}
             
-            {/* Change button overlay */}
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                if (fileInputRef.current) {
-                  fileInputRef.current.click();
-                }
-              }}
-              className="absolute top-2 right-2 bg-black/70 hover:bg-black/90 text-white rounded-full p-2 transition-colors duration-200"
-              title="Change file"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
-                <path d="M21 3v5h-5"/>
-                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
-                <path d="M3 21v-5h5"/>
-              </svg>
-            </button>
+            {/* Overlay button: change or remove in the exact same position */}
+            {overlayMode === "change" ? (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (fileInputRef.current) {
+                    fileInputRef.current.click();
+                  }
+                }}
+                className="absolute top-2 right-2 bg-black/70 hover:bg-black/90 text-white rounded-full p-2 transition-colors duration-200"
+                title="Change file"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                  <path d="M21 3v5h-5"/>
+                  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                  <path d="M3 21v-5h5"/>
+                </svg>
+              </button>
+            ) : (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  // Clear current file and notify parent
+                  setFile({ filePath: null });
+                  try { onFileChange(""); } catch {}
+                  if (onRemove) onRemove();
+                }}
+                className="absolute top-2 right-2 bg-black/70 hover:bg-black/90 text-white rounded-full p-2 transition-colors duration-200"
+                title="Remove file"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18"/>
+                  <path d="M6 6l12 12"/>
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       )}

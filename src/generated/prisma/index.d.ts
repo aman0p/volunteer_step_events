@@ -1185,7 +1185,7 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     dressCode: string | null
-    category: string | null
+    coverUrl: string | null
     maxVolunteers: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1199,7 +1199,7 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     dressCode: string | null
-    category: string | null
+    coverUrl: string | null
     maxVolunteers: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1214,6 +1214,8 @@ export namespace Prisma {
     endDate: number
     dressCode: number
     category: number
+    coverUrl: number
+    eventImages: number
     maxVolunteers: number
     createdAt: number
     updatedAt: number
@@ -1237,7 +1239,7 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     dressCode?: true
-    category?: true
+    coverUrl?: true
     maxVolunteers?: true
     createdAt?: true
     updatedAt?: true
@@ -1251,7 +1253,7 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     dressCode?: true
-    category?: true
+    coverUrl?: true
     maxVolunteers?: true
     createdAt?: true
     updatedAt?: true
@@ -1266,6 +1268,8 @@ export namespace Prisma {
     endDate?: true
     dressCode?: true
     category?: true
+    coverUrl?: true
+    eventImages?: true
     maxVolunteers?: true
     createdAt?: true
     updatedAt?: true
@@ -1366,7 +1370,9 @@ export namespace Prisma {
     startDate: Date
     endDate: Date
     dressCode: string
-    category: string
+    category: string[]
+    coverUrl: string
+    eventImages: string[]
     maxVolunteers: number | null
     createdAt: Date
     updatedAt: Date
@@ -1400,6 +1406,8 @@ export namespace Prisma {
     endDate?: boolean
     dressCode?: boolean
     category?: boolean
+    coverUrl?: boolean
+    eventImages?: boolean
     maxVolunteers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1416,6 +1424,8 @@ export namespace Prisma {
     endDate?: boolean
     dressCode?: boolean
     category?: boolean
+    coverUrl?: boolean
+    eventImages?: boolean
     maxVolunteers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1430,6 +1440,8 @@ export namespace Prisma {
     endDate?: boolean
     dressCode?: boolean
     category?: boolean
+    coverUrl?: boolean
+    eventImages?: boolean
     maxVolunteers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1444,12 +1456,14 @@ export namespace Prisma {
     endDate?: boolean
     dressCode?: boolean
     category?: boolean
+    coverUrl?: boolean
+    eventImages?: boolean
     maxVolunteers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "location" | "startDate" | "endDate" | "dressCode" | "category" | "maxVolunteers" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "location" | "startDate" | "endDate" | "dressCode" | "category" | "coverUrl" | "eventImages" | "maxVolunteers" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Event$enrollmentsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
@@ -1470,7 +1484,9 @@ export namespace Prisma {
       startDate: Date
       endDate: Date
       dressCode: string
-      category: string
+      category: string[]
+      coverUrl: string
+      eventImages: string[]
       maxVolunteers: number | null
       createdAt: Date
       updatedAt: Date
@@ -1905,7 +1921,9 @@ export namespace Prisma {
     readonly startDate: FieldRef<"Event", 'DateTime'>
     readonly endDate: FieldRef<"Event", 'DateTime'>
     readonly dressCode: FieldRef<"Event", 'String'>
-    readonly category: FieldRef<"Event", 'String'>
+    readonly category: FieldRef<"Event", 'String[]'>
+    readonly coverUrl: FieldRef<"Event", 'String'>
+    readonly eventImages: FieldRef<"Event", 'String[]'>
     readonly maxVolunteers: FieldRef<"Event", 'Int'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
@@ -4611,6 +4629,8 @@ export namespace Prisma {
     endDate: 'endDate',
     dressCode: 'dressCode',
     category: 'category',
+    coverUrl: 'coverUrl',
+    eventImages: 'eventImages',
     maxVolunteers: 'maxVolunteers',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -4805,7 +4825,9 @@ export namespace Prisma {
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
     dressCode?: StringFilter<"Event"> | string
-    category?: StringFilter<"Event"> | string
+    category?: StringNullableListFilter<"Event">
+    coverUrl?: StringFilter<"Event"> | string
+    eventImages?: StringNullableListFilter<"Event">
     maxVolunteers?: IntNullableFilter<"Event"> | number | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
@@ -4821,6 +4843,8 @@ export namespace Prisma {
     endDate?: SortOrder
     dressCode?: SortOrder
     category?: SortOrder
+    coverUrl?: SortOrder
+    eventImages?: SortOrder
     maxVolunteers?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -4838,7 +4862,9 @@ export namespace Prisma {
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
     dressCode?: StringFilter<"Event"> | string
-    category?: StringFilter<"Event"> | string
+    category?: StringNullableListFilter<"Event">
+    coverUrl?: StringFilter<"Event"> | string
+    eventImages?: StringNullableListFilter<"Event">
     maxVolunteers?: IntNullableFilter<"Event"> | number | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
@@ -4854,6 +4880,8 @@ export namespace Prisma {
     endDate?: SortOrder
     dressCode?: SortOrder
     category?: SortOrder
+    coverUrl?: SortOrder
+    eventImages?: SortOrder
     maxVolunteers?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -4875,7 +4903,9 @@ export namespace Prisma {
     startDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     dressCode?: StringWithAggregatesFilter<"Event"> | string
-    category?: StringWithAggregatesFilter<"Event"> | string
+    category?: StringNullableListFilter<"Event">
+    coverUrl?: StringWithAggregatesFilter<"Event"> | string
+    eventImages?: StringNullableListFilter<"Event">
     maxVolunteers?: IntNullableWithAggregatesFilter<"Event"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
@@ -5048,7 +5078,9 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     dressCode: string
-    category: string
+    category?: EventCreatecategoryInput | string[]
+    coverUrl: string
+    eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5063,7 +5095,9 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     dressCode: string
-    category: string
+    category?: EventCreatecategoryInput | string[]
+    coverUrl: string
+    eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5078,7 +5112,9 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dressCode?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5093,7 +5129,9 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dressCode?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5108,7 +5146,9 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     dressCode: string
-    category: string
+    category?: EventCreatecategoryInput | string[]
+    coverUrl: string
+    eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5122,7 +5162,9 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dressCode?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5136,7 +5178,9 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dressCode?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5345,6 +5389,14 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -5380,6 +5432,8 @@ export namespace Prisma {
     endDate?: SortOrder
     dressCode?: SortOrder
     category?: SortOrder
+    coverUrl?: SortOrder
+    eventImages?: SortOrder
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5397,7 +5451,7 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     dressCode?: SortOrder
-    category?: SortOrder
+    coverUrl?: SortOrder
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5411,7 +5465,7 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     dressCode?: SortOrder
-    category?: SortOrder
+    coverUrl?: SortOrder
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5467,14 +5521,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
   }
 
   export type EnumGenderFilter<$PrismaModel = never> = {
@@ -5633,6 +5679,14 @@ export namespace Prisma {
     _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
+  export type EventCreatecategoryInput = {
+    set: string[]
+  }
+
+  export type EventCreateeventImagesInput = {
+    set: string[]
+  }
+
   export type EnrollmentCreateNestedManyWithoutEventInput = {
     create?: XOR<EnrollmentCreateWithoutEventInput, EnrollmentUncheckedCreateWithoutEventInput> | EnrollmentCreateWithoutEventInput[] | EnrollmentUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutEventInput | EnrollmentCreateOrConnectWithoutEventInput[]
@@ -5653,6 +5707,16 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type EventUpdatecategoryInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type EventUpdateeventImagesInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -6058,7 +6122,9 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     dressCode: string
-    category: string
+    category?: EventCreatecategoryInput | string[]
+    coverUrl: string
+    eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6072,7 +6138,9 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     dressCode: string
-    category: string
+    category?: EventCreatecategoryInput | string[]
+    coverUrl: string
+    eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6141,7 +6209,9 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dressCode?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6155,7 +6225,9 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     dressCode?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

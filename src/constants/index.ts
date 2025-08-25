@@ -82,7 +82,8 @@ export const SAMPLE_EVENTS = [
     maxVolunteers: 50,
     createdAt: "2024-01-15T10:00:00Z",
     updatedAt: "2024-01-15T10:00:00Z",
-    image: "/events.jpg",
+    coverUrl: "/events.jpg",
+    eventImages: ["/events.jpg"],
   },
   {
     id: "2",
@@ -96,6 +97,8 @@ export const SAMPLE_EVENTS = [
     maxVolunteers: 30,
     createdAt: "2024-01-20T14:30:00Z",
     updatedAt: "2024-01-20T14:30:00Z",
+    coverUrl: "/events.jpg",
+    eventImages: ["/events.jpg"],
   },
   {
     id: "3",
@@ -109,6 +112,8 @@ export const SAMPLE_EVENTS = [
     maxVolunteers: 20,
     createdAt: "2024-01-25T09:15:00Z",
     updatedAt: "2024-01-25T09:15:00Z",
+    coverUrl: "/events.jpg",
+    eventImages: ["/events.jpg"],
   },
   {
     id: "4",
@@ -122,6 +127,8 @@ export const SAMPLE_EVENTS = [
     maxVolunteers: 25,
     createdAt: "2024-01-30T11:45:00Z",
     updatedAt: "2024-01-30T11:45:00Z",
+    coverUrl: "/events.jpg",
+    eventImages: ["/events.jpg"],
   },
   {
     id: "5",
@@ -135,6 +142,8 @@ export const SAMPLE_EVENTS = [
     maxVolunteers: 40,
     createdAt: "2024-02-05T13:20:00Z",
     updatedAt: "2024-02-05T13:20:00Z",
+    coverUrl: "/events.jpg",
+    eventImages: ["/events.jpg"],
   },
 ];
 

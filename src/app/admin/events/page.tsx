@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import EventForm from "@/components/admin/forms/EventForm";
 
 export default function EventsPage() {
     return (
@@ -14,7 +15,7 @@ export default function EventsPage() {
         </div>
   
         <div className="mt-7 w-full overflow-hidden">
-          <p>Table</p>
+          <EventForm />
         </div>
       </section>
     );

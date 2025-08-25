@@ -17,3 +17,29 @@ export const signInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
+
+export const eventSchema = z
+  .object({
+    title: z.string().min(3, "Title must be at least 3 characters"),
+    description: z
+      .string()
+      .min(10, "Description must be at least 10 characters"),
+    location: z.string().min(3, "Location must be at least 3 characters"),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date(),
+    dressCode: z.string().min(2, "Dress code must be at least 2 characters"),
+    coverUrl: z.string().min(1, "Cover URL is required"),
+    eventImages: z.array(z.string()).min(1, "At least one event image is required"),
+    category: z
+      .array(z.string().trim().min(1))
+      .min(1, "At least one category is required")
+      .max(3, "You can add up to 3 categories only"),
+    maxVolunteers: z.number().int("Max volunteers must be an integer").positive("Max volunteers must be positive").optional(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+  })
+  .refine((data) => data.endDate > data.startDate, {
+    message: "End date must be after start date",
+    path: ["endDate"],
+  });
+
