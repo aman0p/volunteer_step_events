@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "pnpm db:generate",
     "dev": "next dev --turbopack",
+    "prebuild": "pnpm db:generate",
     "build": "next build --turbopack",
     "start": "next start",
     "db:generate": "dotenv -e .env.local -- prisma generate",

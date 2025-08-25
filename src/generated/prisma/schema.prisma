@@ -1,0 +1,85 @@
+// Next steps:
+// 1. Run prisma dev to start a local Prisma Postgres server.
+// 2. Define models in the schema.prisma file.
+// 3. Run prisma migrate dev to migrate your local Prisma Postgres database.
+// 4. Tip: Explore how you can extend the ORM with scalable connection pooling, global caching, and a managed serverless Postgres database. Read: https://pris.ly/cli/beyond-orm
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id            String       @id @default(uuid())
+  title         String
+  description   String
+  location      String
+  startDate     DateTime
+  endDate       DateTime
+  dressCode     String
+  category      String
+  maxVolunteers Int?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  enrollments   Enrollment[]
+}
+
+model Volunteer {
+  id           String       @id @default(uuid())
+  fullName     String
+  email        String       @unique
+  password     String       @db.VarChar(255)
+  phoneNumber  String       @unique
+  profileImage String
+  skills       String[]
+  address      String
+  gender       Gender
+  govIdImage   String
+  govIdType    GovId
+  role         Role         @default(VOLUNTEER)
+  lastActiveAt DateTime     @default(now())
+  createdAt    DateTime     @default(now())
+  enrollments  Enrollment[]
+}
+
+model Enrollment {
+  id          String    @id @default(uuid())
+  status      Status    @default(PENDING)
+  enrolledAt  DateTime  @default(now())
+  event       Event     @relation(fields: [eventId], references: [id])
+  eventId     String
+  volunteer   Volunteer @relation(fields: [volunteerId], references: [id])
+  volunteerId String
+
+  @@unique([eventId, volunteerId])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum GovId {
+  AADHAR_CARD
+  PASSPORT
+  DRIVING_LICENSE
+  PAN_CARD
+}
+
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum Role {
+  VOLUNTEER
+  ORGANISER
+  ADMIN
+}
