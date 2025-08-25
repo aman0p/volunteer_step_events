@@ -14,13 +14,14 @@ type Props = {
   add?: boolean; // if true, shows the + tile; otherwise shows the image tile
   multiple?: boolean; // allow multiple selection at once when add is true
   placeholder?: string; // optional placeholder to mirror cover wording
+  mediaType?: "image" | "video" | "both"; // what type of media to accept
 };
 
-export default function ImageTileUpload({ value, onChange, folder, className, add, multiple, placeholder }: Props) {
+export default function ImageTileUpload({ value, onChange, folder, className, add, multiple, placeholder, mediaType = "image" }: Props) {
   // Add tile
   if (add) {
     // When multiple is enabled, handle uploads here to spawn per-file progress tiles
-    const { pending, startUploads } = useMultiFileUpload(folder, (filePath) => onChange(filePath));
+    const { pending, startUploads } = useMultiFileUpload(folder, (filePath) => onChange(filePath), mediaType);
     const inputRef = useRef<HTMLInputElement>(null);
 
     if (multiple) {
@@ -56,7 +57,7 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
           <input
             ref={inputRef}
             type="file"
-            accept="image/*"
+            accept={mediaType === "both" ? "image/*,video/*" : mediaType === "video" ? "video/*" : "image/*"}
             multiple
             className="hidden"
             onChange={(e) => {
@@ -77,9 +78,9 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
       <div className="w-[310px] md:w-[290px]">
         <FileUpload
           key={nonce}
-          type="image"
-          accept="image/*"
-          placeholder={placeholder ?? "Add image"}
+          type={mediaType === "video" ? "video" : "image"}
+          accept={mediaType === "both" ? "image/*,video/*" : mediaType === "video" ? "video/*" : "image/*"}
+          placeholder={placeholder ?? (mediaType === "both" ? "Add media" : mediaType === "video" ? "Add video" : "Add image")}
           folder={folder}
           variant="dark"
           onFileChange={(p) => {
@@ -92,13 +93,21 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
     );
   }
 
-  // Image tile with change on click
+  // Media tile with change on click - auto-detect type for "both"
+  const detectMediaType = (filePath: string) => {
+    if (mediaType === "both") {
+      const extension = filePath.split('.').pop()?.toLowerCase();
+      return ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', 'mkv'].includes(extension || '') ? "video" : "image";
+    }
+    return mediaType === "video" ? "video" : "image";
+  };
+
   return (
     <div className={cn("w-[310px] md:w-[290px]", className)}>
       <FileUpload
-        type="image"
-        accept="image/*"
-        placeholder={placeholder ?? "Change image"}
+        type={detectMediaType(value || "")}
+        accept={mediaType === "both" ? "image/*,video/*" : mediaType === "video" ? "video/*" : "image/*"}
+        placeholder={placeholder ?? (mediaType === "video" ? "Change video" : "Change image")}
         folder={folder}
         variant="dark"
         value={value ?? undefined}

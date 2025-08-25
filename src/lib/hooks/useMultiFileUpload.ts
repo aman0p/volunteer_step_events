@@ -9,7 +9,8 @@ export type PendingUpload = { id: string; progress: number };
 
 export function useMultiFileUpload(
   folder: string,
-  onFileDone: (filePath: string) => void
+  onFileDone: (filePath: string) => void,
+  mediaType: "image" | "video" | "both" = "image"
 ) {
   const [pending, setPending] = useState<PendingUpload[]>([]);
 
@@ -51,7 +52,8 @@ export function useMultiFileUpload(
           setPending((p) => p.filter((it) => it.id !== id));
         } catch (err: any) {
           setPending((p) => p.filter((it) => it.id !== id));
-          toast.error("Image upload failed", { description: err?.message ?? "Please try again." });
+          const mediaTypeText = mediaType === "both" ? "media" : mediaType;
+          toast.error(`${mediaTypeText.charAt(0).toUpperCase() + mediaTypeText.slice(1)} upload failed`, { description: err?.message ?? "Please try again." });
         }
       })
     );

@@ -66,12 +66,7 @@ const EventForm = ({ type, ...event }: Props) => {
 
   return (
     <Form {...form}>
-
-
-
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
-
-
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 bg-transparent">
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-5 lg:gap-10 w-full">
 
           <div className="flex flex-col gap-5">
@@ -362,7 +357,7 @@ const EventForm = ({ type, ...event }: Props) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
-                Event Images
+                Event Media (Images & Videos)
               </FormLabel>
               <FormControl>
                 <div className="flex flex-wrap gap-3">
@@ -371,6 +366,7 @@ const EventForm = ({ type, ...event }: Props) => {
                       <ImageTileUpload
                         value={img}
                         placeholder="Upload multiple event image"
+                        mediaType="both"
                         onChange={(newPath: string | null) => {
                           const list = Array.isArray(field.value) ? [...field.value] : [];
                           list[idx] = newPath ?? "";
@@ -385,6 +381,7 @@ const EventForm = ({ type, ...event }: Props) => {
                   <ImageTileUpload
                     add
                     multiple
+                    mediaType="both"
                     onChange={(newPath: string | null) => {
                       const current = (form.getValues("eventImages") as string[] | undefined) ?? [];
                       field.onChange([...current, newPath ?? ""].filter(Boolean));
@@ -406,4 +403,5 @@ const EventForm = ({ type, ...event }: Props) => {
     </Form>
   );
 };
+
 export default EventForm;
