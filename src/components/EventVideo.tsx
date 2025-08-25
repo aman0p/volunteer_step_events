@@ -3,7 +3,7 @@ import React from "react";
 import { Video } from "@imagekit/next";
 import config from "@/lib/config";
 
-const BookVideo = ({ videoUrl }: { videoUrl: string }) => {
+export const EventVideo = ({ videoUrl }: { videoUrl: string }) => {
   return (
     <Video 
       src={videoUrl} 
@@ -13,4 +13,3 @@ const BookVideo = ({ videoUrl }: { videoUrl: string }) => {
     />
   );
 };
-export default BookVideo;

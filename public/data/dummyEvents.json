@@ -1,0 +1,126 @@
+[
+    {
+        "id": "d7adae52-2e7c-4b39-ab97-556dcb09a123",
+        "title": "HackIndia 2025",
+        "description": "India’s biggest Web3 & AI hackathon bringing together 25,000+ students to build decentralized and AI-driven solutions. Cash prizes and mentorship opportunities available.",
+        "location": "India (Multiple Venues)",
+        "startDate": "2025-09-10T09:00:00Z",
+        "endDate": "2025-09-12T18:00:00Z",
+        "dressCode": "Smart casual",
+        "category": [
+            "Hackathon",
+            "Web3",
+            "AI"
+        ],
+        "coverUrl": "https://hackindia.xyz/assets/event-banner.jpg",
+        "eventImages": [
+            "https://hackindia.xyz/assets/event-banner.jpg",
+            "https://www.instagram.com/p/DI3XsKbJMms/media/?size=l",
+            "https://www.instagram.com/reel/DIkiBmWTQCm/?size=l",
+            "https://www.instagram.com/reel/DLURskzxgD2/?size=l",
+            "https://www.instagram.com/hackindiaxyz/?size=l"
+        ],
+        "maxParticipants": 25000,
+        "createdAt": "2025-04-19T11:00:00Z",
+        "updatedAt": "2025-08-25T08:00:00Z"
+    },
+    {
+        "id": "3f2bb18c-6a5e-11ee-8c99-0242ac120002",
+        "title": "Techfest IIT Bombay 2025-26",
+        "description": "Asia’s largest science and technology festival, featuring competitions, workshops, keynote sessions, and exhibitions.",
+        "location": "IIT Bombay, Mumbai",
+        "startDate": "2025-12-17T10:00:00Z",
+        "endDate": "2025-12-19T20:00:00Z",
+        "dressCode": "Casual",
+        "category": [
+            "Techfest",
+            "Workshop",
+            "Competition"
+        ],
+        "coverUrl": "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/369420840_1006935857299889_8993216027075916823_n.jpg",
+        "eventImages": [
+            "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/369420840_1006935857299889_8993216027075916823_n.jpg",
+            "https://www.instagram.com/p/DNvjCkFUg2I/media/?size=l",
+            "https://collegedunia.com/public/college_data/images/campusimage/1453109492Campus_View.jpg",
+            "https://collegedunia.com/public/college_data/images/campusimage/1533134431Tech-Fest.jpg",
+            "https://collegedunia.com/public/college_data/images/campusimage/1584520083Academic_Building.jpg"
+        ],
+        "maxParticipants": 50000,
+        "createdAt": "2025-08-01T12:00:00Z",
+        "updatedAt": "2025-08-23T07:00:00Z"
+    },
+    {
+        "id": "4c3e846f-b6c7-4dab-961c-1f8e18057e25",
+        "title": "Pune TechFest 2025",
+        "description": "Student-run event with tech challenges, competitions and hands-on learning opportunities. Open to all technical students.",
+        "location": "Pune, Maharashtra",
+        "startDate": "2025-03-01T09:00:00Z",
+        "endDate": "2025-03-01T21:00:00Z",
+        "dressCode": "Casual",
+        "category": [
+            "Techfest",
+            "Competition"
+        ],
+        "coverUrl": "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/241298420_362786988068076_6021112417829511915_n.jpg",
+        "eventImages": [
+            "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/241298420_362786988068076_6021112417829511915_n.jpg",
+            "https://www.sitpune.edu.in/assets/images/symbitech2025-opening.jpg",
+            "https://www.sitpune.edu.in/assets/images/ai-exhibition.jpg",
+            "https://www.sitpune.edu.in/assets/images/roborace.jpg",
+            "https://www.sitpune.edu.in/assets/images/hackathon-group.jpg"
+        ],
+        "maxParticipants": 10000,
+        "createdAt": "2025-02-01T10:00:00Z",
+        "updatedAt": "2025-03-01T15:00:00Z"
+    },
+    {
+        "id": "c1fb2532-268b-4f25-a070-d2ef0fd22e5e",
+        "title": "Bemisaal Tour Mumbai Concert",
+        "description": "A grand music concert in Mumbai with packed crowds and electrifying performances from leading artists.",
+        "location": "Mumbai",
+        "startDate": "2025-08-20T18:00:00Z",
+        "endDate": "2025-08-20T23:00:00Z",
+        "dressCode": "Party wear",
+        "category": [
+            "Concert",
+            "Music",
+            "Entertainment"
+        ],
+        "coverUrl": "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/369007335_1457782821700968_4926810478089986448_n.jpg",
+        "eventImages": [
+            "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/369007335_1457782821700968_4926810478089986448_n.jpg",
+            "https://www.instagram.com/reel/DM0W159o_NS/media/?size=l",
+            "https://www.instagram.com/singerhariharana/media/?size=l",
+            "https://timesofindia.indiatimes.com/photo/95210312.cms",
+            "https://www.instagram.com/p/Cz6X9GUoVpM/media/?size=l"
+        ],
+        "maxParticipants": 8000,
+        "createdAt": "2025-08-12T13:00:00Z",
+        "updatedAt": "2025-08-24T09:00:00Z"
+    },
+    {
+        "id": "c9dec422-eead-4b5d-a2c4-dee63fa8d967",
+        "title": "Mumbai Technology Meetup",
+        "description": "Monthly tech meetup for students, developers, and technology enthusiasts. Featuring talks, demos, and networking.",
+        "location": "Mumbai",
+        "startDate": "2025-09-15T17:00:00Z",
+        "endDate": "2025-09-15T20:00:00Z",
+        "dressCode": "Casual",
+        "category": [
+            "Meetup",
+            "Technology",
+            "Networking"
+        ],
+        "coverUrl": "https://www.meetup.com/mumbai-technology-meetup/photos/123456789/",
+        "eventImages": [
+            "https://www.meetup.com/mumbai-technology-meetup/photos/123456789/",
+            "https://www.instagram.com/mumbai_tech_/media/?size=l",
+            "https://lu.ma/git6fgfv/cover.jpg",
+            "https://www.thedroptimes.com/images/events/2025/mumtechup1.jpg",
+            "https://www.thedroptimes.com/images/events/2025/mumtechup-panel.jpg"
+        ],
+        "maxParticipants": 200,
+        "createdAt": "2025-08-18T09:00:00Z",
+        "updatedAt": "2025-08-18T09:00:00Z"
+    }
+]

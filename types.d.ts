@@ -53,4 +53,14 @@ interface EventParams {
   coverUrl: string;
   eventImages: string[];
   maxVolunteers?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+// Type for events returned from database (includes id and matches Prisma schema exactly)
+interface Event extends EventParams {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  maxVolunteers: number | null;
 }

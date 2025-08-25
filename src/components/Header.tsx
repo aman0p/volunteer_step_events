@@ -67,7 +67,7 @@ export function Header({ session }: { session: Session }) {
         <button
           onClick={handleLogout}
           disabled={isLoggingOut}
-          className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="hidden md:flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           title="Sign out"
         >
           <PiSignOutBold className="w-5 h-5" />

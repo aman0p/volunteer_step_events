@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import "@/styles/admin.css";
 import { Sidebar } from "@/components/admin/Sidebar";
 import Header from "@/components/admin/Header";
+import { prisma } from "@/lib/prisma";
 
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
     const session = await getServerSession(authOptions);
@@ -12,7 +13,16 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
     if (!session) {
         redirect("/sign-in");
     }
-    
+
+    // Check if user has admin role
+    const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { role: true }
+    });
+
+    if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
+        redirect("/");
+    }
 
     return (
         <Providers session={session}>
