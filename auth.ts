@@ -19,7 +19,7 @@ export const authOptions = {
                     throw new Error("Missing email or password");
                 }
 
-                const user = await prisma.volunteer.findUnique({
+                const user = await prisma.user.findUnique({
                     where: {
                         email: credentials.email,
                     },

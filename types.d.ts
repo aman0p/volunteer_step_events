@@ -40,3 +40,17 @@ interface AuthCredentials {
   govIdImage?: string;
   profileImage?: string;
 }
+
+// Type for creating an event based on the Prisma schema
+interface EventParams {
+  title: string;
+  description: string;
+  location: string;
+  startDate: Date;
+  endDate: Date;
+  dressCode: string;
+  category: string[];
+  coverUrl: string;
+  eventImages: string[];
+  maxVolunteers?: number;
+}

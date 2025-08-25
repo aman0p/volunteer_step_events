@@ -45,7 +45,7 @@ export const adminSideBarLinks = [
 
 export const ROLE_OPTIONS = [
   { value: "VOLUNTEER", label: "Volunteer" },
-  { value: "ORGANISER", label: "Organiser" },
+  { value: "ORGANIZER", label: "Organizer" },
   { value: "ADMIN", label: "Admin" },
 ];
 
@@ -173,7 +173,7 @@ export const SAMPLE_VOLUNTEERS = [
     gender: "MALE",
     govIdImage: "/documents/passport-2.jpg",
     govIdType: "PASSPORT",
-    role: "ORGANISER",
+    role: "ORGANIZER",
     createdAt: "2024-01-12T10:30:00Z",
   },
   {

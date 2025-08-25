@@ -14,7 +14,7 @@ const THREE_DAYS_IN_MS = 3 * ONE_DAY_IN_MS;
 const THIRTY_DAYS_IN_MS = 30 * ONE_DAY_IN_MS;
 
 const getUserState = async (email: string): Promise<UserState> => {
-  const user = await prisma.volunteer.findUnique({
+  const user = await prisma.user.findUnique({
     where: { email },
   });
 

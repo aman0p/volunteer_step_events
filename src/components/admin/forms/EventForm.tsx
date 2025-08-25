@@ -22,6 +22,7 @@ import FileUpload from "@/components/FileUpload";
 import ImageTileUpload from "@/components/ui/image-tile-upload";
 import { toast } from "sonner";
 import Tag from "@/components/ui/tag";
+import { createEvent } from "@/lib/admin/action/events";
 
 interface Props extends Partial<Event> {
   type?: "create" | "update";
@@ -58,10 +59,16 @@ const EventForm = ({ type, ...event }: Props) => {
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof eventSchema>> = async (values) => {
-    // Integrate with your server action to create an event here
-    console.log("Create event payload", values);
-    toast.success("Event created successfully");
-    router.push(`/admin/events`);
+    const result = await createEvent(values);
+
+    if (result.success) {
+      toast.success("Event created successfully");
+      console.log(result.data);
+      form.reset();
+      router.push(`/admin/events`);
+    } else {
+      toast.error(result.message);
+    }
   };
 
   return (

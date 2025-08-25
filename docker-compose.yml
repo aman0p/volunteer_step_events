@@ -11,7 +11,11 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - volunteer-step-events-data:/var/lib/postgresql/data
+      - type: volume
+        source: volunteer-step-events-data
+        target: /var/lib/postgresql/data
 
 volumes:
   volunteer-step-events-data:
+    external: false
+    name: volunteer-step-events-data

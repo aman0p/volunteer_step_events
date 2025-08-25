@@ -3,7 +3,7 @@
 import React, { useRef, useState } from "react";
 import FileUpload from "@/components/FileUpload";
 import { cn } from "@/lib/utils";
-import useMultiFileUpload from "@/lib/hooks/useMultiFileUpload";
+import useMultiFileUpload from "@/hooks/useMultiFileUpload";
 import Image from "next/image";
 
 type Props = {

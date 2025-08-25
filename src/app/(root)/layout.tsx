@@ -13,21 +13,29 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 
   // Update lastActiveAt once per day
   if (session?.user?.id) {
-    const volunteer = await prisma.volunteer.findUnique({
-      where: { id: session.user.id },
-      select: { lastActiveAt: true },
-    });
-
-    const today = new Date().toISOString().slice(0, 10);
-    const lastActiveDate = volunteer?.lastActiveAt
-      ? new Date(volunteer.lastActiveAt).toISOString().slice(0, 10)
-      : null;
-
-    if (lastActiveDate !== today) {
-      await prisma.volunteer.update({
+    try {
+      const user = await prisma.user.findUnique({
         where: { id: session.user.id },
-        data: { lastActiveAt: new Date() },
+        select: { lastActiveAt: true },
       });
+
+      // Only proceed if user exists
+      if (user) {
+        const today = new Date().toISOString().slice(0, 10);
+        const lastActiveDate = user.lastActiveAt
+          ? new Date(user.lastActiveAt).toISOString().slice(0, 10)
+          : null;
+
+        if (lastActiveDate !== today) {
+          await prisma.user.update({
+            where: { id: session.user.id },
+            data: { lastActiveAt: new Date() },
+          });
+        }
+      }
+    } catch (error) {
+      // Log error but don't crash the layout
+      console.error('Error updating user lastActiveAt:', error);
     }
   }
 

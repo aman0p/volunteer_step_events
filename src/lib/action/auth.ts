@@ -2,7 +2,7 @@
 
 import { hash } from "bcryptjs";
 import { prisma } from "../prisma";
-import { AuthCredentials } from "../../../types";
+import { AuthCredentials } from "@/types";
 import { Gender, GovId, Role } from "@/generated/prisma";
 import { compare } from "bcryptjs";
 import { headers } from "next/headers";
@@ -23,7 +23,7 @@ export const signInWithCredentials = async (
         if (!success) return redirect("/too-fast");
 
         // Find user in database
-        const user = await prisma.volunteer.findUnique({
+        const user = await prisma.user.findUnique({
             where: { email }
         });
 
@@ -69,7 +69,7 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
 
 
     // 1. Check if user already exists
-    const existingUser = await prisma.volunteer.findFirst({
+    const existingUser = await prisma.user.findFirst({
         where: {
             email: email
         }
@@ -86,7 +86,7 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
     const hashedPassword = await hash(password, 10);
 
     try {
-        const newUser = await prisma.volunteer.create({
+        const newUser = await prisma.user.create({
             data: {
                 fullName,
                 email,

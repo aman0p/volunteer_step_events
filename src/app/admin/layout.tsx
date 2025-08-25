@@ -12,6 +12,7 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
     if (!session) {
         redirect("/sign-in");
     }
+    
 
     return (
         <Providers session={session}>

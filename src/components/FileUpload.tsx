@@ -6,7 +6,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Image as IKImage, Video as IKVideo } from "@imagekit/next";
-import useSingleFileUpload from "@/lib/hooks/useSingleFileUpload";
+import useSingleFileUpload from "@/hooks/useSingleFileUpload";
 
 const {
   env: {

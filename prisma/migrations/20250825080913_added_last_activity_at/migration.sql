@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "public"."Volunteer" ADD COLUMN     "lastActiveAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

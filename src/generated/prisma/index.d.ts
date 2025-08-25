@@ -19,10 +19,10 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Event = $Result.DefaultSelection<Prisma.$EventPayload>
 /**
- * Model Volunteer
+ * Model User
  * 
  */
-export type Volunteer = $Result.DefaultSelection<Prisma.$VolunteerPayload>
+export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
  * Model Enrollment
  * 
@@ -63,7 +63,7 @@ export type Status = (typeof Status)[keyof typeof Status]
 
 export const Role: {
   VOLUNTEER: 'VOLUNTEER',
-  ORGANISER: 'ORGANISER',
+  ORGANIZER: 'ORGANIZER',
   ADMIN: 'ADMIN'
 };
 
@@ -216,14 +216,14 @@ export class PrismaClient<
   get event(): Prisma.EventDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.volunteer`: Exposes CRUD operations for the **Volunteer** model.
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Volunteers
-    * const volunteers = await prisma.volunteer.findMany()
+    * // Fetch zero or more Users
+    * const users = await prisma.user.findMany()
     * ```
     */
-  get volunteer(): Prisma.VolunteerDelegate<ExtArgs, ClientOptions>;
+  get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.enrollment`: Exposes CRUD operations for the **Enrollment** model.
@@ -675,7 +675,7 @@ export namespace Prisma {
 
   export const ModelName: {
     Event: 'Event',
-    Volunteer: 'Volunteer',
+    User: 'User',
     Enrollment: 'Enrollment'
   };
 
@@ -695,7 +695,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "event" | "volunteer" | "enrollment"
+      modelProps: "event" | "user" | "enrollment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -773,77 +773,77 @@ export namespace Prisma {
           }
         }
       }
-      Volunteer: {
-        payload: Prisma.$VolunteerPayload<ExtArgs>
-        fields: Prisma.VolunteerFieldRefs
+      User: {
+        payload: Prisma.$UserPayload<ExtArgs>
+        fields: Prisma.UserFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.VolunteerFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload> | null
+            args: Prisma.UserFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.VolunteerFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload>
+            args: Prisma.UserFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           findFirst: {
-            args: Prisma.VolunteerFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload> | null
+            args: Prisma.UserFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.VolunteerFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload>
+            args: Prisma.UserFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           findMany: {
-            args: Prisma.VolunteerFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload>[]
+            args: Prisma.UserFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           create: {
-            args: Prisma.VolunteerCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload>
+            args: Prisma.UserCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           createMany: {
-            args: Prisma.VolunteerCreateManyArgs<ExtArgs>
+            args: Prisma.UserCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.VolunteerCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload>[]
+            args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           delete: {
-            args: Prisma.VolunteerDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload>
+            args: Prisma.UserDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           update: {
-            args: Prisma.VolunteerUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload>
+            args: Prisma.UserUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           deleteMany: {
-            args: Prisma.VolunteerDeleteManyArgs<ExtArgs>
+            args: Prisma.UserDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.VolunteerUpdateManyArgs<ExtArgs>
+            args: Prisma.UserUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.VolunteerUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload>[]
+            args: Prisma.UserUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           upsert: {
-            args: Prisma.VolunteerUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$VolunteerPayload>
+            args: Prisma.UserUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           aggregate: {
-            args: Prisma.VolunteerAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateVolunteer>
+            args: Prisma.UserAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUser>
           }
           groupBy: {
-            args: Prisma.VolunteerGroupByArgs<ExtArgs>
-            result: $Utils.Optional<VolunteerGroupByOutputType>[]
+            args: Prisma.UserGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserGroupByOutputType>[]
           }
           count: {
-            args: Prisma.VolunteerCountArgs<ExtArgs>
-            result: $Utils.Optional<VolunteerCountAggregateOutputType> | number
+            args: Prisma.UserCountArgs<ExtArgs>
+            result: $Utils.Optional<UserCountAggregateOutputType> | number
           }
         }
       }
@@ -1014,7 +1014,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     event?: EventOmit
-    volunteer?: VolunteerOmit
+    user?: UserOmit
     enrollment?: EnrollmentOmit
   }
 
@@ -1123,32 +1123,32 @@ export namespace Prisma {
 
 
   /**
-   * Count Type VolunteerCountOutputType
+   * Count Type UserCountOutputType
    */
 
-  export type VolunteerCountOutputType = {
+  export type UserCountOutputType = {
     enrollments: number
   }
 
-  export type VolunteerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    enrollments?: boolean | VolunteerCountOutputTypeCountEnrollmentsArgs
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs
   }
 
   // Custom InputTypes
   /**
-   * VolunteerCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type VolunteerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the VolunteerCountOutputType
+     * Select specific fields to fetch from the UserCountOutputType
      */
-    select?: VolunteerCountOutputTypeSelect<ExtArgs> | null
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * VolunteerCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type VolunteerCountOutputTypeCountEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EnrollmentWhereInput
   }
 
@@ -2358,16 +2358,16 @@ export namespace Prisma {
 
 
   /**
-   * Model Volunteer
+   * Model User
    */
 
-  export type AggregateVolunteer = {
-    _count: VolunteerCountAggregateOutputType | null
-    _min: VolunteerMinAggregateOutputType | null
-    _max: VolunteerMaxAggregateOutputType | null
+  export type AggregateUser = {
+    _count: UserCountAggregateOutputType | null
+    _min: UserMinAggregateOutputType | null
+    _max: UserMaxAggregateOutputType | null
   }
 
-  export type VolunteerMinAggregateOutputType = {
+  export type UserMinAggregateOutputType = {
     id: string | null
     fullName: string | null
     email: string | null
@@ -2383,7 +2383,7 @@ export namespace Prisma {
     createdAt: Date | null
   }
 
-  export type VolunteerMaxAggregateOutputType = {
+  export type UserMaxAggregateOutputType = {
     id: string | null
     fullName: string | null
     email: string | null
@@ -2399,7 +2399,7 @@ export namespace Prisma {
     createdAt: Date | null
   }
 
-  export type VolunteerCountAggregateOutputType = {
+  export type UserCountAggregateOutputType = {
     id: number
     fullName: number
     email: number
@@ -2418,7 +2418,7 @@ export namespace Prisma {
   }
 
 
-  export type VolunteerMinAggregateInputType = {
+  export type UserMinAggregateInputType = {
     id?: true
     fullName?: true
     email?: true
@@ -2434,7 +2434,7 @@ export namespace Prisma {
     createdAt?: true
   }
 
-  export type VolunteerMaxAggregateInputType = {
+  export type UserMaxAggregateInputType = {
     id?: true
     fullName?: true
     email?: true
@@ -2450,7 +2450,7 @@ export namespace Prisma {
     createdAt?: true
   }
 
-  export type VolunteerCountAggregateInputType = {
+  export type UserCountAggregateInputType = {
     id?: true
     fullName?: true
     email?: true
@@ -2468,79 +2468,79 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type VolunteerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Volunteer to aggregate.
+     * Filter which User to aggregate.
      */
-    where?: VolunteerWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Volunteers to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: VolunteerOrderByWithRelationInput | VolunteerOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: VolunteerWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Volunteers from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Volunteers.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Volunteers
+     * Count returned Users
     **/
-    _count?: true | VolunteerCountAggregateInputType
+    _count?: true | UserCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: VolunteerMinAggregateInputType
+    _min?: UserMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: VolunteerMaxAggregateInputType
+    _max?: UserMaxAggregateInputType
   }
 
-  export type GetVolunteerAggregateType<T extends VolunteerAggregateArgs> = {
-        [P in keyof T & keyof AggregateVolunteer]: P extends '_count' | 'count'
+  export type GetUserAggregateType<T extends UserAggregateArgs> = {
+        [P in keyof T & keyof AggregateUser]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateVolunteer[P]>
-      : GetScalarType<T[P], AggregateVolunteer[P]>
+        : GetScalarType<T[P], AggregateUser[P]>
+      : GetScalarType<T[P], AggregateUser[P]>
   }
 
 
 
 
-  export type VolunteerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: VolunteerWhereInput
-    orderBy?: VolunteerOrderByWithAggregationInput | VolunteerOrderByWithAggregationInput[]
-    by: VolunteerScalarFieldEnum[] | VolunteerScalarFieldEnum
-    having?: VolunteerScalarWhereWithAggregatesInput
+  export type UserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithAggregationInput | UserOrderByWithAggregationInput[]
+    by: UserScalarFieldEnum[] | UserScalarFieldEnum
+    having?: UserScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: VolunteerCountAggregateInputType | true
-    _min?: VolunteerMinAggregateInputType
-    _max?: VolunteerMaxAggregateInputType
+    _count?: UserCountAggregateInputType | true
+    _min?: UserMinAggregateInputType
+    _max?: UserMaxAggregateInputType
   }
 
-  export type VolunteerGroupByOutputType = {
+  export type UserGroupByOutputType = {
     id: string
     fullName: string
     email: string
@@ -2555,26 +2555,26 @@ export namespace Prisma {
     role: $Enums.Role
     lastActiveAt: Date
     createdAt: Date
-    _count: VolunteerCountAggregateOutputType | null
-    _min: VolunteerMinAggregateOutputType | null
-    _max: VolunteerMaxAggregateOutputType | null
+    _count: UserCountAggregateOutputType | null
+    _min: UserMinAggregateOutputType | null
+    _max: UserMaxAggregateOutputType | null
   }
 
-  type GetVolunteerGroupByPayload<T extends VolunteerGroupByArgs> = Prisma.PrismaPromise<
+  type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<VolunteerGroupByOutputType, T['by']> &
+      PickEnumerable<UserGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof VolunteerGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof UserGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], VolunteerGroupByOutputType[P]>
-            : GetScalarType<T[P], VolunteerGroupByOutputType[P]>
+              : GetScalarType<T[P], UserGroupByOutputType[P]>
+            : GetScalarType<T[P], UserGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type VolunteerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     fullName?: boolean
     email?: boolean
@@ -2589,11 +2589,11 @@ export namespace Prisma {
     role?: boolean
     lastActiveAt?: boolean
     createdAt?: boolean
-    enrollments?: boolean | Volunteer$enrollmentsArgs<ExtArgs>
-    _count?: boolean | VolunteerCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["volunteer"]>
+    enrollments?: boolean | User$enrollmentsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["user"]>
 
-  export type VolunteerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     fullName?: boolean
     email?: boolean
@@ -2608,9 +2608,9 @@ export namespace Prisma {
     role?: boolean
     lastActiveAt?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["volunteer"]>
+  }, ExtArgs["result"]["user"]>
 
-  export type VolunteerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     fullName?: boolean
     email?: boolean
@@ -2625,9 +2625,9 @@ export namespace Prisma {
     role?: boolean
     lastActiveAt?: boolean
     createdAt?: boolean
-  }, ExtArgs["result"]["volunteer"]>
+  }, ExtArgs["result"]["user"]>
 
-  export type VolunteerSelectScalar = {
+  export type UserSelectScalar = {
     id?: boolean
     fullName?: boolean
     email?: boolean
@@ -2644,16 +2644,16 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type VolunteerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "password" | "phoneNumber" | "profileImage" | "skills" | "address" | "gender" | "govIdImage" | "govIdType" | "role" | "lastActiveAt" | "createdAt", ExtArgs["result"]["volunteer"]>
-  export type VolunteerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    enrollments?: boolean | Volunteer$enrollmentsArgs<ExtArgs>
-    _count?: boolean | VolunteerCountOutputTypeDefaultArgs<ExtArgs>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullName" | "email" | "password" | "phoneNumber" | "profileImage" | "skills" | "address" | "gender" | "govIdImage" | "govIdType" | "role" | "lastActiveAt" | "createdAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    enrollments?: boolean | User$enrollmentsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type VolunteerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type VolunteerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
-  export type $VolunteerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Volunteer"
+  export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "User"
     objects: {
       enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     }
@@ -2672,136 +2672,136 @@ export namespace Prisma {
       role: $Enums.Role
       lastActiveAt: Date
       createdAt: Date
-    }, ExtArgs["result"]["volunteer"]>
+    }, ExtArgs["result"]["user"]>
     composites: {}
   }
 
-  type VolunteerGetPayload<S extends boolean | null | undefined | VolunteerDefaultArgs> = $Result.GetResult<Prisma.$VolunteerPayload, S>
+  type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = $Result.GetResult<Prisma.$UserPayload, S>
 
-  type VolunteerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<VolunteerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: VolunteerCountAggregateInputType | true
+  type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserCountAggregateInputType | true
     }
 
-  export interface VolunteerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Volunteer'], meta: { name: 'Volunteer' } }
+  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User'], meta: { name: 'User' } }
     /**
-     * Find zero or one Volunteer that matches the filter.
-     * @param {VolunteerFindUniqueArgs} args - Arguments to find a Volunteer
+     * Find zero or one User that matches the filter.
+     * @param {UserFindUniqueArgs} args - Arguments to find a User
      * @example
-     * // Get one Volunteer
-     * const volunteer = await prisma.volunteer.findUnique({
+     * // Get one User
+     * const user = await prisma.user.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends VolunteerFindUniqueArgs>(args: SelectSubset<T, VolunteerFindUniqueArgs<ExtArgs>>): Prisma__VolunteerClient<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends UserFindUniqueArgs>(args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Volunteer that matches the filter or throw an error with `error.code='P2025'`
+     * Find one User that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {VolunteerFindUniqueOrThrowArgs} args - Arguments to find a Volunteer
+     * @param {UserFindUniqueOrThrowArgs} args - Arguments to find a User
      * @example
-     * // Get one Volunteer
-     * const volunteer = await prisma.volunteer.findUniqueOrThrow({
+     * // Get one User
+     * const user = await prisma.user.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends VolunteerFindUniqueOrThrowArgs>(args: SelectSubset<T, VolunteerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VolunteerClient<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Volunteer that matches the filter.
+     * Find the first User that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VolunteerFindFirstArgs} args - Arguments to find a Volunteer
+     * @param {UserFindFirstArgs} args - Arguments to find a User
      * @example
-     * // Get one Volunteer
-     * const volunteer = await prisma.volunteer.findFirst({
+     * // Get one User
+     * const user = await prisma.user.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends VolunteerFindFirstArgs>(args?: SelectSubset<T, VolunteerFindFirstArgs<ExtArgs>>): Prisma__VolunteerClient<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends UserFindFirstArgs>(args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Volunteer that matches the filter or
+     * Find the first User that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VolunteerFindFirstOrThrowArgs} args - Arguments to find a Volunteer
+     * @param {UserFindFirstOrThrowArgs} args - Arguments to find a User
      * @example
-     * // Get one Volunteer
-     * const volunteer = await prisma.volunteer.findFirstOrThrow({
+     * // Get one User
+     * const user = await prisma.user.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends VolunteerFindFirstOrThrowArgs>(args?: SelectSubset<T, VolunteerFindFirstOrThrowArgs<ExtArgs>>): Prisma__VolunteerClient<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Volunteers that matches the filter.
+     * Find zero or more Users that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VolunteerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {UserFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Volunteers
-     * const volunteers = await prisma.volunteer.findMany()
+     * // Get all Users
+     * const users = await prisma.user.findMany()
      * 
-     * // Get first 10 Volunteers
-     * const volunteers = await prisma.volunteer.findMany({ take: 10 })
+     * // Get first 10 Users
+     * const users = await prisma.user.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const volunteerWithIdOnly = await prisma.volunteer.findMany({ select: { id: true } })
+     * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends VolunteerFindManyArgs>(args?: SelectSubset<T, VolunteerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Volunteer.
-     * @param {VolunteerCreateArgs} args - Arguments to create a Volunteer.
+     * Create a User.
+     * @param {UserCreateArgs} args - Arguments to create a User.
      * @example
-     * // Create one Volunteer
-     * const Volunteer = await prisma.volunteer.create({
+     * // Create one User
+     * const User = await prisma.user.create({
      *   data: {
-     *     // ... data to create a Volunteer
+     *     // ... data to create a User
      *   }
      * })
      * 
      */
-    create<T extends VolunteerCreateArgs>(args: SelectSubset<T, VolunteerCreateArgs<ExtArgs>>): Prisma__VolunteerClient<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends UserCreateArgs>(args: SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Volunteers.
-     * @param {VolunteerCreateManyArgs} args - Arguments to create many Volunteers.
+     * Create many Users.
+     * @param {UserCreateManyArgs} args - Arguments to create many Users.
      * @example
-     * // Create many Volunteers
-     * const volunteer = await prisma.volunteer.createMany({
+     * // Create many Users
+     * const user = await prisma.user.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends VolunteerCreateManyArgs>(args?: SelectSubset<T, VolunteerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends UserCreateManyArgs>(args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Volunteers and returns the data saved in the database.
-     * @param {VolunteerCreateManyAndReturnArgs} args - Arguments to create many Volunteers.
+     * Create many Users and returns the data saved in the database.
+     * @param {UserCreateManyAndReturnArgs} args - Arguments to create many Users.
      * @example
-     * // Create many Volunteers
-     * const volunteer = await prisma.volunteer.createManyAndReturn({
+     * // Create many Users
+     * const user = await prisma.user.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Volunteers and only return the `id`
-     * const volunteerWithIdOnly = await prisma.volunteer.createManyAndReturn({
+     * // Create many Users and only return the `id`
+     * const userWithIdOnly = await prisma.user.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -2811,28 +2811,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends VolunteerCreateManyAndReturnArgs>(args?: SelectSubset<T, VolunteerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Volunteer.
-     * @param {VolunteerDeleteArgs} args - Arguments to delete one Volunteer.
+     * Delete a User.
+     * @param {UserDeleteArgs} args - Arguments to delete one User.
      * @example
-     * // Delete one Volunteer
-     * const Volunteer = await prisma.volunteer.delete({
+     * // Delete one User
+     * const User = await prisma.user.delete({
      *   where: {
-     *     // ... filter to delete one Volunteer
+     *     // ... filter to delete one User
      *   }
      * })
      * 
      */
-    delete<T extends VolunteerDeleteArgs>(args: SelectSubset<T, VolunteerDeleteArgs<ExtArgs>>): Prisma__VolunteerClient<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends UserDeleteArgs>(args: SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Volunteer.
-     * @param {VolunteerUpdateArgs} args - Arguments to update one Volunteer.
+     * Update one User.
+     * @param {UserUpdateArgs} args - Arguments to update one User.
      * @example
-     * // Update one Volunteer
-     * const volunteer = await prisma.volunteer.update({
+     * // Update one User
+     * const user = await prisma.user.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2842,30 +2842,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends VolunteerUpdateArgs>(args: SelectSubset<T, VolunteerUpdateArgs<ExtArgs>>): Prisma__VolunteerClient<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends UserUpdateArgs>(args: SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Volunteers.
-     * @param {VolunteerDeleteManyArgs} args - Arguments to filter Volunteers to delete.
+     * Delete zero or more Users.
+     * @param {UserDeleteManyArgs} args - Arguments to filter Users to delete.
      * @example
-     * // Delete a few Volunteers
-     * const { count } = await prisma.volunteer.deleteMany({
+     * // Delete a few Users
+     * const { count } = await prisma.user.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends VolunteerDeleteManyArgs>(args?: SelectSubset<T, VolunteerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends UserDeleteManyArgs>(args?: SelectSubset<T, UserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Volunteers.
+     * Update zero or more Users.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VolunteerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {UserUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Volunteers
-     * const volunteer = await prisma.volunteer.updateMany({
+     * // Update many Users
+     * const user = await prisma.user.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2875,14 +2875,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends VolunteerUpdateManyArgs>(args: SelectSubset<T, VolunteerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends UserUpdateManyArgs>(args: SelectSubset<T, UserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Volunteers and returns the data updated in the database.
-     * @param {VolunteerUpdateManyAndReturnArgs} args - Arguments to update many Volunteers.
+     * Update zero or more Users and returns the data updated in the database.
+     * @param {UserUpdateManyAndReturnArgs} args - Arguments to update many Users.
      * @example
-     * // Update many Volunteers
-     * const volunteer = await prisma.volunteer.updateManyAndReturn({
+     * // Update many Users
+     * const user = await prisma.user.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2891,8 +2891,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Volunteers and only return the `id`
-     * const volunteerWithIdOnly = await prisma.volunteer.updateManyAndReturn({
+     * // Update zero or more Users and only return the `id`
+     * const userWithIdOnly = await prisma.user.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -2905,56 +2905,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends VolunteerUpdateManyAndReturnArgs>(args: SelectSubset<T, VolunteerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends UserUpdateManyAndReturnArgs>(args: SelectSubset<T, UserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Volunteer.
-     * @param {VolunteerUpsertArgs} args - Arguments to update or create a Volunteer.
+     * Create or update one User.
+     * @param {UserUpsertArgs} args - Arguments to update or create a User.
      * @example
-     * // Update or create a Volunteer
-     * const volunteer = await prisma.volunteer.upsert({
+     * // Update or create a User
+     * const user = await prisma.user.upsert({
      *   create: {
-     *     // ... data to create a Volunteer
+     *     // ... data to create a User
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Volunteer we want to update
+     *     // ... the filter for the User we want to update
      *   }
      * })
      */
-    upsert<T extends VolunteerUpsertArgs>(args: SelectSubset<T, VolunteerUpsertArgs<ExtArgs>>): Prisma__VolunteerClient<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Volunteers.
+     * Count the number of Users.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VolunteerCountArgs} args - Arguments to filter Volunteers to count.
+     * @param {UserCountArgs} args - Arguments to filter Users to count.
      * @example
-     * // Count the number of Volunteers
-     * const count = await prisma.volunteer.count({
+     * // Count the number of Users
+     * const count = await prisma.user.count({
      *   where: {
-     *     // ... the filter for the Volunteers we want to count
+     *     // ... the filter for the Users we want to count
      *   }
      * })
     **/
-    count<T extends VolunteerCountArgs>(
-      args?: Subset<T, VolunteerCountArgs>,
+    count<T extends UserCountArgs>(
+      args?: Subset<T, UserCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], VolunteerCountAggregateOutputType>
+          : GetScalarType<T['select'], UserCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Volunteer.
+     * Allows you to perform aggregations operations on a User.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VolunteerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {UserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -2974,13 +2974,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends VolunteerAggregateArgs>(args: Subset<T, VolunteerAggregateArgs>): Prisma.PrismaPromise<GetVolunteerAggregateType<T>>
+    aggregate<T extends UserAggregateArgs>(args: Subset<T, UserAggregateArgs>): Prisma.PrismaPromise<GetUserAggregateType<T>>
 
     /**
-     * Group by Volunteer.
+     * Group by User.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {VolunteerGroupByArgs} args - Group by arguments.
+     * @param {UserGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -2995,14 +2995,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends VolunteerGroupByArgs,
+      T extends UserGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: VolunteerGroupByArgs['orderBy'] }
-        : { orderBy?: VolunteerGroupByArgs['orderBy'] },
+        ? { orderBy: UserGroupByArgs['orderBy'] }
+        : { orderBy?: UserGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -3051,22 +3051,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, VolunteerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVolunteerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, UserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Volunteer model
+   * Fields of the User model
    */
-  readonly fields: VolunteerFieldRefs;
+  readonly fields: UserFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Volunteer.
+   * The delegate class that acts as a "Promise-like" for User.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__VolunteerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    enrollments<T extends Volunteer$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Volunteer$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    enrollments<T extends User$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3093,414 +3093,414 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Volunteer model
+   * Fields of the User model
    */
-  interface VolunteerFieldRefs {
-    readonly id: FieldRef<"Volunteer", 'String'>
-    readonly fullName: FieldRef<"Volunteer", 'String'>
-    readonly email: FieldRef<"Volunteer", 'String'>
-    readonly password: FieldRef<"Volunteer", 'String'>
-    readonly phoneNumber: FieldRef<"Volunteer", 'String'>
-    readonly profileImage: FieldRef<"Volunteer", 'String'>
-    readonly skills: FieldRef<"Volunteer", 'String[]'>
-    readonly address: FieldRef<"Volunteer", 'String'>
-    readonly gender: FieldRef<"Volunteer", 'Gender'>
-    readonly govIdImage: FieldRef<"Volunteer", 'String'>
-    readonly govIdType: FieldRef<"Volunteer", 'GovId'>
-    readonly role: FieldRef<"Volunteer", 'Role'>
-    readonly lastActiveAt: FieldRef<"Volunteer", 'DateTime'>
-    readonly createdAt: FieldRef<"Volunteer", 'DateTime'>
+  interface UserFieldRefs {
+    readonly id: FieldRef<"User", 'String'>
+    readonly fullName: FieldRef<"User", 'String'>
+    readonly email: FieldRef<"User", 'String'>
+    readonly password: FieldRef<"User", 'String'>
+    readonly phoneNumber: FieldRef<"User", 'String'>
+    readonly profileImage: FieldRef<"User", 'String'>
+    readonly skills: FieldRef<"User", 'String[]'>
+    readonly address: FieldRef<"User", 'String'>
+    readonly gender: FieldRef<"User", 'Gender'>
+    readonly govIdImage: FieldRef<"User", 'String'>
+    readonly govIdType: FieldRef<"User", 'GovId'>
+    readonly role: FieldRef<"User", 'Role'>
+    readonly lastActiveAt: FieldRef<"User", 'DateTime'>
+    readonly createdAt: FieldRef<"User", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Volunteer findUnique
+   * User findUnique
    */
-  export type VolunteerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VolunteerInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Volunteer to fetch.
+     * Filter, which User to fetch.
      */
-    where: VolunteerWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Volunteer findUniqueOrThrow
+   * User findUniqueOrThrow
    */
-  export type VolunteerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VolunteerInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Volunteer to fetch.
+     * Filter, which User to fetch.
      */
-    where: VolunteerWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Volunteer findFirst
+   * User findFirst
    */
-  export type VolunteerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VolunteerInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Volunteer to fetch.
+     * Filter, which User to fetch.
      */
-    where?: VolunteerWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Volunteers to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: VolunteerOrderByWithRelationInput | VolunteerOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Volunteers.
+     * Sets the position for searching for Users.
      */
-    cursor?: VolunteerWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Volunteers from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Volunteers.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Volunteers.
+     * Filter by unique combinations of Users.
      */
-    distinct?: VolunteerScalarFieldEnum | VolunteerScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Volunteer findFirstOrThrow
+   * User findFirstOrThrow
    */
-  export type VolunteerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VolunteerInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Volunteer to fetch.
+     * Filter, which User to fetch.
      */
-    where?: VolunteerWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Volunteers to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: VolunteerOrderByWithRelationInput | VolunteerOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Volunteers.
+     * Sets the position for searching for Users.
      */
-    cursor?: VolunteerWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Volunteers from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Volunteers.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Volunteers.
+     * Filter by unique combinations of Users.
      */
-    distinct?: VolunteerScalarFieldEnum | VolunteerScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Volunteer findMany
+   * User findMany
    */
-  export type VolunteerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VolunteerInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Volunteers to fetch.
+     * Filter, which Users to fetch.
      */
-    where?: VolunteerWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Volunteers to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: VolunteerOrderByWithRelationInput | VolunteerOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Volunteers.
+     * Sets the position for listing Users.
      */
-    cursor?: VolunteerWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Volunteers from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Volunteers.
+     * Skip the first `n` Users.
      */
     skip?: number
-    distinct?: VolunteerScalarFieldEnum | VolunteerScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Volunteer create
+   * User create
    */
-  export type VolunteerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VolunteerInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The data needed to create a Volunteer.
+     * The data needed to create a User.
      */
-    data: XOR<VolunteerCreateInput, VolunteerUncheckedCreateInput>
+    data: XOR<UserCreateInput, UserUncheckedCreateInput>
   }
 
   /**
-   * Volunteer createMany
+   * User createMany
    */
-  export type VolunteerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Volunteers.
+     * The data used to create many Users.
      */
-    data: VolunteerCreateManyInput | VolunteerCreateManyInput[]
+    data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Volunteer createManyAndReturn
+   * User createManyAndReturn
    */
-  export type VolunteerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelectCreateManyAndReturn<ExtArgs> | null
+    select?: UserSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
-     * The data used to create many Volunteers.
+     * The data used to create many Users.
      */
-    data: VolunteerCreateManyInput | VolunteerCreateManyInput[]
+    data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Volunteer update
+   * User update
    */
-  export type VolunteerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VolunteerInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The data needed to update a Volunteer.
+     * The data needed to update a User.
      */
-    data: XOR<VolunteerUpdateInput, VolunteerUncheckedUpdateInput>
+    data: XOR<UserUpdateInput, UserUncheckedUpdateInput>
     /**
-     * Choose, which Volunteer to update.
+     * Choose, which User to update.
      */
-    where: VolunteerWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Volunteer updateMany
+   * User updateMany
    */
-  export type VolunteerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Volunteers.
+     * The data used to update Users.
      */
-    data: XOR<VolunteerUpdateManyMutationInput, VolunteerUncheckedUpdateManyInput>
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
     /**
-     * Filter which Volunteers to update
+     * Filter which Users to update
      */
-    where?: VolunteerWhereInput
+    where?: UserWhereInput
     /**
-     * Limit how many Volunteers to update.
+     * Limit how many Users to update.
      */
     limit?: number
   }
 
   /**
-   * Volunteer updateManyAndReturn
+   * User updateManyAndReturn
    */
-  export type VolunteerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: UserSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
-     * The data used to update Volunteers.
+     * The data used to update Users.
      */
-    data: XOR<VolunteerUpdateManyMutationInput, VolunteerUncheckedUpdateManyInput>
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
     /**
-     * Filter which Volunteers to update
+     * Filter which Users to update
      */
-    where?: VolunteerWhereInput
+    where?: UserWhereInput
     /**
-     * Limit how many Volunteers to update.
+     * Limit how many Users to update.
      */
     limit?: number
   }
 
   /**
-   * Volunteer upsert
+   * User upsert
    */
-  export type VolunteerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VolunteerInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The filter to search for the Volunteer to update in case it exists.
+     * The filter to search for the User to update in case it exists.
      */
-    where: VolunteerWhereUniqueInput
+    where: UserWhereUniqueInput
     /**
-     * In case the Volunteer found by the `where` argument doesn't exist, create a new Volunteer with this data.
+     * In case the User found by the `where` argument doesn't exist, create a new User with this data.
      */
-    create: XOR<VolunteerCreateInput, VolunteerUncheckedCreateInput>
+    create: XOR<UserCreateInput, UserUncheckedCreateInput>
     /**
-     * In case the Volunteer was found with the provided `where` argument, update it with this data.
+     * In case the User was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<VolunteerUpdateInput, VolunteerUncheckedUpdateInput>
+    update: XOR<UserUpdateInput, UserUncheckedUpdateInput>
   }
 
   /**
-   * Volunteer delete
+   * User delete
    */
-  export type VolunteerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VolunteerInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter which Volunteer to delete.
+     * Filter which User to delete.
      */
-    where: VolunteerWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Volunteer deleteMany
+   * User deleteMany
    */
-  export type VolunteerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Volunteers to delete
+     * Filter which Users to delete
      */
-    where?: VolunteerWhereInput
+    where?: UserWhereInput
     /**
-     * Limit how many Volunteers to delete.
+     * Limit how many Users to delete.
      */
     limit?: number
   }
 
   /**
-   * Volunteer.enrollments
+   * User.enrollments
    */
-  export type Volunteer$enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Enrollment
      */
@@ -3522,21 +3522,21 @@ export namespace Prisma {
   }
 
   /**
-   * Volunteer without action
+   * User without action
    */
-  export type VolunteerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Volunteer
+     * Select specific fields to fetch from the User
      */
-    select?: VolunteerSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Volunteer
+     * Omit specific fields from the User
      */
-    omit?: VolunteerOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: VolunteerInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -3555,7 +3555,7 @@ export namespace Prisma {
     status: $Enums.Status | null
     enrolledAt: Date | null
     eventId: string | null
-    volunteerId: string | null
+    userId: string | null
   }
 
   export type EnrollmentMaxAggregateOutputType = {
@@ -3563,7 +3563,7 @@ export namespace Prisma {
     status: $Enums.Status | null
     enrolledAt: Date | null
     eventId: string | null
-    volunteerId: string | null
+    userId: string | null
   }
 
   export type EnrollmentCountAggregateOutputType = {
@@ -3571,7 +3571,7 @@ export namespace Prisma {
     status: number
     enrolledAt: number
     eventId: number
-    volunteerId: number
+    userId: number
     _all: number
   }
 
@@ -3581,7 +3581,7 @@ export namespace Prisma {
     status?: true
     enrolledAt?: true
     eventId?: true
-    volunteerId?: true
+    userId?: true
   }
 
   export type EnrollmentMaxAggregateInputType = {
@@ -3589,7 +3589,7 @@ export namespace Prisma {
     status?: true
     enrolledAt?: true
     eventId?: true
-    volunteerId?: true
+    userId?: true
   }
 
   export type EnrollmentCountAggregateInputType = {
@@ -3597,7 +3597,7 @@ export namespace Prisma {
     status?: true
     enrolledAt?: true
     eventId?: true
-    volunteerId?: true
+    userId?: true
     _all?: true
   }
 
@@ -3678,7 +3678,7 @@ export namespace Prisma {
     status: $Enums.Status
     enrolledAt: Date
     eventId: string
-    volunteerId: string
+    userId: string
     _count: EnrollmentCountAggregateOutputType | null
     _min: EnrollmentMinAggregateOutputType | null
     _max: EnrollmentMaxAggregateOutputType | null
@@ -3703,9 +3703,9 @@ export namespace Prisma {
     status?: boolean
     enrolledAt?: boolean
     eventId?: boolean
-    volunteerId?: boolean
+    userId?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
-    volunteer?: boolean | VolunteerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
 
   export type EnrollmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3713,9 +3713,9 @@ export namespace Prisma {
     status?: boolean
     enrolledAt?: boolean
     eventId?: boolean
-    volunteerId?: boolean
+    userId?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
-    volunteer?: boolean | VolunteerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
 
   export type EnrollmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3723,9 +3723,9 @@ export namespace Prisma {
     status?: boolean
     enrolledAt?: boolean
     eventId?: boolean
-    volunteerId?: boolean
+    userId?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
-    volunteer?: boolean | VolunteerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
 
   export type EnrollmentSelectScalar = {
@@ -3733,35 +3733,35 @@ export namespace Prisma {
     status?: boolean
     enrolledAt?: boolean
     eventId?: boolean
-    volunteerId?: boolean
+    userId?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "enrolledAt" | "eventId" | "volunteerId", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "enrolledAt" | "eventId" | "userId", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
-    volunteer?: boolean | VolunteerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type EnrollmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
-    volunteer?: boolean | VolunteerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type EnrollmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
-    volunteer?: boolean | VolunteerDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $EnrollmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Enrollment"
     objects: {
       event: Prisma.$EventPayload<ExtArgs>
-      volunteer: Prisma.$VolunteerPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       status: $Enums.Status
       enrolledAt: Date
       eventId: string
-      volunteerId: string
+      userId: string
     }, ExtArgs["result"]["enrollment"]>
     composites: {}
   }
@@ -4157,7 +4157,7 @@ export namespace Prisma {
   export interface Prisma__EnrollmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     event<T extends EventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EventDefaultArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    volunteer<T extends VolunteerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, VolunteerDefaultArgs<ExtArgs>>): Prisma__VolunteerClient<$Result.GetResult<Prisma.$VolunteerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4191,7 +4191,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Enrollment", 'Status'>
     readonly enrolledAt: FieldRef<"Enrollment", 'DateTime'>
     readonly eventId: FieldRef<"Enrollment", 'String'>
-    readonly volunteerId: FieldRef<"Enrollment", 'String'>
+    readonly userId: FieldRef<"Enrollment", 'String'>
   }
     
 
@@ -4639,7 +4639,7 @@ export namespace Prisma {
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
-  export const VolunteerScalarFieldEnum: {
+  export const UserScalarFieldEnum: {
     id: 'id',
     fullName: 'fullName',
     email: 'email',
@@ -4656,7 +4656,7 @@ export namespace Prisma {
     createdAt: 'createdAt'
   };
 
-  export type VolunteerScalarFieldEnum = (typeof VolunteerScalarFieldEnum)[keyof typeof VolunteerScalarFieldEnum]
+  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
   export const EnrollmentScalarFieldEnum: {
@@ -4664,7 +4664,7 @@ export namespace Prisma {
     status: 'status',
     enrolledAt: 'enrolledAt',
     eventId: 'eventId',
-    volunteerId: 'volunteerId'
+    userId: 'userId'
   };
 
   export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
@@ -4911,28 +4911,28 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
   }
 
-  export type VolunteerWhereInput = {
-    AND?: VolunteerWhereInput | VolunteerWhereInput[]
-    OR?: VolunteerWhereInput[]
-    NOT?: VolunteerWhereInput | VolunteerWhereInput[]
-    id?: StringFilter<"Volunteer"> | string
-    fullName?: StringFilter<"Volunteer"> | string
-    email?: StringFilter<"Volunteer"> | string
-    password?: StringFilter<"Volunteer"> | string
-    phoneNumber?: StringFilter<"Volunteer"> | string
-    profileImage?: StringFilter<"Volunteer"> | string
-    skills?: StringNullableListFilter<"Volunteer">
-    address?: StringFilter<"Volunteer"> | string
-    gender?: EnumGenderFilter<"Volunteer"> | $Enums.Gender
-    govIdImage?: StringFilter<"Volunteer"> | string
-    govIdType?: EnumGovIdFilter<"Volunteer"> | $Enums.GovId
-    role?: EnumRoleFilter<"Volunteer"> | $Enums.Role
-    lastActiveAt?: DateTimeFilter<"Volunteer"> | Date | string
-    createdAt?: DateTimeFilter<"Volunteer"> | Date | string
+  export type UserWhereInput = {
+    AND?: UserWhereInput | UserWhereInput[]
+    OR?: UserWhereInput[]
+    NOT?: UserWhereInput | UserWhereInput[]
+    id?: StringFilter<"User"> | string
+    fullName?: StringFilter<"User"> | string
+    email?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
+    phoneNumber?: StringFilter<"User"> | string
+    profileImage?: StringFilter<"User"> | string
+    skills?: StringNullableListFilter<"User">
+    address?: StringFilter<"User"> | string
+    gender?: EnumGenderFilter<"User"> | $Enums.Gender
+    govIdImage?: StringFilter<"User"> | string
+    govIdType?: EnumGovIdFilter<"User"> | $Enums.GovId
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    lastActiveAt?: DateTimeFilter<"User"> | Date | string
+    createdAt?: DateTimeFilter<"User"> | Date | string
     enrollments?: EnrollmentListRelationFilter
   }
 
-  export type VolunteerOrderByWithRelationInput = {
+  export type UserOrderByWithRelationInput = {
     id?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
@@ -4950,28 +4950,28 @@ export namespace Prisma {
     enrollments?: EnrollmentOrderByRelationAggregateInput
   }
 
-  export type VolunteerWhereUniqueInput = Prisma.AtLeast<{
+  export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
     phoneNumber?: string
-    AND?: VolunteerWhereInput | VolunteerWhereInput[]
-    OR?: VolunteerWhereInput[]
-    NOT?: VolunteerWhereInput | VolunteerWhereInput[]
-    fullName?: StringFilter<"Volunteer"> | string
-    password?: StringFilter<"Volunteer"> | string
-    profileImage?: StringFilter<"Volunteer"> | string
-    skills?: StringNullableListFilter<"Volunteer">
-    address?: StringFilter<"Volunteer"> | string
-    gender?: EnumGenderFilter<"Volunteer"> | $Enums.Gender
-    govIdImage?: StringFilter<"Volunteer"> | string
-    govIdType?: EnumGovIdFilter<"Volunteer"> | $Enums.GovId
-    role?: EnumRoleFilter<"Volunteer"> | $Enums.Role
-    lastActiveAt?: DateTimeFilter<"Volunteer"> | Date | string
-    createdAt?: DateTimeFilter<"Volunteer"> | Date | string
+    AND?: UserWhereInput | UserWhereInput[]
+    OR?: UserWhereInput[]
+    NOT?: UserWhereInput | UserWhereInput[]
+    fullName?: StringFilter<"User"> | string
+    password?: StringFilter<"User"> | string
+    profileImage?: StringFilter<"User"> | string
+    skills?: StringNullableListFilter<"User">
+    address?: StringFilter<"User"> | string
+    gender?: EnumGenderFilter<"User"> | $Enums.Gender
+    govIdImage?: StringFilter<"User"> | string
+    govIdType?: EnumGovIdFilter<"User"> | $Enums.GovId
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    lastActiveAt?: DateTimeFilter<"User"> | Date | string
+    createdAt?: DateTimeFilter<"User"> | Date | string
     enrollments?: EnrollmentListRelationFilter
   }, "id" | "email" | "phoneNumber">
 
-  export type VolunteerOrderByWithAggregationInput = {
+  export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
@@ -4986,29 +4986,29 @@ export namespace Prisma {
     role?: SortOrder
     lastActiveAt?: SortOrder
     createdAt?: SortOrder
-    _count?: VolunteerCountOrderByAggregateInput
-    _max?: VolunteerMaxOrderByAggregateInput
-    _min?: VolunteerMinOrderByAggregateInput
+    _count?: UserCountOrderByAggregateInput
+    _max?: UserMaxOrderByAggregateInput
+    _min?: UserMinOrderByAggregateInput
   }
 
-  export type VolunteerScalarWhereWithAggregatesInput = {
-    AND?: VolunteerScalarWhereWithAggregatesInput | VolunteerScalarWhereWithAggregatesInput[]
-    OR?: VolunteerScalarWhereWithAggregatesInput[]
-    NOT?: VolunteerScalarWhereWithAggregatesInput | VolunteerScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Volunteer"> | string
-    fullName?: StringWithAggregatesFilter<"Volunteer"> | string
-    email?: StringWithAggregatesFilter<"Volunteer"> | string
-    password?: StringWithAggregatesFilter<"Volunteer"> | string
-    phoneNumber?: StringWithAggregatesFilter<"Volunteer"> | string
-    profileImage?: StringWithAggregatesFilter<"Volunteer"> | string
-    skills?: StringNullableListFilter<"Volunteer">
-    address?: StringWithAggregatesFilter<"Volunteer"> | string
-    gender?: EnumGenderWithAggregatesFilter<"Volunteer"> | $Enums.Gender
-    govIdImage?: StringWithAggregatesFilter<"Volunteer"> | string
-    govIdType?: EnumGovIdWithAggregatesFilter<"Volunteer"> | $Enums.GovId
-    role?: EnumRoleWithAggregatesFilter<"Volunteer"> | $Enums.Role
-    lastActiveAt?: DateTimeWithAggregatesFilter<"Volunteer"> | Date | string
-    createdAt?: DateTimeWithAggregatesFilter<"Volunteer"> | Date | string
+  export type UserScalarWhereWithAggregatesInput = {
+    AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
+    OR?: UserScalarWhereWithAggregatesInput[]
+    NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"User"> | string
+    fullName?: StringWithAggregatesFilter<"User"> | string
+    email?: StringWithAggregatesFilter<"User"> | string
+    password?: StringWithAggregatesFilter<"User"> | string
+    phoneNumber?: StringWithAggregatesFilter<"User"> | string
+    profileImage?: StringWithAggregatesFilter<"User"> | string
+    skills?: StringNullableListFilter<"User">
+    address?: StringWithAggregatesFilter<"User"> | string
+    gender?: EnumGenderWithAggregatesFilter<"User"> | $Enums.Gender
+    govIdImage?: StringWithAggregatesFilter<"User"> | string
+    govIdType?: EnumGovIdWithAggregatesFilter<"User"> | $Enums.GovId
+    role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
+    lastActiveAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
   export type EnrollmentWhereInput = {
@@ -5019,9 +5019,9 @@ export namespace Prisma {
     status?: EnumStatusFilter<"Enrollment"> | $Enums.Status
     enrolledAt?: DateTimeFilter<"Enrollment"> | Date | string
     eventId?: StringFilter<"Enrollment"> | string
-    volunteerId?: StringFilter<"Enrollment"> | string
+    userId?: StringFilter<"Enrollment"> | string
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
-    volunteer?: XOR<VolunteerScalarRelationFilter, VolunteerWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type EnrollmentOrderByWithRelationInput = {
@@ -5029,31 +5029,31 @@ export namespace Prisma {
     status?: SortOrder
     enrolledAt?: SortOrder
     eventId?: SortOrder
-    volunteerId?: SortOrder
+    userId?: SortOrder
     event?: EventOrderByWithRelationInput
-    volunteer?: VolunteerOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type EnrollmentWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    eventId_volunteerId?: EnrollmentEventIdVolunteerIdCompoundUniqueInput
+    eventId_userId?: EnrollmentEventIdUserIdCompoundUniqueInput
     AND?: EnrollmentWhereInput | EnrollmentWhereInput[]
     OR?: EnrollmentWhereInput[]
     NOT?: EnrollmentWhereInput | EnrollmentWhereInput[]
     status?: EnumStatusFilter<"Enrollment"> | $Enums.Status
     enrolledAt?: DateTimeFilter<"Enrollment"> | Date | string
     eventId?: StringFilter<"Enrollment"> | string
-    volunteerId?: StringFilter<"Enrollment"> | string
+    userId?: StringFilter<"Enrollment"> | string
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
-    volunteer?: XOR<VolunteerScalarRelationFilter, VolunteerWhereInput>
-  }, "id" | "eventId_volunteerId">
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "eventId_userId">
 
   export type EnrollmentOrderByWithAggregationInput = {
     id?: SortOrder
     status?: SortOrder
     enrolledAt?: SortOrder
     eventId?: SortOrder
-    volunteerId?: SortOrder
+    userId?: SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
     _max?: EnrollmentMaxOrderByAggregateInput
     _min?: EnrollmentMinOrderByAggregateInput
@@ -5067,7 +5067,7 @@ export namespace Prisma {
     status?: EnumStatusWithAggregatesFilter<"Enrollment"> | $Enums.Status
     enrolledAt?: DateTimeWithAggregatesFilter<"Enrollment"> | Date | string
     eventId?: StringWithAggregatesFilter<"Enrollment"> | string
-    volunteerId?: StringWithAggregatesFilter<"Enrollment"> | string
+    userId?: StringWithAggregatesFilter<"Enrollment"> | string
   }
 
   export type EventCreateInput = {
@@ -5186,14 +5186,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type VolunteerCreateInput = {
+  export type UserCreateInput = {
     id?: string
     fullName: string
     email: string
     password: string
     phoneNumber: string
     profileImage: string
-    skills?: VolunteerCreateskillsInput | string[]
+    skills?: UserCreateskillsInput | string[]
     address: string
     gender: $Enums.Gender
     govIdImage: string
@@ -5201,17 +5201,17 @@ export namespace Prisma {
     role?: $Enums.Role
     lastActiveAt?: Date | string
     createdAt?: Date | string
-    enrollments?: EnrollmentCreateNestedManyWithoutVolunteerInput
+    enrollments?: EnrollmentCreateNestedManyWithoutUserInput
   }
 
-  export type VolunteerUncheckedCreateInput = {
+  export type UserUncheckedCreateInput = {
     id?: string
     fullName: string
     email: string
     password: string
     phoneNumber: string
     profileImage: string
-    skills?: VolunteerCreateskillsInput | string[]
+    skills?: UserCreateskillsInput | string[]
     address: string
     gender: $Enums.Gender
     govIdImage: string
@@ -5219,17 +5219,17 @@ export namespace Prisma {
     role?: $Enums.Role
     lastActiveAt?: Date | string
     createdAt?: Date | string
-    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutVolunteerInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type VolunteerUpdateInput = {
+  export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     profileImage?: StringFieldUpdateOperationsInput | string
-    skills?: VolunteerUpdateskillsInput | string[]
+    skills?: UserUpdateskillsInput | string[]
     address?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     govIdImage?: StringFieldUpdateOperationsInput | string
@@ -5237,17 +5237,17 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    enrollments?: EnrollmentUpdateManyWithoutVolunteerNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
   }
 
-  export type VolunteerUncheckedUpdateInput = {
+  export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     profileImage?: StringFieldUpdateOperationsInput | string
-    skills?: VolunteerUpdateskillsInput | string[]
+    skills?: UserUpdateskillsInput | string[]
     address?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     govIdImage?: StringFieldUpdateOperationsInput | string
@@ -5255,17 +5255,17 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    enrollments?: EnrollmentUncheckedUpdateManyWithoutVolunteerNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type VolunteerCreateManyInput = {
+  export type UserCreateManyInput = {
     id?: string
     fullName: string
     email: string
     password: string
     phoneNumber: string
     profileImage: string
-    skills?: VolunteerCreateskillsInput | string[]
+    skills?: UserCreateskillsInput | string[]
     address: string
     gender: $Enums.Gender
     govIdImage: string
@@ -5275,14 +5275,14 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type VolunteerUpdateManyMutationInput = {
+  export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     profileImage?: StringFieldUpdateOperationsInput | string
-    skills?: VolunteerUpdateskillsInput | string[]
+    skills?: UserUpdateskillsInput | string[]
     address?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     govIdImage?: StringFieldUpdateOperationsInput | string
@@ -5292,14 +5292,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type VolunteerUncheckedUpdateManyInput = {
+  export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     profileImage?: StringFieldUpdateOperationsInput | string
-    skills?: VolunteerUpdateskillsInput | string[]
+    skills?: UserUpdateskillsInput | string[]
     address?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     govIdImage?: StringFieldUpdateOperationsInput | string
@@ -5314,7 +5314,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     event: EventCreateNestedOneWithoutEnrollmentsInput
-    volunteer: VolunteerCreateNestedOneWithoutEnrollmentsInput
+    user: UserCreateNestedOneWithoutEnrollmentsInput
   }
 
   export type EnrollmentUncheckedCreateInput = {
@@ -5322,7 +5322,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     eventId: string
-    volunteerId: string
+    userId: string
   }
 
   export type EnrollmentUpdateInput = {
@@ -5330,7 +5330,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutEnrollmentsNestedInput
-    volunteer?: VolunteerUpdateOneRequiredWithoutEnrollmentsNestedInput
+    user?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
   }
 
   export type EnrollmentUncheckedUpdateInput = {
@@ -5338,7 +5338,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventId?: StringFieldUpdateOperationsInput | string
-    volunteerId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type EnrollmentCreateManyInput = {
@@ -5346,7 +5346,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     eventId: string
-    volunteerId: string
+    userId: string
   }
 
   export type EnrollmentUpdateManyMutationInput = {
@@ -5360,7 +5360,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventId?: StringFieldUpdateOperationsInput | string
-    volunteerId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -5544,7 +5544,7 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
-  export type VolunteerCountOrderByAggregateInput = {
+  export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
@@ -5561,7 +5561,7 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type VolunteerMaxOrderByAggregateInput = {
+  export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
@@ -5577,7 +5577,7 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type VolunteerMinOrderByAggregateInput = {
+  export type UserMinOrderByAggregateInput = {
     id?: SortOrder
     fullName?: SortOrder
     email?: SortOrder
@@ -5635,14 +5635,14 @@ export namespace Prisma {
     isNot?: EventWhereInput
   }
 
-  export type VolunteerScalarRelationFilter = {
-    is?: VolunteerWhereInput
-    isNot?: VolunteerWhereInput
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
   }
 
-  export type EnrollmentEventIdVolunteerIdCompoundUniqueInput = {
+  export type EnrollmentEventIdUserIdCompoundUniqueInput = {
     eventId: string
-    volunteerId: string
+    userId: string
   }
 
   export type EnrollmentCountOrderByAggregateInput = {
@@ -5650,7 +5650,7 @@ export namespace Prisma {
     status?: SortOrder
     enrolledAt?: SortOrder
     eventId?: SortOrder
-    volunteerId?: SortOrder
+    userId?: SortOrder
   }
 
   export type EnrollmentMaxOrderByAggregateInput = {
@@ -5658,7 +5658,7 @@ export namespace Prisma {
     status?: SortOrder
     enrolledAt?: SortOrder
     eventId?: SortOrder
-    volunteerId?: SortOrder
+    userId?: SortOrder
   }
 
   export type EnrollmentMinOrderByAggregateInput = {
@@ -5666,7 +5666,7 @@ export namespace Prisma {
     status?: SortOrder
     enrolledAt?: SortOrder
     eventId?: SortOrder
-    volunteerId?: SortOrder
+    userId?: SortOrder
   }
 
   export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -5755,25 +5755,25 @@ export namespace Prisma {
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
-  export type VolunteerCreateskillsInput = {
+  export type UserCreateskillsInput = {
     set: string[]
   }
 
-  export type EnrollmentCreateNestedManyWithoutVolunteerInput = {
-    create?: XOR<EnrollmentCreateWithoutVolunteerInput, EnrollmentUncheckedCreateWithoutVolunteerInput> | EnrollmentCreateWithoutVolunteerInput[] | EnrollmentUncheckedCreateWithoutVolunteerInput[]
-    connectOrCreate?: EnrollmentCreateOrConnectWithoutVolunteerInput | EnrollmentCreateOrConnectWithoutVolunteerInput[]
-    createMany?: EnrollmentCreateManyVolunteerInputEnvelope
+  export type EnrollmentCreateNestedManyWithoutUserInput = {
+    create?: XOR<EnrollmentCreateWithoutUserInput, EnrollmentUncheckedCreateWithoutUserInput> | EnrollmentCreateWithoutUserInput[] | EnrollmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutUserInput | EnrollmentCreateOrConnectWithoutUserInput[]
+    createMany?: EnrollmentCreateManyUserInputEnvelope
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
   }
 
-  export type EnrollmentUncheckedCreateNestedManyWithoutVolunteerInput = {
-    create?: XOR<EnrollmentCreateWithoutVolunteerInput, EnrollmentUncheckedCreateWithoutVolunteerInput> | EnrollmentCreateWithoutVolunteerInput[] | EnrollmentUncheckedCreateWithoutVolunteerInput[]
-    connectOrCreate?: EnrollmentCreateOrConnectWithoutVolunteerInput | EnrollmentCreateOrConnectWithoutVolunteerInput[]
-    createMany?: EnrollmentCreateManyVolunteerInputEnvelope
+  export type EnrollmentUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<EnrollmentCreateWithoutUserInput, EnrollmentUncheckedCreateWithoutUserInput> | EnrollmentCreateWithoutUserInput[] | EnrollmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutUserInput | EnrollmentCreateOrConnectWithoutUserInput[]
+    createMany?: EnrollmentCreateManyUserInputEnvelope
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
   }
 
-  export type VolunteerUpdateskillsInput = {
+  export type UserUpdateskillsInput = {
     set?: string[]
     push?: string | string[]
   }
@@ -5790,31 +5790,31 @@ export namespace Prisma {
     set?: $Enums.Role
   }
 
-  export type EnrollmentUpdateManyWithoutVolunteerNestedInput = {
-    create?: XOR<EnrollmentCreateWithoutVolunteerInput, EnrollmentUncheckedCreateWithoutVolunteerInput> | EnrollmentCreateWithoutVolunteerInput[] | EnrollmentUncheckedCreateWithoutVolunteerInput[]
-    connectOrCreate?: EnrollmentCreateOrConnectWithoutVolunteerInput | EnrollmentCreateOrConnectWithoutVolunteerInput[]
-    upsert?: EnrollmentUpsertWithWhereUniqueWithoutVolunteerInput | EnrollmentUpsertWithWhereUniqueWithoutVolunteerInput[]
-    createMany?: EnrollmentCreateManyVolunteerInputEnvelope
+  export type EnrollmentUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutUserInput, EnrollmentUncheckedCreateWithoutUserInput> | EnrollmentCreateWithoutUserInput[] | EnrollmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutUserInput | EnrollmentCreateOrConnectWithoutUserInput[]
+    upsert?: EnrollmentUpsertWithWhereUniqueWithoutUserInput | EnrollmentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EnrollmentCreateManyUserInputEnvelope
     set?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
     disconnect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
     delete?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
-    update?: EnrollmentUpdateWithWhereUniqueWithoutVolunteerInput | EnrollmentUpdateWithWhereUniqueWithoutVolunteerInput[]
-    updateMany?: EnrollmentUpdateManyWithWhereWithoutVolunteerInput | EnrollmentUpdateManyWithWhereWithoutVolunteerInput[]
+    update?: EnrollmentUpdateWithWhereUniqueWithoutUserInput | EnrollmentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EnrollmentUpdateManyWithWhereWithoutUserInput | EnrollmentUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
-  export type EnrollmentUncheckedUpdateManyWithoutVolunteerNestedInput = {
-    create?: XOR<EnrollmentCreateWithoutVolunteerInput, EnrollmentUncheckedCreateWithoutVolunteerInput> | EnrollmentCreateWithoutVolunteerInput[] | EnrollmentUncheckedCreateWithoutVolunteerInput[]
-    connectOrCreate?: EnrollmentCreateOrConnectWithoutVolunteerInput | EnrollmentCreateOrConnectWithoutVolunteerInput[]
-    upsert?: EnrollmentUpsertWithWhereUniqueWithoutVolunteerInput | EnrollmentUpsertWithWhereUniqueWithoutVolunteerInput[]
-    createMany?: EnrollmentCreateManyVolunteerInputEnvelope
+  export type EnrollmentUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutUserInput, EnrollmentUncheckedCreateWithoutUserInput> | EnrollmentCreateWithoutUserInput[] | EnrollmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutUserInput | EnrollmentCreateOrConnectWithoutUserInput[]
+    upsert?: EnrollmentUpsertWithWhereUniqueWithoutUserInput | EnrollmentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EnrollmentCreateManyUserInputEnvelope
     set?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
     disconnect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
     delete?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
-    update?: EnrollmentUpdateWithWhereUniqueWithoutVolunteerInput | EnrollmentUpdateWithWhereUniqueWithoutVolunteerInput[]
-    updateMany?: EnrollmentUpdateManyWithWhereWithoutVolunteerInput | EnrollmentUpdateManyWithWhereWithoutVolunteerInput[]
+    update?: EnrollmentUpdateWithWhereUniqueWithoutUserInput | EnrollmentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EnrollmentUpdateManyWithWhereWithoutUserInput | EnrollmentUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
@@ -5824,10 +5824,10 @@ export namespace Prisma {
     connect?: EventWhereUniqueInput
   }
 
-  export type VolunteerCreateNestedOneWithoutEnrollmentsInput = {
-    create?: XOR<VolunteerCreateWithoutEnrollmentsInput, VolunteerUncheckedCreateWithoutEnrollmentsInput>
-    connectOrCreate?: VolunteerCreateOrConnectWithoutEnrollmentsInput
-    connect?: VolunteerWhereUniqueInput
+  export type UserCreateNestedOneWithoutEnrollmentsInput = {
+    create?: XOR<UserCreateWithoutEnrollmentsInput, UserUncheckedCreateWithoutEnrollmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEnrollmentsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type EnumStatusFieldUpdateOperationsInput = {
@@ -5842,12 +5842,12 @@ export namespace Prisma {
     update?: XOR<XOR<EventUpdateToOneWithWhereWithoutEnrollmentsInput, EventUpdateWithoutEnrollmentsInput>, EventUncheckedUpdateWithoutEnrollmentsInput>
   }
 
-  export type VolunteerUpdateOneRequiredWithoutEnrollmentsNestedInput = {
-    create?: XOR<VolunteerCreateWithoutEnrollmentsInput, VolunteerUncheckedCreateWithoutEnrollmentsInput>
-    connectOrCreate?: VolunteerCreateOrConnectWithoutEnrollmentsInput
-    upsert?: VolunteerUpsertWithoutEnrollmentsInput
-    connect?: VolunteerWhereUniqueInput
-    update?: XOR<XOR<VolunteerUpdateToOneWithWhereWithoutEnrollmentsInput, VolunteerUpdateWithoutEnrollmentsInput>, VolunteerUncheckedUpdateWithoutEnrollmentsInput>
+  export type UserUpdateOneRequiredWithoutEnrollmentsNestedInput = {
+    create?: XOR<UserCreateWithoutEnrollmentsInput, UserUncheckedCreateWithoutEnrollmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEnrollmentsInput
+    upsert?: UserUpsertWithoutEnrollmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEnrollmentsInput, UserUpdateWithoutEnrollmentsInput>, UserUncheckedUpdateWithoutEnrollmentsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -6027,14 +6027,14 @@ export namespace Prisma {
     id?: string
     status?: $Enums.Status
     enrolledAt?: Date | string
-    volunteer: VolunteerCreateNestedOneWithoutEnrollmentsInput
+    user: UserCreateNestedOneWithoutEnrollmentsInput
   }
 
   export type EnrollmentUncheckedCreateWithoutEventInput = {
     id?: string
     status?: $Enums.Status
     enrolledAt?: Date | string
-    volunteerId: string
+    userId: string
   }
 
   export type EnrollmentCreateOrConnectWithoutEventInput = {
@@ -6071,47 +6071,47 @@ export namespace Prisma {
     status?: EnumStatusFilter<"Enrollment"> | $Enums.Status
     enrolledAt?: DateTimeFilter<"Enrollment"> | Date | string
     eventId?: StringFilter<"Enrollment"> | string
-    volunteerId?: StringFilter<"Enrollment"> | string
+    userId?: StringFilter<"Enrollment"> | string
   }
 
-  export type EnrollmentCreateWithoutVolunteerInput = {
+  export type EnrollmentCreateWithoutUserInput = {
     id?: string
     status?: $Enums.Status
     enrolledAt?: Date | string
     event: EventCreateNestedOneWithoutEnrollmentsInput
   }
 
-  export type EnrollmentUncheckedCreateWithoutVolunteerInput = {
+  export type EnrollmentUncheckedCreateWithoutUserInput = {
     id?: string
     status?: $Enums.Status
     enrolledAt?: Date | string
     eventId: string
   }
 
-  export type EnrollmentCreateOrConnectWithoutVolunteerInput = {
+  export type EnrollmentCreateOrConnectWithoutUserInput = {
     where: EnrollmentWhereUniqueInput
-    create: XOR<EnrollmentCreateWithoutVolunteerInput, EnrollmentUncheckedCreateWithoutVolunteerInput>
+    create: XOR<EnrollmentCreateWithoutUserInput, EnrollmentUncheckedCreateWithoutUserInput>
   }
 
-  export type EnrollmentCreateManyVolunteerInputEnvelope = {
-    data: EnrollmentCreateManyVolunteerInput | EnrollmentCreateManyVolunteerInput[]
+  export type EnrollmentCreateManyUserInputEnvelope = {
+    data: EnrollmentCreateManyUserInput | EnrollmentCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
-  export type EnrollmentUpsertWithWhereUniqueWithoutVolunteerInput = {
+  export type EnrollmentUpsertWithWhereUniqueWithoutUserInput = {
     where: EnrollmentWhereUniqueInput
-    update: XOR<EnrollmentUpdateWithoutVolunteerInput, EnrollmentUncheckedUpdateWithoutVolunteerInput>
-    create: XOR<EnrollmentCreateWithoutVolunteerInput, EnrollmentUncheckedCreateWithoutVolunteerInput>
+    update: XOR<EnrollmentUpdateWithoutUserInput, EnrollmentUncheckedUpdateWithoutUserInput>
+    create: XOR<EnrollmentCreateWithoutUserInput, EnrollmentUncheckedCreateWithoutUserInput>
   }
 
-  export type EnrollmentUpdateWithWhereUniqueWithoutVolunteerInput = {
+  export type EnrollmentUpdateWithWhereUniqueWithoutUserInput = {
     where: EnrollmentWhereUniqueInput
-    data: XOR<EnrollmentUpdateWithoutVolunteerInput, EnrollmentUncheckedUpdateWithoutVolunteerInput>
+    data: XOR<EnrollmentUpdateWithoutUserInput, EnrollmentUncheckedUpdateWithoutUserInput>
   }
 
-  export type EnrollmentUpdateManyWithWhereWithoutVolunteerInput = {
+  export type EnrollmentUpdateManyWithWhereWithoutUserInput = {
     where: EnrollmentScalarWhereInput
-    data: XOR<EnrollmentUpdateManyMutationInput, EnrollmentUncheckedUpdateManyWithoutVolunteerInput>
+    data: XOR<EnrollmentUpdateManyMutationInput, EnrollmentUncheckedUpdateManyWithoutUserInput>
   }
 
   export type EventCreateWithoutEnrollmentsInput = {
@@ -6151,14 +6151,14 @@ export namespace Prisma {
     create: XOR<EventCreateWithoutEnrollmentsInput, EventUncheckedCreateWithoutEnrollmentsInput>
   }
 
-  export type VolunteerCreateWithoutEnrollmentsInput = {
+  export type UserCreateWithoutEnrollmentsInput = {
     id?: string
     fullName: string
     email: string
     password: string
     phoneNumber: string
     profileImage: string
-    skills?: VolunteerCreateskillsInput | string[]
+    skills?: UserCreateskillsInput | string[]
     address: string
     gender: $Enums.Gender
     govIdImage: string
@@ -6168,14 +6168,14 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type VolunteerUncheckedCreateWithoutEnrollmentsInput = {
+  export type UserUncheckedCreateWithoutEnrollmentsInput = {
     id?: string
     fullName: string
     email: string
     password: string
     phoneNumber: string
     profileImage: string
-    skills?: VolunteerCreateskillsInput | string[]
+    skills?: UserCreateskillsInput | string[]
     address: string
     gender: $Enums.Gender
     govIdImage: string
@@ -6185,9 +6185,9 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type VolunteerCreateOrConnectWithoutEnrollmentsInput = {
-    where: VolunteerWhereUniqueInput
-    create: XOR<VolunteerCreateWithoutEnrollmentsInput, VolunteerUncheckedCreateWithoutEnrollmentsInput>
+  export type UserCreateOrConnectWithoutEnrollmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEnrollmentsInput, UserUncheckedCreateWithoutEnrollmentsInput>
   }
 
   export type EventUpsertWithoutEnrollmentsInput = {
@@ -6233,25 +6233,25 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type VolunteerUpsertWithoutEnrollmentsInput = {
-    update: XOR<VolunteerUpdateWithoutEnrollmentsInput, VolunteerUncheckedUpdateWithoutEnrollmentsInput>
-    create: XOR<VolunteerCreateWithoutEnrollmentsInput, VolunteerUncheckedCreateWithoutEnrollmentsInput>
-    where?: VolunteerWhereInput
+  export type UserUpsertWithoutEnrollmentsInput = {
+    update: XOR<UserUpdateWithoutEnrollmentsInput, UserUncheckedUpdateWithoutEnrollmentsInput>
+    create: XOR<UserCreateWithoutEnrollmentsInput, UserUncheckedCreateWithoutEnrollmentsInput>
+    where?: UserWhereInput
   }
 
-  export type VolunteerUpdateToOneWithWhereWithoutEnrollmentsInput = {
-    where?: VolunteerWhereInput
-    data: XOR<VolunteerUpdateWithoutEnrollmentsInput, VolunteerUncheckedUpdateWithoutEnrollmentsInput>
+  export type UserUpdateToOneWithWhereWithoutEnrollmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEnrollmentsInput, UserUncheckedUpdateWithoutEnrollmentsInput>
   }
 
-  export type VolunteerUpdateWithoutEnrollmentsInput = {
+  export type UserUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     profileImage?: StringFieldUpdateOperationsInput | string
-    skills?: VolunteerUpdateskillsInput | string[]
+    skills?: UserUpdateskillsInput | string[]
     address?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     govIdImage?: StringFieldUpdateOperationsInput | string
@@ -6261,14 +6261,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type VolunteerUncheckedUpdateWithoutEnrollmentsInput = {
+  export type UserUncheckedUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
     profileImage?: StringFieldUpdateOperationsInput | string
-    skills?: VolunteerUpdateskillsInput | string[]
+    skills?: UserUpdateskillsInput | string[]
     address?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
     govIdImage?: StringFieldUpdateOperationsInput | string
@@ -6282,52 +6282,52 @@ export namespace Prisma {
     id?: string
     status?: $Enums.Status
     enrolledAt?: Date | string
-    volunteerId: string
+    userId: string
   }
 
   export type EnrollmentUpdateWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    volunteer?: VolunteerUpdateOneRequiredWithoutEnrollmentsNestedInput
+    user?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    volunteerId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type EnrollmentUncheckedUpdateManyWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    volunteerId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type EnrollmentCreateManyVolunteerInput = {
+  export type EnrollmentCreateManyUserInput = {
     id?: string
     status?: $Enums.Status
     enrolledAt?: Date | string
     eventId: string
   }
 
-  export type EnrollmentUpdateWithoutVolunteerInput = {
+  export type EnrollmentUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutEnrollmentsNestedInput
   }
 
-  export type EnrollmentUncheckedUpdateWithoutVolunteerInput = {
+  export type EnrollmentUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type EnrollmentUncheckedUpdateManyWithoutVolunteerInput = {
+  export type EnrollmentUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -136,7 +136,7 @@ exports.Prisma.EventScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.VolunteerScalarFieldEnum = {
+exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   fullName: 'fullName',
   email: 'email',
@@ -158,7 +158,7 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   status: 'status',
   enrolledAt: 'enrolledAt',
   eventId: 'eventId',
-  volunteerId: 'volunteerId'
+  userId: 'userId'
 };
 
 exports.Prisma.SortOrder = {
@@ -190,7 +190,7 @@ exports.GovId = exports.$Enums.GovId = {
 
 exports.Role = exports.$Enums.Role = {
   VOLUNTEER: 'VOLUNTEER',
-  ORGANISER: 'ORGANISER',
+  ORGANIZER: 'ORGANIZER',
   ADMIN: 'ADMIN'
 };
 
@@ -202,7 +202,7 @@ exports.Status = exports.$Enums.Status = {
 
 exports.Prisma.ModelName = {
   Event: 'Event',
-  Volunteer: 'Volunteer',
+  User: 'User',
   Enrollment: 'Enrollment'
 };
 
