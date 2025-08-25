@@ -4,7 +4,7 @@ import EventForm from "@/components/admin/forms/EventForm";
 
 export default function EventsPage() {
     return (
-        <section className="w-full rounded-2xl bg-white p-7">
+        <section className="w-full rounded-2xl bg-white md:p-3 md:pr-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-xl font-semibold">All Books</h2>
           <Button variant="default" asChild>
