@@ -10,7 +10,7 @@ export const authOptions = {
     providers: [
         CredentialsProvider({
             name: "credentials",
-            credentials: {  
+            credentials: {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" }
             },
@@ -45,10 +45,10 @@ export const authOptions = {
     ],
     pages: {
         signIn: "/sign-in",
-    },  
+    },
     callbacks: {
         async jwt({ token, user }: any) {
-            if(user) {
+            if (user) {
                 token.id = user.id;
                 token.email = user.email;
                 token.name = user.name;
@@ -56,7 +56,7 @@ export const authOptions = {
             return token;
         },
         async session({ session, token }: any) {
-            if(session.user) {
+            if (session.user) {
                 session.user.id = token.id as string;
                 session.user.email = token.email as string;
                 session.user.name = token.name as string;

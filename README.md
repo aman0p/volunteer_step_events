@@ -9,3 +9,10 @@ Volunteer Management App with Admin panel
 - User management
 - Role-based access control
 - Reporting and analytics
+
+
+
+
+<!-- Issue to be fixed later -->
+
+1. Rate limit is not working as expected

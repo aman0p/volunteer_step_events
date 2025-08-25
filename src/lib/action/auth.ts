@@ -5,12 +5,20 @@ import { prisma } from "../prisma";
 import { AuthCredentials } from "../../../types";
 import { Gender, GovId } from "@/generated/prisma";
 import { compare } from "bcryptjs";
+import { headers } from "next/headers";
+import { ratelimit } from "../ratelimit";
+import { redirect } from "next/navigation";
 
 export const signInWithCredentials = async (
     params: Pick<AuthCredentials, "email" | "password">
 ) => {
     try {
         const { email, password } = params;
+
+        // ********* Upstash Redis - Rate Limit *********
+        const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+        const { success } = await ratelimit.limit(ip);
+        if (!success) return redirect("/too-fast");
 
         // Find user in database
         const user = await prisma.volunteer.findUnique({
@@ -26,7 +34,7 @@ export const signInWithCredentials = async (
 
         // Verify password
         const isPasswordValid = await compare(password, user.password);
-        
+
         if (!isPasswordValid) {
             return {
                 success: false,
@@ -52,6 +60,12 @@ export const signInWithCredentials = async (
 export const signUpWithCredentials = async (params: AuthCredentials) => {
     const { fullName, email, password, phoneNumber, address, gender, govIdType, govIdImage, profileImage } = params;
 
+    // ********* Upstash Redis - Rate Limit *********
+    const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+    const { success } = await ratelimit.limit(ip);
+    if (!success) return redirect("/too-fast");
+
+
     // 1. Check if user already exists
     const existingUser = await prisma.volunteer.findFirst({
         where: {
@@ -59,7 +73,7 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
         }
     });
 
-    if(existingUser) {
+    if (existingUser) {
         return {
             success: false,
             message: "User already exists"
@@ -99,4 +113,3 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
         }
     }
 }
-    

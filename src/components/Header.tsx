@@ -39,7 +39,7 @@ export function Header({ session }: { session: Session }) {
   };
 
   return (
-    <header className="flex justify-between items-center w-full">
+    <header className="z-10 flex justify-between items-center w-full">
       <Link href="/" className="space-x-2 flex items-center w-fit">
         <Image src="/icons/logo.svg" alt="logo" width={20} height={20} className="w-6 h-6 invert" />
         <h1 className="font-bold text-lg">Volunteer Step Events</h1>
