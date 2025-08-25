@@ -1,11 +1,10 @@
 "use server";
 
 import { hash } from "bcryptjs";
-import prisma from "../prisma";
+import { prisma } from "../prisma";
 import { AuthCredentials } from "../../../types";
 import { Gender, GovId } from "@/generated/prisma";
 import { compare } from "bcryptjs";
-import { authOptions } from "@/auth";
 
 export const signInWithCredentials = async (
     params: Pick<AuthCredentials, "email" | "password">
@@ -22,7 +21,7 @@ export const signInWithCredentials = async (
             return {
                 success: false,
                 message: "User not found"
-            }
+            };
         }
 
         // Verify password
@@ -32,19 +31,21 @@ export const signInWithCredentials = async (
             return {
                 success: false,
                 message: "Invalid password"
-            }
+            };
         }
 
+        // If credentials are valid, return success
+        // The actual session creation will be handled by NextAuth when the form redirects
         return {
             success: true,
             message: "Signin successful"
-        }
+        };
     } catch (error) {
         console.log(error, "Signin error");
         return {
             success: false,
             message: "Signin failed"
-        }
+        };
     }
 }
 

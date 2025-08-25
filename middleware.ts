@@ -14,9 +14,8 @@ export default withAuth(
 export const config = {
   matcher: [
     // Add routes that require authentication
-    "/",
     "/admin/:path*",
-    // Exclude auth routes
-    "/((?!sign-in|sign-up|api|_next/static|_next/image|favicon.ico).*)",
+    // Exclude auth routes and root route
+    "/((?!sign-in|sign-up|api|_next/static|_next/image|favicon.ico|$).*)",
   ]
 }
