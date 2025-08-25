@@ -26,7 +26,8 @@ export const sendEmail = async ({
       provider: resend({ token: config.env.resendToken }),
     },
     body: {
-      from: "Praveen Lodhi <events.praveenlodhi.me>",
+      // TODO: Change to the actual professional email
+      from: `Praveen Lodhi <${config.env.professionalEmail}>`,
       to: [email],
       subject,
       html: message,
