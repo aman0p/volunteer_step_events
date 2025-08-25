@@ -1,7 +1,5 @@
 import { serve } from "@upstash/workflow/nextjs";
-import { db } from "@/database/drizzle";
-import { users } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/workflow";
 
 type UserState = "non-active" | "active";
@@ -16,15 +14,13 @@ const THREE_DAYS_IN_MS = 3 * ONE_DAY_IN_MS;
 const THIRTY_DAYS_IN_MS = 30 * ONE_DAY_IN_MS;
 
 const getUserState = async (email: string): Promise<UserState> => {
-  const user = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1);
+  const user = await prisma.volunteer.findUnique({
+    where: { email },
+  });
 
-  if (user.length === 0) return "non-active";
+  if (!user) return "non-active";
 
-  const lastActivityDate = new Date(user[0].lastActivityDate!);
+  const lastActivityDate = new Date(user?.lastActiveAt!);
   const now = new Date();
   const timeDifference = now.getTime() - lastActivityDate.getTime();
 

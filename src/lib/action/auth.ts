@@ -3,11 +3,13 @@
 import { hash } from "bcryptjs";
 import { prisma } from "../prisma";
 import { AuthCredentials } from "../../../types";
-import { Gender, GovId } from "@/generated/prisma";
+import { Gender, GovId, Role } from "@/generated/prisma";
 import { compare } from "bcryptjs";
 import { headers } from "next/headers";
 import { ratelimit } from "../ratelimit";
 import { redirect } from "next/navigation";
+import { workflowClient } from "@/lib/workflow";
+import config from "@/lib/config";
 
 export const signInWithCredentials = async (
     params: Pick<AuthCredentials, "email" | "password">
@@ -95,9 +97,17 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
                 gender: gender as Gender,
                 govIdType: govIdType as GovId,
                 govIdImage: govIdImage || "",
-                role: "VOLUNTEER"
+                role: Role.VOLUNTEER
             }
         })
+
+        await workflowClient.trigger({
+            url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
+            body: {
+              email,
+              fullName,
+            },
+          });
 
         // await signInWithCredentials({email, password})
 

@@ -42,6 +42,7 @@ model Volunteer {
   govIdImage   String
   govIdType    GovId
   role         Role         @default(VOLUNTEER)
+  lastActiveAt DateTime     @default(now())
   createdAt    DateTime     @default(now())
   enrollments  Enrollment[]
 }
