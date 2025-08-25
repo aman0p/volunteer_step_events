@@ -18,7 +18,7 @@ export function Header({ session }: { session: Session }) {
   const handleLogout = async () => {
     // Show confirmation dialog
     const confirmed = window.confirm("Are you sure you want to sign out?");
-    
+
     if (!confirmed) {
       return;
     }
@@ -26,7 +26,7 @@ export function Header({ session }: { session: Session }) {
     setIsLoggingOut(true);
 
     try {
-      await signOut({ 
+      await signOut({
         redirect: true,
         callbackUrl: "/sign-in"
       });
@@ -41,7 +41,13 @@ export function Header({ session }: { session: Session }) {
   return (
     <header className="z-10 flex justify-between items-center w-full">
       <Link href="/" className="space-x-2 flex items-center w-fit">
-        <Image src="/icons/logo.svg" alt="logo" width={20} height={20} className="w-6 h-6 invert" />
+        <Image
+          src="/icons/logo.svg"
+          alt="logo"
+          width={20}
+          height={20}
+          className="w-6 h-6 invert"
+        />
         <h1 className="font-bold text-lg">Volunteer Step Events</h1>
       </Link>
 
