@@ -19,7 +19,7 @@ export const adminSideBarLinks = [
   },
   {
     img: "/icons/admin/users.svg",
-    route: "/admin/volunteers",
+    route: "/admin/volunteer",
     text: "All Volunteers",
   },
   {

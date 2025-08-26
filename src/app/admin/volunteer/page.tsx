@@ -3,17 +3,15 @@ import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
-import { Users, Filter, Download, Plus, ArrowRight } from "lucide-react";
+import { Users, Filter, Download, Plus, ArrowRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Image } from "@imagekit/next";
 import config from "@/lib/config";
-import { Badge } from "@/components/ui/badge";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import VolunteerSearch from "@/components/admin/VolunteerSearch";
 
 export default async function VolunteerPage() {
   const session = await getServerSession(authOptions);
-  
+
   if (!session) {
     redirect("/sign-in");
   }
@@ -125,7 +123,7 @@ export default async function VolunteerPage() {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
@@ -137,7 +135,7 @@ export default async function VolunteerPage() {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
@@ -153,8 +151,8 @@ export default async function VolunteerPage() {
 
         {/* Search Bar */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-          <div className="max-w-md">
-            <VolunteerSearch 
+          <div className="max-w-xl">
+            <VolunteerSearch
               placeholder="Search volunteers by name, email, or skills..."
               className="w-full"
             />
@@ -166,7 +164,7 @@ export default async function VolunteerPage() {
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">All Volunteers ({totalVolunteers})</h2>
           </div>
-          
+
           {volunteers.length === 0 ? (
             <div className="p-12 text-center">
               <Users className="w-16 h-16 mx-auto mb-4 text-gray-400" />
@@ -204,9 +202,14 @@ export default async function VolunteerPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between">
                           <div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                              {volunteer.fullName}
-                            </h3>
+                            <div className="flex justify-start items-start gap-3">
+                              <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                                {volunteer.fullName}
+                              </h3>
+                              <Link href={`/admin/volunteer/${volunteer.id}`}>
+                                <ExternalLink className="w-3 h-3 mr-1" />
+                              </Link>
+                            </div>
                             <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
                               <div className="flex items-center gap-1">
                                 <span className="font-medium">Email:</span>
@@ -221,7 +224,7 @@ export default async function VolunteerPage() {
                                 {volunteer.address}
                               </div>
                             </div>
-                            
+
                             {/* Skills */}
                             {/* {volunteer.skills && volunteer.skills.length > 0 && (
                               <div className="mb-3">
@@ -235,7 +238,7 @@ export default async function VolunteerPage() {
                                 </div>
                               </div>
                             )} */}
-                            
+
                             {/* Enrollment Statistics */}
                             {/* <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
                               <div className="flex items-center gap-1">
@@ -280,16 +283,6 @@ export default async function VolunteerPage() {
                                 <span className="text-yellow-600 font-medium">{stats.pending} Pending</span>
                                 <span className="text-red-600 font-medium">{stats.rejected} Rejected</span>
                               </div>
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex gap-2">
-                              <Link href={`/admin/volunteers/${volunteer.id}`}>
-                                <Button size="sm" variant="outline">
-                                  View Profile
-                                  <ArrowRight className="w-3 h-3 ml-1" />
-                                </Button>
-                              </Link>
                             </div>
                           </div>
                         </div>

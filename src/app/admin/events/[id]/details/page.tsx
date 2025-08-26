@@ -82,7 +82,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
 
 
 
-  return (
+    return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
@@ -188,7 +188,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
                 
                 <div className="flex items-center gap-3">
                   <Users className="w-5 h-5 text-gray-400" />
-                  <div>
+        <div>
                     <p className="text-sm text-gray-500">Max Volunteers</p>
                     <p className="font-medium text-gray-900">
                       {event.maxVolunteers ? event.maxVolunteers : 'Unlimited'}
@@ -346,6 +346,6 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
           </div>
         </div>
       </div>
-    </div>
+        </div>
   );
 }

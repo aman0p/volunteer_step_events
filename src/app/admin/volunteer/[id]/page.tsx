@@ -29,7 +29,7 @@ export default async function VolunteerDetailsPage({ params }: { params: { id: s
 
   // Fetch volunteer with all enrollments and event details
   const volunteer = await prisma.user.findUnique({
-    where: { id: params.id },
+    where: { id: (await params).id },
     include: {
       enrollments: {
         include: {

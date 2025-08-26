@@ -3,13 +3,14 @@ import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Users, Mail, Phone, MapPin, Calendar, Download, Filter, Search, ExternalLink } from "lucide-react";
+import { ArrowLeft, Users, Mail, Phone, MapPin, Calendar, Download, Filter, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Badge } from "@/components/ui/badge";
 import { Image } from "@imagekit/next";
 import config from "@/lib/config";
 import EnrollmentActions from "@/components/admin/EnrollmentActions";
+import VolunteerSearch from "@/components/admin/VolunteerSearch";
 
 export default async function RegisteredVolunteerPage({ params }: { params: { id: string } }) {
     const session = await getServerSession(authOptions);
@@ -170,12 +171,11 @@ export default async function RegisteredVolunteerPage({ params }: { params: { id
                 {/* Search and Filter Bar */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                     <div className="flex flex-col md:flex-row gap-4">
-                        <div className="flex-1 relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                            <input
-                                type="text"
+                        <div className="flex-1">
+                            <VolunteerSearch 
                                 placeholder="Search volunteers by name, email, or skills..."
-                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full"
+                                eventId={params.id}
                             />
                         </div>
                         <div className="flex gap-2">
@@ -240,7 +240,7 @@ export default async function RegisteredVolunteerPage({ params }: { params: { id
                                                         <h3 className="text-lg font-semibold text-gray-900 mb-1">
                                                             {enrollment.user.fullName}
                                                         </h3>
-                                                        <Link href={`/admin/volunteers/${enrollment.user.id}`}>
+                                                        <Link href={`/admin/volunteer/${enrollment.user.id}`}>
                                                             <ExternalLink className="w-3 h-3 mr-1" />
                                                         </Link>
                                                     </div>

@@ -23,27 +23,42 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q');
+    const eventId = searchParams.get('eventId');
 
     if (!query || query.trim().length < 2) {
-      return NextResponse.json({ volunteers: [] });
+      return NextResponse.json({ volunteer: [] });
     }
 
     const searchTerm = query.trim();
 
-    // Search volunteers by name, email, or skills
-    const volunteers = await prisma.user.findMany({
-      where: {
-        AND: [
-          { role: "VOLUNTEER" },
-          {
-            OR: [
-              { fullName: { contains: searchTerm, mode: 'insensitive' } },
-              { email: { contains: searchTerm, mode: 'insensitive' } },
-              { skills: { hasSome: [searchTerm] } }
-            ]
+    // Build the where clause
+    let whereClause: any = {
+      AND: [
+        { role: "VOLUNTEER" },
+        {
+          OR: [
+            { fullName: { contains: searchTerm, mode: 'insensitive' } },
+            { email: { contains: searchTerm, mode: 'insensitive' } }
+            // Note: skills search removed as hasSome doesn't work well with partial strings
+          ]
+        }
+      ]
+    };
+
+    // If eventId is provided, filter volunteer who are enrolled in that specific event
+    if (eventId) {
+      whereClause.AND.push({
+        enrollments: {
+          some: {
+            eventId: eventId
           }
-        ]
-      },
+        }
+      });
+    }
+
+    // Search volunteer by name, email, or skills
+    const volunteer = await prisma.user.findMany({
+      where: whereClause,
       include: {
         enrollments: {
           include: {
@@ -62,7 +77,7 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: "desc" }
     });
 
-    return NextResponse.json({ volunteers });
+    return NextResponse.json({ volunteer });
   } catch (error) {
     console.error("Volunteer search error:", error);
     return NextResponse.json(

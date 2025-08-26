@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, X, User, Mail, Phone, MapPin } from "lucide-react";
+import { Search, X, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Image } from "@imagekit/next";
@@ -33,9 +33,10 @@ interface VolunteerSearchProps {
   onVolunteerSelect?: (volunteer: Volunteer) => void;
   placeholder?: string;
   className?: string;
+  eventId?: string; // Add eventId to filter volunteers by specific event
 }
 
-export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Search volunteers by name...", className = "" }: VolunteerSearchProps) {
+export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Search volunteers by name...", className = "", eventId }: VolunteerSearchProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Volunteer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,11 +52,17 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
 
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/admin/volunteers/search?q=${encodeURIComponent(query)}`);
+        const searchUrl = `/api/admin/volunteer/search?q=${encodeURIComponent(query)}${eventId ? `&eventId=${eventId}` : ''}`;
+        
+        const response = await fetch(searchUrl);
+        
         if (response.ok) {
           const data = await response.json();
-          setResults(data.volunteers || []);
+          const volunteers = data.volunteer || [];
+          setResults(volunteers);
           setShowResults(true);
+        } else {
+          console.error('Search response not ok:', response.status, response.statusText);
         }
       } catch (error) {
         console.error("Search error:", error);
@@ -67,7 +74,9 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
 
     const debounceTimer = setTimeout(searchVolunteers, 300);
     return () => clearTimeout(debounceTimer);
-  }, [query]);
+  }, [query, eventId]);
+
+
 
   const handleVolunteerClick = (volunteer: Volunteer) => {
     if (onVolunteerSelect) {
@@ -210,7 +219,7 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
                       )}
 
                       {/* Recent Events */}
-                      {volunteer.enrollments && volunteer.enrollments.length > 0 && (
+                      {/* {volunteer.enrollments && volunteer.enrollments.length > 0 && (
                         <div className="mt-2">
                           <p className="text-xs text-gray-500 mb-1">Recent Events:</p>
                           <div className="flex flex-wrap gap-1">
@@ -229,7 +238,7 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
                             )}
                           </div>
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     {/* View Profile Button */}
