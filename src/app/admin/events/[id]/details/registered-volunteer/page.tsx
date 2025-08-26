@@ -3,7 +3,7 @@ import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Users, Mail, Phone, MapPin, Calendar, Download, Filter, Search } from "lucide-react";
+import { ArrowLeft, Users, Mail, Phone, MapPin, Calendar, Download, Filter, Search, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Badge } from "@/components/ui/badge";
@@ -236,9 +236,14 @@ export default async function RegisteredVolunteerPage({ params }: { params: { id
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-start justify-between">
                                                 <div>
-                                                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                                                        {enrollment.user.fullName}
-                                                    </h3>
+                                                    <div className="flex justify-start items-start gap-3">
+                                                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                                                            {enrollment.user.fullName}
+                                                        </h3>
+                                                        <Link href={`/admin/volunteers/${enrollment.user.id}`}>
+                                                            <ExternalLink className="w-3 h-3 mr-1" />
+                                                        </Link>
+                                                    </div>
                                                     <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
                                                         <div className="flex items-center gap-1">
                                                             <Mail className="w-4 h-4" />
@@ -287,17 +292,17 @@ export default async function RegisteredVolunteerPage({ params }: { params: { id
 
                                                     <div className="flex gap-2">
                                                         {enrollment.status === 'PENDING' && (
-                                                                <EnrollmentActions
-                                                                    enrollmentId={enrollment.id}
-                                                                    userName={enrollment.user.fullName}
-                                                                    eventId={enrollment.eventId}
-                                                                    />
+                                                            <EnrollmentActions
+                                                                enrollmentId={enrollment.id}
+                                                                userName={enrollment.user.fullName}
+                                                                eventId={enrollment.eventId}
+                                                            />
                                                         )}
-                                                        {enrollment.status === 'APPROVED' && (
+                                                        {/* {enrollment.status === 'APPROVED' && (
                                                             <Button size="sm" variant="outline">
                                                                 View Details
                                                             </Button>
-                                                        )}
+                                                        )} */}
                                                         {enrollment.status === 'REJECTED' && (
                                                             <Button size="sm" variant="outline">
                                                                 Reconsider
