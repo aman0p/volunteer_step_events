@@ -28,3 +28,30 @@ export const createEvent = async (params: EventParams) => {
     };
   }
 };
+
+export const updateEvent = async (id: string, params: Partial<EventParams>) => {
+  try {
+    const updated = await prisma.event.update({
+      where: { id },
+      data: {
+        ...params,
+      },
+    });
+
+    // Ensure lists and detail pages refresh
+    revalidatePath("/admin/events");
+    revalidatePath(`/admin/events/${id}`);
+
+    return {
+      success: true,
+      data: updated,
+    };
+  } catch (error) {
+    console.log(error);
+
+    return {
+      success: false,
+      message: "An error occurred while updating the event",
+    };
+  }
+};

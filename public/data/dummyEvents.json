@@ -1,5 +1,22 @@
 [
     {
+        "id":"717b664d-47e0-4ece-b206-f9250bd070cb",
+        "title":"Summer Music Festival 2024",
+        "description":"Join us for an unforgettable evening of live music featuring top local and international artists. This year's festival will showcase a diverse lineup including rock, pop, jazz, and electronic music. Experience amazing performances under the stars with food trucks, craft vendors, and a vibrant atmosphere. Don't miss the biggest music event of the summer!",
+        "location":"Central Park Amphitheater, Downtown District",
+        "startDate":"2025-08-27T11:40:00Z",
+        "endDate":"2025-08-28T11:40:00Z",
+        "dressCode":"Casual/Concert attire",
+        "category":["Music","Festival"],
+        "coverUrl":"/events/covers/Diljit-Dosanjh-12_M7bnycRVV.jpg",
+        "eventImages":["/events/images/GettyImages-1484340653_TvxF5y2iU.webp","/events/images/GettyImages-2150511667_yOnR04yjTC.webp","/events/images/images_k1FeDQ8uu.jpeg"],
+        "maxVolunteers":25,
+        "createdAt":"2025-08-26T11:40:36.028Z",
+        "updatedAt":"2025-08-26T11:40:36.028Z",
+        "color":"#000000",
+        "videoUrl":""
+    },
+    {
         "id": "d7adae52-2e7c-4b39-ab97-556dcb09a123",
         "title": "HackIndia 2025",
         "description": "India’s biggest Web3 & AI hackathon bringing together 25,000+ students to build decentralized and AI-driven solutions. Cash prizes and mentorship opportunities available.",
@@ -13,14 +30,12 @@
             "AI"
         ],
         "coverUrl": "https://hackindia.xyz/assets/event-banner.jpg",
+        "color": "#0EA5E9",
+        "videoUrl": "",
         "eventImages": [
-            "https://hackindia.xyz/assets/event-banner.jpg",
-            "https://www.instagram.com/p/DI3XsKbJMms/media/?size=l",
-            "https://www.instagram.com/reel/DIkiBmWTQCm/?size=l",
-            "https://www.instagram.com/reel/DLURskzxgD2/?size=l",
-            "https://www.instagram.com/hackindiaxyz/?size=l"
+            "https://hackindia.xyz/assets/event-banner.jpg"
         ],
-        "maxParticipants": 25000,
+        "maxVolunteers": 25000,
         "createdAt": "2025-04-19T11:00:00Z",
         "updatedAt": "2025-08-25T08:00:00Z"
     },
@@ -38,14 +53,13 @@
             "Competition"
         ],
         "coverUrl": "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/369420840_1006935857299889_8993216027075916823_n.jpg",
+        "color": "#22C55E",
+        "videoUrl": "",
         "eventImages": [
             "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/369420840_1006935857299889_8993216027075916823_n.jpg",
-            "https://www.instagram.com/p/DNvjCkFUg2I/media/?size=l",
-            "https://collegedunia.com/public/college_data/images/campusimage/1453109492Campus_View.jpg",
-            "https://collegedunia.com/public/college_data/images/campusimage/1533134431Tech-Fest.jpg",
-            "https://collegedunia.com/public/college_data/images/campusimage/1584520083Academic_Building.jpg"
+            "https://collegedunia.com/public/college_data/images/campusimage/1453109492Campus_View.jpg"
         ],
-        "maxParticipants": 50000,
+        "maxVolunteers": 50000,
         "createdAt": "2025-08-01T12:00:00Z",
         "updatedAt": "2025-08-23T07:00:00Z"
     },
@@ -62,41 +76,15 @@
             "Competition"
         ],
         "coverUrl": "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/241298420_362786988068076_6021112417829511915_n.jpg",
+        "color": "#F59E0B",
+        "videoUrl": "",
         "eventImages": [
             "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/241298420_362786988068076_6021112417829511915_n.jpg",
-            "https://www.sitpune.edu.in/assets/images/symbitech2025-opening.jpg",
-            "https://www.sitpune.edu.in/assets/images/ai-exhibition.jpg",
-            "https://www.sitpune.edu.in/assets/images/roborace.jpg",
-            "https://www.sitpune.edu.in/assets/images/hackathon-group.jpg"
+            "https://www.sitpune.edu.in/assets/images/symbitech2025-opening.jpg"
         ],
-        "maxParticipants": 10000,
+        "maxVolunteers": 10000,
         "createdAt": "2025-02-01T10:00:00Z",
         "updatedAt": "2025-03-01T15:00:00Z"
-    },
-    {
-        "id": "c1fb2532-268b-4f25-a070-d2ef0fd22e5e",
-        "title": "Bemisaal Tour Mumbai Concert",
-        "description": "A grand music concert in Mumbai with packed crowds and electrifying performances from leading artists.",
-        "location": "Mumbai",
-        "startDate": "2025-08-20T18:00:00Z",
-        "endDate": "2025-08-20T23:00:00Z",
-        "dressCode": "Party wear",
-        "category": [
-            "Concert",
-            "Music",
-            "Entertainment"
-        ],
-        "coverUrl": "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/369007335_1457782821700968_4926810478089986448_n.jpg",
-        "eventImages": [
-            "https://instagram.fmum7-1.fna.fbcdn.net/v/t51.2885-15/369007335_1457782821700968_4926810478089986448_n.jpg",
-            "https://www.instagram.com/reel/DM0W159o_NS/media/?size=l",
-            "https://www.instagram.com/singerhariharana/media/?size=l",
-            "https://timesofindia.indiatimes.com/photo/95210312.cms",
-            "https://www.instagram.com/p/Cz6X9GUoVpM/media/?size=l"
-        ],
-        "maxParticipants": 8000,
-        "createdAt": "2025-08-12T13:00:00Z",
-        "updatedAt": "2025-08-24T09:00:00Z"
     },
     {
         "id": "c9dec422-eead-4b5d-a2c4-dee63fa8d967",
@@ -111,15 +99,13 @@
             "Technology",
             "Networking"
         ],
-        "coverUrl": "https://www.meetup.com/mumbai-technology-meetup/photos/123456789/",
+        "coverUrl": "https://www.thedroptimes.com/images/events/2025/mumtechup1.jpg",
+        "color": "#8B5CF6",
+        "videoUrl": "",
         "eventImages": [
-            "https://www.meetup.com/mumbai-technology-meetup/photos/123456789/",
-            "https://www.instagram.com/mumbai_tech_/media/?size=l",
-            "https://lu.ma/git6fgfv/cover.jpg",
-            "https://www.thedroptimes.com/images/events/2025/mumtechup1.jpg",
             "https://www.thedroptimes.com/images/events/2025/mumtechup-panel.jpg"
         ],
-        "maxParticipants": 200,
+        "maxVolunteers": 200,
         "createdAt": "2025-08-18T09:00:00Z",
         "updatedAt": "2025-08-18T09:00:00Z"
     }

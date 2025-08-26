@@ -23,36 +23,70 @@ import FileUpload from "@/components/FileUpload";
 import ImageTileUpload from "@/components/ui/image-tile-upload";
 import { toast } from "sonner";
 import Tag from "@/components/ui/tag";
-import { createEvent } from "@/lib/admin/action/events";
+import { createEvent, updateEvent } from "@/lib/admin/action/events";
 import ColorPicker from "@/components/admin/ColorPicker";
 
 
-interface Props extends Partial<Event> {
+interface Props {
   type?: "create" | "update";
   onThemeColorChange?: (hexOrEmpty: string) => void;
+  id?: string;
+  title?: string;
+  description?: string;
+  location?: string;
+  startDate?: Date | string;
+  endDate?: Date | string;
+  dressCode?: string;
+  coverUrl?: string;
+  color?: string | null;
+  videoUrl?: string | null;
+  eventImages?: string[];
+  category?: string[];
+  maxVolunteers?: number | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
 const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
   const router = useRouter();
+  const isUpdate = type === "update" && !!event.id;
 
   const form = (useForm({
     resolver: zodResolver(eventSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      location: "",
-      startDate: new Date(),
-      endDate: new Date(),
-      dressCode: "",
-      coverUrl: "",
-      color: "",
-      videoUrl: "",
-      eventImages: [],
-      category: [],
-      maxVolunteers: undefined,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
+    defaultValues: isUpdate
+      ? {
+          title: (event.title as string) ?? "",
+          description: (event.description as string) ?? "",
+          location: (event.location as string) ?? "",
+          startDate: event.startDate ? new Date(event.startDate) : new Date(),
+          endDate: event.endDate ? new Date(event.endDate) : new Date(),
+          dressCode: (event.dressCode as string) ?? "",
+          coverUrl: (event.coverUrl as string) ?? "",
+          color: (event.color as string) ?? "",
+          videoUrl: (event.videoUrl as string) ?? "",
+          eventImages: (event.eventImages as string[]) ?? [],
+          category: (event.category as string[]) ?? [],
+          maxVolunteers:
+            typeof event.maxVolunteers === "number" ? event.maxVolunteers : undefined,
+          createdAt: event.createdAt ? new Date(event.createdAt) : new Date(),
+          updatedAt: new Date(),
+        }
+      : {
+          title: "",
+          description: "",
+          location: "",
+          startDate: new Date(),
+          endDate: new Date(),
+          dressCode: "",
+          coverUrl: "",
+          color: "",
+          videoUrl: "",
+          eventImages: [],
+          category: [],
+          maxVolunteers: undefined,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
   }) as UseFormReturn<z.infer<typeof eventSchema>>);
   const formatDateTimeLocal = (date: Date) => {
     const pad = (n: number) => String(n).padStart(2, "0");
@@ -65,11 +99,12 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof eventSchema>> = async (values) => {
-    const result = await createEvent(values);
+    const result = isUpdate && event.id
+      ? await updateEvent(event.id as string, values)
+      : await createEvent(values);
 
     if (result.success) {
-      toast.success("Event created successfully");
-      console.log(result.data);
+      toast.success(isUpdate ? "Event updated successfully" : "Event created successfully");
       form.reset();
       router.push(`/admin/events`);
       router.refresh();
@@ -91,17 +126,17 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
 
   return (
     <>
-      <div className="mt-0 w-full overflow-hidden">
+      <div className="w-full overflow-hidden">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-5 bg-transparent"
           >
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">Create a New Event</h2>
+              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">{isUpdate ? "Update Event" : "Create a New Event"}</h2>
               {/* Submit Button */}
               <Button type="submit" className="w-40 mt-5 bg-black text-white hidden md:block">
-                Create Event
+                {isUpdate ? "Update Event" : "Create Event"}
               </Button>
             </div>
 
@@ -480,7 +515,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
             onClick={form.handleSubmit(onSubmit)}
             className="w-full mt-5 bg-black text-white block md:hidden" 
             >
-              Create Event
+              {isUpdate ? "Update Event" : "Create Event"}
             </Button>
         </Form>
       </div>

@@ -70,7 +70,7 @@ const seed = async () => {
           category: event.category,
           coverUrl: coverUrl || event.coverUrl,
           eventImages: eventImages.length > 0 ? eventImages : event.eventImages,
-          maxVolunteers: event.maxParticipants,
+          maxVolunteers: event.maxVolunteers,
           createdAt: new Date(event.createdAt),
           updatedAt: new Date(event.updatedAt),
         },

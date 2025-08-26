@@ -64,7 +64,7 @@ export function Sidebar({ session }: { session: Session }) {
                 </div>
 
             </div>
-            <div className="user flex items-center justify-center md:justify-start gap-2">
+            <div className="pb-1 flex items-center justify-center md:justify-start gap-2">
                 <Avatar>
                     <AvatarFallback className="bg-amber-100">
                         {getInitials(session?.user?.name || "IN")}
