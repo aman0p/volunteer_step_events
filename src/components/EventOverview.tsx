@@ -1,3 +1,4 @@
+"use client";
 
 import { Image } from '@imagekit/next';
 import { Button } from "./ui/button";
@@ -5,14 +6,38 @@ import { Event } from "@/types";
 import config from "@/lib/config";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
+import { requestEnrollment } from '@/lib/action/enrollment';
+import { toast } from "sonner";
+import { useState } from 'react';
 
 interface EventOverviewProps {
-    latestEvents?: Event[];
+    latestEvents?: (Event & { enrollments?: any[] })[];
     userId?: string;
 }
 
 export default function EventOverview({ latestEvents, userId }: EventOverviewProps) {
     const events = latestEvents || [];
+    const [isEnrolling, setIsEnrolling] = useState(false);
+
+    const handleEnroll = async (eventId: string) => {
+        if (!userId) return;
+        
+        setIsEnrolling(true);
+        try {
+            const result = await requestEnrollment(eventId);
+            if (result.success) {
+                toast.success(result.message);
+                // Refresh the page to show updated state
+                window.location.reload();
+            } else {
+                toast.error(result.message);
+            }
+        } catch (error) {
+            toast.error("Failed to send enrollment request");
+        } finally {
+            setIsEnrolling(false);
+        }
+    };
 
     return (
         <div className="space-y-20 h-full w-full">
@@ -47,14 +72,74 @@ export default function EventOverview({ latestEvents, userId }: EventOverviewPro
                                 <span className="font-bold">{events[0].dressCode}</span>
                             </p>
                             <p>Max Volunteers:&nbsp;
-                                <span className="font-bold">{events[0].maxVolunteers}</span>
+                                <span className="font-bold">{events[0].maxVolunteers || 'Unlimited'}</span>
                             </p>
                         </div>
 
-                        <div className="flex gap-2 w-fit">
-                            <Button className="w-40 gap-2 flex items-center px-10 py-5 cursor-pointer bg-black text-white">
-                                {userId ? "Enroll Now" : "Sign In to Enroll"}
-                            </Button>
+                        <div className="flex gap-2 w-fit">  
+                            {userId ? (
+                                (() => {
+                                    // Check if user is already enrolled
+                                    const userEnrollment = events[0].enrollments?.find((e: any) => e.userId === userId);
+                                    const isEnrolled = userEnrollment?.status === 'APPROVED';
+                                    const isPending = userEnrollment?.status === 'PENDING';
+                                    const isRejected = userEnrollment?.status === 'REJECTED';
+                                    
+                                    // Debug logging
+                                    console.log('EventOverview Debug:', {
+                                        userId,
+                                        eventId: events[0].id,
+                                        enrollments: events[0].enrollments,
+                                        userEnrollment,
+                                        isEnrolled,
+                                        isPending,
+                                        isRejected
+                                    });
+                                    
+                                    if (isEnrolled) {
+                                        return (
+                                            <Button 
+                                                disabled
+                                                className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-green-600 text-white">
+                                                ✓ Enrolled
+                                            </Button>
+                                        );
+                                    }
+                                    
+                                    if (isPending) {
+                                        return (
+                                            <Button 
+                                                disabled
+                                                className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-yellow-600 text-white">
+                                                ⏳ Pending
+                                            </Button>
+                                        );
+                                    }
+                                    
+                                    if (isRejected) {
+                                        return (
+                                            <Button 
+                                                disabled
+                                                className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-red-600 text-white">
+                                                ❌ Rejected
+                                            </Button>
+                                        );
+                                    }
+                                    
+                                    return (
+                                        <Button 
+                                            onClick={() => handleEnroll(events[0].id)}
+                                            disabled={isEnrolling}
+                                            className="w-40 gap-2 flex items-center px-10 py-5 cursor-pointer bg-black text-white hover:bg-gray-800">
+                                            {isEnrolling ? "Enrolling..." : "Enroll Now"}
+                                        </Button>
+                                    );
+                                })()
+                            ) : (
+                                <Button className="w-40 gap-2 flex items-center px-10 py-5 cursor-pointer bg-black text-white">
+                                    Sign In to Enroll
+                                </Button>
+                            )}
                             <Link href={`/events/${events[0].id}`} className="w-full group">
                                 <Button className="w-40 gap-2 flex items-center px-10 py-5 cursor-pointer bg-black text-white">
                                     View Details
@@ -74,7 +159,6 @@ export default function EventOverview({ latestEvents, userId }: EventOverviewPro
                             responsive={true}
                             loading="eager"
                         />
-
 
                         {/* Event Description */}
                         <p className="text-sm md:text-base line-clamp-3 md:line-clamp-none">{events[0].description}</p>

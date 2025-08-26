@@ -11,14 +11,15 @@ export default async function EventCard({event}: {event: any}) {
     const backgroundColor = event.color ? hexToRgba(event.color as string, 0.05) : undefined;
 
     return (
-        <section
+        <Link
+        href={`/admin/events/${event.id}/details`}
         key={event.id}
         className={"border flex flex-col h-full gap-1 p-1 md:p-2 rounded-lg cursor-pointer backdrop-blur-sm"}
         style={{ borderColor, backgroundColor }}
       >
         <div className="absolute top-4 right-4 flex flex-col gap-2">
             <DeleteEvent eventId={event.id} eventTitle={event.title} />
-            <Link href={`/admin/events/${event.id}`}>
+            <Link href={`/admin/events/${event.id}/update`}>
                 <Button variant="default" size="icon" className="cursor-pointer hover:bg-black">
                     <Pencil className="w-4 h-4 " />
                 </Button>
@@ -49,6 +50,6 @@ export default async function EventCard({event}: {event: any}) {
             <p className="text-[10px] md:text-xs lg:text-sm text-gray-500 line-clamp-1">{new Date(event.startDate).toLocaleDateString()}</p>
           </div>
         </div>
-      </section>
+      </Link>
     )
 }

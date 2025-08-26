@@ -22,10 +22,20 @@ export default async function Home() {
             dressCode: true,
             category: true,
             coverUrl: true,
+            color: true,
+            videoUrl: true,
             eventImages: true,
             maxVolunteers: true,
             createdAt: true,
             updatedAt: true,
+            enrollments: {
+                select: {
+                    id: true,
+                    status: true,
+                    userId: true,
+                    enrolledAt: true
+                }
+            }
         }
     });
 
@@ -37,5 +47,5 @@ export default async function Home() {
                 events={latestEvents.slice(1)}
             />
         </div>
-    )
+    );
 }

@@ -2,7 +2,6 @@ import { authOptions } from "@/auth";
 import { Providers } from "@/components/Providers";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import "@/styles/admin.css";
 import { Sidebar } from "@/components/admin/Sidebar";
 import Header from "@/components/admin/Header";
 import { prisma } from "@/lib/prisma";
@@ -30,9 +29,9 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
             <main className="flex min-h-screen w-full">
                 <Sidebar session={session} />
                 <div className="flex-1 flex flex-col h-screen overflow-hidden">
-                    <div className="border-b">
+                    {/* <div className="border-b">
                         <Header session={session} />
-                    </div>
+                    </div> */}
                     <div className="flex-1 overflow-y-auto">
                         {children}
                     </div>

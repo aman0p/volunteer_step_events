@@ -9,6 +9,7 @@ import Link from "next/link";
 import NextImage from "next/image";
 import { Image } from "@imagekit/next";
 import config from "@/lib/config";
+import EnrollButton from "@/components/EnrollButton";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -118,9 +119,20 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3">
-                  {session?.user?.id ? "Enroll Now" : "Sign In to Enroll"}
-                </Button>
+                {session?.user?.id ? (
+                  <EnrollButton 
+                    eventId={id} 
+                    isFull={event.maxVolunteers ? enrolledVolunteers >= event.maxVolunteers : false}
+                    enrollmentStatus={(() => {
+                      const userEnrollment = event.enrollments.find((e: any) => e.userId === session.user.id);
+                      return userEnrollment?.status || null;
+                    })()}
+                  />
+                ) : (
+                  <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3">
+                    Sign In to Enroll
+                  </Button>
+                )}
                 <Button variant="outline" className="flex-1 py-3">
                   Share Event
                 </Button>
