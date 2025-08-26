@@ -23,16 +23,17 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
     if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
         redirect("/");
     }
+    
 
     return (
         <Providers session={session}>
             <main className="flex min-h-screen w-full">
                 <Sidebar session={session} />
                 <div className="flex-1 flex flex-col h-screen overflow-hidden">
-                    <div className="py-4 px-6 border-b">
+                    <div className="border-b">
                         <Header session={session} />
                     </div>
-                    <div className="flex-1 overflow-y-auto p-4">
+                    <div className="flex-1 overflow-y-auto">
                         {children}
                     </div>
                 </div>

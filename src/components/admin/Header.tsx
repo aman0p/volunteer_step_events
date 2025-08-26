@@ -2,13 +2,13 @@ import { Session } from "next-auth";
 
 const Header = ({ session }: { session: Session }) => {
   return (
-    <header className="flex justify-between items-center">
+    <header className="flex justify-between items-center px-4 py-2 md:p-7 md:pr-13">
       <div className="flex flex-col">
-        <h2 className="text-xl font-bold">
+        <h2 className="text-lg md:text-xl font-bold">
         {/* Welcome back,  */}
         {session?.user?.name || "Admin"}
         </h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-xs md:text-sm text-slate-500">
           Monitor your events and volunteers here
         </p>
       </div>

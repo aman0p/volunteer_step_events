@@ -130,6 +130,8 @@ exports.Prisma.EventScalarFieldEnum = {
   dressCode: 'dressCode',
   category: 'category',
   coverUrl: 'coverUrl',
+  color: 'color',
+  videoUrl: 'videoUrl',
   eventImages: 'eventImages',
   maxVolunteers: 'maxVolunteers',
   createdAt: 'createdAt',

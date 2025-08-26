@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { EventParams } from "@/types";
+import { revalidatePath } from "next/cache";
 
 export const createEvent = async (params: EventParams) => {
   try {
@@ -10,6 +11,9 @@ export const createEvent = async (params: EventParams) => {
         ...params,
       },
     });
+
+    // Ensure the admin events page shows the newly created event
+    revalidatePath("/admin/events");
 
     return {
       success: true,

@@ -26,7 +26,7 @@ export function Sidebar({ session }: { session: Session }) {
                     <h1 className="hidden md:block font-bold text-lg">Volunteer Step Events</h1>
                 </Link>
 
-                <div className="flex flex-col gap-3 md:gap-5">
+                <div className="flex flex-col gap-3 ">
                     {adminSideBarLinks.map((link) => {
                         const isSelected =
                             (link.route === "/admin" && pathname === "/admin") ||
@@ -38,9 +38,9 @@ export function Sidebar({ session }: { session: Session }) {
                             <Link href={link.route} key={link.route} className="flex items-center text-sm">
                                 <div
                                     className={cn(
-                                        "link flex items-center gap-2 p-1.5 md:px-3 md:py-2.5 rounded-lg transition-colors",
+                                        "link flex items-center gap-2 p-1.5 md:px-3 md:py-2.5 w-full rounded-lg transition-colors",
                                         isSelected 
-                                            ? "bg-blue-800 text-white" 
+                                            ? "bg-black text-white md:ml-2" 
                                             : "hover:bg-gray-100"
                                     )}
                                 >

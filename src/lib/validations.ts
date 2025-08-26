@@ -29,6 +29,11 @@ export const eventSchema = z
     endDate: z.coerce.date(),
     dressCode: z.string().min(2, "Dress code must be at least 2 characters"),
     coverUrl: z.string().min(1, "Cover URL is required"),
+    // Accept hex color like #RRGGBB
+    color: z
+      .string()
+      .regex(/^#([A-Fa-f0-9]{6})$/, "Color must be a 6-digit hex like #A1B2C3"),
+    videoUrl: z.string().optional(),
     eventImages: z.array(z.string()).min(1, "At least one event image is required"),
     category: z
       .array(z.string().trim().min(1))

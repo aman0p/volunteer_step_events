@@ -24,6 +24,8 @@ model Event {
   dressCode     String
   category      String[]
   coverUrl      String
+  color         String?
+  videoUrl      String?
   eventImages   String[]
   maxVolunteers Int?
   createdAt     DateTime     @default(now())

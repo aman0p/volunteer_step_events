@@ -1186,6 +1186,8 @@ export namespace Prisma {
     endDate: Date | null
     dressCode: string | null
     coverUrl: string | null
+    color: string | null
+    videoUrl: string | null
     maxVolunteers: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1200,6 +1202,8 @@ export namespace Prisma {
     endDate: Date | null
     dressCode: string | null
     coverUrl: string | null
+    color: string | null
+    videoUrl: string | null
     maxVolunteers: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1215,6 +1219,8 @@ export namespace Prisma {
     dressCode: number
     category: number
     coverUrl: number
+    color: number
+    videoUrl: number
     eventImages: number
     maxVolunteers: number
     createdAt: number
@@ -1240,6 +1246,8 @@ export namespace Prisma {
     endDate?: true
     dressCode?: true
     coverUrl?: true
+    color?: true
+    videoUrl?: true
     maxVolunteers?: true
     createdAt?: true
     updatedAt?: true
@@ -1254,6 +1262,8 @@ export namespace Prisma {
     endDate?: true
     dressCode?: true
     coverUrl?: true
+    color?: true
+    videoUrl?: true
     maxVolunteers?: true
     createdAt?: true
     updatedAt?: true
@@ -1269,6 +1279,8 @@ export namespace Prisma {
     dressCode?: true
     category?: true
     coverUrl?: true
+    color?: true
+    videoUrl?: true
     eventImages?: true
     maxVolunteers?: true
     createdAt?: true
@@ -1372,6 +1384,8 @@ export namespace Prisma {
     dressCode: string
     category: string[]
     coverUrl: string
+    color: string | null
+    videoUrl: string | null
     eventImages: string[]
     maxVolunteers: number | null
     createdAt: Date
@@ -1407,6 +1421,8 @@ export namespace Prisma {
     dressCode?: boolean
     category?: boolean
     coverUrl?: boolean
+    color?: boolean
+    videoUrl?: boolean
     eventImages?: boolean
     maxVolunteers?: boolean
     createdAt?: boolean
@@ -1425,6 +1441,8 @@ export namespace Prisma {
     dressCode?: boolean
     category?: boolean
     coverUrl?: boolean
+    color?: boolean
+    videoUrl?: boolean
     eventImages?: boolean
     maxVolunteers?: boolean
     createdAt?: boolean
@@ -1441,6 +1459,8 @@ export namespace Prisma {
     dressCode?: boolean
     category?: boolean
     coverUrl?: boolean
+    color?: boolean
+    videoUrl?: boolean
     eventImages?: boolean
     maxVolunteers?: boolean
     createdAt?: boolean
@@ -1457,13 +1477,15 @@ export namespace Prisma {
     dressCode?: boolean
     category?: boolean
     coverUrl?: boolean
+    color?: boolean
+    videoUrl?: boolean
     eventImages?: boolean
     maxVolunteers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "location" | "startDate" | "endDate" | "dressCode" | "category" | "coverUrl" | "eventImages" | "maxVolunteers" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "location" | "startDate" | "endDate" | "dressCode" | "category" | "coverUrl" | "color" | "videoUrl" | "eventImages" | "maxVolunteers" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Event$enrollmentsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
@@ -1486,6 +1508,8 @@ export namespace Prisma {
       dressCode: string
       category: string[]
       coverUrl: string
+      color: string | null
+      videoUrl: string | null
       eventImages: string[]
       maxVolunteers: number | null
       createdAt: Date
@@ -1923,6 +1947,8 @@ export namespace Prisma {
     readonly dressCode: FieldRef<"Event", 'String'>
     readonly category: FieldRef<"Event", 'String[]'>
     readonly coverUrl: FieldRef<"Event", 'String'>
+    readonly color: FieldRef<"Event", 'String'>
+    readonly videoUrl: FieldRef<"Event", 'String'>
     readonly eventImages: FieldRef<"Event", 'String[]'>
     readonly maxVolunteers: FieldRef<"Event", 'Int'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
@@ -4630,6 +4656,8 @@ export namespace Prisma {
     dressCode: 'dressCode',
     category: 'category',
     coverUrl: 'coverUrl',
+    color: 'color',
+    videoUrl: 'videoUrl',
     eventImages: 'eventImages',
     maxVolunteers: 'maxVolunteers',
     createdAt: 'createdAt',
@@ -4827,6 +4855,8 @@ export namespace Prisma {
     dressCode?: StringFilter<"Event"> | string
     category?: StringNullableListFilter<"Event">
     coverUrl?: StringFilter<"Event"> | string
+    color?: StringNullableFilter<"Event"> | string | null
+    videoUrl?: StringNullableFilter<"Event"> | string | null
     eventImages?: StringNullableListFilter<"Event">
     maxVolunteers?: IntNullableFilter<"Event"> | number | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
@@ -4844,6 +4874,8 @@ export namespace Prisma {
     dressCode?: SortOrder
     category?: SortOrder
     coverUrl?: SortOrder
+    color?: SortOrderInput | SortOrder
+    videoUrl?: SortOrderInput | SortOrder
     eventImages?: SortOrder
     maxVolunteers?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -4864,6 +4896,8 @@ export namespace Prisma {
     dressCode?: StringFilter<"Event"> | string
     category?: StringNullableListFilter<"Event">
     coverUrl?: StringFilter<"Event"> | string
+    color?: StringNullableFilter<"Event"> | string | null
+    videoUrl?: StringNullableFilter<"Event"> | string | null
     eventImages?: StringNullableListFilter<"Event">
     maxVolunteers?: IntNullableFilter<"Event"> | number | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
@@ -4881,6 +4915,8 @@ export namespace Prisma {
     dressCode?: SortOrder
     category?: SortOrder
     coverUrl?: SortOrder
+    color?: SortOrderInput | SortOrder
+    videoUrl?: SortOrderInput | SortOrder
     eventImages?: SortOrder
     maxVolunteers?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -4905,6 +4941,8 @@ export namespace Prisma {
     dressCode?: StringWithAggregatesFilter<"Event"> | string
     category?: StringNullableListFilter<"Event">
     coverUrl?: StringWithAggregatesFilter<"Event"> | string
+    color?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    videoUrl?: StringNullableWithAggregatesFilter<"Event"> | string | null
     eventImages?: StringNullableListFilter<"Event">
     maxVolunteers?: IntNullableWithAggregatesFilter<"Event"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
@@ -5080,6 +5118,8 @@ export namespace Prisma {
     dressCode: string
     category?: EventCreatecategoryInput | string[]
     coverUrl: string
+    color?: string | null
+    videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
     createdAt?: Date | string
@@ -5097,6 +5137,8 @@ export namespace Prisma {
     dressCode: string
     category?: EventCreatecategoryInput | string[]
     coverUrl: string
+    color?: string | null
+    videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
     createdAt?: Date | string
@@ -5114,6 +5156,8 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5131,6 +5175,8 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5148,6 +5194,8 @@ export namespace Prisma {
     dressCode: string
     category?: EventCreatecategoryInput | string[]
     coverUrl: string
+    color?: string | null
+    videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
     createdAt?: Date | string
@@ -5164,6 +5212,8 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5180,6 +5230,8 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5397,6 +5449,21 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -5433,6 +5500,8 @@ export namespace Prisma {
     dressCode?: SortOrder
     category?: SortOrder
     coverUrl?: SortOrder
+    color?: SortOrder
+    videoUrl?: SortOrder
     eventImages?: SortOrder
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
@@ -5452,6 +5521,8 @@ export namespace Prisma {
     endDate?: SortOrder
     dressCode?: SortOrder
     coverUrl?: SortOrder
+    color?: SortOrder
+    videoUrl?: SortOrder
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5466,6 +5537,8 @@ export namespace Prisma {
     endDate?: SortOrder
     dressCode?: SortOrder
     coverUrl?: SortOrder
+    color?: SortOrder
+    videoUrl?: SortOrder
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5505,6 +5578,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5714,6 +5805,10 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type EventUpdateeventImagesInput = {
     set?: string[]
     push?: string | string[]
@@ -5875,6 +5970,20 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -5926,6 +6035,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -6124,6 +6250,8 @@ export namespace Prisma {
     dressCode: string
     category?: EventCreatecategoryInput | string[]
     coverUrl: string
+    color?: string | null
+    videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
     createdAt?: Date | string
@@ -6140,6 +6268,8 @@ export namespace Prisma {
     dressCode: string
     category?: EventCreatecategoryInput | string[]
     coverUrl: string
+    color?: string | null
+    videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
     createdAt?: Date | string
@@ -6211,6 +6341,8 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6227,6 +6359,8 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

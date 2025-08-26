@@ -28,7 +28,7 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
       return (
         <div className={cn("flex items-start gap-3 flex-wrap", className)}>
           {pending.map((item) => (
-            <div key={item.id} className="relative w-[310px] md:w-[290px] aspect-video rounded-md overflow-hidden border bg-white shadow-xs">
+            <div key={item.id} className="relative w-[310px] md:w-[290px] aspect-video rounded-md overflow-hidden bg-white shadow-xs">
               <div className="absolute inset-0 bg-green-100" />
               <div className="absolute inset-0 bg-green-300" style={{ width: `${item.progress}%` }} />
               <div className="absolute inset-0 flex items-center justify-center text-sm text-slate-700">{item.progress}% Uploading...</div>
@@ -40,7 +40,7 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
               e.preventDefault();
               inputRef.current?.click();
             }}
-            className="w-[310px] md:w-[290px] aspect-video border border-gray-200 rounded-md bg-white shadow-xs hover:bg-gray-50 flex items-center justify-center"
+            className="w-[310px] md:w-[290px] aspect-video rounded-md bg-gray-50 hover:bg-gray-100 flex items-center justify-center"
             title="Add images"
           >
             <div className="flex items-center gap-1.5">
