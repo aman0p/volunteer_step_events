@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import Tag from "@/components/ui/tag";
 import { createEvent, updateEvent } from "@/lib/admin/action/events";
 import ColorPicker from "@/components/admin/ColorPicker";
+import { EventParams } from "@/types";
 
 
 interface Props {
@@ -101,7 +102,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
   const onSubmit: SubmitHandler<z.infer<typeof eventSchema>> = async (values) => {
     const result = isUpdate && event.id
       ? await updateEvent(event.id as string, values)
-      : await createEvent(values);
+      : await createEvent(values as EventParams);
 
     if (result.success) {
       toast.success(isUpdate ? "Event updated successfully" : "Event created successfully");
@@ -169,7 +170,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                 />
 
                 {/* Starting & Ending Date */}
-                <div className="flex flex-col md:flex-row gap-5 w-full">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full">
 
                   {/* Starting Date */}
                   <FormField
@@ -437,7 +438,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                   />
 
                   {/* Color */}
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name={"color"}
                     render={({ field }) => (
@@ -456,7 +457,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -473,7 +474,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                   <FormControl>
                     <div className="flex flex-wrap gap-3">
                       {Array.isArray(field.value) && field.value.length > 0 && field.value.map((img, idx) => (
-                        <Bordered key={`${img}-${idx}`} color={form.watch("color") as string} alpha={0.2} className="rounded-md">
+                        <Bordered key={`${img}-${idx}`} color={form.watch("color") as string} alpha={0.2} className="rounded-md border-none">
                           <ImageTileUpload
                             value={img}
                             placeholder="Upload multiple event image"
@@ -484,6 +485,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                               field.onChange(list.filter(Boolean));
                             }}
                             folder="events/images"
+                            // className="border border-black"
                           />
                         </Bordered>
                       ))}
@@ -499,6 +501,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                           field.onChange([...current, newPath ?? ""].filter(Boolean));
                         }}
                         folder="events/images"
+                        className="border border-gray-400 border-dashed rounded-md"
                       />
                       {/* </Bordered> */}
                     </div>

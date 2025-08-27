@@ -46,8 +46,8 @@ export default async function EventCard({event}: {event: any}) {
         <div className="flex flex-col gap-0.5 p-0.5 pl-1 justify-between h-full w-full md:w-auto">
           <h1 className="text-xs md:text-base font-bold mt-0.5 capitalize line-clamp-1">{event.title}</h1>
           <div className="flex flex-col md:flex-row justify-between md:items-center">
-            <p className="text-[10px] md:text-xs text-gray-500 capitalize line-clamp-1">{event.category.join(", ")}</p>
-            <p className="text-[10px] md:text-xs text-gray-500 line-clamp-1">{new Date(event.startDate).toLocaleDateString()}</p>
+            <p className="text-xxs md:text-xs text-gray-500 capitalize line-clamp-1">{event.category.join(", ")}</p>
+            <p className="text-xxs md:text-xs text-gray-500 line-clamp-1">{new Date(event.startDate).toLocaleDateString()}</p>
           </div>
         </div>
       </Link>

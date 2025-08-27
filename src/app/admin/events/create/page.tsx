@@ -7,7 +7,7 @@ export default function CreateEventPage() {
   const [themeColor, setThemeColor] = useState<string>("");
 
   return (
-    <ThemeBackground className="w-full p-4 md:p-7 md:pr-13" themeColor={themeColor} alpha={0.05}>
+    <ThemeBackground className="w-full" themeColor={themeColor} alpha={0.05}>
         <EventForm onThemeColorChange={setThemeColor} />
     </ThemeBackground>
   );

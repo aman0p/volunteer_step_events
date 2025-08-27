@@ -51,7 +51,7 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
             height={15}
             className="object-contain relative z-10"
           />
-              <span className="text-sm ">{placeholder ?? "Upload event images"}</span>
+              <span className="text-sm ">{placeholder ?? "Upload event media"}</span>
             </div>
           </button>
           <input

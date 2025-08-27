@@ -41,6 +41,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  /* Tailwind v4 text size token for `text-xxs` */
+  --text-xxs: 10px;
 }
 
 :root {
@@ -121,6 +123,7 @@
   }
 }
 
+/* text sizes: `text-xxs` is now a Tailwind token via `--text-xxs` */
 
 /* Gradients ------------------------------------->  */
 
@@ -135,7 +138,6 @@
 .gradient-blue {
   background: linear-gradient(180deg, #11131c 5%, #11131c 100%);
 } */
-
 
 /* Custom select dropdown styling */
 select option {

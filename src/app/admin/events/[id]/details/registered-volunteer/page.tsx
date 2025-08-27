@@ -31,7 +31,7 @@ export default async function RegisteredVolunteerPage({ params }: { params: { id
 
     // Fetch event with all enrollments and user details
     const event = await prisma.event.findUnique({
-        where: { id: params.id },
+        where: { id: (await params).id },
         include: {
             enrollments: {
                 include: {
@@ -89,12 +89,11 @@ export default async function RegisteredVolunteerPage({ params }: { params: { id
     const rejectedEnrollments = event.enrollments.filter(e => e.status === 'REJECTED');
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto p-6">
+        <div className="">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-4">
-                        <Link href={`/admin/events/${params.id}/details`}>
+                        <Link href={`/admin/events/${(await params).id}/details`}>
                             <Button variant="outline" size="sm">
                                 <ArrowLeft className="w-4 h-4 mr-2" />
                                 Back to Event Details
@@ -175,7 +174,7 @@ export default async function RegisteredVolunteerPage({ params }: { params: { id
                             <VolunteerSearch 
                                 placeholder="Search volunteers by name, email, or skills..."
                                 className="w-full"
-                                eventId={params.id}
+                                eventId={(await params).id}
                             />
                         </div>
                         <div className="flex gap-2">
@@ -335,7 +334,6 @@ export default async function RegisteredVolunteerPage({ params }: { params: { id
                         </div>
                     </div>
                 )}
-            </div>
         </div>
     );
 }

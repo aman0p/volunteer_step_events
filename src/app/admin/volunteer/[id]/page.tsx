@@ -108,12 +108,11 @@ export default async function VolunteerDetailsPage({ params }: { params: { id: s
   const stats = getEnrollmentStats(volunteer.enrollments);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-6">
+    <div className="">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-            <Link href="/admin/volunteers">
+            <Link href="/admin/volunteer">
               <Button variant="outline" size="sm">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Volunteers
@@ -400,7 +399,6 @@ export default async function VolunteerDetailsPage({ params }: { params: { id: s
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 }

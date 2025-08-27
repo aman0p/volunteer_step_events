@@ -33,7 +33,7 @@ export default async function EventsPage() {
         <div className="w-full md:px-2 md:w-4xl lg:w-6xl mx-auto">
             <h1 className="text-2xl md:text-3xl font-bold mb-6">Events</h1>
             <div
-                className="grid grid-cols-3 md:grid-cols-6 auto-rows-[5rem] md:auto-rows-[6rem] lg:auto-rows-[7rem] gap-3 md:gap-3 lg:gap-4"
+                className="grid grid-cols-3 md:grid-cols-6 auto-rows-[5rem] md:auto-rows-[6rem] lg:auto-rows-[7rem] gap-1.5 md:gap-3 lg:gap-4"
             >
                 {Array.from({
                     length: Math.max(events.length, 9),
@@ -58,7 +58,7 @@ export default async function EventsPage() {
                         <Link
                             key={event.id}
                             href={`/events/${event.id}`}
-                            className={`group relative overflow-hidden rounded-lg border bg-white ${klass}`}
+                            className={`group relative overflow-hidden rounded-md md:rounded-lg border bg-white ${klass}`}
                         >
                             <Image
                                 urlEndpoint={config.env.imagekit.urlEndpoint}
@@ -72,16 +72,16 @@ export default async function EventsPage() {
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                             {Array.isArray(event.category) && (
-                                <div className="absolute top-2 right-2 hidden md:flex flex-col items-end gap-1">
-                                    <Badge variant="secondary" className="bg-black/10 backdrop-blur-md text-white border-0 rounded-sm">
-                                        {(event as any).enrollments?.length ?? 0} / {event.maxVolunteers ?? "-"}
+                                <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
+                                    <Badge variant="secondary" className="hidden md:flex bg-black/10 backdrop-blur-md text-white border-0 rounded-sm">
+                                        <span className="text-xxs md:text-xs">{(event as any).enrollments?.length ?? 0} / {event.maxVolunteers ?? "-"}</span>
                                         <span className="mx-1">|</span>
-                                        {daysRemaining.toString().padStart(2, "0")} days remaining
+                                        <span className="text-xxs md:text-xs">{daysRemaining.toString().padStart(2, "0")} days remaining</span>
                                     </Badge>
                                     <div className="flex flex-wrap gap-1 justify-end">
                                         {event.category.slice(0, 3).map((cat: string) => (
-                                            <Badge key={cat} variant="secondary" className="text-[10px] md:text-xs bg-black/10 backdrop-blur-md text-white border-0 rounded-sm">
-                                                {cat}
+                                            <Badge key={cat} variant="secondary" className="bg-black/10 backdrop-blur-md text-white border-0 rounded-sm">
+                                                <span className="text-xxs md:text-xs">{cat}</span>
                                             </Badge>
                                         ))}
                                     </div>
@@ -91,9 +91,9 @@ export default async function EventsPage() {
                                 <h2 className="text-white text-sm md:text-base lg:text-lg font-semibold line-clamp-1">
                                     {event.title}
                                 </h2>
-                                <p className="text-white/90 text-xs mt-0.5 flex items-center gap-1">
-                                    <p className="text-[10px] md:text-xs">{new Date(event.startDate).toLocaleDateString()}</p>
-                                    <span className="hidden md:inline">||</span>
+                                <p className="text-white/90 text-xs mt-0.5 flex items-center gap-1.5">
+                                    <p className="text-xxs md:text-xs">{new Date(event.startDate).toLocaleDateString()}</p>
+                                    <span className="hidden md:block">|</span>
                                     <p className="hidden md:block">{event.location.split(",")[0]}</p>
                                 </p>
                             </div>

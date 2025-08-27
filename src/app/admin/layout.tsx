@@ -3,6 +3,7 @@ import { Providers } from "@/components/Providers";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/admin/Sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import Header from "@/components/admin/Header";
 import { prisma } from "@/lib/prisma";
 
@@ -26,17 +27,22 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
 
     return (
         <Providers session={session}>
-            <main className="flex min-h-screen w-full">
-                <Sidebar session={session} />
-                <div className="flex-1 flex flex-col h-screen overflow-hidden">
+            <SidebarProvider>
+                <main className="flex min-h-screen w-full">
+                    <Sidebar session={session} />
+                    <div className="flex-1 flex flex-col h-screen overflow-hidden">
                     {/* <div className="border-b">
                         <Header session={session} />
                     </div> */}
-                    <div className="flex-1 overflow-y-auto">
-                        {children}
+                        <div className="flex items-center gap-2 p-2 border-b">
+                            <SidebarTrigger />
+                        </div>
+                        <div className="w-full p-4 md:p-7 md:pr-13 flex-1 overflow-y-auto">
+                            {children}
+                        </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            </SidebarProvider>
         </Providers>
     );
 }

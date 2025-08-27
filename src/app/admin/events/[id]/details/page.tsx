@@ -28,7 +28,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
 
   // Fetch event with enrollments
   const event = await prisma.event.findUnique({
-    where: { id: params.id },
+    where: { id: (await params).id },
     include: {
       enrollments: {
         include: {
@@ -83,7 +83,6 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
 
 
     return (
-    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -100,7 +99,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
             </div>
           </div>
           <div className="flex gap-2">
-            <Link href={`/admin/events/${params.id}`}>
+            <Link href={`/admin/events/${(await params).id}`}>
             <Link href={`/admin/events/${event.id}/update`}>
                 <Button variant="default" size="icon" className="cursor-pointer hover:bg-black w-fit px-4 py-2">
                     <Pencil className="w-4 h-4 " />
@@ -292,7 +291,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
               <div className="space-y-3">
-                <Link href={`/admin/events/${params.id}/details/registered-volunteer`}>
+                <Link href={`/admin/events/${(await params).id}/details/registered-volunteer`}>
                   <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                     <Users className="w-4 h-4 mr-2" />
                     View All Volunteers
@@ -346,6 +345,5 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
           </div>
         </div>
       </div>
-        </div>
   );
 }
