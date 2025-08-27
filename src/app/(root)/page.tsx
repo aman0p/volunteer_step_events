@@ -40,8 +40,8 @@ export default async function Home() {
     });
 
     return (
-        <div className="flex flex-col gap-20 h-full w-full max-w-7xl mx-auto">
-            <EventOverview latestEvents={latestEvents} userId={session?.user?.id} />
+        <div className="flex flex-col gap-20 h-full w-full md:px-2 md:w-4xl lg:w-6xl mx-auto">
+            {/* <EventOverview latestEvents={latestEvents} userId={session?.user?.id} /> */}
             <EventList 
                 title="Latest Events"
                 events={latestEvents.slice(1)}

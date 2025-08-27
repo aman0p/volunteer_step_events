@@ -136,7 +136,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">{isUpdate ? "Update Event" : "Create a New Event"}</h2>
               {/* Submit Button */}
-              <Button type="submit" className="w-40 mt-5 bg-black text-white hidden md:block">
+              <Button type="submit" className="w-fit bg-black text-white hidden md:block">
                 {isUpdate ? "Update Event" : "Create Event"}
               </Button>
             </div>
@@ -364,7 +364,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                       </FormLabel>
                       <div className="">
                         <FormControl>
-                          <Bordered color={form.watch("color") as string} alpha={0.2} className="max-w-[450px] min-w-[310px] w-full rounded-md">
+                          <Bordered color={form.watch("color") as string} alpha={0.2} className="max-w-[450px] min-w-[310px] w-full rounded-md border-gray-400 border-dashed">
                             <FileUpload
                               type="image"
                               accept="image/*"

@@ -6,7 +6,7 @@ export default async function EventsPage() {
   const events = await prisma.event.findMany();
 
   return (
-    <section className="w-full rounded-2xl bg-transparent p-4 md:p-7 md:pr-13">
+    <section className="w-full rounded-2xl bg-transparent">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">All Events</h2>
         {/* <Button variant="default" asChild> */}
