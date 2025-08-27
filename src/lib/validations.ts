@@ -48,3 +48,13 @@ export const eventSchema = z
     path: ["endDate"],
   });
 
+// Profile update schema for user self-service editing
+export const profileSchema = z.object({
+  fullName: z.string().min(3, "Full name must be at least 3 characters"),
+  phoneNumber: z.string().min(10, "Phone number must be at least 10 digits"),
+  address: z.string().min(10, "Address must be at least 10 characters"),
+  gender: z.nativeEnum(Gender),
+  profileImage: z.string().min(1, "Profile image is required"),
+  skills: z.array(z.string().trim().min(1)).max(10).optional(),
+});
+

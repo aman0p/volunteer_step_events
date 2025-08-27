@@ -171,12 +171,12 @@ export default async function VolunteerPage() {
               <p className="text-gray-500">Volunteers will appear here once they register.</p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-200">
+            <div className="divide-y">
               {volunteers.map((volunteer) => {
                 const stats = getEnrollmentStats(volunteer.enrollments);
                 return (
                   <div key={volunteer.id} className="p-6 hover:bg-gray-50 transition-colors">
-                    <div className="flex items-start gap-4">
+                    <Link href={`/admin/volunteer/${volunteer.id}`} className="flex items-start gap-4">
                       {/* Profile Image */}
                       <div className="flex-shrink-0">
                         {volunteer.profileImage ? (
@@ -201,14 +201,9 @@ export default async function VolunteerPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between">
                           <div>
-                            <div className="flex justify-start items-start gap-3">
                               <h3 className="text-lg font-semibold text-gray-900 mb-1">
                                 {volunteer.fullName}
                               </h3>
-                              <Link href={`/admin/volunteer/${volunteer.id}`}>
-                                <ExternalLink className="w-3 h-3 mr-1" />
-                              </Link>
-                            </div>
                             <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
                               <div className="flex items-center gap-1">
                                 <span className="font-medium">Email:</span>
@@ -216,7 +211,8 @@ export default async function VolunteerPage() {
                               </div>
                               <div className="flex items-center gap-1">
                                 <span className="font-medium">Phone:</span>
-                                {volunteer.phoneNumber}
+                                <span className="text-gray-700 select-none">+91</span>
+                                <span className="text-gray-700">{volunteer.phoneNumber}</span>
                               </div>
                               <div className="flex items-center gap-1">
                                 <span className="font-medium">Address:</span>
@@ -286,7 +282,7 @@ export default async function VolunteerPage() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 );
               })}

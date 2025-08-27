@@ -161,7 +161,7 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
                   className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
                   onClick={() => handleVolunteerClick(volunteer)}
                 >
-                  <div className="flex items-center gap-3">
+                  <Link href={`/admin/volunteer/${volunteer.id}`} className="flex items-center gap-3">
                     {/* Profile Image */}
                     <div className="flex-shrink-0">
                       {volunteer.profileImage ? (
@@ -198,7 +198,8 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
                         </div>
                         <div className="flex items-center gap-1">
                           <Phone className="w-3 h-3" />
-                          <span>{volunteer.phoneNumber}</span>
+                          <span className="text-gray-700 select-none">+91</span>
+                          <span className="text-gray-700">{volunteer.phoneNumber}</span>
                         </div>
                       </div>
 
@@ -241,15 +242,7 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
                       )} */}
                     </div>
 
-                    {/* View Profile Button */}
-                    <div className="flex-shrink-0">
-                      <Link href={`/admin/volunteer/${volunteer.id}`}>
-                        <Button size="sm" variant="outline" className="text-xs">
-                          View Profile
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
+                  </Link>
                 </div>
               ))}
             </div>

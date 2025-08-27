@@ -103,7 +103,10 @@ export default function Profile() {
                           <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Phone Number</FormLabel>
                           <FormControl>
                             <Bordered className="w-full">
-                              <Input placeholder="Your phone number" {...field} className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0" />
+                              <div className="flex items-center w-full">
+                                <span className="px-3 py-2 text-sm text-gray-700 bg-gray-50 select-none border-r border-gray-200">+91</span>
+                                <Input placeholder="Your phone number" {...field} className="w-full px-3 py-2 text-sm transition-all duration-200 border-0 rounded-none" />
+                              </div>
                             </Bordered>
                           </FormControl>
                           <FormMessage />

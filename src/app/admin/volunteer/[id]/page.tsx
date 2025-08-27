@@ -177,7 +177,10 @@ export default async function VolunteerDetailsPage({ params }: { params: { id: s
                       <Phone className="w-5 h-5 text-gray-400" />
                       <div>
                         <p className="text-sm text-gray-500">Phone</p>
-                        <p className="font-medium text-gray-900">{volunteer.phoneNumber}</p>
+                        <p className="font-medium text-gray-900">
+                          <span className="text-gray-700 select-none">+91</span>
+                          <span className="text-gray-700">{volunteer.phoneNumber}</span>
+                        </p>
                       </div>
                     </div>
                     

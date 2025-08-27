@@ -174,6 +174,19 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                                                         </option>
                                                     ))}
                                                 </Select>
+                                            ) : fieldName === "phoneNumber" ? (
+                                                    <div className="flex items-center w-full">
+                                                        <span className="px-3 py-2 text-sm text-gray-700 border border-gray-200 rounded-l-md bg-gray-50 select-none">+91</span>
+                                                        <Input
+                                                            type="tel"
+                                                            value={field.value as string}
+                                                            onChange={field.onChange}
+                                                            name="phone"
+                                                            required
+                                                            placeholder="Enter 10-digit mobile number"
+                                                            className="w-full px-4 py-2 text-sm border border-gray-200 rounded-md rounded-l-none -ml-px bg-white shadow-xs transition-all duration-200 focus:outline-none"
+                                                        />
+                                                    </div>
                                             ) : (
                                                 <Input
                                                     required
