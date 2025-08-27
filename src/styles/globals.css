@@ -157,3 +157,10 @@ select option:checked {
 select option:hover {
   background-color: #eff6ff;
 }
+
+/* Event background color responsive styling */
+@media (min-width: 768px) {
+  [style*="--event-bg-color"] {
+    background-color: var(--event-bg-color) !important;
+  }
+}

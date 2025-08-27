@@ -31,20 +31,20 @@ export default async function EventsPage() {
 
     return (
         <div className="w-full md:px-2 md:w-4xl lg:w-6xl mx-auto">
-            <h1 className="text-2xl md:text-3xl font-bold mb-6">Events</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-6">Upcoming Events</h1>
             <div
-                className="grid grid-cols-3 md:grid-cols-6 auto-rows-[5rem] md:auto-rows-[6rem] lg:auto-rows-[7rem] gap-1.5 md:gap-3 lg:gap-4"
+                className="grid grid-cols-3 md:grid-cols-6 auto-rows-[5rem] md:auto-rows-[6rem] gap-1.5 md:gap-3"
             >
                 {Array.from({
-                    length: Math.max(events.length, 9),
+                    length: Math.max(events.length, 7),
                 }).map((_, idx) => {
                     const klass = patternClasses[idx % patternClasses.length];
                     const event = events[idx];
-                    if (!event) {
-                        return (
+                        if (!event) {
+                            return (
                             <div
                                 key={`placeholder-${idx}`}
-                                className={`relative overflow-hidden rounded-lg border border-dashed bg-gray-50 ${klass} flex items-center justify-center`}
+                                className={` opacity-0 relative overflow-hidden rounded-lg border border-dashed bg-gray-50 ${klass} flex items-center justify-center`}
                             >
                                 <span className="text-gray-500 text-sm md:text-base">Event coming soon</span>
                             </div>
@@ -66,7 +66,7 @@ export default async function EventsPage() {
                                 alt={event.title}
                                 fill
                                 sizes="(min-width: 1024px) 100vw, 100vw"
-                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                className="object-cover transition-transform duration-500 group-hover:scale-105 object-top"
                                 priority={idx < 4}
                                 quality={100}
                             />

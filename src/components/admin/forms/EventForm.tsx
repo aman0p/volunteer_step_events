@@ -348,6 +348,55 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                   )}
                 />
 
+                            {/* Event Images */}
+            <FormField
+              control={form.control}
+              name={"eventImages"}
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-1">
+                  <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
+                    Event Media (Images & Videos)
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex flex-wrap gap-3">
+                      {Array.isArray(field.value) && field.value.length > 0 && field.value.map((img, idx) => (
+                        <Bordered key={`${img}-${idx}`} color={form.watch("color") as string} alpha={0.2} className="rounded-md border-none">
+                          <ImageTileUpload
+                            value={img}
+                            placeholder="Upload multiple event image"
+                            mediaType="both"
+                            onChange={(newPath: string | null) => {
+                              const list = Array.isArray(field.value) ? [...field.value] : [];
+                              list[idx] = newPath ?? "";
+                              field.onChange(list.filter(Boolean));
+                            }}
+                            folder="events/images"
+                            // className="border border-black"
+                          />
+                        </Bordered>
+                      ))}
+
+                      {/* Add tile */}
+                      {/* <Bordered color={form.watch("color") as string} alpha={0.2} className="rounded-md"> */}
+                      <ImageTileUpload
+                        add
+                        multiple
+                        mediaType="both"
+                        onChange={(newPath: string | null) => {
+                          const current = (form.getValues("eventImages") as string[] | undefined) ?? [];
+                          field.onChange([...current, newPath ?? ""].filter(Boolean));
+                        }}
+                        folder="events/images"
+                        className="border border-gray-400 border-dashed rounded-md"
+                      />
+                      {/* </Bordered> */}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
               </div>
 
 
@@ -438,7 +487,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                   />
 
                   {/* Color */}
-                  {/* <FormField
+                  <FormField
                     control={form.control}
                     name={"color"}
                     render={({ field }) => (
@@ -457,59 +506,39 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  /> */}
+                  />
+
+                  {/* Event Video */}
+                  <FormField
+                    control={form.control}
+                    name={"videoUrl"}
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col gap-1">
+                        <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
+                          Event Video
+                        </FormLabel>
+                        <FormControl>
+                          <Bordered color={form.watch("color") as string} alpha={0.2} className="w-full">
+                          <FileUpload
+                              type="video"
+                              accept="video/*"
+                              placeholder="Upload an event video"
+                              folder="events/videos"
+                              variant="dark"
+                              onFileChange={field.onChange}
+                              value={field.value}
+                              className="max-w-[450px] min-w-[310px] aspect-video object-cover w-full rounded-md border-gray-400 border-dashed"
+                            />
+                          </Bordered>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                 </div>
               </div>
             </div>
-
-            {/* Event Images */}
-            <FormField
-              control={form.control}
-              name={"eventImages"}
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-1">
-                  <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
-                    Event Media (Images & Videos)
-                  </FormLabel>
-                  <FormControl>
-                    <div className="flex flex-wrap gap-3">
-                      {Array.isArray(field.value) && field.value.length > 0 && field.value.map((img, idx) => (
-                        <Bordered key={`${img}-${idx}`} color={form.watch("color") as string} alpha={0.2} className="rounded-md border-none">
-                          <ImageTileUpload
-                            value={img}
-                            placeholder="Upload multiple event image"
-                            mediaType="both"
-                            onChange={(newPath: string | null) => {
-                              const list = Array.isArray(field.value) ? [...field.value] : [];
-                              list[idx] = newPath ?? "";
-                              field.onChange(list.filter(Boolean));
-                            }}
-                            folder="events/images"
-                            // className="border border-black"
-                          />
-                        </Bordered>
-                      ))}
-
-                      {/* Add tile */}
-                      {/* <Bordered color={form.watch("color") as string} alpha={0.2} className="rounded-md"> */}
-                      <ImageTileUpload
-                        add
-                        multiple
-                        mediaType="both"
-                        onChange={(newPath: string | null) => {
-                          const current = (form.getValues("eventImages") as string[] | undefined) ?? [];
-                          field.onChange([...current, newPath ?? ""].filter(Boolean));
-                        }}
-                        folder="events/images"
-                        className="border border-gray-400 border-dashed rounded-md"
-                      />
-                      {/* </Bordered> */}
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </form>
 
             {/* Submit Button */}
