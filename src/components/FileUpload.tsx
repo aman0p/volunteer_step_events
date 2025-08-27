@@ -37,6 +37,9 @@ interface FileUploadProps {
   className?: string;
   overlayMode?: "change" | "remove"; // which overlay button to show when file is present
   onRemove?: () => void; // called when overlayMode is remove and user clicks
+  objectFit?: "cover" | "contain"; // control media fit inside preview
+  mediaClassName?: string; // extra classes for IKImage/IKVideo
+  aspectRatio?: "16:9" | "4:3" | "1:1" | "9:16"; // control media aspect ratio
 }
 
 const FileUpload = ({
@@ -50,6 +53,9 @@ const FileUpload = ({
   className,
   overlayMode = "change",
   onRemove,
+  objectFit = "cover",
+  aspectRatio = "16:9",
+  mediaClassName,
 }: FileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<{ filePath: string | null }>({
@@ -186,7 +192,14 @@ const FileUpload = ({
         </button>
       ) : (
         <div className={cn("relative", className)}>
-          <div className="relative w-full aspect-video rounded-md overflow-hidden border">
+          <div className={cn(
+            "relative w-full rounded-md overflow-hidden border", 
+            aspectRatio === "16:9" ? "aspect-video" : 
+            aspectRatio === "4:3" ? "aspect-4/3" : 
+            aspectRatio === "1:1" ? "aspect-square" : 
+            aspectRatio === "9:16" ? "aspect-9/16" : 
+            "aspect-video"
+          )}>
             {type === "image" ? (
               <IKImage
                 src={file.filePath}
@@ -194,14 +207,22 @@ const FileUpload = ({
                 alt={file.filePath}
                 width={400}
                 height={225}
-                className="object-cover w-full h-full"
+                className={cn(
+                  "w-full h-full",
+                  objectFit === "contain" ? "object-contain" : "object-cover",
+                  mediaClassName
+                )}
               />
             ) : type === "video" ? (
               <IKVideo
                 src={file.filePath}
                 urlEndpoint={urlEndpoint}
                 controls={true}
-                className="w-full h-full object-cover"
+                className={cn(
+                  "w-full h-full",
+                  objectFit === "contain" ? "object-contain" : "object-cover",
+                  mediaClassName
+                )}
               />
             ) : null}
             

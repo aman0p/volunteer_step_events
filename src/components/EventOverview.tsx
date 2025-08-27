@@ -6,7 +6,7 @@ import { Event } from "@/types";
 import config from "@/lib/config";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
-import { requestEnrollment } from '@/lib/action/enrollment';
+import { requestEnrollment } from '@/lib/user/enrollment';
 import { toast } from "sonner";
 import { useState } from 'react';
 

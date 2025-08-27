@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { approveEnrollment, rejectEnrollment } from "@/lib/admin/action/enrollment";
+import { approveEnrollment, rejectEnrollment } from "@/lib/admin/enrollment";
 import { toast } from "sonner";
 
 interface EnrollmentActionsProps {

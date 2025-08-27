@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { requestEnrollment } from "@/lib/action/enrollment";
+import { requestEnrollment } from "@/lib/user/enrollment";
 import { toast } from "sonner";
 
 interface EnrollButtonProps {
