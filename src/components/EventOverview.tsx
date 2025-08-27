@@ -40,7 +40,7 @@ export default function EventOverview({ latestEvents, userId }: EventOverviewPro
     };
 
     return (
-        <div className="space-y-20 h-full w-full">
+        <div className="space-y-20 h-full w-6xl mx-auto">
             <div className="flex flex-col gap-1">
                 {events.length > 0 && (
                     <div className="flex flex-col gap-5 md:gap-8 ">

@@ -12,6 +12,11 @@ export const requestEnrollment = async (eventId: string) => {
     return { success: false, message: "Authentication required" };
   }
 
+  // Check if user is a volunteer
+  if (session.user.role !== "VOLUNTEER") {
+    return { success: false, message: "Only volunteers can enroll in events" };
+  }
+
   try {
     // Check if already enrolled
     const existing = await prisma.enrollment.findUnique({
@@ -60,6 +65,11 @@ export const cancelEnrollment = async (eventId: string) => {
     return { success: false, message: "Authentication required" };
   }
 
+  // Check if user is a volunteer
+  if (session.user.role !== "VOLUNTEER") {
+    return { success: false, message: "Only volunteers can cancel enrollments" };
+  }
+
   try {
     await prisma.enrollment.delete({
       where: { eventId_userId: { eventId, userId: session.user.id } }
@@ -78,6 +88,11 @@ export const getUserEnrollmentStatus = async (eventId: string) => {
   
   if (!session?.user?.id) {
     return { success: false, message: "Authentication required" };
+  }
+
+  // Check if user is a volunteer
+  if (session.user.role !== "VOLUNTEER") {
+    return { success: false, message: "Only volunteers can check enrollment status" };
   }
 
   try {
