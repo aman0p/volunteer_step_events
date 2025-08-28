@@ -222,19 +222,7 @@ export default async function AccountVerificationDetail({ params }: { params: { 
                 </div>
               )}
 
-              {request.adminNote && (
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Admin Note</label>
-                  <p className="text-sm">{request.adminNote}</p>
-                </div>
-              )}
 
-              {request.rejectionReason && (
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Rejection Reason</label>
-                  <p className="text-sm text-red-600">{request.rejectionReason}</p>
-                </div>
-              )}
             </div>
           </div>
 

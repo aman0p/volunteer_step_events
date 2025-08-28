@@ -14,9 +14,9 @@ export const requestEnrollment = async (eventId: string) => {
     return { success: false, message: "Authentication required" };
   }
 
-  // Check if user is a volunteer
+  // Check if user is a volunteer (only verified users can enroll)
   if (session.user.role !== "VOLUNTEER") {
-    return { success: false, message: "Only volunteers can enroll in events" };
+    return { success: false, message: "Only verified volunteers can enroll in events. Please complete your profile and request verification first." };
   }
 
   try {

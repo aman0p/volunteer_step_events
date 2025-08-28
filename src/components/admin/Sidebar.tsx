@@ -24,7 +24,7 @@ import {
 import { Session } from "next-auth";
 import { NotificationCount } from "@/components/ui/notification";
 
-export function Sidebar({ session, enrollmentCount }: { session: Session; enrollmentCount: number }) {
+export function Sidebar({ session, enrollmentCount, verificationCount }: { session: Session; enrollmentCount: number; verificationCount: number }) {
     const pathname = usePathname();
 
     return (
@@ -57,7 +57,7 @@ export function Sidebar({ session, enrollmentCount }: { session: Session; enroll
                                         link.text === "All Volunteers" ? Users :
                                             link.text === "All Events" ? Book :
                                                 link.text === "Event Enrollments" ? Bookmark :
-                                                    link.text === "Account Requests" ? UserCheck : Home;
+                                                    link.text === "Verification Requests" ? UserCheck : Home;
 
                                 return (
                                     <SidebarMenuItem key={link.route}>
@@ -68,6 +68,11 @@ export function Sidebar({ session, enrollmentCount }: { session: Session; enroll
                                                 {link.text === "Event Enrollments" && (
                                                     <div className="ml-8">
                                                         <NotificationCount count={enrollmentCount} />
+                                                    </div>
+                                                )}
+                                                {link.text === "Verification Requests" && (
+                                                    <div className="ml-8">
+                                                        <NotificationCount count={verificationCount} />
                                                     </div>
                                                 )}
                                             </Link>

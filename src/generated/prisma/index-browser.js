@@ -183,9 +183,7 @@ exports.Prisma.VerificationRequestScalarFieldEnum = {
   status: 'status',
   submittedAt: 'submittedAt',
   reviewedAt: 'reviewedAt',
-  reviewedById: 'reviewedById',
-  adminNote: 'adminNote',
-  rejectionReason: 'rejectionReason'
+  reviewedById: 'reviewedById'
 };
 
 exports.Prisma.SortOrder = {

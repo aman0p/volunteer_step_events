@@ -41,7 +41,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <Providers session={session}>
-      <div className="flex flex-col items-center justify-center w-full max-w-6xl mx-auto h-full px-3 py-5">
+      <div className="flex flex-col items-center justify-center w-full max-w-6xl mx-auto h-full px-3 py-5 mt-7">
         <Navbar session={session} />
         <div className="mt-10">{children}</div>
       </div>

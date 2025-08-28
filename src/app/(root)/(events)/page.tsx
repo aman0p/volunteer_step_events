@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { Image } from "@imagekit/next";
 import config from "@/lib/config";
 import { Badge } from "@/components/ui/badge";
+import ProfileCompletionBanner from "@/components/ProfileCompletionBanner";
 
 // Repeating 10-item mosaic pattern: [Large, Small x8, Large]
 const patternClasses = [
@@ -32,6 +33,10 @@ export default async function EventsPage() {
     return (
         <div className="w-full md:px-2 md:w-4xl lg:w-6xl mx-auto">
             <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-6">Upcoming Events</h1>
+            
+            {/* Profile Completion Banner for USER role users */}
+            <ProfileCompletionBanner className="absolute top-0 left-0"/>
+            
             <div
                 className="grid grid-cols-3 md:grid-cols-6 auto-rows-[5rem] md:auto-rows-[6rem] gap-1.5 md:gap-3"
             >
@@ -57,7 +62,7 @@ export default async function EventsPage() {
                     return (
                         <Link
                             key={event.id}
-                            href={`/events/${event.id}`}
+                            href={`/${event.id}`}
                             className={`group relative overflow-hidden rounded-md md:rounded-lg border bg-white ${klass}`}
                         >
                             <Image

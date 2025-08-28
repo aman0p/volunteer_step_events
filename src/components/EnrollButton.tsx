@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { requestEnrollment } from "@/lib/actions/user/enrollment";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
 interface EnrollButtonProps {
   eventId: string;
@@ -15,6 +16,7 @@ interface EnrollButtonProps {
 
 export default function EnrollButton({ eventId, isFull, enrollmentStatus, className }: EnrollButtonProps) {
   const [isEnrolling, setIsEnrolling] = useState(false);
+  const { data: session } = useSession();
 
   const handleEnroll = async () => {
     if (isFull || enrollmentStatus) return;
@@ -86,9 +88,33 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
       <Button
         disabled
         className={cn("w-45 h-fit rounded-full py-3 px-5 bg-gray-500 text-white/90 hover:text-white", className)}
-
       >
         Enrollment Full
+      </Button>
+    );
+  }
+
+  // Check user role and show appropriate button
+  if (session?.user?.role === "USER") {
+    return (
+      <Button
+        disabled
+        className={cn("w-45 h-fit rounded-full py-3 px-5 bg-gray-500 text-white/90 hover:text-white", className)}
+        title="Complete your profile and request verification to enroll in events"
+      >
+        Apply for Verification
+      </Button>
+    );
+  }
+
+  if (session?.user?.role === "ADMIN" || session?.user?.role === "ORGANIZER") {
+    return (
+      <Button
+        disabled
+        className={cn("w-45 h-fit rounded-full py-3 px-5 bg-gray-500 text-white/90 hover:text-white", className)}
+        title="Admins and Organizers cannot enroll as volunteers"
+      >
+        Admin/Organizer
       </Button>
     );
   }

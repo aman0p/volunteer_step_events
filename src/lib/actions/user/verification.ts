@@ -5,6 +5,21 @@ import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
+const createVerificationRequestNotification = async (userId: string) => {
+  try {
+    await prisma.notification.create({
+      data: {
+        userId,
+        type: "VERIFICATION_REQUEST",
+        title: "Verification Request Submitted",
+        message: "Your verification request has been submitted and is under review. You will be notified once an admin reviews your request.",
+      },
+    });
+  } catch (error) {
+    console.error("Failed to create verification request notification:", error);
+  }
+};
+
 export const submitVerificationRequest = async () => {
   const session = await getServerSession(authOptions);
   
@@ -42,6 +57,8 @@ export const submitVerificationRequest = async () => {
         status: "PENDING"
       }
     });
+
+    await createVerificationRequestNotification(session.user.id);
 
     revalidatePath("/profile");
     return { success: true, message: "Verification request submitted successfully" };

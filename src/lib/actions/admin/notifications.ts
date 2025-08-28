@@ -167,4 +167,35 @@ export const broadcastNewEventNotification = async (eventId: string) => {
   }
 };
 
+export const notifyUserOnVerificationStatusChange = async (
+  params: { userId: string; status: "APPROVED" | "REJECTED" }
+) => {
+  try {
+    const typeMap: Record<"APPROVED" | "REJECTED", NotificationType> = {
+      APPROVED: NotificationType.VERIFICATION_APPROVED,
+      REJECTED: NotificationType.VERIFICATION_REJECTED,
+    } as const;
+
+    const type = typeMap[params.status];
+    const title = params.status === "APPROVED" ? "Verification Approved" : "Verification Rejected";
+    const message = params.status === "APPROVED" 
+      ? "Congratulations! Your account has been verified. You can now enroll in events as a volunteer."
+      : "Your verification request was rejected. Please check with admin for details or submit a new request.";
+
+    await prisma.notification.create({
+      data: {
+        userId: params.userId,
+        type,
+        title,
+        message,
+      },
+    });
+
+    return { success: true } as const;
+  } catch (error) {
+    console.error("notifyUserOnVerificationStatusChange error", error);
+    return { success: false, message: "Failed to notify user" } as const;
+  }
+};
+
 

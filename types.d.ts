@@ -104,8 +104,7 @@ export interface VerificationRequest {
   submittedAt: Date;
   reviewedAt?: Date;
   reviewedById?: string;
-  adminNote?: string;
-  rejectionReason?: string;
+
   user: {
     id: string;
     fullName: string;

@@ -34,8 +34,8 @@ export const adminSideBarLinks = [
   },
   {
     img: "/icons/admin/user.svg",
-    route: "/admin/account-requests",
-    text: "Account Requests",
+    route: "/admin/account-verification",
+    text: "Verification Requests",
   },
 ];
 

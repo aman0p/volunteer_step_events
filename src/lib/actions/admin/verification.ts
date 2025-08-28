@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { notifyUserOnVerificationStatusChange } from "./notifications";
 
 export const getVerificationRequests = async () => {
   const session = await getServerSession(authOptions);
@@ -51,7 +52,7 @@ export const getVerificationRequests = async () => {
   }
 };
 
-export const approveVerificationRequest = async (requestId: string, adminNote?: string) => {
+export const approveVerificationRequest = async (requestId: string) => {
   const session = await getServerSession(authOptions);
   
   if (!session?.user?.id) {
@@ -75,8 +76,7 @@ export const approveVerificationRequest = async (requestId: string, adminNote?: 
       data: {
         status: "APPROVED",
         reviewedAt: new Date(),
-        reviewedById: session.user.id,
-        adminNote
+        reviewedById: session.user.id
       }
     });
 
@@ -87,22 +87,32 @@ export const approveVerificationRequest = async (requestId: string, adminNote?: 
     });
 
     if (request) {
-      // Update user verification status
+      // Update user verification status and upgrade role to VOLUNTEER
       await prisma.user.update({
         where: { id: request.userId },
-        data: { isVerified: true }
+        data: { 
+          isVerified: true,
+          role: "VOLUNTEER" // Upgrade from USER to VOLUNTEER
+        }
+      });
+
+      // Send notification to user about verification approval
+      await notifyUserOnVerificationStatusChange({
+        userId: request.userId,
+        status: "APPROVED"
       });
     }
 
     revalidatePath("/admin/account-verification");
-    return { success: true, message: "Verification request approved successfully" };
+    revalidatePath("/profile");
+    return { success: true, message: "Verification request approved successfully. User role upgraded to Volunteer." };
   } catch (error) {
     console.error("Approve verification error:", error);
     return { success: false, message: "Failed to approve verification request" };
   }
 };
 
-export const rejectVerificationRequest = async (requestId: string, rejectionReason: string) => {
+export const rejectVerificationRequest = async (requestId: string) => {
   const session = await getServerSession(authOptions);
   
   if (!session?.user?.id) {
@@ -116,7 +126,7 @@ export const rejectVerificationRequest = async (requestId: string, rejectionReas
   });
 
   if (!user || user.role !== "ADMIN") {
-    return { success: false, message: "Admin access required" };
+    return { success: false, message: "Authentication required" };
   }
 
   try {
@@ -126,10 +136,23 @@ export const rejectVerificationRequest = async (requestId: string, rejectionReas
       data: {
         status: "REJECTED",
         reviewedAt: new Date(),
-        reviewedById: session.user.id,
-        rejectionReason
+        reviewedById: session.user.id
       }
     });
+
+    // Get the user ID from the request
+    const request = await prisma.verificationRequest.findUnique({
+      where: { id: requestId },
+      select: { userId: true }
+    });
+
+    if (request) {
+      // Send notification to user about verification rejection
+      await notifyUserOnVerificationStatusChange({
+        userId: request.userId,
+        status: "REJECTED"
+      });
+    }
 
     revalidatePath("/admin/account-verification");
     return { success: true, message: "Verification request rejected successfully" };

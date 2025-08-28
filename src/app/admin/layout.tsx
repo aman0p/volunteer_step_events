@@ -27,12 +27,15 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
 
     // Sidebar badge should reflect current number of pending enrollment requests
     const enrollmentCount = await prisma.enrollment.count({ where: { status: "PENDING" } });
+    
+    // Count pending verification requests
+    const verificationCount = await prisma.verificationRequest.count({ where: { status: "PENDING" } });
 
     return (
         <Providers session={session}>
             <SidebarProvider>
                 <main className="flex min-h-screen w-full">
-                    <Sidebar session={session} enrollmentCount={enrollmentCount} />
+                    <Sidebar session={session} enrollmentCount={enrollmentCount} verificationCount={verificationCount} />
                     <div className="flex-1 flex flex-col h-screen overflow-hidden">
                     {/* <div className="border-b">
                         <Header session={session} />

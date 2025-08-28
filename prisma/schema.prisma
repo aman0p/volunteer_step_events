@@ -90,8 +90,6 @@ model VerificationRequest {
   reviewedAt       DateTime?
   reviewedBy       User?               @relation("ReviewedBy", fields: [reviewedById], references: [id])
   reviewedById     String?
-  adminNote        String?
-  rejectionReason  String?
 }
 
 enum Gender {
