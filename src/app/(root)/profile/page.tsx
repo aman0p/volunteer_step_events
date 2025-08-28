@@ -12,8 +12,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/FileUpload";
 import Tag from "@/components/ui/tag";
-import { updateCurrentUserProfile, getCurrentUserProfile } from "@/lib/user/profile";
+import { updateCurrentUserProfile, getCurrentUserProfile } from "@/lib/actions/user/profile";
 import { toast } from "sonner";
+import { GOV_ID_OPTIONS } from "@/constants";
+import { Select } from "@/components/ui/select";
 
 export default function Profile() {
 
@@ -26,6 +28,8 @@ export default function Profile() {
           gender: undefined,
           profileImage: "",
           skills: [],
+          govIdType: undefined,
+          govIdImage: "",
         },
       }) as UseFormReturn<z.infer<typeof profileSchema>>);
     const [role, setRole] = useState("");
@@ -42,6 +46,8 @@ export default function Profile() {
               gender: result.data.gender ?? undefined,
               profileImage: result.data.profileImage ?? "",
               skills: Array.isArray(result.data.skills) ? result.data.skills : [],
+              govIdType: (result.data as any).govIdType ?? undefined,
+              govIdImage: (result.data as any).govIdImage ?? "",
             });
             setRole((result.data as any).role ?? "");
           }
@@ -88,7 +94,7 @@ export default function Profile() {
                     )}
                   />
     
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full">
+                  <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr_1fr_1.5fr] gap-5 w-full">
                     <div className="flex flex-col gap-1 w-full">
                       <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Role</FormLabel>
                       <Bordered className="w-full">
@@ -135,6 +141,35 @@ export default function Profile() {
                         </FormItem>
                       )}
                     />
+
+<FormField
+                      control={form.control}
+                      name={"govIdType"}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col gap-1 w-full">
+                          <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Government ID Type</FormLabel>
+                          <FormControl>
+                            <Bordered className="w-full">
+                              <Select
+                                value={field.value ?? ""}
+                                onChange={(e) => field.onChange(e.target.value)}
+                                className="w-full bg-black/10 font-medium px-3 py-2 text-sm rounded-md transition-all duration-200 border-0 disabled:opacity-100"
+                              >
+                                <option value="" disabled>
+                                  Select ID Type
+                                </option>
+                                {GOV_ID_OPTIONS.map((opt) => (
+                                  <option key={opt.value} value={opt.value}>
+                                    {opt.label}
+                                  </option>
+                                ))}
+                              </Select>
+                            </Bordered>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
     
                   <FormField
@@ -145,7 +180,7 @@ export default function Profile() {
                         <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Address</FormLabel>
                         <FormControl>
                           <Bordered className="w-full">
-                            <Textarea placeholder="Your address" {...field} rows={6} className="w-full px-3 py-2 text-sm rounded-md bg-transparent transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0 border-0" />
+                            <Textarea placeholder="Your address" {...field} rows={9} className="w-full px-3 py-2 text-sm rounded-md bg-transparent transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0 border-0" />
                           </Bordered>
                         </FormControl>
                         <FormMessage />
@@ -229,9 +264,38 @@ export default function Profile() {
                                 variant="dark"
                                 onFileChange={field.onChange}
                                 value={field.value}
-                                // objectFit="contain"
-                                aspectRatio="1:1"
-                                className="w-full h-full border-0 rounded-md"
+                                objectFit="contain"
+                                aspectRatio="16:9"
+                                className="w-full h-full border-0 rounded-md aspect-video"
+                              />
+                            </Bordered>
+                          </FormControl>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={"govIdImage"}
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col gap-1">
+                        <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Government ID Image</FormLabel>
+                        <div>
+                          <FormControl>
+                            <Bordered className="h-fit w-full rounded-md border-gray-400 border-dashed">
+                              <FileUpload
+                                type="image"
+                                accept="image/*"
+                                placeholder="Upload government ID image"
+                                folder="users/gov-id"
+                                variant="dark"
+                                onFileChange={field.onChange}
+                                value={field.value}
+                                objectFit="contain"
+                                aspectRatio="4:3"
+                                className="w-full h-full border-0 rounded-md aspect-video"
                               />
                             </Bordered>
                           </FormControl>

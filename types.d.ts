@@ -34,8 +34,9 @@ interface AuthCredentials {
   email: string;
   password: string;
   phoneNumber: string;
-  address: string;
-  gender: Gender;
+  // Optional fields populated later via profile update
+  address?: string;
+  gender?: Gender;
   govIdType?: GovId;
   govIdImage?: string;
   profileImage?: string;

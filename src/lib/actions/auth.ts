@@ -60,7 +60,7 @@ export const signInWithCredentials = async (
 }
 
 export const signUpWithCredentials = async (params: AuthCredentials) => {
-    const { fullName, email, password, phoneNumber, address, gender, govIdType, govIdImage, profileImage } = params;
+    const { fullName, email, password, phoneNumber, gender } = params;
 
     // ********* Upstash Redis - Rate Limit *********
     const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
@@ -92,11 +92,12 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
                 email,
                 password: hashedPassword,
                 phoneNumber: phoneNumber,
-                profileImage: profileImage || "",
-                address: address,
-                gender: gender as Gender,
-                govIdType: govIdType as GovId,
-                govIdImage: govIdImage || "",
+                // Defaults for fields to be filled later in profile page
+                profileImage: "",
+                address: "",
+                gender: (gender as Gender) ?? Gender.MALE,
+                govIdType: GovId.AADHAR_CARD,
+                govIdImage: "",
                 role: Role.VOLUNTEER
             }
         })

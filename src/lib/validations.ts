@@ -4,18 +4,14 @@ import { z } from "zod";
 
 export const signUpSchema = z.object({
   fullName: z.string().min(3, "Full name must be at least 3 characters"),
-  email: z.string().email("Invalid email address"),
+  email: z.string().lowercase().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   phoneNumber: z.string().min(10, "Phone number must be at least 10 digits"),
-  address: z.string().min(10, "Address must be at least 10 characters"),
   gender: z.nativeEnum(Gender),
-  govIdType: z.nativeEnum(GovId),
-  govIdImage: z.string().nonempty("Govt. ID is required"),
-  profileImage: z.string().nonempty("Profile image is required"),
 });
 
 export const signInSchema = z.object({
-  email: z.string().email(),
+  email: z.string().lowercase().email(),
   password: z.string().min(8),
 });
 
@@ -57,6 +53,8 @@ export const profileSchema = z.object({
   gender: z.nativeEnum(Gender),
   profileImage: z.string().min(1, "Profile image is required"),
   skills: z.array(z.string().trim().min(1)).max(10).optional(),
+  govIdType: z.nativeEnum(GovId),
+  govIdImage: z.string().nonempty("Govt. ID is required"),
 });
 
 // Notification schemas

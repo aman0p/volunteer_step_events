@@ -4,7 +4,7 @@ import React from "react";
 import { signUpSchema } from "@/lib/validations";
 import { AuthForm } from "@/components/AuthForm";
 import { signUpWithCredentials } from "@/lib/actions/auth";
-import { Gender, GovId } from "@/generated/prisma";
+import { Gender } from "@/generated/prisma";
 
 export default function SignUpPage() {
     return (
@@ -16,11 +16,7 @@ export default function SignUpPage() {
                 email: "",
                 password: "",
                 phoneNumber: "",
-                address: "",
                 gender: Gender.MALE,
-                govIdType: GovId.AADHAR_CARD,
-                govIdImage: "",
-                profileImage: "",
             }}
             onSubmit={signUpWithCredentials}
         />
