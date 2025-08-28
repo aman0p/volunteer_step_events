@@ -5,7 +5,7 @@ import { z } from "zod";
 import { useState } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Bordered } from "@/components/ui/bordered";
+
 import { profileSchema } from "@/lib/validations";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -102,9 +102,9 @@ export default function Profile() {
                   <FormItem className="flex flex-col gap-1">
                     <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Full Name</FormLabel>
                     <FormControl>
-                      <Bordered className="w-full">
+                      <div className="w-full border border-gray-300 rounded-md">
                         <Input required placeholder="Your full name" {...field} className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0" />
-                      </Bordered>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -114,9 +114,9 @@ export default function Profile() {
               <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr_1fr_1.5fr] gap-5 w-full">
                 <div className="flex flex-col gap-1 w-full">
                   <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Role</FormLabel>
-                  <Bordered className="w-full">
+                  <div className="w-full border border-gray-300 rounded-md">
                     <Input value={role} readOnly disabled className="w-full bg-black/10 font-medium px-3 py-2 text-sm rounded-md transition-all duration-200 border-0 disabled:opacity-100" />
-                  </Bordered>
+                  </div>
                 </div>
                 <FormField
                   control={form.control}
@@ -125,12 +125,12 @@ export default function Profile() {
                     <FormItem className="flex flex-col gap-1 w-full">
                       <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Phone Number</FormLabel>
                       <FormControl>
-                        <Bordered className="w-full">
+                        <div className="w-full border border-gray-300 rounded-md">
                           <div className="flex items-center w-full">
                             <span className="px-3 py-2 text-sm text-gray-700 bg-gray-50 select-none border-r border-gray-200">+91</span>
                             <Input placeholder="Your phone number" {...field} className="w-full px-3 py-2 text-sm transition-all duration-200 border-0 rounded-none" />
                           </div>
-                        </Bordered>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

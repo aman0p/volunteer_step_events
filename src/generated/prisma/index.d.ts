@@ -1435,7 +1435,6 @@ export namespace Prisma {
     endDate: Date | null
     dressCode: string | null
     coverUrl: string | null
-    color: string | null
     videoUrl: string | null
     maxVolunteers: number | null
     createdAt: Date | null
@@ -1451,7 +1450,6 @@ export namespace Prisma {
     endDate: Date | null
     dressCode: string | null
     coverUrl: string | null
-    color: string | null
     videoUrl: string | null
     maxVolunteers: number | null
     createdAt: Date | null
@@ -1468,7 +1466,6 @@ export namespace Prisma {
     dressCode: number
     category: number
     coverUrl: number
-    color: number
     videoUrl: number
     eventImages: number
     maxVolunteers: number
@@ -1495,7 +1492,6 @@ export namespace Prisma {
     endDate?: true
     dressCode?: true
     coverUrl?: true
-    color?: true
     videoUrl?: true
     maxVolunteers?: true
     createdAt?: true
@@ -1511,7 +1507,6 @@ export namespace Prisma {
     endDate?: true
     dressCode?: true
     coverUrl?: true
-    color?: true
     videoUrl?: true
     maxVolunteers?: true
     createdAt?: true
@@ -1528,7 +1523,6 @@ export namespace Prisma {
     dressCode?: true
     category?: true
     coverUrl?: true
-    color?: true
     videoUrl?: true
     eventImages?: true
     maxVolunteers?: true
@@ -1633,7 +1627,6 @@ export namespace Prisma {
     dressCode: string
     category: string[]
     coverUrl: string
-    color: string | null
     videoUrl: string | null
     eventImages: string[]
     maxVolunteers: number | null
@@ -1670,7 +1663,6 @@ export namespace Prisma {
     dressCode?: boolean
     category?: boolean
     coverUrl?: boolean
-    color?: boolean
     videoUrl?: boolean
     eventImages?: boolean
     maxVolunteers?: boolean
@@ -1690,7 +1682,6 @@ export namespace Prisma {
     dressCode?: boolean
     category?: boolean
     coverUrl?: boolean
-    color?: boolean
     videoUrl?: boolean
     eventImages?: boolean
     maxVolunteers?: boolean
@@ -1708,7 +1699,6 @@ export namespace Prisma {
     dressCode?: boolean
     category?: boolean
     coverUrl?: boolean
-    color?: boolean
     videoUrl?: boolean
     eventImages?: boolean
     maxVolunteers?: boolean
@@ -1726,7 +1716,6 @@ export namespace Prisma {
     dressCode?: boolean
     category?: boolean
     coverUrl?: boolean
-    color?: boolean
     videoUrl?: boolean
     eventImages?: boolean
     maxVolunteers?: boolean
@@ -1734,7 +1723,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "location" | "startDate" | "endDate" | "dressCode" | "category" | "coverUrl" | "color" | "videoUrl" | "eventImages" | "maxVolunteers" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "location" | "startDate" | "endDate" | "dressCode" | "category" | "coverUrl" | "videoUrl" | "eventImages" | "maxVolunteers" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Event$enrollmentsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
@@ -1757,7 +1746,6 @@ export namespace Prisma {
       dressCode: string
       category: string[]
       coverUrl: string
-      color: string | null
       videoUrl: string | null
       eventImages: string[]
       maxVolunteers: number | null
@@ -2196,7 +2184,6 @@ export namespace Prisma {
     readonly dressCode: FieldRef<"Event", 'String'>
     readonly category: FieldRef<"Event", 'String[]'>
     readonly coverUrl: FieldRef<"Event", 'String'>
-    readonly color: FieldRef<"Event", 'String'>
     readonly videoUrl: FieldRef<"Event", 'String'>
     readonly eventImages: FieldRef<"Event", 'String[]'>
     readonly maxVolunteers: FieldRef<"Event", 'Int'>
@@ -7223,7 +7210,6 @@ export namespace Prisma {
     dressCode: 'dressCode',
     category: 'category',
     coverUrl: 'coverUrl',
-    color: 'color',
     videoUrl: 'videoUrl',
     eventImages: 'eventImages',
     maxVolunteers: 'maxVolunteers',
@@ -7486,7 +7472,6 @@ export namespace Prisma {
     dressCode?: StringFilter<"Event"> | string
     category?: StringNullableListFilter<"Event">
     coverUrl?: StringFilter<"Event"> | string
-    color?: StringNullableFilter<"Event"> | string | null
     videoUrl?: StringNullableFilter<"Event"> | string | null
     eventImages?: StringNullableListFilter<"Event">
     maxVolunteers?: IntNullableFilter<"Event"> | number | null
@@ -7505,7 +7490,6 @@ export namespace Prisma {
     dressCode?: SortOrder
     category?: SortOrder
     coverUrl?: SortOrder
-    color?: SortOrderInput | SortOrder
     videoUrl?: SortOrderInput | SortOrder
     eventImages?: SortOrder
     maxVolunteers?: SortOrderInput | SortOrder
@@ -7527,7 +7511,6 @@ export namespace Prisma {
     dressCode?: StringFilter<"Event"> | string
     category?: StringNullableListFilter<"Event">
     coverUrl?: StringFilter<"Event"> | string
-    color?: StringNullableFilter<"Event"> | string | null
     videoUrl?: StringNullableFilter<"Event"> | string | null
     eventImages?: StringNullableListFilter<"Event">
     maxVolunteers?: IntNullableFilter<"Event"> | number | null
@@ -7546,7 +7529,6 @@ export namespace Prisma {
     dressCode?: SortOrder
     category?: SortOrder
     coverUrl?: SortOrder
-    color?: SortOrderInput | SortOrder
     videoUrl?: SortOrderInput | SortOrder
     eventImages?: SortOrder
     maxVolunteers?: SortOrderInput | SortOrder
@@ -7572,7 +7554,6 @@ export namespace Prisma {
     dressCode?: StringWithAggregatesFilter<"Event"> | string
     category?: StringNullableListFilter<"Event">
     coverUrl?: StringWithAggregatesFilter<"Event"> | string
-    color?: StringNullableWithAggregatesFilter<"Event"> | string | null
     videoUrl?: StringNullableWithAggregatesFilter<"Event"> | string | null
     eventImages?: StringNullableListFilter<"Event">
     maxVolunteers?: IntNullableWithAggregatesFilter<"Event"> | number | null
@@ -7906,7 +7887,6 @@ export namespace Prisma {
     dressCode: string
     category?: EventCreatecategoryInput | string[]
     coverUrl: string
-    color?: string | null
     videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
@@ -7925,7 +7905,6 @@ export namespace Prisma {
     dressCode: string
     category?: EventCreatecategoryInput | string[]
     coverUrl: string
-    color?: string | null
     videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
@@ -7944,7 +7923,6 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
-    color?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -7963,7 +7941,6 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
-    color?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -7982,7 +7959,6 @@ export namespace Prisma {
     dressCode: string
     category?: EventCreatecategoryInput | string[]
     coverUrl: string
-    color?: string | null
     videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
@@ -8000,7 +7976,6 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
-    color?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -8018,7 +7993,6 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
-    color?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -8458,7 +8432,6 @@ export namespace Prisma {
     dressCode?: SortOrder
     category?: SortOrder
     coverUrl?: SortOrder
-    color?: SortOrder
     videoUrl?: SortOrder
     eventImages?: SortOrder
     maxVolunteers?: SortOrder
@@ -8479,7 +8452,6 @@ export namespace Prisma {
     endDate?: SortOrder
     dressCode?: SortOrder
     coverUrl?: SortOrder
-    color?: SortOrder
     videoUrl?: SortOrder
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
@@ -8495,7 +8467,6 @@ export namespace Prisma {
     endDate?: SortOrder
     dressCode?: SortOrder
     coverUrl?: SortOrder
-    color?: SortOrder
     videoUrl?: SortOrder
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
@@ -9796,7 +9767,6 @@ export namespace Prisma {
     dressCode: string
     category?: EventCreatecategoryInput | string[]
     coverUrl: string
-    color?: string | null
     videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
@@ -9814,7 +9784,6 @@ export namespace Prisma {
     dressCode: string
     category?: EventCreatecategoryInput | string[]
     coverUrl: string
-    color?: string | null
     videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
@@ -9895,7 +9864,6 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
-    color?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
@@ -9913,7 +9881,6 @@ export namespace Prisma {
     dressCode?: StringFieldUpdateOperationsInput | string
     category?: EventUpdatecategoryInput | string[]
     coverUrl?: StringFieldUpdateOperationsInput | string
-    color?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null

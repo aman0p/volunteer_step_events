@@ -2,20 +2,15 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 import config from "@/lib/config";
-import { hexToRgba } from "@/lib/utils";
 import { Image } from "@imagekit/next";
 import { DeleteEvent } from "@/components/admin/forms/DeleteEvent";
 
 export default async function EventCard({event}: {event: any}) {
-    const borderColor = event.color ? hexToRgba(event.color as string, 0.3) : undefined;
-    const backgroundColor = event.color ? hexToRgba(event.color as string, 0.05) : undefined;
-
     return (
         <Link
         href={`/admin/events/${event.id}/details`}
         key={event.id}
         className={"border flex flex-col h-full gap-1 p-1 md:p-2 rounded-lg cursor-pointer backdrop-blur-sm"}
-        style={{ borderColor, backgroundColor }}
       >
         <div className="absolute top-4 right-4 flex flex-col gap-2">
             <DeleteEvent eventId={event.id} eventTitle={event.title} />

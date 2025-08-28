@@ -328,18 +328,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
                   <span className="text-gray-500">Event ID</span>
                   <span className="text-gray-900 font-mono text-xs">{event.id}</span>
                 </div>
-                {event.color && (
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-500">Theme Color</span>
-                    <div className="flex items-center gap-2">
-                      <div 
-                        className="w-4 h-4 rounded-full border border-gray-300" 
-                        style={{ backgroundColor: event.color }}
-                      ></div>
-                      <span className="text-gray-900 font-mono text-xs">{event.color}</span>
-                    </div>
-                  </div>
-                )}
+
               </div>
             </div>
           </div>

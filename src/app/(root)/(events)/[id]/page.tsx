@@ -57,7 +57,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const enrolledVolunteers = event.enrollments.filter((e: any) => e.status === 'APPROVED').length;
   const availableSlots = event.maxVolunteers ? event.maxVolunteers - enrolledVolunteers : 'Unlimited';
-  const eventBgColor = event.color ? `${event.color}1A` : 'rgba(0, 0, 0, 0.1)';
+
 
   return (
     <div className="w-full space-y-2 md:space-y-5 md:px-2 lg:px-0 md:w-4xl lg:w-6xl mx-auto h-full rounded-xl md:rounded-2xl lg:rounded-3xl">
@@ -65,10 +65,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
       {/* main content */}
       <div 
         className="grid grid-cols-1 md:grid-cols-[2fr_1fr] w-full rounded-xl md:rounded-2xl lg:rounded-3xl h-full md:p-7 gap-10"
-        style={{ 
-          '--event-bg-color': eventBgColor,
-          backgroundColor: 'transparent'
-        } as React.CSSProperties & { '--event-bg-color': string }}
+
       >
         <div className="flex flex-col gap-3 md:gap-7 justify-end order-2 md:order-1">
 

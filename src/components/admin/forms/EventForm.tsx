@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Bordered } from "@/components/ui/bordered";
 import { useRouter } from "next/navigation";
 import { eventSchema } from "@/lib/validations";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,13 +23,11 @@ import ImageTileUpload from "@/components/ui/image-tile-upload";
 import { toast } from "sonner";
 import Tag from "@/components/ui/tag";
 import { createEvent, updateEvent } from "@/lib/actions/admin/events";
-import ColorPicker from "@/components/admin/ColorPicker";
 import { EventParams } from "@/types";
 
 
 interface Props {
   type?: "create" | "update";
-  onThemeColorChange?: (hexOrEmpty: string) => void;
   id?: string;
   title?: string;
   description?: string;
@@ -39,7 +36,6 @@ interface Props {
   endDate?: Date | string;
   dressCode?: string;
   coverUrl?: string;
-  color?: string | null;
   videoUrl?: string | null;
   eventImages?: string[];
   category?: string[];
@@ -48,7 +44,7 @@ interface Props {
   updatedAt?: Date | string;
 }
 
-const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
+const EventForm = ({ type, ...event }: Props) => {
   const router = useRouter();
   const isUpdate = type === "update" && !!event.id;
 
@@ -63,7 +59,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
           endDate: event.endDate ? new Date(event.endDate) : new Date(),
           dressCode: (event.dressCode as string) ?? "",
           coverUrl: (event.coverUrl as string) ?? "",
-          color: (event.color as string) ?? "",
+
           videoUrl: (event.videoUrl as string) ?? "",
           eventImages: (event.eventImages as string[]) ?? [],
           category: (event.category as string[]) ?? [],
@@ -80,7 +76,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
           endDate: new Date(),
           dressCode: "",
           coverUrl: "",
-          color: "",
+
           videoUrl: "",
           eventImages: [],
           category: [],
@@ -114,16 +110,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
     }
   };
 
-  // Bubble up theme color changes to parent page
-  useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
-      if (name === "color" && onThemeColorChange) {
-        const hex = (value.color as string) || "";
-        onThemeColorChange(hex);
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [form, onThemeColorChange]);
+
 
   return (
     <>
@@ -155,14 +142,14 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                         Event Title
                       </FormLabel>
                       <FormControl>
-                        <Bordered color={form.watch("color") as string} alpha={0.2} className="w-full">
+                        <div className="w-full border border-gray-300 rounded-md">
                           <Input
                             required
                             placeholder="Event title"
                             {...field}
                             className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0"
                           />
-                        </Bordered>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -182,7 +169,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                           Start Date
                         </FormLabel>
                         <FormControl>
-                          <Bordered color={form.watch("color") as string} alpha={0.2} className="w-full">
+                          <div className="w-full border border-gray-300 rounded-md">
                             <Input
                               required
                               type="datetime-local"
@@ -194,7 +181,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                               ref={field.ref}
                               className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0"
                             />
-                          </Bordered>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -211,7 +198,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                           End Date
                         </FormLabel>
                         <FormControl>
-                          <Bordered color={form.watch("color") as string} alpha={0.2} className="w-full">
+                          <div className="w-full border border-gray-300 rounded-md">
                             <Input
                               required
                               type="datetime-local"
@@ -223,7 +210,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                               ref={field.ref}
                               className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0"
                             />
-                          </Bordered>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -240,13 +227,13 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                           Dress Code
                         </FormLabel>
                         <FormControl>
-                          <Bordered color={form.watch("color") as string} alpha={0.2} className="w-full">
+                          <div className="w-full border border-gray-300 rounded-md">
                             <Input
                               placeholder="Dress code"
                               {...field}
                               className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0"
                             />
-                          </Bordered>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -297,7 +284,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                           Categories (press Enter to add, max 3)
                         </FormLabel>
                         <FormControl>
-                          <Bordered color={form.watch("color") as string} alpha={0.2} className="w-full h-10 px-2 items-center justify-center text-sm  flex gap-2 flex-wrap">
+                          <div className="w-full h-10 px-2 items-center justify-center text-sm flex gap-2 flex-wrap border border-gray-300 rounded-md">
                             {Array.isArray(field.value) && field.value.length > 0 && (
                               field.value.map((cat) => (
                                 <Tag key={cat} label={cat} onRemove={() => removeCategory(cat)} />
@@ -315,7 +302,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                               disabled={Array.isArray(field.value) && field.value.length >= 3}
                               className="flex-1 min-w-[160px] bg-transparent outline-none text-sm placeholder:text-gray-500 placeholder:pl-1"
                             />
-                          </Bordered>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -333,14 +320,14 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                         Event Description
                       </FormLabel>
                       <FormControl>
-                        <Bordered color={form.watch("color") as string} alpha={0.2} className="w-full">
-                          <Textarea
-                            placeholder="Event description"
-                            {...field}
-                            rows={8}
-                            className="w-full px-3 py-2 text-sm rounded-md bg-transparent transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0 border-0"
-                          />
-                        </Bordered>
+                                                  <div className="w-full border border-gray-300 rounded-md">
+                            <Textarea
+                              placeholder="Event description"
+                              {...field}
+                              rows={8}
+                              className="w-full px-3 py-2 text-sm rounded-md bg-transparent transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0 border-0"
+                            />
+                          </div>
                       </FormControl>
 
                       <FormMessage />
@@ -360,7 +347,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                   <FormControl>
                     <div className="flex flex-wrap gap-3">
                       {Array.isArray(field.value) && field.value.length > 0 && field.value.map((img, idx) => (
-                        <Bordered key={`${img}-${idx}`} color={form.watch("color") as string} alpha={0.2} className="rounded-md border-none">
+                        <div key={`${img}-${idx}`} className="rounded-md border border-gray-300">
                           <ImageTileUpload
                             value={img}
                             placeholder="Upload multiple event image"
@@ -373,7 +360,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                             folder="events/images"
                             // className="border border-black"
                           />
-                        </Bordered>
+                        </div>
                       ))}
 
                       {/* Add tile */}
@@ -413,7 +400,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                       </FormLabel>
                       <div className="">
                         <FormControl>
-                          <Bordered color={form.watch("color") as string} alpha={0.2} className="max-w-[450px] min-w-[310px] w-full rounded-md border-gray-400 border-dashed">
+                          <div className="max-w-[450px] min-w-[310px] w-full rounded-md border border-gray-400 border-dashed">
                             <FileUpload
                               type="image"
                               accept="image/*"
@@ -424,7 +411,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                               value={field.value}
                               className="w-full aspect-video object-cover border-0 rounded-md"
                             />
-                          </Bordered>
+                          </div>
                         </FormControl>
                       </div>
                       <FormMessage />
@@ -443,14 +430,14 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                           Location
                         </FormLabel>
                         <FormControl>
-                          <Bordered color={form.watch("color") as string} alpha={0.2} className="w-full">
+                          <div className="w-full border border-gray-300 rounded-md">
                             <Input
                               required
                               placeholder="Event location"
                               {...field}
                               className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0"
                             />
-                          </Bordered>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -467,7 +454,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                           Max Volunteers
                         </FormLabel>
                         <FormControl>
-                          <Bordered color={form.watch("color") as string} alpha={0.2} className="w-full">
+                          <div className="w-full border border-gray-300 rounded-md">
                             <Input
                               type="number"
                               placeholder="Maximum volunteers"
@@ -479,34 +466,14 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                               }
                               className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0"
                             />
-                          </Bordered>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Color */}
-                  <FormField
-                    control={form.control}
-                    name={"color"}
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col gap-1">
-                        <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
-                          Theme Color
-                        </FormLabel>
-                        <FormControl>
-                          <div className="flex flex-col gap-2">
-                            <ColorPicker
-                              value={field.value as string}
-                              onPickerChange={(hex) => field.onChange(hex)}
-                            />
                           </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
+
 
                   {/* Event Video */}
                   <FormField
@@ -518,7 +485,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                           Event Video
                         </FormLabel>
                         <FormControl>
-                          <Bordered color={form.watch("color") as string} alpha={0.2} className="w-full">
+                          <div className="w-full border border-gray-300 rounded-md">
                           <FileUpload
                               type="video"
                               accept="video/*"
@@ -529,7 +496,7 @@ const EventForm = ({ type, onThemeColorChange, ...event }: Props) => {
                               value={field.value}
                               className="max-w-[450px] min-w-[310px] aspect-video object-cover w-full rounded-md border-gray-400 border-dashed"
                             />
-                          </Bordered>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

@@ -52,7 +52,6 @@ interface EventParams {
   dressCode: string;
   category: string[];
   coverUrl: string;
-  color: string | null;
   videoUrl: string | null;
   eventImages: string[];
   maxVolunteers?: number;
