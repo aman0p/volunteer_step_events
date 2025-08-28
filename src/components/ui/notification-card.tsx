@@ -89,7 +89,7 @@ export function EventNotificationCard({
         <p className="mt-1 text-xs text-black/80 line-clamp-2">{n.message}</p>
         <div className="mt-3">
           <Link
-            href={n.relatedEventId ? `/events/${n.relatedEventId}` : "/events"}
+            href={n.relatedEventId ? `/${n.relatedEventId}` : "/events"}
             className="text-xs px-2 py-1 rounded-md bg-primary text-white hover:opacity-90 inline-flex"
             onClick={onCloseDrawer}
           >

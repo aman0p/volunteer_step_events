@@ -54,6 +54,22 @@ export const authOptions = {
                 token.email = user.email;
                 token.name = user.name;
                 token.role = user.role;
+            } else {
+                // If no user object (token refresh), fetch latest user data from database
+                if (token.id) {
+                    try {
+                        const dbUser = await prisma.user.findUnique({
+                            where: { id: token.id as string },
+                            select: { role: true, fullName: true }
+                        });
+                        if (dbUser) {
+                            token.role = dbUser.role;
+                            token.name = dbUser.fullName;
+                        }
+                    } catch (error) {
+                        console.error("Error fetching user data in JWT callback:", error);
+                    }
+                }
             }
             return token;
         },

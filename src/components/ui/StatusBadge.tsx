@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-export type StatusType = "PENDING" | "APPROVED" | "REJECTED" | "ACTIVE" | "INACTIVE" | "COMPLETED" | "CANCELLED";
+export type StatusType = "PENDING" | "APPROVED" | "REJECTED" | "WAITLISTED" | "ACTIVE" | "INACTIVE" | "COMPLETED" | "CANCELLED";
 
 interface StatusBadgeProps {
   status: StatusType;
@@ -24,6 +24,11 @@ const statusConfig = {
     variant: "destructive" as const,
     className: "bg-red-600 text-white border-red-600",
     icon: "❌"
+  },
+  WAITLISTED: {
+    variant: "secondary" as const,
+    className: "bg-blue-100 text-blue-800 border-blue-200",
+    icon: "⏸️"
   },
   ACTIVE: {
     variant: "default" as const,
@@ -76,6 +81,10 @@ export function ApprovedBadge({ className }: { className?: string }) {
 
 export function RejectedBadge({ className }: { className?: string }) {
   return <StatusBadge status="REJECTED" className={className} />;
+}
+
+export function WaitlistedBadge({ className }: { className?: string }) {
+  return <StatusBadge status="WAITLISTED" className={className} />;
 }
 
 export function ActiveBadge({ className }: { className?: string }) {

@@ -10,13 +10,13 @@ import { useSession } from "next-auth/react";
 interface EnrollButtonProps {
   eventId: string;
   isFull: boolean;
-  enrollmentStatus?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED" | null;
+  enrollmentStatus?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED" | "WAITLISTED" | null;
   className?: string;
 }
 
 export default function EnrollButton({ eventId, isFull, enrollmentStatus, className }: EnrollButtonProps) {
   const [isEnrolling, setIsEnrolling] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const handleEnroll = async () => {
     if (isFull || enrollmentStatus) return;
@@ -38,12 +38,24 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
     }
   };
 
+  // Show loading state while session is loading
+  if (status === "loading") {
+    return (
+      <Button
+        disabled
+        className={cn("w-45 h-fit rounded-full py-3 px-5 bg-gray-400 text-white/90", className)}
+      >
+        Loading...
+      </Button>
+    );
+  }
+
   // Show different states based on enrollment status
   if (enrollmentStatus === "APPROVED") {
     return (
       <Button
-        disabled
-        className={cn("w-45 h-fit rounded-full py-3 px-5 bg-green-600 text-white/90 hover:text-white", className)}
+        // disabled
+        className={cn("w-45 h-fit rounded-full py-3 px-5 bg-green-600 hover:bg-green-600/90 cursor-not-allowed text-white/90 hover:text-white", className)}
       >
         Enrollment Approved
       </Button>
@@ -54,7 +66,8 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
     return (
       <Button
         disabled
-        className={cn("w-45 h-fit rounded-full py-3 px-5 bg-yellow-600 text-black/90 hover:text-white", className)}
+        variant="default"
+        className={cn("w-45 h-fit rounded-full py-3 px-5 text-white", className)}
       >
         Pending Approval
       </Button>
@@ -83,6 +96,17 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
     );
   }
 
+  if (enrollmentStatus === "WAITLISTED") {
+    return (
+      <Button
+        disabled
+        className={cn("w-45 h-fit rounded-full py-3 px-5 bg-blue-600 text-white/90 hover:text-white", className)}
+      >
+        Waitlisted
+      </Button>
+    );
+  }
+
   if (isFull) {
     return (
       <Button
@@ -94,8 +118,21 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
     );
   }
 
+  // Check if user is not authenticated
+  if (!session?.user) {
+    return (
+      <Button
+        disabled
+        className={cn("w-45 h-fit rounded-full py-3 px-5 bg-gray-500 text-white/90", className)}
+        title="Please sign in to enroll in events"
+      >
+        Sign In to Enroll
+      </Button>
+    );
+  }
+
   // Check user role and show appropriate button
-  if (session?.user?.role === "USER") {
+  if (session.user.role === "USER") {
     return (
       <Button
         disabled
@@ -107,7 +144,7 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
     );
   }
 
-  if (session?.user?.role === "ADMIN" || session?.user?.role === "ORGANIZER") {
+  if (session.user.role === "ADMIN" || session.user.role === "ORGANIZER") {
     return (
       <Button
         disabled
@@ -119,14 +156,28 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
     );
   }
 
+  // Only show enroll button for VOLUNTEER role
+  if (session.user.role === "VOLUNTEER") {
+    return (
+      <Button
+        onClick={handleEnroll}
+        disabled={isEnrolling}
+        variant="outline"
+        className={cn("w-45 h-fit rounded-full py-3 px-5 bg-black hover:bg-black/95 text-white/90 hover:text-white", className)}
+      >
+        {isEnrolling ? "Enrolling..." : "Enroll as Volunteer"}
+      </Button>
+    );
+  }
+
+  // Fallback for any other role or undefined role
   return (
     <Button
-      onClick={handleEnroll}
-      disabled={isEnrolling}
-      variant="outline"
-      className={cn("w-45 h-fit rounded-full py-3 px-5 bg-black hover:bg-black/95 text-white/90 hover:text-white", className)}
+      disabled
+      className={cn("w-45 h-fit rounded-full py-3 px-5 bg-gray-500 text-white/90", className)}
+      title="Invalid user role"
     >
-      {isEnrolling ? "Enrolling..." : "Enroll as Volunteer"}
+      Cannot Enroll
     </Button>
   );
 }

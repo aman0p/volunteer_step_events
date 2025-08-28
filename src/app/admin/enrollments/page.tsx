@@ -12,7 +12,7 @@ export default async function EnrollmentsPage() {
     redirect("/sign-in");
   }
 
-  // Check if user has admin role
+  // Check if user has admin role - use database role instead of session role
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
     select: { role: true }
@@ -49,8 +49,6 @@ export default async function EnrollmentsPage() {
     },
     orderBy: { enrolledAt: "desc" }
   });
-
-
 
   const getCapacityStatus = (maxVolunteers: number | null, approvedCount: number) => {
     if (!maxVolunteers) return "Unlimited";

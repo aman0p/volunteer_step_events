@@ -6,9 +6,10 @@ import { Event } from "@/types";
 import config from "@/lib/config";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
-import { requestEnrollment } from '@/lib/user/enrollment';
+import { requestEnrollment } from '@/lib/actions/user/enrollment';
 import { toast } from "sonner";
 import { useState } from 'react';
+import { useSession } from "next-auth/react";
 
 interface EventOverviewProps {
     latestEvents?: (Event & { enrollments?: any[] })[];
@@ -18,6 +19,7 @@ interface EventOverviewProps {
 export default function EventOverview({ latestEvents, userId }: EventOverviewProps) {
     const events = latestEvents || [];
     const [isEnrolling, setIsEnrolling] = useState(false);
+    const { data: session, status } = useSession();
 
     const handleEnroll = async (eventId: string) => {
         if (!userId) return;
@@ -37,6 +39,122 @@ export default function EventOverview({ latestEvents, userId }: EventOverviewPro
         } finally {
             setIsEnrolling(false);
         }
+    };
+
+    // Helper function to render enrollment button based on user role and status
+    const renderEnrollmentButton = () => {
+        // Show loading state while session is loading
+        if (status === "loading") {
+            return (
+                <Button 
+                    disabled
+                    className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-gray-400 text-white">
+                    Loading...
+                </Button>
+            );
+        }
+
+        // Check if user is not authenticated
+        if (!session?.user) {
+            return (
+                <Button className="w-40 gap-2 flex items-center px-10 py-5 cursor-pointer bg-black text-white">
+                    Sign In to Enroll
+                </Button>
+            );
+        }
+
+        // Check if user is not a volunteer
+        if (session.user.role !== "VOLUNTEER") {
+            if (session.user.role === "USER") {
+                return (
+                    <Button 
+                        disabled
+                        className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-gray-500 text-white"
+                        title="Complete your profile and request verification to enroll in events">
+                        Apply for Verification
+                    </Button>
+                );
+            }
+            
+            if (session.user.role === "ADMIN" || session.user.role === "ORGANIZER") {
+                return (
+                    <Button 
+                        disabled
+                        className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-gray-500 text-white"
+                        title="Admins and Organizers cannot enroll as volunteers">
+                        Admin/Organizer
+                    </Button>
+                );
+            }
+
+            return (
+                <Button 
+                    disabled
+                    className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-gray-500 text-white"
+                    title="Invalid user role">
+                    Cannot Enroll
+                </Button>
+            );
+        }
+
+        // User is a volunteer, check enrollment status
+        if (events[0]?.enrollments) {
+            const userEnrollment = events[0].enrollments.find((e: any) => e.userId === userId);
+            const isEnrolled = userEnrollment?.status === 'APPROVED';
+            const isPending = userEnrollment?.status === 'PENDING';
+            const isRejected = userEnrollment?.status === 'REJECTED';
+            const isWaitlisted = userEnrollment?.status === 'WAITLISTED';
+            
+            if (isEnrolled) {
+                return (
+                    <Button 
+                        disabled
+                        className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-green-600 text-white">
+                        ✓ Enrolled
+                    </Button>
+                );
+            }
+            
+            if (isPending) {
+                return (
+                    <Button 
+                        disabled
+                        className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-yellow-600 text-white">
+                        ⏳ Pending
+                    </Button>
+                );
+            }
+            
+            if (isRejected) {
+                return (
+                    <Button 
+                        disabled
+                        className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-red-600 text-white">
+                        ❌ Rejected
+                    </Button>
+                );
+            }
+
+            if (isWaitlisted) {
+                return (
+                    <Button 
+                        disabled
+                        className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-blue-600 text-white">
+                        ⏸️ Waitlisted
+                    </Button>
+                );
+            }
+        }
+
+        // Show enroll button for volunteers
+        return (
+            <Button 
+                onClick={() => handleEnroll(events[0].id)}
+                disabled={isEnrolling}
+                className="w-40 gap-2 flex items-center px-10 py-5 cursor-pointer bg-black text-white hover:bg-gray-800">
+                {isEnrolling ? "Enrolling..." : "Enroll Now"}
+            </Button>
+        );
     };
 
     return (
@@ -77,70 +195,8 @@ export default function EventOverview({ latestEvents, userId }: EventOverviewPro
                         </div>
 
                         <div className="flex gap-2 w-fit">  
-                            {userId ? (
-                                (() => {
-                                    // Check if user is already enrolled
-                                    const userEnrollment = events[0].enrollments?.find((e: any) => e.userId === userId);
-                                    const isEnrolled = userEnrollment?.status === 'APPROVED';
-                                    const isPending = userEnrollment?.status === 'PENDING';
-                                    const isRejected = userEnrollment?.status === 'REJECTED';
-                                    
-                                    // Debug logging
-                                    console.log('EventOverview Debug:', {
-                                        userId,
-                                        eventId: events[0].id,
-                                        enrollments: events[0].enrollments,
-                                        userEnrollment,
-                                        isEnrolled,
-                                        isPending,
-                                        isRejected
-                                    });
-                                    
-                                    if (isEnrolled) {
-                                        return (
-                                            <Button 
-                                                disabled
-                                                className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-green-600 text-white">
-                                                ✓ Enrolled
-                                            </Button>
-                                        );
-                                    }
-                                    
-                                    if (isPending) {
-                                        return (
-                                            <Button 
-                                                disabled
-                                                className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-yellow-600 text-white">
-                                                ⏳ Pending
-                                            </Button>
-                                        );
-                                    }
-                                    
-                                    if (isRejected) {
-                                        return (
-                                            <Button 
-                                                disabled
-                                                className="w-40 gap-2 flex items-center px-10 py-5 cursor-default bg-red-600 text-white">
-                                                ❌ Rejected
-                                            </Button>
-                                        );
-                                    }
-                                    
-                                    return (
-                                        <Button 
-                                            onClick={() => handleEnroll(events[0].id)}
-                                            disabled={isEnrolling}
-                                            className="w-40 gap-2 flex items-center px-10 py-5 cursor-pointer bg-black text-white hover:bg-gray-800">
-                                            {isEnrolling ? "Enrolling..." : "Enroll Now"}
-                                        </Button>
-                                    );
-                                })()
-                            ) : (
-                                <Button className="w-40 gap-2 flex items-center px-10 py-5 cursor-pointer bg-black text-white">
-                                    Sign In to Enroll
-                                </Button>
-                            )}
-                            <Link href={`/events/${events[0].id}`} className="w-full group">
+                            {renderEnrollmentButton()}
+                            <Link href={`/${events[0].id}`} className="w-full group">
                                 <Button className="w-40 gap-2 flex items-center px-10 py-5 cursor-pointer bg-black text-white">
                                     View Details
                                     <ArrowRightIcon className="size-4 group-hover:pl-0.3 group-hover:rotate-[-45deg] group-hover:translate-x-1 transition-all duration-300" />

@@ -59,7 +59,7 @@ export const requestEnrollment = async (eventId: string) => {
       applicantName: session.user.name || undefined,
     });
 
-    revalidatePath(`/events/${eventId}`);
+    revalidatePath(`/${eventId}`);
     return { success: true, message: "Enrollment request sent successfully" };
   } catch (error) {
     console.error("Enrollment error:", error);
@@ -106,7 +106,7 @@ export const cancelEnrollment = async (eventId: string) => {
       },
     });
 
-    revalidatePath(`/events/${eventId}`);
+    revalidatePath(`/${eventId}`);
     return { success: true, message: "Enrollment cancelled" };
   } catch (error) {
     console.error("Cancel error:", error);

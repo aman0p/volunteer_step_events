@@ -14,7 +14,7 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
         redirect("/sign-in");
     }
 
-    // Check if user has admin role
+    // Check if user has admin role - use database role instead of session role
     const user = await prisma.user.findUnique({
         where: { id: session.user.id },
         select: { role: true }
@@ -23,7 +23,6 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
     if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
         redirect("/");
     }
-    
 
     // Sidebar badge should reflect current number of pending enrollment requests
     const enrollmentCount = await prisma.enrollment.count({ where: { status: "PENDING" } });

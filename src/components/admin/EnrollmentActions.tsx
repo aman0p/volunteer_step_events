@@ -18,16 +18,14 @@ export default function EnrollmentActions({ enrollmentId, userName, eventId }: E
     setIsLoading(true);
     try {
       const result = await approveEnrollment(enrollmentId);
-      
       if (result.success) {
-        toast.success(`Approved ${userName}'s enrollment`);
-        // Refresh the page to show updated state
-        window.location.reload();
+        toast.success(`Enrollment for ${userName} approved!`);
       } else {
-        toast.error(result.message);
+        toast.error(result.message || "Failed to approve enrollment.");
       }
     } catch (error) {
-      toast.error("Failed to approve enrollment");
+      console.error("Error approving enrollment:", error);
+      toast.error("An unexpected error occurred during approval.");
     } finally {
       setIsLoading(false);
     }
@@ -37,38 +35,26 @@ export default function EnrollmentActions({ enrollmentId, userName, eventId }: E
     setIsLoading(true);
     try {
       const result = await rejectEnrollment(enrollmentId);
-      
       if (result.success) {
-        toast.success(`Rejected ${userName}'s enrollment`);
-        // Refresh the page to show updated state
-        window.location.reload();
+        toast.success(`Enrollment for ${userName} rejected.`);
       } else {
-        toast.error(result.message);
+        toast.error(result.message || "Failed to reject enrollment.");
       }
     } catch (error) {
-      toast.error("Failed to reject enrollment");
+      console.error("Error rejecting enrollment:", error);
+      toast.error("An unexpected error occurred during rejection.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex gap-2 w-full">
-      <Button 
-        size="sm" 
-        onClick={handleApprove} 
-        disabled={isLoading}
-        className="bg-green-600 hover:bg-green-700 text-white"
-      >
-        {isLoading ? "Processing..." : "Approve"}
+    <div className="flex gap-2">
+      <Button onClick={handleApprove} disabled={isLoading} className="bg-green-500 hover:bg-green-600 text-white">
+        {isLoading ? "Approving..." : "Approve"}
       </Button>
-      <Button 
-        size="sm" 
-        variant="destructive" 
-        onClick={handleReject} 
-        disabled={isLoading}
-      >
-        {isLoading ? "Processing..." : "Reject"}
+      <Button onClick={handleReject} disabled={isLoading} variant="destructive">
+        {isLoading ? "Rejecting..." : "Reject"}
       </Button>
     </div>
   );
