@@ -49,18 +49,33 @@ model User {
   lastActiveAt DateTime     @default(now())
   createdAt    DateTime     @default(now())
   enrollments  Enrollment[]
+  notifications Notification[]
 }
 
 model Enrollment {
   id          String    @id @default(uuid())
   status      Status    @default(PENDING)
   enrolledAt  DateTime  @default(now())
+  cancelledAt DateTime? // Track when user cancels enrollment
   event       Event     @relation(fields: [eventId], references: [id])
   eventId     String
   user        User      @relation(fields: [userId], references: [id])
   userId      String
 
   @@unique([eventId, userId])
+}
+
+model Notification {
+  id          String           @id @default(uuid())
+  title       String
+  message     String
+  type        NotificationType
+  isRead      Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  user        User             @relation(fields: [userId], references: [id])
+  userId      String
+  relatedEventId String?       // For event-related notifications
+  relatedEnrollmentId String?  // For enrollment-related notifications
 }
 
 enum Gender {
@@ -80,10 +95,25 @@ enum Status {
   PENDING
   APPROVED
   REJECTED
+  WAITLISTED
+  CANCELLED
 }
 
 enum Role {
   VOLUNTEER
   ORGANIZER
   ADMIN
+}
+
+enum NotificationType {
+  ENROLLMENT_APPLICATION    // Admin gets notified when user applies
+  ENROLLMENT_APPROVED      // User gets notified when approved
+  ENROLLMENT_REJECTED      // User gets notified when rejected
+  ENROLLMENT_WAITLISTED    // User gets notified when waitlisted
+  ENROLLMENT_CANCELLED     // User gets notified when cancelled
+  ENROLLMENT_SELF_CANCELLED // User gets notified when they cancel themselves
+  NEW_EVENT_ADDED          // User gets notified when new event is added
+  EVENT_UPDATE             // User gets notified about event changes
+  EVENT_REMINDER          // User gets notified before event
+  SYSTEM_MESSAGE          // General system notifications
 }

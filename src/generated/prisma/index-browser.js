@@ -159,8 +159,21 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   id: 'id',
   status: 'status',
   enrolledAt: 'enrolledAt',
+  cancelledAt: 'cancelledAt',
   eventId: 'eventId',
   userId: 'userId'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message',
+  type: 'type',
+  isRead: 'isRead',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  relatedEventId: 'relatedEventId',
+  relatedEnrollmentId: 'relatedEnrollmentId'
 };
 
 exports.Prisma.SortOrder = {
@@ -199,13 +212,29 @@ exports.Role = exports.$Enums.Role = {
 exports.Status = exports.$Enums.Status = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
+  REJECTED: 'REJECTED',
+  WAITLISTED: 'WAITLISTED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.NotificationType = exports.$Enums.NotificationType = {
+  ENROLLMENT_APPLICATION: 'ENROLLMENT_APPLICATION',
+  ENROLLMENT_APPROVED: 'ENROLLMENT_APPROVED',
+  ENROLLMENT_REJECTED: 'ENROLLMENT_REJECTED',
+  ENROLLMENT_WAITLISTED: 'ENROLLMENT_WAITLISTED',
+  ENROLLMENT_CANCELLED: 'ENROLLMENT_CANCELLED',
+  ENROLLMENT_SELF_CANCELLED: 'ENROLLMENT_SELF_CANCELLED',
+  NEW_EVENT_ADDED: 'NEW_EVENT_ADDED',
+  EVENT_UPDATE: 'EVENT_UPDATE',
+  EVENT_REMINDER: 'EVENT_REMINDER',
+  SYSTEM_MESSAGE: 'SYSTEM_MESSAGE'
 };
 
 exports.Prisma.ModelName = {
   Event: 'Event',
   User: 'User',
-  Enrollment: 'Enrollment'
+  Enrollment: 'Enrollment',
+  Notification: 'Notification'
 };
 
 /**
