@@ -1,4 +1,4 @@
-import { Gender, GovId, Role } from "@/generated/prisma"
+import { Gender, GovId, Role } from "./src/generated/prisma"
 import NextAuth from "next-auth"
 
 declare module "next-auth" {
@@ -66,3 +66,22 @@ interface Event extends EventParams {
   updatedAt: Date;
   maxVolunteers: number | null;
 }
+
+export type NotificationType =
+  | "ENROLLMENT_APPLICATION"
+  | "ENROLLMENT_APPROVED"
+  | "ENROLLMENT_REJECTED"
+  | "ENROLLMENT_WAITLISTED"
+  | "ENROLLMENT_CANCELLED"
+  | "ENROLLMENT_SELF_CANCELLED"
+  | "NEW_EVENT_ADDED"
+  | "EVENT_UPDATE"
+  | "EVENT_REMINDER"
+  | "SYSTEM_MESSAGE";
+
+export type EnrollmentStatus =
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED"
+  | "WAITLISTED"
+  | "CANCELLED";

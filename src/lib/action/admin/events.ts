@@ -1,16 +1,20 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { EventParams } from "@/types";
+import { broadcastNewEventNotification } from "@/lib/action/admin/notifications";
+import type { Prisma } from "@/generated/prisma";
 import { revalidatePath } from "next/cache";
 
-export const createEvent = async (params: EventParams) => {
+export const createEvent = async (params: Prisma.EventCreateInput) => {
   try {
     const newEvent = await prisma.event.create({
       data: {
         ...params,
       },
     });
+
+    // Broadcast to volunteers that a new event has been added
+    await broadcastNewEventNotification(newEvent.id);
 
     // Ensure the admin events page shows the newly created event
     revalidatePath("/admin/events");
@@ -29,7 +33,7 @@ export const createEvent = async (params: EventParams) => {
   }
 };
 
-export const updateEvent = async (id: string, params: Partial<EventParams>) => {
+export const updateEvent = async (id: string, params: Prisma.EventUpdateInput) => {
   try {
     const updated = await prisma.event.update({
       where: { id },

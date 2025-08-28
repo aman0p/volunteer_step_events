@@ -1,6 +1,6 @@
 import dummyEvents from "../../public/data/dummyEvents.json";
 import ImageKit from "imagekit";
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "@/generated/prisma";
 import config from "@/lib/config";
 
 // Create Prisma client with local database connection

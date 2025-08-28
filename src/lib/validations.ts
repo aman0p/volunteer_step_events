@@ -1,4 +1,5 @@
 import { Gender, GovId } from "@/generated/prisma";
+import type { NotificationType, EnrollmentStatus } from "@/types";
 import { z } from "zod";
 
 export const signUpSchema = z.object({
@@ -57,4 +58,39 @@ export const profileSchema = z.object({
   profileImage: z.string().min(1, "Profile image is required"),
   skills: z.array(z.string().trim().min(1)).max(10).optional(),
 });
+
+// Notification schemas
+export const notificationTypeSchema = z.custom<NotificationType>((val) => {
+  return (
+    typeof val === "string" &&
+    [
+      "ENROLLMENT_APPLICATION",
+      "ENROLLMENT_APPROVED",
+      "ENROLLMENT_REJECTED",
+      "ENROLLMENT_WAITLISTED",
+      "ENROLLMENT_CANCELLED",
+      "ENROLLMENT_SELF_CANCELLED",
+      "NEW_EVENT_ADDED",
+      "EVENT_UPDATE",
+      "EVENT_REMINDER",
+      "SYSTEM_MESSAGE",
+    ].includes(val)
+  );
+}, { message: "Invalid notification type" });
+
+export const createNotificationSchema = z.object({
+  userId: z.string().uuid(),
+  title: z.string().min(1),
+  message: z.string().min(1),
+  type: notificationTypeSchema,
+  relatedEventId: z.string().uuid().optional(),
+  relatedEnrollmentId: z.string().uuid().optional(),
+});
+
+export const enrollmentStatusSchema = z.custom<EnrollmentStatus>((val) => {
+  return (
+    typeof val === "string" &&
+    ["PENDING", "APPROVED", "REJECTED", "WAITLISTED", "CANCELLED"].includes(val)
+  );
+}, { message: "Invalid enrollment status" });
 

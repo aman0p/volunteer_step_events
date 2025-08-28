@@ -3,6 +3,8 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { notifyAdminsOnEnrollmentApplication } from "@/lib/action/admin/notifications";
+import { NotificationType, Status } from "@/generated/prisma";
 import { revalidatePath } from "next/cache";
 
 export const requestEnrollment = async (eventId: string) => {
@@ -42,12 +44,19 @@ export const requestEnrollment = async (eventId: string) => {
     }
 
     // Create enrollment
-    await prisma.enrollment.create({
+    const enrollment = await prisma.enrollment.create({
       data: {
         eventId,
         userId: session.user.id,
         status: "PENDING"
       }
+    });
+
+    // Notify admins/organizers
+    await notifyAdminsOnEnrollmentApplication({
+      eventId,
+      enrollmentId: enrollment.id,
+      applicantName: session.user.name || undefined,
     });
 
     revalidatePath(`/events/${eventId}`);
@@ -71,8 +80,30 @@ export const cancelEnrollment = async (eventId: string) => {
   }
 
   try {
-    await prisma.enrollment.delete({
-      where: { eventId_userId: { eventId, userId: session.user.id } }
+    const existing = await prisma.enrollment.findUnique({
+      where: { eventId_userId: { eventId, userId: session.user.id } },
+      select: { id: true },
+    });
+
+    if (!existing) {
+      return { success: false, message: "Enrollment not found" };
+    }
+
+    await prisma.enrollment.update({
+      where: { id: existing.id },
+      data: { status: Status.CANCELLED, cancelledAt: new Date() },
+    });
+
+    // Create a self-cancellation notification for the user
+    await prisma.notification.create({
+      data: {
+        userId: session.user.id,
+        type: NotificationType.ENROLLMENT_SELF_CANCELLED,
+        title: "Enrollment Cancelled",
+        message: "You have cancelled your enrollment.",
+        relatedEventId: eventId,
+        relatedEnrollmentId: existing.id,
+      },
     });
 
     revalidatePath(`/events/${eventId}`);

@@ -4,6 +4,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { notifyUserOnEnrollmentStatusChange } from "@/lib/action/admin/notifications";
+import { Status } from "@/generated/prisma";
 
 export const approveEnrollment = async (enrollmentId: string) => {
   const session = await getServerSession(authOptions);
@@ -55,9 +57,16 @@ export const approveEnrollment = async (enrollmentId: string) => {
       }
     }
 
-    await prisma.enrollment.update({
+    const updated = await prisma.enrollment.update({
       where: { id: enrollmentId },
-      data: { status: "APPROVED" }
+      data: { status: Status.APPROVED }
+    });
+
+    await notifyUserOnEnrollmentStatusChange({
+      userId: updated.userId,
+      eventId: updated.eventId,
+      enrollmentId: updated.id,
+      status: Status.APPROVED,
     });
 
     revalidatePath(`/admin/events/${enrollment.eventId}`);
@@ -94,7 +103,14 @@ export const rejectEnrollment = async (enrollmentId: string) => {
   try {
     const enrollment = await prisma.enrollment.update({
       where: { id: enrollmentId },
-      data: { status: "REJECTED" }
+      data: { status: Status.REJECTED }
+    });
+
+    await notifyUserOnEnrollmentStatusChange({
+      userId: enrollment.userId,
+      eventId: enrollment.eventId,
+      enrollmentId: enrollment.id,
+      status: Status.REJECTED,
     });
 
     revalidatePath(`/admin/events/${enrollment.eventId}`);
