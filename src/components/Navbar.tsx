@@ -11,6 +11,8 @@ import { getInitials } from "@/lib/utils";
 import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 import { useState } from "react";
+import { IoNotifications } from "react-icons/io5";
+import { NotificationBell } from "./ui/notification";
 
 export function Navbar({ session }: { session: Session }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -41,20 +43,32 @@ export function Navbar({ session }: { session: Session }) {
   return (
     <header className="z-10 flex items-center justify-between w-full">
       {/* Left: Hamburger on small screens; hidden on md+ */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 md:gap-2">
         <Sheet>
           <SheetTrigger className="md:hidden inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-100" aria-label="Open menu">
-            <Menu className="h-6 w-6" />
+            <Menu className="h-5 w-5 md:h-6 md:w-6" />
           </SheetTrigger>
           <SheetContent side="left" className="p-0">
+           
+            {/* Logo */}
             <div className="flex items-center gap-2 border-b p-4">
               <Image src="/icons/logo.svg" alt="logo" width={20} height={20} className="w-6 h-6 invert" />
               <span className="text-lg font-bold">Volunteer Step Events</span>
             </div>
+
+            {/* Nav */}
             <nav className="flex flex-col p-2 text-sm">
+              
+              {/* Home */}
               <Link href="/" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Home</Link>
+              
+              {/* Events */}
               <Link href="/events" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Events</Link>
+
+              {/* Profile */}
               <Link href="/profile" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Profile</Link>
+              
+              {/* Sign out */}
               <button
                 onClick={handleLogout}
                 disabled={isLoggingOut}
@@ -68,15 +82,15 @@ export function Navbar({ session }: { session: Session }) {
         </Sheet>
 
         {/* Center: Logo + Title */}
-        <Link href="/" className="space-x-2 flex items-center w-fit">
+        <Link href="/" className="gap-2 flex items-center w-fit">
           <Image
             src="/icons/logo.svg"
             alt="logo"
             width={20}
             height={20}
-            className="w-6 h-6 invert"
+            className="w-5 h-5 md:w-6 md:h-6 invert"
           />
-          <h1 className="font-bold text-lg">Volunteer Step Events</h1>
+          <h1 className="font-bold text-base md:text-lg">Volunteer Step Events</h1>
         </Link>
       </div>
 
@@ -86,10 +100,13 @@ export function Navbar({ session }: { session: Session }) {
         <Link href="/" className="hidden md:block">Home</Link>
         <Link href="/events" className="hidden md:block">Events</Link>
 
+        {/* Notifications (desktop) */}
+        <NotificationBell count={2} />
+
         <Link href="/profile" aria-label="Profile">
-          <Avatar>
+          <Avatar className="w-7 h-7 md:w-7 md:h-7 mb-1 md:mb-0.5">
             {/* <AvatarImage src={session?.user?.image || ""} /> */}
-            <AvatarFallback>
+            <AvatarFallback >
               {getInitials(session?.user?.name || "V")}
             </AvatarFallback>
           </Avatar>

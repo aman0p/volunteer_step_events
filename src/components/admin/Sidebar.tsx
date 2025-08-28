@@ -22,8 +22,9 @@ import {
     SidebarRail,
 } from "@/components/ui/sidebar";
 import { Session } from "next-auth";
+import { NotificationCount } from "@/components/ui/notification";
 
-export function Sidebar({ session }: { session: Session }) {
+export function Sidebar({ session, enrollmentCount }: { session: Session; enrollmentCount: number }) {
     const pathname = usePathname();
 
     return (
@@ -64,6 +65,11 @@ export function Sidebar({ session }: { session: Session }) {
                                             <Link href={link.route}>
                                                 <Icon className="size-5" />
                                                 <span className="text-sm">{link.text}</span>
+                                                {link.text === "Event Enrollments" && (
+                                                    <div className="ml-8">
+                                                        <NotificationCount count={enrollmentCount} />
+                                                    </div>
+                                                )}
                                             </Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
@@ -74,7 +80,7 @@ export function Sidebar({ session }: { session: Session }) {
                 </SidebarGroup>
             </SidebarContent>
 
-            <SidebarSeparator className="relative right-2"/>
+            <SidebarSeparator className="relative right-2" />
 
             <SidebarFooter>
                 <div className="py-2 flex items-center justify-start gap-3 px-1">

@@ -23,7 +23,7 @@ import FileUpload from "@/components/FileUpload";
 import ImageTileUpload from "@/components/ui/image-tile-upload";
 import { toast } from "sonner";
 import Tag from "@/components/ui/tag";
-import { createEvent, updateEvent } from "@/lib/action/admin/events";
+import { createEvent, updateEvent } from "@/lib/actions/admin/events";
 import ColorPicker from "@/components/admin/ColorPicker";
 import { EventParams } from "@/types";
 

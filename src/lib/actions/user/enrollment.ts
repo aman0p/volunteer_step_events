@@ -3,7 +3,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { notifyAdminsOnEnrollmentApplication } from "@/lib/action/admin/notifications";
+import { notifyAdminsOnEnrollmentApplication } from "@/lib/actions/admin/notifications";
 import { NotificationType, Status } from "@/generated/prisma";
 import { revalidatePath } from "next/cache";
 

@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { notifyUserOnEnrollmentStatusChange } from "@/lib/action/admin/notifications";
+import { notifyUserOnEnrollmentStatusChange } from "@/lib/actions/admin/notifications";
 import { Status } from "@/generated/prisma";
 
 export const approveEnrollment = async (enrollmentId: string) => {

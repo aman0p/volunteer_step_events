@@ -3,7 +3,7 @@
 import React from "react";
 import { signUpSchema } from "@/lib/validations";
 import { AuthForm } from "@/components/AuthForm";
-import { signUpWithCredentials } from "@/lib/action/auth";
+import { signUpWithCredentials } from "@/lib/actions/auth";
 import { Gender, GovId } from "@/generated/prisma";
 
 export default function SignUpPage() {

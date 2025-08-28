@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { broadcastNewEventNotification } from "@/lib/action/admin/notifications";
+import { broadcastNewEventNotification } from "@/lib/actions/admin/notifications";
 import type { Prisma } from "@/generated/prisma";
 import { revalidatePath } from "next/cache";
 
