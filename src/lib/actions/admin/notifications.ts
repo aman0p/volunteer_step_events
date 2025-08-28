@@ -116,12 +116,19 @@ export const notifyUserOnEnrollmentStatusChange = async (
 
     const type = typeMap[params.status];
 
+    // Fetch human-friendly event title instead of showing event id
+    const event = await prisma.event.findUnique({
+      where: { id: params.eventId },
+      select: { title: true },
+    });
+    const eventTitle = event?.title ?? "the event";
+
     await prisma.notification.create({
       data: {
         userId: params.userId,
         type,
         title: "Enrollment Update",
-        message: `Your enrollment status is ${params.status.toLowerCase()}.`,
+        message: `Your enrollment status for ${eventTitle} is ${params.status.toLowerCase()}.`,
         relatedEventId: params.eventId,
         relatedEnrollmentId: params.enrollmentId,
       },

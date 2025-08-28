@@ -65,3 +65,22 @@ export const markAllMyNotificationsRead = async () => {
 };
 
 
+export const deleteMyNotification = async (notificationId: string) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    return { success: false, message: "Authentication required" } as const;
+  }
+
+  try {
+    await prisma.notification.deleteMany({
+      where: { id: notificationId, userId: session.user.id },
+    });
+    return { success: true, message: "Deleted" } as const;
+  } catch (error) {
+    console.error("deleteMyNotification error", error);
+    return { success: false, message: "Failed to delete notification" } as const;
+  }
+};
+
+

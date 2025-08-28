@@ -9,7 +9,7 @@ interface NotificationProps {
 export function NotificationBell({ count = 0, className }: NotificationProps) {
     const displayCount = count > 999 ? "999+" : count;
     return (
-        <button
+        <div
             aria-label="Notifications"
             title="Notifications"
             className={cn("relative inline-flex items-center justify-center rounded-md p-1", className)}
@@ -20,7 +20,7 @@ export function NotificationBell({ count = 0, className }: NotificationProps) {
                     {displayCount}
                 </span>
             )}
-        </button>
+        </div>
     )
 }
 

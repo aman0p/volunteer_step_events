@@ -12,7 +12,7 @@ import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { IoNotifications } from "react-icons/io5";
-import { NotificationBell } from "./ui/notification";
+import { NotificationDrawer } from "./NotificationDrawer";
 
 export function Navbar({ session }: { session: Session }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -101,7 +101,7 @@ export function Navbar({ session }: { session: Session }) {
         <Link href="/events" className="hidden md:block">Events</Link>
 
         {/* Notifications (desktop) */}
-        <NotificationBell count={2} />
+        <NotificationDrawer />
 
         <Link href="/profile" aria-label="Profile">
           <Avatar className="w-7 h-7 md:w-7 md:h-7 mb-1 md:mb-0.5">
