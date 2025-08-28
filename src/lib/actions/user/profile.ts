@@ -17,7 +17,7 @@ export const updateCurrentUserProfile = async (formData: unknown) => {
     return { success: false, message: parse.error.issues[0]?.message || "Invalid data" };
   }
 
-  const { fullName, phoneNumber, address, gender, profileImage, skills } = parse.data;
+  const { fullName, phoneNumber, address, gender, profileImage, skills, govIdType, govIdImage } = parse.data;
 
   try {
     await prisma.user.update({
@@ -28,6 +28,8 @@ export const updateCurrentUserProfile = async (formData: unknown) => {
         address,
         gender,
         profileImage,
+        govIdType,
+        govIdImage,
         ...(skills ? { skills } : {}),
       },
     });
@@ -55,6 +57,8 @@ export const getCurrentUserProfile = async () => {
         profileImage: true,
         skills: true,
         role: true,
+        govIdType: true,
+        govIdImage: true,
       },
     });
 

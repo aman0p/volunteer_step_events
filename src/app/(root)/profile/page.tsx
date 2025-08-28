@@ -1,9 +1,8 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type UseFormReturn, type SubmitHandler } from "react-hook-form";
+import { type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Bordered } from "@/components/ui/bordered";
@@ -12,141 +11,33 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/FileUpload";
 import Tag from "@/components/ui/tag";
-import { updateCurrentUserProfile, getCurrentUserProfile } from "@/lib/actions/user/profile";
-import { toast } from "sonner";
 import { GOV_ID_OPTIONS } from "@/constants";
 import { Select } from "@/components/ui/select";
-import { submitVerificationRequest, getVerificationStatus } from "@/lib/actions/user/verification";
 import { UserCheck, Loader2, RefreshCw } from "lucide-react";
+import { useProfile } from "@/hooks/useProfile";
 
 export default function Profile() {
+  const {
+    form,
+    role,
+    isVerified,
+    hasPendingRequest,
+    isSubmittingVerification,
+    isRefreshingVerification,
+    areAllFieldsFilled,
+    refreshVerificationStatus,
+    handleSubmitVerification,
+    onSubmit,
+  } = useProfile();
 
-  const form = (useForm({
-    resolver: zodResolver(profileSchema),
-    defaultValues: {
-      fullName: "",
-      phoneNumber: "",
-      address: "",
-      gender: undefined,
-      profileImage: "",
-      skills: [],
-      govIdType: undefined,
-      govIdImage: "",
-    },
-  }) as UseFormReturn<z.infer<typeof profileSchema>>);
-  const [role, setRole] = useState("");
-  const [isVerified, setIsVerified] = useState(false);
-  const [hasPendingRequest, setHasPendingRequest] = useState(false);
-  const [isSubmittingVerification, setIsSubmittingVerification] = useState(false);
-  const [isRefreshingVerification, setIsRefreshingVerification] = useState(false);
-
-  // Function to fetch verification status
-  const fetchVerificationStatus = async () => {
-    const result = await getVerificationStatus();
-    if (result.success) {
-      const wasVerified = isVerified;
-      const wasPending = hasPendingRequest;
-
-      setIsVerified(result.isVerified ?? false);
-      setHasPendingRequest(result.latestRequest?.status === "PENDING");
-
-      // No need for toast notifications here - sidebar notifications will handle this
-    }
+  const handleFormSubmit: SubmitHandler<z.infer<typeof profileSchema>> = async (values) => {
+    await onSubmit(values);
   };
-
-  // Function to refresh verification status
-  const refreshVerificationStatus = async () => {
-    setIsRefreshingVerification(true);
-    try {
-      await fetchVerificationStatus();
-      toast.success("Verification status refreshed");
-    } catch (error) {
-      toast.error("Failed to refresh verification status");
-    } finally {
-      setIsRefreshingVerification(false);
-    }
-  };
-
-  useEffect(() => {
-    let isMounted = true;
-    (async () => {
-      const result = await getCurrentUserProfile();
-      if (isMounted && result.success && result.data) {
-        form.reset({
-          fullName: result.data.fullName ?? "",
-          phoneNumber: result.data.phoneNumber ?? "",
-          address: result.data.address ?? "",
-          gender: result.data.gender ?? undefined,
-          profileImage: result.data.profileImage ?? "",
-          skills: Array.isArray(result.data.skills) ? result.data.skills : [],
-          govIdType: (result.data as any).govIdType ?? undefined,
-          govIdImage: (result.data as any).govIdImage ?? "",
-        });
-        setRole((result.data as any).role ?? "");
-      }
-    })();
-
-    // Fetch verification status separately
-    fetchVerificationStatus();
-
-    // Set up periodic refresh of verification status (every 30 seconds)
-    const intervalId = setInterval(() => {
-      if (isMounted && !isVerified && hasPendingRequest) {
-        fetchVerificationStatus();
-      }
-    }, 30000);
-
-    return () => {
-      isMounted = false;
-      clearInterval(intervalId);
-    };
-  }, [form, isVerified, hasPendingRequest]);
-
-  // Refresh verification status when component becomes visible (e.g., user navigates back)
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden && !isVerified && hasPendingRequest) {
-        fetchVerificationStatus();
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [isVerified, hasPendingRequest]);
-
-  const onSubmit: SubmitHandler<z.infer<typeof profileSchema>> = async (values) => {
-    const result = await updateCurrentUserProfile(values);
-    if (result.success) {
-      toast.success("Profile updated successfully");
-    } else {
-      toast.error(result.message);
-    }
-  };
-
-  const handleSubmitVerification = async () => {
-    setIsSubmittingVerification(true);
-    try {
-      const result = await submitVerificationRequest();
-      if (result.success) {
-        setHasPendingRequest(true);
-        // Toast notification removed - sidebar notification will handle this
-      } else {
-        toast.error(result.message || "Failed to submit verification request");
-      }
-    } catch (error) {
-      toast.error("An error occurred while submitting the request");
-    } finally {
-      setIsSubmittingVerification(false);
-    }
-  };
-
 
   return (
     <div className="w-full overflow-hidden">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 bg-transparent">
+        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col gap-5 bg-transparent">
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">Update Profile</h2>
             <div className="flex items-center gap-2">
@@ -178,8 +69,17 @@ export default function Profile() {
               ) : (
                 <Button
                   onClick={handleSubmitVerification}
-                  disabled={isSubmittingVerification}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  disabled={isSubmittingVerification || !areAllFieldsFilled()}
+                  className={`${
+                    areAllFieldsFilled() 
+                      ? "bg-blue-600 hover:bg-blue-700" 
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
+                  title={
+                    !areAllFieldsFilled() 
+                      ? "Please fill all required fields before requesting verification" 
+                      : "Save profile and request verification"
+                  }
                 >
                   {isSubmittingVerification ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -270,6 +170,7 @@ export default function Profile() {
                           <Select
                             value={field.value ?? ""}
                             onChange={(e) => field.onChange(e.target.value)}
+                            disabled={!!field.value}
                             className="w-full bg-black/10 font-medium px-3 py-2 text-sm rounded-md transition-all duration-200 border-0 disabled:opacity-100"
                           >
                             <option value="" disabled>
@@ -283,6 +184,11 @@ export default function Profile() {
                           </Select>
                         </Bordered>
                       </FormControl>
+                      {field.value && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          Government ID type cannot be changed once selected. Contact support if you need to update it.
+                        </p>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -381,9 +287,9 @@ export default function Profile() {
                             variant="dark"
                             onFileChange={field.onChange}
                             value={field.value}
-                            objectFit="contain"
+                            objectFit="cover"
                             aspectRatio="16:9"
-                            className="w-full h-full border-0 rounded-md aspect-video"
+                            className="w-full h-full border-0 rounded-md aspect-video overflow-hidden object-top"
                           />
                         </Bordered>
                       </FormControl>
@@ -410,13 +316,19 @@ export default function Profile() {
                             variant="dark"
                             onFileChange={field.onChange}
                             value={field.value}
-                            objectFit="contain"
+                            objectFit="cover"
                             aspectRatio="4:3"
-                            className="w-full h-full border-0 rounded-md aspect-video"
+                            className="w-full h-full border-0 rounded-md aspect-video overflow-hidden"
+                            disabled={!!field.value}
                           />
                         </Bordered>
                       </FormControl>
                     </div>
+                    {field.value && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Government ID image cannot be changed once uploaded. Contact support if you need to update it.
+                      </p>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -425,7 +337,9 @@ export default function Profile() {
           </div>
         </form>
 
-        <Button type="submit" onClick={form.handleSubmit(onSubmit)} className="w-full mt-5 bg-black text-white block md:hidden">Save Changes</Button>
+
+
+        <Button type="submit" onClick={form.handleSubmit(handleFormSubmit)} className="w-full mt-5 bg-black text-white block md:hidden">Save Changes</Button>
       </Form>
     </div>
   );

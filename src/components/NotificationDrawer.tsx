@@ -37,7 +37,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
   const hasItems = notifications.length > 0;
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn("relative z-50", className)}>
       <button onClick={() => setOpen(true)} aria-label="Open notifications">
         <NotificationBell count={unreadCount} />
       </button>
@@ -47,7 +47,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
         {open && (
           <motion.div
             key="overlay"
-            className="fixed inset-0 z-40 bg-black/40"
+            className="fixed inset-0 z-40 bg-black/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -61,7 +61,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
         {open && (
           <motion.aside
             key="drawer"
-            className="fixed right-0 top-0 h-full w-[92%] sm:w-[460px] rounded-l-3xl z-50 bg-white/20 backdrop-blur-md dark:bg-neutral-950 shadow-xl border-l border-white/15"
+            className="fixed right-0 top-0 h-full w-[92%] sm:w-[460px] rounded-l-3xl z-50 bg-white/50 backdrop-blur-md dark:bg-neutral-950 shadow-xl border-l border-white/15"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}

@@ -40,6 +40,7 @@ interface FileUploadProps {
   objectFit?: "cover" | "contain"; // control media fit inside preview
   mediaClassName?: string; // extra classes for IKImage/IKVideo
   aspectRatio?: "16:9" | "4:3" | "1:1" | "9:16"; // control media aspect ratio
+  disabled?: boolean; // disable file upload functionality
 }
 
 const FileUpload = ({
@@ -56,6 +57,7 @@ const FileUpload = ({
   objectFit = "cover",
   aspectRatio = "16:9",
   mediaClassName,
+  disabled = false,
 }: FileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<{ filePath: string | null }>({
@@ -156,14 +158,19 @@ const FileUpload = ({
 
       {!file.filePath ? (
         <button
-          className={cn("flex min-h-9 w-full items-center justify-center gap-1.5 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none relative overflow-hidden", styles.button, className)}
+          className={cn(
+            "flex min-h-9 w-full items-center justify-center gap-1.5 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none relative overflow-hidden", 
+            styles.button, 
+            className,
+            disabled && "opacity-50 cursor-not-allowed bg-gray-100"
+          )}
           onClick={(e) => {
             e.preventDefault();
-            if (fileInputRef.current) {
+            if (fileInputRef.current && !disabled) {
               fileInputRef.current.click();
             }
           }}
-          disabled={isUploading}
+          disabled={isUploading || disabled}
         >
           {/* Progress bar background */}
           {isUploading && (
@@ -183,11 +190,11 @@ const FileUpload = ({
             alt="upload-icon"
             width={15}
             height={15}
-            className="object-contain relative z-10"
+            className="object-contain relative z-9"
           />
 
-          <p className={cn("text-sm relative z-10", styles.placeholder)}>
-            {isUploading ? `${progress}% Uploading...` : placeholder}
+          <p className={cn("text-sm relative z-9", styles.placeholder)}>
+            {isUploading ? `${progress}% Uploading...` : disabled ? "File uploaded - cannot be changed" : placeholder}
           </p>
         </button>
       ) : (
@@ -227,7 +234,7 @@ const FileUpload = ({
             ) : null}
             
             {/* Overlay button: change or remove in the exact same position */}
-            {overlayMode === "change" ? (
+            {overlayMode === "change" && !disabled ? (
               <button
                 onClick={(e) => {
                   e.preventDefault();
