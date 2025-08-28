@@ -1,7 +1,6 @@
 import prisma from "@/lib/prisma";
 import EventForm from "@/components/admin/forms/EventForm";
 import { notFound } from "next/navigation";
-import ThemeBackground from "@/components/ui/theme-background";
 
 export default async function EventPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -14,8 +13,8 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         return notFound();
     }
     return (
-        <ThemeBackground className="w-full p-4 md:p-7 md:pr-13" alpha={0.05}>
+        <div className="w-full p-4 md:p-7 md:pr-13">
             <EventForm type="update" {...event} />
-        </ThemeBackground>
+        </div>
     );
 }

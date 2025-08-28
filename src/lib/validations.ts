@@ -27,7 +27,7 @@ export const eventSchema = z
     dressCode: z.string().min(2, "Dress code must be at least 2 characters"),
     coverUrl: z.string().min(1, "Cover URL is required"),
     videoUrl: z.string().optional(),
-    eventImages: z.array(z.string()).min(1, "At least one event image is required"),
+    eventImages: z.array(z.string()),
     category: z
       .array(z.string().trim().min(1))
       .min(1, "At least one category is required")
