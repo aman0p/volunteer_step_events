@@ -98,7 +98,7 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
                 gender: (gender as Gender) ?? Gender.MALE,
                 govIdType: GovId.AADHAR_CARD,
                 govIdImage: "",
-                role: Role.VOLUNTEER
+                role: Role.USER
             }
         })
 

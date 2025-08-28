@@ -34,7 +34,12 @@ export async function GET(request: NextRequest) {
     // Build the where clause
     let whereClause: any = {
       AND: [
-        { role: "VOLUNTEER" },
+        {
+          OR: [
+            { role: "USER" },
+            { role: "VOLUNTEER" }
+          ]
+        },
         {
           OR: [
             { fullName: { contains: searchTerm, mode: 'insensitive' } },

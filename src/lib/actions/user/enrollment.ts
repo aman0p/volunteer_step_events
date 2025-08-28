@@ -63,7 +63,7 @@ export const requestEnrollment = async (eventId: string) => {
     return { success: true, message: "Enrollment request sent successfully" };
   } catch (error) {
     console.error("Enrollment error:", error);
-    return { success: false, message: "Failed to send enrollment request" };
+    return { success: false, message: "Enrollment failed" };
   }
 };
 

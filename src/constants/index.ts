@@ -44,6 +44,7 @@ export const adminSideBarLinks = [
 
 
 export const ROLE_OPTIONS = [
+  { value: "USER", label: "User" },
   { value: "VOLUNTEER", label: "Volunteer" },
   { value: "ORGANIZER", label: "Organizer" },
   { value: "ADMIN", label: "Admin" },

@@ -28,7 +28,12 @@ export default async function VolunteerPage() {
 
   // Fetch all volunteers with their enrollments and event details
   const volunteers = await prisma.user.findMany({
-    where: { role: "VOLUNTEER" },
+    where: { 
+      OR: [
+        { role: "USER" },
+        { role: "VOLUNTEER" }
+      ]
+    },
     include: {
       enrollments: {
         include: {

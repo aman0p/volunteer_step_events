@@ -1,4 +1,4 @@
-import { Gender, GovId, Role } from "./src/generated/prisma"
+import { Gender, GovId, Role, VerificationStatus } from "./src/generated/prisma"
 import NextAuth from "next-auth"
 
 declare module "next-auth" {
@@ -78,6 +78,9 @@ export type NotificationType =
   | "NEW_EVENT_ADDED"
   | "EVENT_UPDATE"
   | "EVENT_REMINDER"
+  | "VERIFICATION_REQUEST"
+  | "VERIFICATION_APPROVED"
+  | "VERIFICATION_REJECTED"
   | "SYSTEM_MESSAGE";
 
 export type EnrollmentStatus =
@@ -86,3 +89,32 @@ export type EnrollmentStatus =
   | "REJECTED"
   | "WAITLISTED"
   | "CANCELLED";
+
+export type VerificationStatusType =
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED"
+  | "CANCELLED";
+
+// New interface for verification requests
+export interface VerificationRequest {
+  id: string;
+  userId: string;
+  status: VerificationStatusType;
+  submittedAt: Date;
+  reviewedAt?: Date;
+  reviewedById?: string;
+  adminNote?: string;
+  rejectionReason?: string;
+  user: {
+    id: string;
+    fullName: string;
+    email: string;
+    profileImage: string;
+    skills: string[];
+    address: string;
+    gender: Gender;
+    govIdType: GovId;
+    govIdImage: string;
+  };
+}

@@ -186,6 +186,13 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                                     )}
                                 </button>
                             </div>
+                        ) : fieldName === "email" ? (
+                            <Input
+                                required
+                                type="email"
+                                {...field}
+                                className="w-full px-4 py-2 text-sm lowercase border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
+                            />
                         ) : (
                             <Input
                                 required

@@ -151,6 +151,7 @@ exports.Prisma.UserScalarFieldEnum = {
   govIdImage: 'govIdImage',
   govIdType: 'govIdType',
   role: 'role',
+  isVerified: 'isVerified',
   lastActiveAt: 'lastActiveAt',
   createdAt: 'createdAt'
 };
@@ -174,6 +175,17 @@ exports.Prisma.NotificationScalarFieldEnum = {
   userId: 'userId',
   relatedEventId: 'relatedEventId',
   relatedEnrollmentId: 'relatedEnrollmentId'
+};
+
+exports.Prisma.VerificationRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById',
+  adminNote: 'adminNote',
+  rejectionReason: 'rejectionReason'
 };
 
 exports.Prisma.SortOrder = {
@@ -204,6 +216,7 @@ exports.GovId = exports.$Enums.GovId = {
 };
 
 exports.Role = exports.$Enums.Role = {
+  USER: 'USER',
   VOLUNTEER: 'VOLUNTEER',
   ORGANIZER: 'ORGANIZER',
   ADMIN: 'ADMIN'
@@ -227,14 +240,25 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   NEW_EVENT_ADDED: 'NEW_EVENT_ADDED',
   EVENT_UPDATE: 'EVENT_UPDATE',
   EVENT_REMINDER: 'EVENT_REMINDER',
+  VERIFICATION_REQUEST: 'VERIFICATION_REQUEST',
+  VERIFICATION_APPROVED: 'VERIFICATION_APPROVED',
+  VERIFICATION_REJECTED: 'VERIFICATION_REJECTED',
   SYSTEM_MESSAGE: 'SYSTEM_MESSAGE'
+};
+
+exports.VerificationStatus = exports.$Enums.VerificationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.Prisma.ModelName = {
   Event: 'Event',
   User: 'User',
   Enrollment: 'Enrollment',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  VerificationRequest: 'VerificationRequest'
 };
 
 /**
