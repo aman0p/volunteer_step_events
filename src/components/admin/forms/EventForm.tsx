@@ -364,7 +364,6 @@ const EventForm = ({ type, ...event }: Props) => {
                       ))}
 
                       {/* Add tile */}
-                      {/* <Bordered color={form.watch("color") as string} alpha={0.2} className="rounded-md"> */}
                       <ImageTileUpload
                         add
                         multiple
@@ -376,7 +375,6 @@ const EventForm = ({ type, ...event }: Props) => {
                         folder="events/images"
                         className="border border-gray-400 border-dashed rounded-md"
                       />
-                      {/* </Bordered> */}
                     </div>
                   </FormControl>
                   <FormMessage />

@@ -20,7 +20,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -127,7 +127,7 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                                 value={field.value}
                             />
                         ) : fieldName === "gender" ? (
-                            <Select
+                            <select
                                 value={field.value}
                                 onChange={field.onChange}
                                 className="w-full px-4 py-2 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
@@ -138,9 +138,9 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                                         {option.label}
                                     </option>
                                 ))}
-                            </Select>
+                            </select>
                         ) : fieldName === "govIdType" ? (
-                            <Select
+                            <select
                                 value={field.value}
                                 onChange={field.onChange}
                                 className="w-full px-4 py-2 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
@@ -151,7 +151,7 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                                         {option.label}
                                     </option>
                                 ))}
-                            </Select>
+                            </select>
                         ) : fieldName === "phoneNumber" ? (
                             <div className="flex items-center w-full">
                                 <span className="px-3 py-2 text-sm text-gray-700 border border-gray-200 rounded-l-md bg-gray-50 select-none">+91</span>

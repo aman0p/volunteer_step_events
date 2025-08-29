@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/FileUpload";
 import Tag from "@/components/ui/tag";
 import { GOV_ID_OPTIONS } from "@/constants";
-import { Select } from "@/components/ui/select";
 import { UserCheck, Loader2, RefreshCw } from "lucide-react";
 import { useProfile } from "@/hooks/useProfile";
 
@@ -144,7 +143,7 @@ export default function Profile() {
                     <FormItem className="flex flex-col gap-1 w-full">
                       <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Gender</FormLabel>
                       <FormControl>
-                        <Bordered className="w-full">
+                        <div className="w-full border border-gray-300 rounded-md">
                           <Input
                             {...field}
                             readOnly
@@ -152,7 +151,7 @@ export default function Profile() {
                             placeholder="Gender"
                             className="w-full bg-black/10 font-medium px-3 py-2 text-sm rounded-md transition-all duration-200 border-0 disabled:opacity-100"
                           />
-                        </Bordered>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -166,8 +165,8 @@ export default function Profile() {
                     <FormItem className="flex flex-col gap-1 w-full">
                       <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Government ID Type</FormLabel>
                       <FormControl>
-                        <Bordered className="w-full">
-                          <Select
+                        <div className="w-full border border-gray-300 rounded-md">
+                          <select
                             value={field.value ?? ""}
                             onChange={(e) => field.onChange(e.target.value)}
                             disabled={!!field.value}
@@ -181,8 +180,8 @@ export default function Profile() {
                                 {opt.label}
                               </option>
                             ))}
-                          </Select>
-                        </Bordered>
+                          </select>
+                        </div>
                       </FormControl>
                       {field.value && (
                         <p className="text-xs text-gray-500 mt-1">
@@ -202,9 +201,9 @@ export default function Profile() {
                   <FormItem className="flex flex-col gap-1">
                     <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Address</FormLabel>
                     <FormControl>
-                      <Bordered className="w-full">
+                      <div className="w-full border border-gray-300 rounded-md">
                         <Textarea placeholder="Your address" {...field} rows={9} className="w-full px-3 py-2 text-sm rounded-md bg-transparent transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0 border-0" />
-                      </Bordered>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -248,7 +247,7 @@ export default function Profile() {
                     <FormItem className="flex flex-col gap-1 w-full">
                       <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Skills (press Enter to add, max 10)</FormLabel>
                       <FormControl>
-                        <Bordered className="w-full h-10 px-2 items-center justify-center text-sm  flex gap-2 flex-wrap">
+                        <div className="w-full h-10 px-2 items-center justify-center text-sm  flex gap-2 flex-wrap border border-gray-300 rounded-md">
                           {Array.isArray(field.value) && field.value.length > 0 && field.value.map((skill) => (
                             <Tag key={skill} label={skill} onRemove={() => removeSkill(skill)} />
                           ))}
@@ -260,7 +259,7 @@ export default function Profile() {
                             disabled={Array.isArray(field.value) && field.value.length >= 10}
                             className="flex-1 min-w-[160px] bg-transparent outline-none text-sm placeholder:text-gray-500 placeholder:pl-1"
                           />
-                        </Bordered>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -278,7 +277,7 @@ export default function Profile() {
                     <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Profile Image</FormLabel>
                     <div>
                       <FormControl>
-                        <Bordered className="h-fit w-full rounded-md border-gray-400 border-dashed">
+                        <div className="h-fit w-full rounded-md border-gray-400 border-dashed">
                           <FileUpload
                             type="image"
                             accept="image/*"
@@ -291,7 +290,7 @@ export default function Profile() {
                             aspectRatio="16:9"
                             className="w-full h-full border-0 rounded-md aspect-video overflow-hidden object-top"
                           />
-                        </Bordered>
+                        </div>
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -307,7 +306,7 @@ export default function Profile() {
                     <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Government ID Image</FormLabel>
                     <div>
                       <FormControl>
-                        <Bordered className="h-fit w-full rounded-md border-gray-400 border-dashed">
+                        <div className="h-fit w-full rounded-md border-gray-400 border-dashed">
                           <FileUpload
                             type="image"
                             accept="image/*"
@@ -321,7 +320,7 @@ export default function Profile() {
                             className="w-full h-full border-0 rounded-md aspect-video overflow-hidden"
                             disabled={!!field.value}
                           />
-                        </Bordered>
+                        </div>
                       </FormControl>
                     </div>
                     {field.value && (

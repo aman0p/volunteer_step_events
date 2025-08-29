@@ -64,7 +64,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       {/* main content */}
       <div 
-        className="grid grid-cols-1 md:grid-cols-[2fr_1fr] w-full rounded-xl md:rounded-2xl lg:rounded-3xl h-full md:p-7 gap-10"
+        className="grid grid-cols-1 md:grid-cols-[2fr_1fr] w-full rounded-xl md:rounded-2xl lg:rounded-3xl h-full md:p-7 gap-10 bg-black/10"
 
       >
         <div className="flex flex-col gap-3 md:gap-7 justify-end order-2 md:order-1">
@@ -154,7 +154,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
         <div className="flex flex-col gap-2 md:gap-5">
 
           {/* Event Images */}
-          <div className="grid grid-cols-2 gap-2 md:gap-5 w-full order-2 md:order-1">
+          <div className="grid grid-cols-2 gap-2 md:gap-5 w-full order-2">
             {event.eventImages && event.eventImages.map((img, index) => (
               <Image
                 key={index}
@@ -163,20 +163,12 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 alt="event image"
                 width={1000}
                 height={1000}
-                className="w-full aspect-video object-cover rounded-xl md:rounded-2xl lg:rounded-3xl object-top"
-                style={{ backgroundColor: eventBgColor }}
+                className="w-full aspect-video object-cover rounded-xl md:rounded-2xl lg:rounded-3xl object-top rotate-y-180"
               />
             ))}
           </div>
 
-          {/* Description */}
-          <div className="h-fit w-full order-1 md:order-2 flex flex-col gap-3 md:gap-5 p-5 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl" style={{ backgroundColor: eventBgColor }}>
-            <h1 className="text-base md:text-xl font-bold">Description</h1>
-            <p className="text-xs md:text-sm tracking-wide leading-5.5 line-clamp-4 md:line-clamp-none">{event.description}</p>
-          </div>
-
-          {/* Event Video */}
-          <div className="w-full h-full order-3 md:order-3">
+          <div className="w-full h-full">
             {event.videoUrl && event.videoUrl.trim() !== "" && (
               <Video
                 urlEndpoint={config.env.imagekit.urlEndpoint}
@@ -184,17 +176,24 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 alt="event video"
                 controls
                 className="w-full h-full object-cover rounded-xl md:rounded-2xl lg:rounded-3xl aspect-video"
-                style={{ backgroundColor: eventBgColor }}
                 poster={event.coverUrl || undefined}
               />
             )}
           </div>
 
+          {/* Description */}
+          <div className="h-fit w-full order-1 flex flex-col gap-3 md:gap-5 p-5 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
+            <h1 className="text-base md:text-xl font-bold">Description</h1>
+            <p className="text-xs md:text-sm tracking-wide leading-5.5 line-clamp-4 md:line-clamp-none">{event.description}</p>
+          </div>
+
+          {/* Event Video */}
+
         </div>
 
         <div className="flex flex-col gap-2 md:gap-5">
           {/* Event Details */}
-          <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7  rounded-xl md:rounded-2xl lg:rounded-3xl" style={{ backgroundColor: eventBgColor }}>
+          <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7  rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
             <h1 className="text-base md:text-xl font-bold">Event Details</h1>
             <div className="flex flex-col gap-3 overflow-hidden text-xs md:text-sm">
               <p className="space-x-1">
@@ -220,10 +219,8 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
             </div>
           </div>
 
-
-
           {/* Quick Links */}
-          <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl" style={{ backgroundColor: eventBgColor }}>
+          <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/5">
             <h1 className="text-base md:text-xl  font-bold">Quick Links</h1>
             <div className="flex flex-col gap-3 overflow-hidden text-xs md:text-sm">
               <Link href="/events" className="flex items-center gap-2 md:gap-3">
