@@ -102,7 +102,7 @@ export default function Profile() {
                     <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Full Name</FormLabel>
                     <FormControl>
                       <div className="w-full border border-gray-300 rounded-md">
-                        <Input required placeholder="Your full name" {...field} className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0" />
+                        <Input required placeholder="Your full name" {...field} value={field.value || ""} className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0" />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -127,7 +127,7 @@ export default function Profile() {
                         <div className="w-full border border-gray-300 rounded-md">
                           <div className="flex items-center w-full">
                             <span className="px-3 py-2 text-sm text-gray-700 bg-gray-50 select-none border-r border-gray-200">+91</span>
-                            <Input placeholder="Your phone number" {...field} className="w-full px-3 py-2 text-sm transition-all duration-200 border-0 rounded-none" />
+                            <Input placeholder="Your phone number" {...field} value={field.value || ""} className="w-full px-3 py-2 text-sm transition-all duration-200 border-0 rounded-none" />
                           </div>
                         </div>
                       </FormControl>
@@ -149,6 +149,7 @@ export default function Profile() {
                             readOnly
                             disabled
                             placeholder="Gender"
+                            value={field.value || ""}
                             className="w-full bg-black/10 font-medium px-3 py-2 text-sm rounded-md transition-all duration-200 border-0 disabled:opacity-100"
                           />
                         </div>
@@ -167,7 +168,7 @@ export default function Profile() {
                       <FormControl>
                         <div className="w-full border border-gray-300 rounded-md">
                           <select
-                            value={field.value ?? ""}
+                            value={field.value || ""}
                             onChange={(e) => field.onChange(e.target.value)}
                             disabled={!!field.value}
                             className="w-full bg-black/10 font-medium px-3 py-2 text-sm rounded-md transition-all duration-200 border-0 disabled:opacity-100"
@@ -202,7 +203,7 @@ export default function Profile() {
                     <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Address</FormLabel>
                     <FormControl>
                       <div className="w-full border border-gray-300 rounded-md">
-                        <Textarea placeholder="Your address" {...field} rows={9} className="w-full px-3 py-2 text-sm rounded-md bg-transparent transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0 border-0" />
+                        <Textarea placeholder="Your address" {...field} value={field.value || ""} rows={9} className="w-full px-3 py-2 text-sm rounded-md bg-transparent transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0 border-0" />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -248,15 +249,15 @@ export default function Profile() {
                       <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Skills (press Enter to add, max 10)</FormLabel>
                       <FormControl>
                         <div className="w-full h-10 px-2 items-center justify-center text-sm  flex gap-2 flex-wrap border border-gray-300 rounded-md">
-                          {Array.isArray(field.value) && field.value.length > 0 && field.value.map((skill) => (
+                          {(Array.isArray(field.value) ? field.value : []).length > 0 && (Array.isArray(field.value) ? field.value : []).map((skill) => (
                             <Tag key={skill} label={skill} onRemove={() => removeSkill(skill)} />
                           ))}
                           <input
                             value={skillInput}
                             onChange={(e) => setSkillInput(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            placeholder={Array.isArray(field.value) && field.value.length >= 10 ? "Maximum 10 skills" : "Type and press Enter"}
-                            disabled={Array.isArray(field.value) && field.value.length >= 10}
+                            placeholder={(Array.isArray(field.value) ? field.value : []).length >= 10 ? "Maximum 10 skills" : "Type and press Enter"}
+                            disabled={(Array.isArray(field.value) ? field.value : []).length >= 10}
                             className="flex-1 min-w-[160px] bg-transparent outline-none text-sm placeholder:text-gray-500 placeholder:pl-1"
                           />
                         </div>

@@ -99,7 +99,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
               {event.enrollments
                 .filter((e: any) => e.user.profileImage) // Only show users with profile images
                 .sort(() => Math.random() - 0.5)
-                .slice(0, 3)
+                .slice(0, 5)
                 .map((e: any) => (
                   <Image
                     key={e.id}

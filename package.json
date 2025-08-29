@@ -12,7 +12,6 @@
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
     "db:push": "dotenv -e .env.local -- prisma db push",
     "db:studio": "dotenv -e .env.local -- prisma studio",
-    "db:seed": "pnpm db:generate && npx tsx src/database/seed.ts && npx tsx src/database/seed-local.ts",
     "db:seed:verification": "pnpm db:generate && npx tsx src/database/seed/seed-verification.ts",
     "db:seed:events": "npx tsx src/database/seed/seed-events.ts",
     "postinstall": "node -e \"if(process.env.NODE_ENV==='production'){require('child_process').execSync('prisma migrate deploy',{stdio:'inherit'})}\""
