@@ -364,27 +364,6 @@ export default async function VolunteerDetailsPage({ params }: { params: { id: s
               </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-              <div className="space-y-3">
-                <Button variant="outline" className="w-full">
-                  <Mail className="w-4 h-4 mr-2" />
-                  Send Message
-                </Button>
-                
-                <Button variant="outline" className="w-full">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  View Calendar
-                </Button>
-                
-                <Button variant="outline" className="w-full">
-                  <Users className="w-4 h-4 mr-2" />
-                  Assign to Event
-                </Button>
-              </div>
-            </div>
-
             {/* Volunteer Metadata */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Volunteer Metadata</h2>

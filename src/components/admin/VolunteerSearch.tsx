@@ -92,19 +92,6 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
     setShowResults(false);
   };
 
-  const getGenderIcon = (gender: string) => {
-    switch (gender) {
-      case "MALE":
-        return "👨";
-      case "FEMALE":
-        return "👩";
-      case "OTHER":
-        return "👤";
-      default:
-        return "👤";
-    }
-  };
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "PENDING":
@@ -121,14 +108,14 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
   return (
     <div className={`relative ${className}`}>
       {/* Search Input */}
-      <div className="relative">
+      <div className="relative ">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
-          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full pl-10 pr-10 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           onFocus={() => query.trim().length >= 2 && setShowResults(true)}
         />
         {query && (
@@ -170,28 +157,28 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
                             urlEndpoint={config.env.imagekit.urlEndpoint}
                             src={volunteer.profileImage}
                             alt={volunteer.fullName}
-                            width={40}
-                            height={40}
+                            width={100}
+                            height={100}
                             className="w-full h-full object-cover"
                           />
                         </div>
                       ) : (
                         <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                          <span className="text-lg">{getGenderIcon(volunteer.gender)}</span>
+                          <span className="text-lg">{volunteer.gender}</span>
                         </div>
                       )}
                     </div>
 
                     {/* Volunteer Info */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-3 mb-1">
                         <h4 className="font-medium text-gray-900 truncate">{volunteer.fullName}</h4>
                         <Badge variant="outline" className="text-xs">
                           {volunteer.role}
                         </Badge>
                       </div>
                       
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <div className="mt-1 flex items-center gap-4 text-sm text-gray-600">
                         <div className="flex items-center gap-1">
                           <Mail className="w-3 h-3" />
                           <span className="truncate">{volunteer.email}</span>
