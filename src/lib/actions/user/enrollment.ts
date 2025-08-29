@@ -26,7 +26,25 @@ export const requestEnrollment = async (eventId: string) => {
     });
 
     if (existing) {
-      return { success: false, message: "Already enrolled in this event" };
+      if (existing.status === "CANCELLED" && (existing as any).cancellationCount === 1) {
+        // Allow one-time reapply by flipping back to PENDING on the same record
+        await prisma.enrollment.update({
+          where: { id: existing.id },
+          data: { status: Status.PENDING, cancelledAt: null },
+        });
+
+        // Notify event owner again about new application
+        await notifyAdminsOnEnrollmentApplication({
+          eventId,
+          enrollmentId: existing.id,
+          applicantName: session.user.name || undefined,
+        });
+
+        revalidatePath(`/${eventId}`);
+        return { success: true, message: "Enrollment request sent successfully" };
+      } else {
+        return { success: false, message: "Already enrolled in this event" };
+      }
     }
 
     // Check event capacity
@@ -82,32 +100,41 @@ export const cancelEnrollment = async (eventId: string) => {
   try {
     const existing = await prisma.enrollment.findUnique({
       where: { eventId_userId: { eventId, userId: session.user.id } },
-      select: { id: true },
     });
 
     if (!existing) {
       return { success: false, message: "Enrollment not found" };
     }
 
+    const currentCount = (existing as any).cancellationCount ?? 0;
+    const nextCount = currentCount + 1;
+    const nextStatus = nextCount >= 2 ? Status.REJECTED : Status.CANCELLED;
+
     await prisma.enrollment.update({
       where: { id: existing.id },
-      data: { status: Status.CANCELLED, cancelledAt: new Date() },
+      data: {
+        status: nextStatus,
+        cancelledAt: new Date(),
+        cancellationCount: nextCount as any,
+      },
     });
 
-    // Create a self-cancellation notification for the user
+    // Notify the user
     await prisma.notification.create({
       data: {
         userId: session.user.id,
-        type: NotificationType.ENROLLMENT_SELF_CANCELLED,
-        title: "Enrollment Cancelled",
-        message: "You have cancelled your enrollment.",
+        type: nextStatus === Status.REJECTED ? NotificationType.ENROLLMENT_REJECTED : NotificationType.ENROLLMENT_SELF_CANCELLED,
+        title: nextStatus === Status.REJECTED ? "Enrollment Rejected" : "Enrollment Cancelled",
+        message: nextStatus === Status.REJECTED
+          ? "You cancelled twice. Your enrollment is now rejected."
+          : "You have cancelled your enrollment request.",
         relatedEventId: eventId,
         relatedEnrollmentId: existing.id,
       },
     });
 
     revalidatePath(`/${eventId}`);
-    return { success: true, message: "Enrollment cancelled" };
+    return { success: true, nextStatus, message: nextStatus === Status.REJECTED ? "Enrollment rejected due to repeated cancellation" : "Enrollment cancelled" };
   } catch (error) {
     console.error("Cancel error:", error);
     return { success: false, message: "Failed to cancel enrollment" };

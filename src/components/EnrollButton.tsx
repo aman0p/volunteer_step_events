@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { requestEnrollment } from "@/lib/actions/user/enrollment";
+import { requestEnrollment, cancelEnrollment } from "@/lib/actions/user/enrollment";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
@@ -17,23 +17,46 @@ interface EnrollButtonProps {
 
 export default function EnrollButton({ eventId, isFull, enrollmentStatus, className }: EnrollButtonProps) {
   const [isEnrolling, setIsEnrolling] = useState(false);
+  const [localStatus, setLocalStatus] = useState<"PENDING" | "APPROVED" | "REJECTED" | "CANCELLED" | "WAITLISTED" | null>(enrollmentStatus ?? null);
   const { data: session, status } = useSession();
 
   const handleEnroll = async () => {
-    if (isFull || enrollmentStatus) return;
+    if (isFull || localStatus) return;
 
     setIsEnrolling(true);
     try {
       const result = await requestEnrollment(eventId);
       if (result.success) {
         toast.success(result.message);
-        // Refresh the page to show updated state
-        window.location.reload();
+        setLocalStatus("PENDING");
       } else {
         toast.error(result.message);
       }
     } catch (error) {
       toast.error("Failed to send enrollment request");
+    } finally {
+      setIsEnrolling(false);
+    }
+  };
+
+  const handleCancel = async () => {
+    setIsEnrolling(true);
+    try {
+      const result = await cancelEnrollment(eventId);
+      if (result.success) {
+        toast.success(result.message || "Enrollment request cancelled");
+        if ((result as any).nextStatus === "REJECTED") {
+          setLocalStatus("REJECTED");
+        } else {
+          // First cancel: show cancelled for 2s then allow re-apply
+          setLocalStatus("CANCELLED");
+          setTimeout(() => setLocalStatus(null), 2000);
+        }
+      } else {
+        toast.error(result.message || "Failed to cancel request");
+      }
+    } catch (error) {
+      toast.error("Failed to cancel request");
     } finally {
       setIsEnrolling(false);
     }
@@ -52,7 +75,7 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
   }
 
   // Show different states based on enrollment status
-  if (enrollmentStatus === "APPROVED") {
+  if (localStatus === "APPROVED") {
     return (
       <Button
         // disabled
@@ -63,19 +86,29 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
     );
   }
 
-  if (enrollmentStatus === "PENDING") {
+  if (localStatus === "PENDING") {
     return (
-      <Button
-        disabled
-        variant="default"
-        className={cn("w-45 h-fit rounded-full py-3 px-5 text-white", className)}
-      >
-        Pending Approval
-      </Button>
+      <div className={cn("flex w-full md:w-fit items-center gap-2", className)}>
+        <Button
+          disabled
+          variant="default"
+          className={cn("h-fit rounded-full py-3 px-5 text-white")}
+        >
+          Pending Approval
+        </Button>
+        <Button
+          variant="outline"
+          onClick={handleCancel}
+          disabled={isEnrolling}
+          className="h-fit rounded-full py-3 px-5"
+        >
+          {isEnrolling ? "Cancelling..." : "Cancel Request"}
+        </Button>
+      </div>
     );
   }
 
-  if (enrollmentStatus === "REJECTED") {
+  if (localStatus === "REJECTED") {
     return (
       <Button
         disabled
@@ -86,7 +119,7 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
     );
   }
 
-  if (enrollmentStatus === "CANCELLED") {
+  if (localStatus === "CANCELLED") {
     return (
       <Button
         disabled
@@ -97,7 +130,7 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
     );
   }
 
-  if (enrollmentStatus === "WAITLISTED") {
+  if (localStatus === "WAITLISTED") {
     return (
       <Button
         disabled

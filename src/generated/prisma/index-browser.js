@@ -161,6 +161,7 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   status: 'status',
   enrolledAt: 'enrolledAt',
   cancelledAt: 'cancelledAt',
+  cancellationCount: 'cancellationCount',
   eventId: 'eventId',
   userId: 'userId'
 };
@@ -233,7 +234,6 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   ENROLLMENT_APPROVED: 'ENROLLMENT_APPROVED',
   ENROLLMENT_REJECTED: 'ENROLLMENT_REJECTED',
   ENROLLMENT_WAITLISTED: 'ENROLLMENT_WAITLISTED',
-  ENROLLMENT_CANCELLED: 'ENROLLMENT_CANCELLED',
   ENROLLMENT_SELF_CANCELLED: 'ENROLLMENT_SELF_CANCELLED',
   NEW_EVENT_ADDED: 'NEW_EVENT_ADDED',
   EVENT_UPDATE: 'EVENT_UPDATE',
@@ -247,8 +247,7 @@ exports.NotificationType = exports.$Enums.NotificationType = {
 exports.VerificationStatus = exports.$Enums.VerificationStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  CANCELLED: 'CANCELLED'
+  REJECTED: 'REJECTED'
 };
 
 exports.Prisma.ModelName = {

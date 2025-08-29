@@ -118,7 +118,10 @@ export const deleteEvent = async (eventId: string) => {
     // Notify all enrolled volunteers about the event deletion
     await notifyEnrolledVolunteersOnEventDeletion(eventId, event.title);
 
-    // Delete the event (this will cascade delete enrollments)
+    // Remove related enrollments first to satisfy FK constraints
+    await prisma.enrollment.deleteMany({ where: { eventId } });
+
+    // Delete the event
     await prisma.event.delete({
       where: { id: eventId },
     });

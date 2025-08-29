@@ -60,14 +60,15 @@ model User {
 }
 
 model Enrollment {
-  id          String    @id @default(uuid())
-  status      Status    @default(PENDING)
-  enrolledAt  DateTime  @default(now())
-  cancelledAt DateTime? // Track when user cancels enrollment
-  event       Event     @relation(fields: [eventId], references: [id])
-  eventId     String
-  user        User      @relation(fields: [userId], references: [id])
-  userId      String
+  id                String    @id @default(uuid())
+  status            Status    @default(PENDING)
+  enrolledAt        DateTime  @default(now())
+  cancelledAt       DateTime? // Track when user cancels enrollment
+  cancellationCount Int       @default(0)
+  event             Event     @relation(fields: [eventId], references: [id])
+  eventId           String
+  user              User      @relation(fields: [userId], references: [id])
+  userId            String
 
   @@unique([eventId, userId])
 }
@@ -130,7 +131,6 @@ enum NotificationType {
   ENROLLMENT_APPROVED
   ENROLLMENT_REJECTED
   ENROLLMENT_WAITLISTED
-  ENROLLMENT_CANCELLED
   ENROLLMENT_SELF_CANCELLED
 
   // Event related
@@ -151,5 +151,4 @@ enum VerificationStatus {
   PENDING
   APPROVED
   REJECTED
-  CANCELLED
 }

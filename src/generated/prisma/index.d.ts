@@ -88,7 +88,6 @@ export const NotificationType: {
   ENROLLMENT_APPROVED: 'ENROLLMENT_APPROVED',
   ENROLLMENT_REJECTED: 'ENROLLMENT_REJECTED',
   ENROLLMENT_WAITLISTED: 'ENROLLMENT_WAITLISTED',
-  ENROLLMENT_CANCELLED: 'ENROLLMENT_CANCELLED',
   ENROLLMENT_SELF_CANCELLED: 'ENROLLMENT_SELF_CANCELLED',
   NEW_EVENT_ADDED: 'NEW_EVENT_ADDED',
   EVENT_UPDATE: 'EVENT_UPDATE',
@@ -105,8 +104,7 @@ export type NotificationType = (typeof NotificationType)[keyof typeof Notificati
 export const VerificationStatus: {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-  CANCELLED: 'CANCELLED'
+  REJECTED: 'REJECTED'
 };
 
 export type VerificationStatus = (typeof VerificationStatus)[keyof typeof VerificationStatus]
@@ -3973,8 +3971,18 @@ export namespace Prisma {
 
   export type AggregateEnrollment = {
     _count: EnrollmentCountAggregateOutputType | null
+    _avg: EnrollmentAvgAggregateOutputType | null
+    _sum: EnrollmentSumAggregateOutputType | null
     _min: EnrollmentMinAggregateOutputType | null
     _max: EnrollmentMaxAggregateOutputType | null
+  }
+
+  export type EnrollmentAvgAggregateOutputType = {
+    cancellationCount: number | null
+  }
+
+  export type EnrollmentSumAggregateOutputType = {
+    cancellationCount: number | null
   }
 
   export type EnrollmentMinAggregateOutputType = {
@@ -3982,6 +3990,7 @@ export namespace Prisma {
     status: $Enums.Status | null
     enrolledAt: Date | null
     cancelledAt: Date | null
+    cancellationCount: number | null
     eventId: string | null
     userId: string | null
   }
@@ -3991,6 +4000,7 @@ export namespace Prisma {
     status: $Enums.Status | null
     enrolledAt: Date | null
     cancelledAt: Date | null
+    cancellationCount: number | null
     eventId: string | null
     userId: string | null
   }
@@ -4000,17 +4010,27 @@ export namespace Prisma {
     status: number
     enrolledAt: number
     cancelledAt: number
+    cancellationCount: number
     eventId: number
     userId: number
     _all: number
   }
 
 
+  export type EnrollmentAvgAggregateInputType = {
+    cancellationCount?: true
+  }
+
+  export type EnrollmentSumAggregateInputType = {
+    cancellationCount?: true
+  }
+
   export type EnrollmentMinAggregateInputType = {
     id?: true
     status?: true
     enrolledAt?: true
     cancelledAt?: true
+    cancellationCount?: true
     eventId?: true
     userId?: true
   }
@@ -4020,6 +4040,7 @@ export namespace Prisma {
     status?: true
     enrolledAt?: true
     cancelledAt?: true
+    cancellationCount?: true
     eventId?: true
     userId?: true
   }
@@ -4029,6 +4050,7 @@ export namespace Prisma {
     status?: true
     enrolledAt?: true
     cancelledAt?: true
+    cancellationCount?: true
     eventId?: true
     userId?: true
     _all?: true
@@ -4072,6 +4094,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: EnrollmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EnrollmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: EnrollmentMinAggregateInputType
@@ -4102,6 +4136,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: EnrollmentCountAggregateInputType | true
+    _avg?: EnrollmentAvgAggregateInputType
+    _sum?: EnrollmentSumAggregateInputType
     _min?: EnrollmentMinAggregateInputType
     _max?: EnrollmentMaxAggregateInputType
   }
@@ -4111,9 +4147,12 @@ export namespace Prisma {
     status: $Enums.Status
     enrolledAt: Date
     cancelledAt: Date | null
+    cancellationCount: number
     eventId: string
     userId: string
     _count: EnrollmentCountAggregateOutputType | null
+    _avg: EnrollmentAvgAggregateOutputType | null
+    _sum: EnrollmentSumAggregateOutputType | null
     _min: EnrollmentMinAggregateOutputType | null
     _max: EnrollmentMaxAggregateOutputType | null
   }
@@ -4137,6 +4176,7 @@ export namespace Prisma {
     status?: boolean
     enrolledAt?: boolean
     cancelledAt?: boolean
+    cancellationCount?: boolean
     eventId?: boolean
     userId?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
@@ -4148,6 +4188,7 @@ export namespace Prisma {
     status?: boolean
     enrolledAt?: boolean
     cancelledAt?: boolean
+    cancellationCount?: boolean
     eventId?: boolean
     userId?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
@@ -4159,6 +4200,7 @@ export namespace Prisma {
     status?: boolean
     enrolledAt?: boolean
     cancelledAt?: boolean
+    cancellationCount?: boolean
     eventId?: boolean
     userId?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
@@ -4170,11 +4212,12 @@ export namespace Prisma {
     status?: boolean
     enrolledAt?: boolean
     cancelledAt?: boolean
+    cancellationCount?: boolean
     eventId?: boolean
     userId?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "enrolledAt" | "cancelledAt" | "eventId" | "userId", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "enrolledAt" | "cancelledAt" | "cancellationCount" | "eventId" | "userId", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4199,6 +4242,7 @@ export namespace Prisma {
       status: $Enums.Status
       enrolledAt: Date
       cancelledAt: Date | null
+      cancellationCount: number
       eventId: string
       userId: string
     }, ExtArgs["result"]["enrollment"]>
@@ -4630,6 +4674,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Enrollment", 'Status'>
     readonly enrolledAt: FieldRef<"Enrollment", 'DateTime'>
     readonly cancelledAt: FieldRef<"Enrollment", 'DateTime'>
+    readonly cancellationCount: FieldRef<"Enrollment", 'Int'>
     readonly eventId: FieldRef<"Enrollment", 'String'>
     readonly userId: FieldRef<"Enrollment", 'String'>
   }
@@ -7315,6 +7360,7 @@ export namespace Prisma {
     status: 'status',
     enrolledAt: 'enrolledAt',
     cancelledAt: 'cancelledAt',
+    cancellationCount: 'cancellationCount',
     eventId: 'eventId',
     userId: 'userId'
   };
@@ -7763,6 +7809,7 @@ export namespace Prisma {
     status?: EnumStatusFilter<"Enrollment"> | $Enums.Status
     enrolledAt?: DateTimeFilter<"Enrollment"> | Date | string
     cancelledAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    cancellationCount?: IntFilter<"Enrollment"> | number
     eventId?: StringFilter<"Enrollment"> | string
     userId?: StringFilter<"Enrollment"> | string
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
@@ -7774,6 +7821,7 @@ export namespace Prisma {
     status?: SortOrder
     enrolledAt?: SortOrder
     cancelledAt?: SortOrderInput | SortOrder
+    cancellationCount?: SortOrder
     eventId?: SortOrder
     userId?: SortOrder
     event?: EventOrderByWithRelationInput
@@ -7789,6 +7837,7 @@ export namespace Prisma {
     status?: EnumStatusFilter<"Enrollment"> | $Enums.Status
     enrolledAt?: DateTimeFilter<"Enrollment"> | Date | string
     cancelledAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    cancellationCount?: IntFilter<"Enrollment"> | number
     eventId?: StringFilter<"Enrollment"> | string
     userId?: StringFilter<"Enrollment"> | string
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
@@ -7800,11 +7849,14 @@ export namespace Prisma {
     status?: SortOrder
     enrolledAt?: SortOrder
     cancelledAt?: SortOrderInput | SortOrder
+    cancellationCount?: SortOrder
     eventId?: SortOrder
     userId?: SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
+    _avg?: EnrollmentAvgOrderByAggregateInput
     _max?: EnrollmentMaxOrderByAggregateInput
     _min?: EnrollmentMinOrderByAggregateInput
+    _sum?: EnrollmentSumOrderByAggregateInput
   }
 
   export type EnrollmentScalarWhereWithAggregatesInput = {
@@ -7815,6 +7867,7 @@ export namespace Prisma {
     status?: EnumStatusWithAggregatesFilter<"Enrollment"> | $Enums.Status
     enrolledAt?: DateTimeWithAggregatesFilter<"Enrollment"> | Date | string
     cancelledAt?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
+    cancellationCount?: IntWithAggregatesFilter<"Enrollment"> | number
     eventId?: StringWithAggregatesFilter<"Enrollment"> | string
     userId?: StringWithAggregatesFilter<"Enrollment"> | string
   }
@@ -8237,6 +8290,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     cancelledAt?: Date | string | null
+    cancellationCount?: number
     event: EventCreateNestedOneWithoutEnrollmentsInput
     user: UserCreateNestedOneWithoutEnrollmentsInput
   }
@@ -8246,6 +8300,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     cancelledAt?: Date | string | null
+    cancellationCount?: number
     eventId: string
     userId: string
   }
@@ -8255,6 +8310,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellationCount?: IntFieldUpdateOperationsInput | number
     event?: EventUpdateOneRequiredWithoutEnrollmentsNestedInput
     user?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
   }
@@ -8264,6 +8320,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellationCount?: IntFieldUpdateOperationsInput | number
     eventId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
   }
@@ -8273,6 +8330,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     cancelledAt?: Date | string | null
+    cancellationCount?: number
     eventId: string
     userId: string
   }
@@ -8282,6 +8340,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellationCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type EnrollmentUncheckedUpdateManyInput = {
@@ -8289,6 +8348,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellationCount?: IntFieldUpdateOperationsInput | number
     eventId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
   }
@@ -8805,6 +8865,17 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type EventScalarRelationFilter = {
     is?: EventWhereInput
     isNot?: EventWhereInput
@@ -8820,8 +8891,13 @@ export namespace Prisma {
     status?: SortOrder
     enrolledAt?: SortOrder
     cancelledAt?: SortOrder
+    cancellationCount?: SortOrder
     eventId?: SortOrder
     userId?: SortOrder
+  }
+
+  export type EnrollmentAvgOrderByAggregateInput = {
+    cancellationCount?: SortOrder
   }
 
   export type EnrollmentMaxOrderByAggregateInput = {
@@ -8829,6 +8905,7 @@ export namespace Prisma {
     status?: SortOrder
     enrolledAt?: SortOrder
     cancelledAt?: SortOrder
+    cancellationCount?: SortOrder
     eventId?: SortOrder
     userId?: SortOrder
   }
@@ -8838,8 +8915,13 @@ export namespace Prisma {
     status?: SortOrder
     enrolledAt?: SortOrder
     cancelledAt?: SortOrder
+    cancellationCount?: SortOrder
     eventId?: SortOrder
     userId?: SortOrder
+  }
+
+  export type EnrollmentSumOrderByAggregateInput = {
+    cancellationCount?: SortOrder
   }
 
   export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -8864,6 +8946,22 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -9317,6 +9415,14 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type EventUpdateOneRequiredWithoutEnrollmentsNestedInput = {
     create?: XOR<EventCreateWithoutEnrollmentsInput, EventUncheckedCreateWithoutEnrollmentsInput>
     connectOrCreate?: EventCreateOrConnectWithoutEnrollmentsInput
@@ -9627,6 +9733,33 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
     in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
@@ -9666,6 +9799,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     cancelledAt?: Date | string | null
+    cancellationCount?: number
     user: UserCreateNestedOneWithoutEnrollmentsInput
   }
 
@@ -9674,6 +9808,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     cancelledAt?: Date | string | null
+    cancellationCount?: number
     userId: string
   }
 
@@ -9760,6 +9895,7 @@ export namespace Prisma {
     status?: EnumStatusFilter<"Enrollment"> | $Enums.Status
     enrolledAt?: DateTimeFilter<"Enrollment"> | Date | string
     cancelledAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    cancellationCount?: IntFilter<"Enrollment"> | number
     eventId?: StringFilter<"Enrollment"> | string
     userId?: StringFilter<"Enrollment"> | string
   }
@@ -9824,6 +9960,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     cancelledAt?: Date | string | null
+    cancellationCount?: number
     event: EventCreateNestedOneWithoutEnrollmentsInput
   }
 
@@ -9832,6 +9969,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     cancelledAt?: Date | string | null
+    cancellationCount?: number
     eventId: string
   }
 
@@ -10612,6 +10750,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     cancelledAt?: Date | string | null
+    cancellationCount?: number
     userId: string
   }
 
@@ -10620,6 +10759,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellationCount?: IntFieldUpdateOperationsInput | number
     user?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
   }
 
@@ -10628,6 +10768,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellationCount?: IntFieldUpdateOperationsInput | number
     userId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -10636,6 +10777,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellationCount?: IntFieldUpdateOperationsInput | number
     userId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -10644,6 +10786,7 @@ export namespace Prisma {
     status?: $Enums.Status
     enrolledAt?: Date | string
     cancelledAt?: Date | string | null
+    cancellationCount?: number
     eventId: string
   }
 
@@ -10696,6 +10839,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellationCount?: IntFieldUpdateOperationsInput | number
     event?: EventUpdateOneRequiredWithoutEnrollmentsNestedInput
   }
 
@@ -10704,6 +10848,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellationCount?: IntFieldUpdateOperationsInput | number
     eventId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -10712,6 +10857,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellationCount?: IntFieldUpdateOperationsInput | number
     eventId?: StringFieldUpdateOperationsInput | string
   }
 
