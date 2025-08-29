@@ -2,13 +2,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Clock, Tag, Users, Shirt, FileText, ImageIcon, Video, ArrowLeft, Edit, Trash2, Pencil } from "lucide-react";
-import Link from "next/link";
+import { MapPin, Edit, Instagram, Mail } from "lucide-react";
 import { Image } from "@imagekit/next";
 import config from "@/lib/config";
-import { DeleteEvent } from "@/components/admin/forms/DeleteEvent";
-import { VolunteerPieChart } from "@/components/ui/volunteer-pie-chart";
+import { FaWhatsapp } from "react-icons/fa";
+import { Video } from "@imagekit/next";
 
 export default async function EventDetailsPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
@@ -86,205 +84,133 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
     return `${start} - ${end}`;
   };
 
-  const approvedVolunteers = event.enrollments.filter(e => e.status === 'APPROVED');
-  const waitlistedVolunteers = event.enrollments.filter(e => e.status === 'WAITLISTED');
-  const pendingVolunteers = event.enrollments.filter(e => e.status === 'PENDING');
-  const rejectedVolunteers = event.enrollments.filter(e => e.status === 'REJECTED');
-
 
 
   return (
-    <div className="">
-      {/* Header */}
-      <div className="mb-6 space-y-3">
-        <h1 className="text-3xl font-bold tracking-tight">{event.title}</h1>
-        <p className="text-sm text-muted-foreground">
-          {event.description}
-        </p>
-      </div>
+    <div className="w-full h-full grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-10">
+      <div className="w-full h-full space-y-2 md:space-y-5">
+        <div className="space-y-2">
+          <p className="hidden md:block text-sm ml-1 font-semibold text-black">Cover Image</p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Side - Event Details */}
-        <div className="lg:col-span-2 space-y-6">
-          {event.coverUrl && <div className="relative w-full h-full rounded-lg overflow-hidden">
+          {event.coverUrl && (
             <Image
               urlEndpoint={config.env.imagekit.urlEndpoint}
               src={event.coverUrl}
               alt={event.title}
-              fill
-              className="object-cover"
+              width={500}
+              height={500}
+              className="object-cover w-full rounded-2xl aspect-video"
+              priority
             />
-          </div>
-          }
+          )}
         </div>
+        <h1 className="text-3xl rounded-xl font-bold tracking-tight">{event.title}</h1>
+        <p className="text-sm">{event.description}</p>
 
-        {/* Event Basic Information */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Event Information</h2>
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center text-sm">
-              <p className="text-gray-500">Location:&nbsp;</p>
-              <p className="text-gray-900 font-semibold">{event.location}</p>
+        <div className="grid grid-cols-2 gap-2 md:gap-5">
+          {event.eventImages.map((imageUrl, index) => (
+            <div key={index} className="relative aspect-video rounded-lg overflow-hidden">
+              <Image
+                urlEndpoint={config.env.imagekit.urlEndpoint}
+                src={imageUrl}
+                alt={`${event.title} - Image ${index + 1}`}
+                fill
+                className="object-cover aspect-video"
+              />
             </div>
+          ))}
+        </div>
+      </div>
+      <div className="w-full h-full space-y-10">
 
-            <div className="flex items-center text-sm">
-              <p className="text-gray-500">Date:&nbsp;</p>
-              <p className="text-gray-900 font-semibold">{formatDate(event.startDate)}</p>
-            </div>
-
-
-            <div className="flex items-center text-sm">
-              <p className="text-gray-500">Time:&nbsp;</p>
-              <p className="text-gray-900 font-semibold">{getTimeRange(event.startDate, event.endDate)}</p>
-
-            </div>
-
-            <div className="flex items-center text-sm">
-              <p className="text-gray-500">Category:&nbsp;</p>
-              <p className="text-gray-900 font-semibold">{event.category.join(", ")}</p>
-
-            </div>
-
-            <div className="flex items-center text-sm">
-              <p className="text-gray-500">Dress Code:&nbsp;</p>
-              <p className="text-gray-900 font-semibold">{event.dressCode}</p>
-
-            </div>
-
-            <div className="flex items-center text-sm">
-              <p className="text-gray-500">Max Volunteers:&nbsp;</p>
-              <p className="text-gray-900 font-semibold">
-                {event.maxVolunteers ? event.maxVolunteers : 'Unlimited'}
-              </p>
-            </div>
+        {/* Event Details */}
+        <div className="space-y-1">
+          <p className="text-sm ml-1 text-black font-semibold">Event Details</p>
+          <div className="w-full text-sm  grid grid-rows-auto grid-cols-[auto_1fr] h-fit border overflow-hidden rounded-2xl">
+            <div className="rounded-tl-2xl border p-2 pl-4 pr-6 bg-black/10 border-black/30">Category</div>
+            <div className="border p-2 pl-4 pr-6 border-black/20">{event.category}</div>
+            <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Location</div>
+            <div className="border p-2 pl-4 pr-6 border-black/20">{event.location}</div>
+            <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Dress Code</div>
+            <div className="border p-2 pl-4 pr-6 border-black/20">{event.dressCode}</div>
+            <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Volunteers Count</div>
+            <div className="border p-2 pl-4 pr-6 border-black/20">{event.enrollments.length} / {event.maxVolunteers}</div>
+            <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Duration</div>
+            <div className="border p-2 pl-4 pr-6 border-black/20">{getTimeRange(event.startDate, event.endDate)}</div>
+            <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Start Date</div>
+            <div className="border p-2 pl-4 pr-6 border-black/20">{formatDate(event.startDate)}</div>
+            <div className="rounded-bl-2xl border p-2 pl-4 pr-6 bg-black/10 border-black/30">End Date</div>
+            <div className="border p-2 pl-4 pr-6 border-black/20">{formatDate(event.endDate)}</div>
           </div>
         </div>
 
-        {/* Event Description */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Description</h2>
-          <p className="text-gray-700 leading-relaxed">{event.description}</p>
-        </div>
-
-        {/* Event Images */}
-        {event.eventImages && event.eventImages.length > 0 && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Event Images</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {event.eventImages.map((imageUrl, index) => (
-                <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
-                  <Image
-                    urlEndpoint={config.env.imagekit.urlEndpoint}
-                    src={imageUrl}
-                    alt={`${event.title} - Image ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Video URL */}
-        {event.videoUrl && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Event Video</h2>
+        {/* Video Player */}
+        <div className="space-y-1">
+          <p className="text-sm ml-1 text-black font-semibold">Video</p>
+          {event.videoUrl && (
             <div className="aspect-video rounded-lg overflow-hidden">
-              <video
+              <Video
+                urlEndpoint={config.env.imagekit.urlEndpoint}
                 src={event.videoUrl}
+                width={500}
+                height={500}
                 controls
                 className="w-full h-full object-cover"
-              >
-                Your browser does not support the video tag.
-              </video>
+              />
             </div>
-          </div>
-        )}
-      </div>
-
-      {/* Right Side - Statistics & Actions */}
-      <div className="space-y-6">
-        {/* Volunteer Statistics Pie Chart */}
-        <VolunteerPieChart
-          approvedCount={approvedVolunteers.length}
-          waitlistedCount={waitlistedVolunteers.length}
-          pendingCount={pendingVolunteers.length}
-          rejectedCount={rejectedVolunteers.length}
-        />
-
-        {/* Capacity Information */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Capacity Overview</h2>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Total Requests</span>
-              <span className="text-lg font-bold text-gray-900">{event.enrollments.length}</span>
-            </div>
-            {event.maxVolunteers && (
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">Capacity</span>
-                <span className="text-sm font-medium text-gray-900">
-                  {approvedVolunteers.length}/{event.maxVolunteers}
-                </span>
-              </div>
-            )}
-            <div className="pt-2 border-t border-gray-200">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">Available Spots</span>
-                <span className={`text-sm font-medium ${event.maxVolunteers && approvedVolunteers.length >= event.maxVolunteers ? 'text-red-600' : 'text-green-600'}`}>
-                  {event.maxVolunteers ? Math.max(0, event.maxVolunteers - approvedVolunteers.length) : 'Unlimited'}
-                </span>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-          <div className="space-y-3">
-            <Link href={`/admin/events/${(await params).id}/details/registered-volunteer`}>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                <Users className="w-4 h-4 mr-2" />
-                View All Volunteers
-              </Button>
-            </Link>
+        {/* Quick Links */}
+        <div className="space-y-1">
+          <p className="text-sm ml-1 text-black font-semibold">Quick Links</p>
 
-            <Link href={`/admin/enrollments`}>
-              <Button variant="outline" className="w-full">
-                <FileText className="w-4 h-4 mr-2" />
-                Manage Enrollments
-              </Button>
-            </Link>
-
-            <Button variant="outline" className="w-full">
-              <Calendar className="w-4 h-4 mr-2" />
-              Export Data
-            </Button>
+          {/* Edit Link */}
+          <div className="w-full text-sm grid grid-rows-auto grid-cols-[0.55fr_1fr] h-fit border border-black/30 overflow-hidden rounded-2xl">
+            <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
+              <Edit className="w-4 h-4" />
+              <span className="text-sm line-clamp-1">Edit Event</span>
+            </div>
+            <p className="p-2 mr-4 pl-4 pr-6 border-black/20 line-clamp-1">{event.title}/update</p>
           </div>
-        </div>
 
-        {/* Event Metadata */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Event Metadata</h2>
-          <div className="space-y-3 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-500">Created</span>
-              <span className="text-gray-900">{formatDate(event.createdAt)}</span>
+          {/* Whatsapp Link */}
+          <div className="w-full text-sm grid grid-rows-auto grid-cols-[0.55fr_1fr] h-fit border border-black/30 overflow-hidden rounded-2xl">
+            <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
+              <FaWhatsapp className="w-4 h-4" />
+              <span className="text-sm line-clamp-1">Whatsapp Link</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">Last Updated</span>
-              <span className="text-gray-900">{formatDate(event.updatedAt)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">Event ID</span>
-              <span className="text-gray-900 font-mono text-xs">{event.id}</span>
-            </div>
+            <p className="p-2 pl-4 pr-6 border-black/20 line-clamp-1">edfrgthgfd</p>
+          </div>
 
+          <div className="w-full text-sm grid grid-rows-auto grid-cols-[0.55fr_1fr] h-fit border border-black/30 overflow-hidden rounded-2xl">
+            <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
+              <Instagram className="w-4 h-4" />
+              <span className="text-sm line-clamp-1">Instagram</span>
+            </div>
+            <p className="p-2 pl-4 pr-6 border-black/20 line-clamp-1">edfrgthgfd</p>
+          </div>
+
+          {/* Mail Link */}
+          <div className="w-full text-sm grid grid-rows-auto grid-cols-[0.55fr_1fr] h-fit border border-black/30 overflow-hidden rounded-2xl">
+            <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
+              <Mail className="w-4 h-4" />
+              <span className="text-sm line-clamp-1">Mail Link</span>
+            </div>
+            <p className="p-2 mr-4 pl-4 pr-6 border-black/20 line-clamp-1">edfrgthgfdefrgergwrgetfhgfwnekfjhbewnkjfvbenkjgbvejbgvjgb</p>
+          </div>
+
+          {/* Map Location */}
+          <div className="w-full text-sm grid grid-rows-auto grid-cols-[0.55fr_1fr] h-fit border border-black/30 overflow-hidden rounded-2xl">
+            <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              <span className="text-sm line-clamp-1">Map Location</span>
+            </div>
+            <p className="p-2 pl-4 pr-6 border-black/20 line-clamp-1">edfrgthgfd</p>
           </div>
         </div>
       </div>
     </div>
   );
 }
+

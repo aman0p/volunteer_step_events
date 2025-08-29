@@ -303,7 +303,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                      <Link href={`/${enrollment.event.id}`}>
+                      <Link href={`/admin/events/${enrollment.event.id}`}>
                         <Eye className="mr-2 h-4 w-4" />
                         View Event
                       </Link>

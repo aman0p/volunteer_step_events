@@ -3,8 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type UseFormReturn, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
 import {
   Form,
   FormControl,
@@ -96,9 +95,26 @@ const EventForm = ({ type, ...event }: Props) => {
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof eventSchema>> = async (values) => {
+    // Normalize schema values to match EventParams shape
+    const payload: EventParams = {
+      title: values.title,
+      description: values.description,
+      location: values.location,
+      startDate: values.startDate,
+      endDate: values.endDate,
+      dressCode: values.dressCode,
+      category: values.category,
+      coverUrl: values.coverUrl,
+      videoUrl: values.videoUrl ?? null,
+      eventImages: values.eventImages,
+      maxVolunteers: values.maxVolunteers,
+      createdAt: values.createdAt,
+      updatedAt: values.updatedAt,
+    };
+
     const result = isUpdate && event.id
-      ? await updateEvent(event.id as string, values)
-      : await createEvent(values as EventParams);
+      ? await updateEvent(event.id as string, payload)
+      : await createEvent(payload);
 
     if (result.success) {
       toast.success(isUpdate ? "Event updated successfully" : "Event created successfully");

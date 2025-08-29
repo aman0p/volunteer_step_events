@@ -196,7 +196,7 @@ export default function EventOverview({ latestEvents, userId }: EventOverviewPro
 
                         <div className="flex gap-2 w-fit">  
                             {renderEnrollmentButton()}
-                            <Link href={`/${events[0].id}`} className="w-full group">
+                            <Link href={`/events/${events[0].id}`} className="w-full group">
                                 <Button className="w-40 gap-2 flex items-center px-10 py-5 cursor-pointer bg-black text-white">
                                     View Details
                                     <ArrowRightIcon className="size-4 group-hover:pl-0.3 group-hover:rotate-[-45deg] group-hover:translate-x-1 transition-all duration-300" />

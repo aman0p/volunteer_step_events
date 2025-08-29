@@ -9,21 +9,36 @@ import {
   notifyEnrolledVolunteersOnEventDeletion 
 } from "@/lib/actions/admin/notifications";
 import type { Prisma } from "@/generated/prisma";
+import type { EventParams } from "@/types";
 import { revalidatePath } from "next/cache";
 
-export const createEvent = async (params: Prisma.EventCreateInput) => {
+export const createEvent = async (params: EventParams) => {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return { success: false, message: "Authentication required" };
     }
 
-    const newEvent = await prisma.event.create({
-      data: {
-        ...params,
-        createdById: session.user.id,
-      },
-    });
+    // Map incoming params to Prisma create shape
+    const data: Prisma.EventUncheckedCreateInput = {
+      title: params.title,
+      description: params.description,
+      location: params.location,
+      startDate: params.startDate,
+      endDate: params.endDate,
+      dressCode: params.dressCode,
+      category: params.category,
+      coverUrl: params.coverUrl,
+      videoUrl: params.videoUrl ?? null,
+      eventImages: params.eventImages,
+      maxVolunteers: params.maxVolunteers ?? null,
+      createdAt: params.createdAt ?? new Date(),
+      // updatedAt will be set automatically by Prisma @updatedAt
+      createdById: session.user.id,
+      // id is auto-generated
+    };
+
+    const newEvent = await prisma.event.create({ data });
 
     // Broadcast to volunteers that a new event has been added
     await broadcastNewEventNotification(newEvent.id);
@@ -45,7 +60,7 @@ export const createEvent = async (params: Prisma.EventCreateInput) => {
   }
 };
 
-export const updateEvent = async (id: string, params: Prisma.EventUpdateInput) => {
+export const updateEvent = async (id: string, params: EventParams) => {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -64,11 +79,24 @@ export const updateEvent = async (id: string, params: Prisma.EventUpdateInput) =
       return { success: false, message: "You can only update your own events" };
     }
 
+    const updateData: Prisma.EventUpdateInput = {
+      title: params.title,
+      description: params.description,
+      location: params.location,
+      startDate: params.startDate,
+      endDate: params.endDate,
+      dressCode: params.dressCode,
+      category: params.category,
+      coverUrl: params.coverUrl,
+      videoUrl: params.videoUrl ?? null,
+      eventImages: params.eventImages,
+      maxVolunteers: params.maxVolunteers ?? null,
+      // Do not allow changing createdById/createdAt via update
+    };
+
     const updated = await prisma.event.update({
       where: { id },
-      data: {
-        ...params,
-      },
+      data: updateData,
     });
 
     // Notify all enrolled volunteers about the event update

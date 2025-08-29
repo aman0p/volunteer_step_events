@@ -35,6 +35,9 @@ To seed events in your local database:
 # Seed events in local database
 npx dotenv -e .env.local -- npx tsx src/database/seed/seed-events.ts
 
+# Seed verification data in local database
+npx dotenv -e .env.local -- npx tsx src/database/seed/seed-verification.ts
+
 # Seed enrollment requests in local database
 npx dotenv -e .env.local -- npx tsx src/database/seed/seed-enrollments.ts
 
