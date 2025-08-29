@@ -31,6 +31,7 @@ export const approveEnrollment = async (enrollmentId: string) => {
         event: {
           select: {
             maxVolunteers: true,
+            createdById: true,
             enrollments: {
               where: {
                 status: "APPROVED"
@@ -46,6 +47,11 @@ export const approveEnrollment = async (enrollmentId: string) => {
 
     if (!enrollment) {
       return { success: false, message: "Enrollment not found" };
+    }
+
+    // Owner check
+    if (enrollment.event.createdById !== session.user.id) {
+      return { success: false, message: "Only the event creator can approve enrollments" };
     }
 
     // Check capacity
@@ -94,6 +100,18 @@ export const rejectEnrollment = async (enrollmentId: string) => {
   }
 
   try {
+    // Ensure owner
+    const found = await prisma.enrollment.findUnique({
+      where: { id: enrollmentId },
+      include: { event: { select: { createdById: true } } }
+    });
+    if (!found) {
+      return { success: false, message: "Enrollment not found" };
+    }
+    if (found.event.createdById !== session.user.id) {
+      return { success: false, message: "Only the event creator can reject enrollments" };
+    }
+
     const enrollment = await prisma.enrollment.update({
       where: { id: enrollmentId },
       data: { status: Status.REJECTED }

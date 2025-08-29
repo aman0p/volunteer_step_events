@@ -1,12 +1,13 @@
 "use client";
 
-import prisma from "@/lib/prisma";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { FaTrash } from "react-icons/fa";
 import { useState } from "react";
 import { PiSpinner, PiX } from "react-icons/pi";
 import { createPortal } from "react-dom";
+import { deleteEvent } from "@/lib/actions/admin/events";
+import { toast } from "sonner";
 
 interface DeleteEventModalProps {
     eventId: string;
@@ -29,15 +30,23 @@ function DeleteEventModal({ eventId, eventTitle, open, setOpen }: DeleteEventMod
     const handleDelete = async () => {
         setLoading(true);
 
-        await prisma.event.delete({
-            where: {
-                id: eventId,
-            },
-        });
-
-        setLoading(false);
-        setOpen(false);
-        router.push("/admin/events");
+        try {
+            const result = await deleteEvent(eventId);
+            
+            if (result.success) {
+                toast.success("Event deleted successfully");
+                setOpen(false);
+                router.push("/admin/events");
+                router.refresh();
+            } else {
+                toast.error(result.message || "Failed to delete event");
+            }
+        } catch (error) {
+            console.error("Error deleting event:", error);
+            toast.error("An error occurred while deleting the event");
+        } finally {
+            setLoading(false);
+        }
     }
 
     const handleCancel = () => {

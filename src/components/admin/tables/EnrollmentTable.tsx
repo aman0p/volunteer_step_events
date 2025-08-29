@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Eye, Loader2, GripVertical, ArrowRight } from "lucide-react"
+import { MoreHorizontal, Eye, GripVertical, ArrowRight } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Image } from "@imagekit/next"
 import Link from "next/link"
@@ -18,7 +18,6 @@ type EventEnrollment = {
   event: {
     id: string
     title: string
-    maxVolunteers: number | null
   }
   user: {
     id: string
@@ -37,16 +36,19 @@ interface EventEnrollmentTableProps {
 export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTableProps) {
   const [page, setPage] = useState(1)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
-  const [processingIds, setProcessingIds] = useState<string[]>([])
+  const [approveProcessingIds, setApproveProcessingIds] = useState<string[]>([])
+  const [rejectProcessingIds, setRejectProcessingIds] = useState<string[]>([])
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [isBulkProcessing, setIsBulkProcessing] = useState(false)
+  const [isBulkApproveProcessing, setIsBulkApproveProcessing] = useState(false)
+  const [isBulkRejectProcessing, setIsBulkRejectProcessing] = useState(false)
 
   const paginatedData = enrollments.slice((page - 1) * rowsPerPage, page * rowsPerPage)
   const totalPages = Math.ceil(enrollments.length / rowsPerPage)
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedRows(paginatedData.map(row => row.id))
+      // Select all rows across all pages, not just current page
+      setSelectedRows(enrollments.map(row => row.id))
     } else {
       setSelectedRows([])
     }
@@ -61,35 +63,63 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
   }
 
   const handleApproveAll = async () => {
-    setIsBulkProcessing(true)
+    if (selectedRows.length === 0) {
+      toast.error("Please select at least one enrollment")
+      return
+    }
+    
+    setIsBulkApproveProcessing(true)
     try {
-      for (const id of selectedRows) {
-        await handleApprove(id)
-      }
+      const promises = selectedRows.map(async (id) => {
+        const result = await approveEnrollment(id)
+        if (result.success) {
+          toast.success(result.message || `Enrollment ${id} approved`)
+        } else {
+          toast.error(result.message || `Failed to approve enrollment ${id}`)
+        }
+      })
+      await Promise.all(promises)
+      toast.success(`Successfully processed ${selectedRows.length} enrollment(s)`) 
+      setSelectedRows([])
+      window.location.reload()
     } catch (error) {
       console.error('Error approving all:', error)
       toast.error("An error occurred while approving all selected enrollments")
     } finally {
-      setIsBulkProcessing(false)
+      setIsBulkApproveProcessing(false)
     }
   }
 
   const handleRejectAll = async () => {
-    setIsBulkProcessing(true)
+    if (selectedRows.length === 0) {
+      toast.error("Please select at least one enrollment")
+      return
+    }
+    
+    setIsBulkRejectProcessing(true)
     try {
-      for (const id of selectedRows) {
-        await handleReject(id)
-      }
+      const promises = selectedRows.map(async (id) => {
+        const result = await rejectEnrollment(id)
+        if (result.success) {
+          toast.success(result.message || `Enrollment ${id} rejected`)
+        } else {
+          toast.error(result.message || `Failed to reject enrollment ${id}`)
+        }
+      })
+      await Promise.all(promises)
+      toast.success(`Successfully processed ${selectedRows.length} enrollment(s)`) 
+      setSelectedRows([])
+      window.location.reload()
     } catch (error) {
       console.error('Error rejecting all:', error)
       toast.error("An error occurred while rejecting all selected enrollments")
     } finally {
-      setIsBulkProcessing(false)
+      setIsBulkRejectProcessing(false)
     }
   }
 
   const handleApprove = async (id: string) => {
-    setProcessingIds(prev => [...prev, id])
+    setApproveProcessingIds(prev => [...prev, id])
     try {
       const result = await approveEnrollment(id)
       if (result.success) {
@@ -103,12 +133,12 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
       console.error('Error approving:', error)
       toast.error("An error occurred while approving the enrollment")
     } finally {
-      setProcessingIds(prev => prev.filter(procId => procId !== id))
+      setApproveProcessingIds(prev => prev.filter(procId => procId !== id))
     }
   }
 
   const handleReject = async (id: string) => {
-    setProcessingIds(prev => [...prev, id])
+    setRejectProcessingIds(prev => [...prev, id])
     try {
       const result = await rejectEnrollment(id)
       if (result.success) {
@@ -122,11 +152,11 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
       console.error('Error rejecting:', error)
       toast.error("An error occurred while rejecting the enrollment")
     } finally {
-      setProcessingIds(prev => prev.filter(procId => procId !== id))
+      setRejectProcessingIds(prev => prev.filter(procId => procId !== id))
     }
   }
 
-
+  const isAllSelected = selectedRows.length === enrollments.length && enrollments.length > 0
 
   return (
     <div className="space-y-4">
@@ -137,22 +167,20 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
             variant="outline"
             size="sm"
             onClick={handleApproveAll}
-            disabled={selectedRows.length === 0 || isBulkProcessing}
+            disabled={selectedRows.length === 0}
+            loading={isBulkApproveProcessing}
+            className="h-8 px-2 text-xs w-28"
           >
-            {isBulkProcessing ? (
-              <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-            ) : null}
             Approve All ({selectedRows.length})
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={handleRejectAll}
-            disabled={selectedRows.length === 0 || isBulkProcessing}
+            disabled={selectedRows.length === 0}
+            loading={isBulkRejectProcessing}
+            className="h-8 px-2 text-xs w-28"
           >
-            {isBulkProcessing ? (
-              <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-            ) : null}
             Reject All ({selectedRows.length})
           </Button>
         </div>
@@ -160,6 +188,16 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
           <span className="text-sm text-muted-foreground">
             {selectedRows.length} of {enrollments.length} selected
           </span>
+          {selectedRows.length > 0 && (
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setSelectedRows([])}
+              className="text-xs"
+            >
+              Clear Selection
+            </Button>
+          )}
         </div>
       </div>
 
@@ -170,7 +208,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
                          <TableHead className="w-10"></TableHead>
              <TableHead className="w-10">
                <Checkbox 
-                 checked={selectedRows.length === paginatedData.length && paginatedData.length > 0}
+                 checked={isAllSelected}
                  onCheckedChange={handleSelectAll}
                />
              </TableHead>
@@ -186,15 +224,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
           {paginatedData.map((enrollment) => (
             <TableRow
               key={enrollment.id}
-              className="hover:bg-muted/50 cursor-pointer"
-              onClick={(e) => {
-                // Don't select row if clicking on the image link
-                if ((e.target as HTMLElement).closest('a')) {
-                  return
-                }
-                const isSelected = selectedRows.includes(enrollment.id)
-                handleSelectRow(enrollment.id, !isSelected)
-              }}
+              className="hover:bg-muted/50"
             >
               <TableCell className="w-10">
                 <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
@@ -223,9 +253,9 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
                         urlEndpoint={config.env.imagekit.urlEndpoint}
                         src={enrollment.user.profileImage}
                         alt={enrollment.user.fullName}
-                        width={32}
-                        height={32}
-                        className="rounded-full"
+                        width={60}
+                        height={60}
+                        className="rounded-full w-8 h-8 aspect-square object-cover"
                       />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
@@ -248,24 +278,18 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
                     size="sm"
                     variant="default"
                     onClick={() => handleApprove(enrollment.id)}
-                    disabled={processingIds.includes(enrollment.id)}
+                    loading={approveProcessingIds.includes(enrollment.id)}
                     className="h-8 px-2 text-xs w-20"
                   >
-                    {processingIds.includes(enrollment.id) ? (
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                    ) : null}
                     Approve
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => handleReject(enrollment.id)}
-                    disabled={processingIds.includes(enrollment.id)}
+                    loading={rejectProcessingIds.includes(enrollment.id)}
                     className="h-8 px-2 text-xs w-20"
                   >
-                    {processingIds.includes(enrollment.id) ? (
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                    ) : null}
                     Reject
                   </Button>
                 </div>

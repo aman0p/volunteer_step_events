@@ -134,7 +134,8 @@ exports.Prisma.EventScalarFieldEnum = {
   eventImages: 'eventImages',
   maxVolunteers: 'maxVolunteers',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
 };
 
 exports.Prisma.UserScalarFieldEnum = {

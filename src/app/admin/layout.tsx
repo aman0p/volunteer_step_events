@@ -24,8 +24,8 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
         redirect("/");
     }
 
-    // Sidebar badge should reflect current number of pending enrollment requests
-    const enrollmentCount = await prisma.enrollment.count({ where: { status: "PENDING" } });
+    // Sidebar badge should reflect current number of pending enrollment requests for this admin
+    const enrollmentCount = await prisma.enrollment.count({ where: { status: "PENDING", event: { createdById: session.user.id } } });
     
     // Count pending verification requests
     const verificationCount = await prisma.verificationRequest.count({ where: { status: "PENDING" } });

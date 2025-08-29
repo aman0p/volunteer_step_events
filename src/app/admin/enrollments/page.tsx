@@ -23,9 +23,9 @@ export default async function EnrollmentsPage() {
     redirect("/");
   }
 
-  // Get all pending enrollments with event and user details
+  // Get pending enrollments only for events created by current admin
   const pendingEnrollments = await prisma.enrollment.findMany({
-    where: { status: "PENDING" },
+    where: { status: "PENDING", event: { createdById: session.user.id } },
     include: {
       event: {
         select: {

@@ -58,6 +58,15 @@ export default async function RegisteredVolunteerPage({ params }: { params: { id
         redirect("/admin/events");
     }
 
+    // Owner guard
+    const owner = await prisma.event.findUnique({
+        where: { id: event.id },
+        select: { createdById: true }
+    });
+    if (!owner || owner.createdById !== session.user.id) {
+        redirect("/admin/events");
+    }
+
     const formatDate = (date: Date) => {
         return new Intl.DateTimeFormat('en-US', {
             year: 'numeric',

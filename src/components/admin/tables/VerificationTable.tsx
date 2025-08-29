@@ -2,11 +2,10 @@
 
 import { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Check, X, Eye, Loader2, GripVertical, ArrowRight } from "lucide-react"
+import { MoreHorizontal, Eye, GripVertical } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Image } from "@imagekit/next"
 import Link from "next/link"
@@ -34,16 +33,18 @@ interface VerificationTableProps {
 export default function VerificationTable({ verificationRequests }: VerificationTableProps) {
   const [page, setPage] = useState(1)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
-  const [processingIds, setProcessingIds] = useState<string[]>([])
+  const [approveProcessingIds, setApproveProcessingIds] = useState<string[]>([])
+  const [rejectProcessingIds, setRejectProcessingIds] = useState<string[]>([])
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [isBulkProcessing, setIsBulkProcessing] = useState(false)
+  const [isBulkApproveProcessing, setIsBulkApproveProcessing] = useState(false)
+  const [isBulkRejectProcessing, setIsBulkRejectProcessing] = useState(false)
 
   const paginatedData = verificationRequests.slice((page - 1) * rowsPerPage, page * rowsPerPage)
   const totalPages = Math.ceil(verificationRequests.length / rowsPerPage)
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedRows(paginatedData.map(row => row.id))
+      setSelectedRows(verificationRequests.map(row => row.id))
     } else {
       setSelectedRows([])
     }
@@ -58,106 +59,132 @@ export default function VerificationTable({ verificationRequests }: Verification
   }
 
   const handleApproveAll = async () => {
-    setIsBulkProcessing(true)
+    if (selectedRows.length === 0) {
+      toast.error("Please select at least one verification request")
+      return
+    }
+
+    setIsBulkApproveProcessing(true)
     try {
-      for (const id of selectedRows) {
-        await handleApprove(id)
-      }
+      const promises = selectedRows.map(async (id) => {
+        const result = await approveVerificationRequest(id)
+        if (result.success) {
+          toast.success(result.message || `Request ${id} approved`)
+        } else {
+          toast.error(result.message || `Failed to approve request ${id}`)
+        }
+      })
+      await Promise.all(promises)
+      toast.success(`Successfully processed ${selectedRows.length} verification request(s)`)
+      setSelectedRows([])
+      window.location.reload() // reload once after all are done
     } catch (error) {
-      console.error('Error approving all:', error)
+      console.error("Error approving all:", error)
       toast.error("An error occurred while approving all selected requests")
     } finally {
-      setIsBulkProcessing(false)
+      setIsBulkApproveProcessing(false)
     }
   }
 
   const handleRejectAll = async () => {
-    setIsBulkProcessing(true)
+    if (selectedRows.length === 0) {
+      toast.error("Please select at least one verification request")
+      return
+    }
+
+    setIsBulkRejectProcessing(true)
     try {
-      for (const id of selectedRows) {
-        await handleReject(id)
-      }
+      const promises = selectedRows.map(async (id) => {
+        const result = await rejectVerificationRequest(id)
+        if (result.success) {
+          toast.success(result.message || `Request ${id} rejected`)
+        } else {
+          toast.error(result.message || `Failed to reject request ${id}`)
+        }
+      })
+      await Promise.all(promises)
+      toast.success(`Successfully processed ${selectedRows.length} verification request(s)`)
+      setSelectedRows([])
+      window.location.reload() // reload once after all are done
     } catch (error) {
-      console.error('Error rejecting all:', error)
+      console.error("Error rejecting all:", error)
       toast.error("An error occurred while rejecting all selected requests")
     } finally {
-      setIsBulkProcessing(false)
+      setIsBulkRejectProcessing(false)
     }
   }
 
   const handleApprove = async (id: string) => {
-    setProcessingIds(prev => [...prev, id])
+    setApproveProcessingIds(prev => [...prev, id])
     try {
       const result = await approveVerificationRequest(id)
       if (result.success) {
         toast.success(result.message || "Verification request approved successfully")
-        // Refresh the page to show updated data
         window.location.reload()
       } else {
         toast.error(result.message || "Failed to approve verification request")
       }
     } catch (error) {
-      console.error('Error approving:', error)
+      console.error("Error approving:", error)
       toast.error("An error occurred while approving the request")
     } finally {
-      setProcessingIds(prev => prev.filter(procId => procId !== id))
+      setApproveProcessingIds(prev => prev.filter(procId => procId !== id))
     }
   }
 
   const handleReject = async (id: string) => {
-    setProcessingIds(prev => [...prev, id])
+    setRejectProcessingIds(prev => [...prev, id])
     try {
       const result = await rejectVerificationRequest(id)
       if (result.success) {
         toast.success(result.message || "Verification request rejected successfully")
-        // Refresh the page to show updated data
         window.location.reload()
       } else {
         toast.error(result.message || "Failed to reject verification request")
       }
     } catch (error) {
-      console.error('Error rejecting:', error)
+      console.error("Error rejecting:", error)
       toast.error("An error occurred while rejecting the request")
     } finally {
-      setProcessingIds(prev => prev.filter(procId => procId !== id))
+      setRejectProcessingIds(prev => prev.filter(procId => procId !== id))
     }
   }
 
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
     }).format(date)
   }
+
+  const isAllSelected = selectedRows.length === verificationRequests.length && verificationRequests.length > 0
 
   return (
     <div className="space-y-4">
       {/* Top buttons */}
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={handleApproveAll}
-            disabled={selectedRows.length === 0 || isBulkProcessing}
+            disabled={selectedRows.length === 0}
+            loading={isBulkApproveProcessing}
+            className="h-8 px-2 text-xs w-28"
           >
-            {isBulkProcessing ? (
-              <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-            ) : null}
             Approve All ({selectedRows.length})
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={handleRejectAll}
-            disabled={selectedRows.length === 0 || isBulkProcessing}
+            disabled={selectedRows.length === 0}
+            loading={isBulkRejectProcessing}
+            className="h-8 px-2 text-xs w-28"
           >
-            {isBulkProcessing ? (
-              <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-            ) : null}
             Reject All ({selectedRows.length})
           </Button>
         </div>
@@ -165,6 +192,11 @@ export default function VerificationTable({ verificationRequests }: Verification
           <span className="text-sm text-muted-foreground">
             {selectedRows.length} of {verificationRequests.length} selected
           </span>
+          {selectedRows.length > 0 && (
+            <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])} className="text-xs">
+              Clear Selection
+            </Button>
+          )}
         </div>
       </div>
 
@@ -172,13 +204,10 @@ export default function VerificationTable({ verificationRequests }: Verification
       <Table>
         <TableHeader>
           <TableRow>
-                         <TableHead className="w-10"></TableHead>
-             <TableHead className="w-10">
-               <Checkbox 
-                 checked={selectedRows.length === paginatedData.length && paginatedData.length > 0}
-                 onCheckedChange={handleSelectAll}
-               />
-             </TableHead>
+            <TableHead className="w-10"></TableHead>
+            <TableHead className="w-10">
+              <Checkbox checked={isAllSelected} onCheckedChange={handleSelectAll} />
+            </TableHead>
             <TableHead>Volunteer Name</TableHead>
             <TableHead>Email ID</TableHead>
             <TableHead>Phone No</TableHead>
@@ -189,25 +218,14 @@ export default function VerificationTable({ verificationRequests }: Verification
         </TableHeader>
         <TableBody>
           {paginatedData.map((request) => (
-            <TableRow 
-              key={request.id} 
-              className="hover:bg-muted/50 cursor-pointer"
-              onClick={(e) => {
-                // Don't select row if clicking on the image link
-                if ((e.target as HTMLElement).closest('a')) {
-                  return
-                }
-                const isSelected = selectedRows.includes(request.id)
-                handleSelectRow(request.id, !isSelected)
-              }}
-            >
+            <TableRow key={request.id} className="hover:bg-muted/50">
               <TableCell className="w-10">
                 <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
                   <GripVertical className="h-4 w-4 text-gray-400" />
                 </div>
               </TableCell>
               <TableCell className="w-10">
-                <Checkbox 
+                <Checkbox
                   checked={selectedRows.includes(request.id)}
                   onCheckedChange={(checked) => handleSelectRow(request.id, checked as boolean)}
                 />
@@ -220,14 +238,18 @@ export default function VerificationTable({ verificationRequests }: Verification
                         urlEndpoint={config.env.imagekit.urlEndpoint}
                         src={request.user.profileImage}
                         alt={request.user.fullName}
-                        width={32}
-                        height={32}
-                        className="rounded-full"
+                        width={70}
+                        height={70}
+                        className="rounded-full w-8 h-8 aspect-square object-cover"
                       />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
                         <Link href={`/admin/account-verification/${request.id}`} className="text-xs font-medium">
-                          {request.user.fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
+                          {request.user.fullName
+                            .split(" ")
+                            .map((n: string) => n[0])
+                            .join("")
+                            .toUpperCase()}
                         </Link>
                       </div>
                     )}
@@ -239,33 +261,25 @@ export default function VerificationTable({ verificationRequests }: Verification
               </TableCell>
               <TableCell className="font-mono text-sm">{request.user.email}</TableCell>
               <TableCell className="font-mono text-sm">{request.user.phoneNumber}</TableCell>
-              <TableCell className="text-sm text-muted-foreground">
-                {formatDate(request.submittedAt)}
-              </TableCell>
+              <TableCell className="text-sm text-muted-foreground">{formatDate(request.submittedAt)}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Button
                     size="sm"
                     variant="default"
                     onClick={() => handleApprove(request.id)}
-                    disabled={processingIds.includes(request.id)}
+                    loading={approveProcessingIds.includes(request.id)}
                     className="h-8 px-2 text-xs w-20"
                   >
-                    {processingIds.includes(request.id) ? (
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                    ) : null}
                     Approve
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => handleReject(request.id)}
-                    disabled={processingIds.includes(request.id)}
+                    loading={rejectProcessingIds.includes(request.id)}
                     className="h-8 px-2 text-xs w-20"
                   >
-                    {processingIds.includes(request.id) ? (
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                    ) : null}
                     Reject
                   </Button>
                 </div>
@@ -308,35 +322,32 @@ export default function VerificationTable({ verificationRequests }: Verification
               <SelectItem value="50">50</SelectItem>
             </SelectContent>
           </Select>
-          <span className="text-sm">Page {page} of {totalPages}</span>
+          <span className="text-sm">
+            Page {page} of {totalPages}
+          </span>
           <div className="flex gap-1">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setPage(1)}
-              disabled={page === 1}
-            >
+            <Button variant="outline" size="sm" onClick={() => setPage(1)} disabled={page === 1}>
               «
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
             >
               ‹
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
             >
               ›
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setPage(totalPages)}
               disabled={page === totalPages}
             >

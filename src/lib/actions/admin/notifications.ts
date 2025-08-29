@@ -75,24 +75,25 @@ export const notifyAdminsOnEnrollmentApplication = async (
   params: { eventId: string; enrollmentId: string; applicantName?: string }
 ) => {
   try {
-    const admins = await prisma.user.findMany({
-      where: { OR: [{ role: "ADMIN" }, { role: "ORGANIZER" }] },
-      select: { id: true },
+    // Notify only the event owner
+    const event = await prisma.event.findUnique({
+      where: { id: params.eventId },
+      select: { createdById: true },
     });
 
-    if (admins.length === 0) return { success: true } as const;
+    if (!event?.createdById) return { success: true } as const;
 
-    await prisma.notification.createMany({
-      data: admins.map((a) => ({
-        userId: a.id,
+    await prisma.notification.create({
+      data: {
+        userId: event.createdById,
         type: NotificationType.ENROLLMENT_APPLICATION,
         title: "New Enrollment Application",
         message: params.applicantName
-          ? `${params.applicantName} applied to an event.`
-          : "A user applied to an event.",
+          ? `${params.applicantName} applied to your event.`
+          : "A user applied to your event.",
         relatedEventId: params.eventId,
         relatedEnrollmentId: params.enrollmentId,
-      })),
+      },
     });
 
     return { success: true } as const;
@@ -195,6 +196,73 @@ export const notifyUserOnVerificationStatusChange = async (
   } catch (error) {
     console.error("notifyUserOnVerificationStatusChange error", error);
     return { success: false, message: "Failed to notify user" } as const;
+  }
+};
+
+export const notifyEnrolledVolunteersOnEventUpdate = async (eventId: string) => {
+  try {
+    // Get all enrolled volunteers for this event
+    const enrollments = await prisma.enrollment.findMany({
+      where: { 
+        eventId,
+        status: { in: ['APPROVED', 'WAITLISTED', 'PENDING'] } // Only notify active enrollments
+      },
+      include: {
+        user: { select: { id: true } },
+        event: { select: { title: true } }
+      }
+    });
+
+    if (enrollments.length === 0) return { success: true } as const;
+
+    const eventTitle = enrollments[0]?.event.title ?? "the event";
+
+    await prisma.notification.createMany({
+      data: enrollments.map((enrollment) => ({
+        userId: enrollment.user.id,
+        type: NotificationType.EVENT_UPDATE,
+        title: "Event Updated",
+        message: `The event "${eventTitle}" has been updated. Please check the latest details.`,
+        relatedEventId: eventId,
+      })),
+    });
+
+    return { success: true } as const;
+  } catch (error) {
+    console.error("notifyEnrolledVolunteersOnEventUpdate error", error);
+    return { success: false, message: "Failed to notify volunteers" } as const;
+  }
+};
+
+export const notifyEnrolledVolunteersOnEventDeletion = async (eventId: string, eventTitle: string) => {
+  try {
+    // Get all enrolled volunteers for this event
+    const enrollments = await prisma.enrollment.findMany({
+      where: { 
+        eventId,
+        status: { in: ['APPROVED', 'WAITLISTED', 'PENDING'] } // Only notify active enrollments
+      },
+      include: {
+        user: { select: { id: true } }
+      }
+    });
+
+    if (enrollments.length === 0) return { success: true } as const;
+
+    await prisma.notification.createMany({
+      data: enrollments.map((enrollment) => ({
+        userId: enrollment.user.id,
+        type: NotificationType.SYSTEM_MESSAGE,
+        title: "Event Cancelled",
+        message: `The event "${eventTitle}" has been cancelled and removed from the platform.`,
+        relatedEventId: eventId,
+      })),
+    });
+
+    return { success: true } as const;
+  } catch (error) {
+    console.error("notifyEnrolledVolunteersOnEventDeletion error", error);
+    return { success: false, message: "Failed to notify volunteers" } as const;
   }
 };
 

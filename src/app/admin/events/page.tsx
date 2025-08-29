@@ -22,12 +22,14 @@ export default async function EventsPage() {
     redirect("/");
   }
 
-  const events = await prisma.event.findMany();
+  const events = await prisma.event.findMany({
+    where: { createdById: session.user.id },
+  });
 
   return (
     <section className="w-full rounded-2xl bg-transparent">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">All Events</h2>
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">My Events</h2>
         {/* <Button variant="default" asChild> */}
         <Link href="/admin/events/create" className="text-white bg-black px-3 py-2 md:px-4 md:py-2 rounded-sm md:rounded-lg text-xs md:text-sm">
           + Create a New Event

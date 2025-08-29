@@ -46,7 +46,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
       <ProfileCompletionBanner className="w-full sticky top-0" />
 
         <Navbar session={session} />
-        <div className="mt-10 max-w-6xl px-3">{children}</div>
+        <div className="mt-10 max-w-6xl">{children}</div>
       </div>
     </Providers>
   );

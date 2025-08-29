@@ -1353,6 +1353,7 @@ export namespace Prisma {
     notifications: number
     verificationRequests: number
     reviewedRequests: number
+    eventsCreated: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1360,6 +1361,7 @@ export namespace Prisma {
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     verificationRequests?: boolean | UserCountOutputTypeCountVerificationRequestsArgs
     reviewedRequests?: boolean | UserCountOutputTypeCountReviewedRequestsArgs
+    eventsCreated?: boolean | UserCountOutputTypeCountEventsCreatedArgs
   }
 
   // Custom InputTypes
@@ -1401,6 +1403,13 @@ export namespace Prisma {
     where?: VerificationRequestWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEventsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
+  }
+
 
   /**
    * Models
@@ -1439,6 +1448,7 @@ export namespace Prisma {
     maxVolunteers: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    createdById: string | null
   }
 
   export type EventMaxAggregateOutputType = {
@@ -1454,6 +1464,7 @@ export namespace Prisma {
     maxVolunteers: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    createdById: string | null
   }
 
   export type EventCountAggregateOutputType = {
@@ -1471,6 +1482,7 @@ export namespace Prisma {
     maxVolunteers: number
     createdAt: number
     updatedAt: number
+    createdById: number
     _all: number
   }
 
@@ -1496,6 +1508,7 @@ export namespace Prisma {
     maxVolunteers?: true
     createdAt?: true
     updatedAt?: true
+    createdById?: true
   }
 
   export type EventMaxAggregateInputType = {
@@ -1511,6 +1524,7 @@ export namespace Prisma {
     maxVolunteers?: true
     createdAt?: true
     updatedAt?: true
+    createdById?: true
   }
 
   export type EventCountAggregateInputType = {
@@ -1528,6 +1542,7 @@ export namespace Prisma {
     maxVolunteers?: true
     createdAt?: true
     updatedAt?: true
+    createdById?: true
     _all?: true
   }
 
@@ -1632,6 +1647,7 @@ export namespace Prisma {
     maxVolunteers: number | null
     createdAt: Date
     updatedAt: Date
+    createdById: string
     _count: EventCountAggregateOutputType | null
     _avg: EventAvgAggregateOutputType | null
     _sum: EventSumAggregateOutputType | null
@@ -1668,7 +1684,9 @@ export namespace Prisma {
     maxVolunteers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    createdById?: boolean
     enrollments?: boolean | Event$enrollmentsArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -1687,6 +1705,8 @@ export namespace Prisma {
     maxVolunteers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    createdById?: boolean
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1704,6 +1724,8 @@ export namespace Prisma {
     maxVolunteers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    createdById?: boolean
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectScalar = {
@@ -1721,20 +1743,27 @@ export namespace Prisma {
     maxVolunteers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    createdById?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "location" | "startDate" | "endDate" | "dressCode" | "category" | "coverUrl" | "videoUrl" | "eventImages" | "maxVolunteers" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "location" | "startDate" | "endDate" | "dressCode" | "category" | "coverUrl" | "videoUrl" | "eventImages" | "maxVolunteers" | "createdAt" | "updatedAt" | "createdById", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Event$enrollmentsArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type EventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type EventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $EventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Event"
     objects: {
       enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
+      createdBy: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1751,6 +1780,7 @@ export namespace Prisma {
       maxVolunteers: number | null
       createdAt: Date
       updatedAt: Date
+      createdById: string
     }, ExtArgs["result"]["event"]>
     composites: {}
   }
@@ -2146,6 +2176,7 @@ export namespace Prisma {
   export interface Prisma__EventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     enrollments<T extends Event$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Event$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2189,6 +2220,7 @@ export namespace Prisma {
     readonly maxVolunteers: FieldRef<"Event", 'Int'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
+    readonly createdById: FieldRef<"Event", 'String'>
   }
     
 
@@ -2438,6 +2470,10 @@ export namespace Prisma {
      */
     data: EventCreateManyInput | EventCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2508,6 +2544,10 @@ export namespace Prisma {
      * Limit how many Events to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2863,6 +2903,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     verificationRequests?: boolean | User$verificationRequestsArgs<ExtArgs>
     reviewedRequests?: boolean | User$reviewedRequestsArgs<ExtArgs>
+    eventsCreated?: boolean | User$eventsCreatedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2926,6 +2967,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     verificationRequests?: boolean | User$verificationRequestsArgs<ExtArgs>
     reviewedRequests?: boolean | User$reviewedRequestsArgs<ExtArgs>
+    eventsCreated?: boolean | User$eventsCreatedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2938,6 +2980,7 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       verificationRequests: Prisma.$VerificationRequestPayload<ExtArgs>[]
       reviewedRequests: Prisma.$VerificationRequestPayload<ExtArgs>[]
+      eventsCreated: Prisma.$EventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3353,6 +3396,7 @@ export namespace Prisma {
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     verificationRequests<T extends User$verificationRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$verificationRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VerificationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviewedRequests<T extends User$reviewedRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VerificationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    eventsCreated<T extends User$eventsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$eventsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3878,6 +3922,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: VerificationRequestScalarFieldEnum | VerificationRequestScalarFieldEnum[]
+  }
+
+  /**
+   * User.eventsCreated
+   */
+  export type User$eventsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    where?: EventWhereInput
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    cursor?: EventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
   }
 
   /**
@@ -7214,7 +7282,8 @@ export namespace Prisma {
     eventImages: 'eventImages',
     maxVolunteers: 'maxVolunteers',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    createdById: 'createdById'
   };
 
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
@@ -7477,7 +7546,9 @@ export namespace Prisma {
     maxVolunteers?: IntNullableFilter<"Event"> | number | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
+    createdById?: StringFilter<"Event"> | string
     enrollments?: EnrollmentListRelationFilter
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type EventOrderByWithRelationInput = {
@@ -7495,7 +7566,9 @@ export namespace Prisma {
     maxVolunteers?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     enrollments?: EnrollmentOrderByRelationAggregateInput
+    createdBy?: UserOrderByWithRelationInput
   }
 
   export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -7516,7 +7589,9 @@ export namespace Prisma {
     maxVolunteers?: IntNullableFilter<"Event"> | number | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
+    createdById?: StringFilter<"Event"> | string
     enrollments?: EnrollmentListRelationFilter
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type EventOrderByWithAggregationInput = {
@@ -7534,6 +7609,7 @@ export namespace Prisma {
     maxVolunteers?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
     _count?: EventCountOrderByAggregateInput
     _avg?: EventAvgOrderByAggregateInput
     _max?: EventMaxOrderByAggregateInput
@@ -7559,6 +7635,7 @@ export namespace Prisma {
     maxVolunteers?: IntNullableWithAggregatesFilter<"Event"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    createdById?: StringWithAggregatesFilter<"Event"> | string
   }
 
   export type UserWhereInput = {
@@ -7584,6 +7661,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     verificationRequests?: VerificationRequestListRelationFilter
     reviewedRequests?: VerificationRequestListRelationFilter
+    eventsCreated?: EventListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -7606,6 +7684,7 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     verificationRequests?: VerificationRequestOrderByRelationAggregateInput
     reviewedRequests?: VerificationRequestOrderByRelationAggregateInput
+    eventsCreated?: EventOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -7631,6 +7710,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     verificationRequests?: VerificationRequestListRelationFilter
     reviewedRequests?: VerificationRequestListRelationFilter
+    eventsCreated?: EventListRelationFilter
   }, "id" | "email" | "phoneNumber">
 
   export type UserOrderByWithAggregationInput = {
@@ -7893,6 +7973,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentCreateNestedManyWithoutEventInput
+    createdBy: UserCreateNestedOneWithoutEventsCreatedInput
   }
 
   export type EventUncheckedCreateInput = {
@@ -7910,6 +7991,7 @@ export namespace Prisma {
     maxVolunteers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById: string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutEventInput
   }
 
@@ -7929,6 +8011,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUpdateManyWithoutEventNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutEventsCreatedNestedInput
   }
 
   export type EventUncheckedUpdateInput = {
@@ -7946,6 +8029,7 @@ export namespace Prisma {
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutEventNestedInput
   }
 
@@ -7964,6 +8048,7 @@ export namespace Prisma {
     maxVolunteers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById: string
   }
 
   export type EventUpdateManyMutationInput = {
@@ -7998,6 +8083,7 @@ export namespace Prisma {
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserCreateInput = {
@@ -8020,6 +8106,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
+    eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -8042,6 +8129,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
+    eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUpdateInput = {
@@ -8064,6 +8152,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
+    eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -8086,6 +8175,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+    eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -8413,6 +8503,11 @@ export namespace Prisma {
     none?: EnrollmentWhereInput
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -8437,6 +8532,7 @@ export namespace Prisma {
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
   }
 
   export type EventAvgOrderByAggregateInput = {
@@ -8456,6 +8552,7 @@ export namespace Prisma {
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
   }
 
   export type EventMinOrderByAggregateInput = {
@@ -8471,6 +8568,7 @@ export namespace Prisma {
     maxVolunteers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
   }
 
   export type EventSumOrderByAggregateInput = {
@@ -8581,11 +8679,21 @@ export namespace Prisma {
     none?: VerificationRequestWhereInput
   }
 
+  export type EventListRelationFilter = {
+    every?: EventWhereInput
+    some?: EventWhereInput
+    none?: EventWhereInput
+  }
+
   export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type VerificationRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EventOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -8700,11 +8808,6 @@ export namespace Prisma {
   export type EventScalarRelationFilter = {
     is?: EventWhereInput
     isNot?: EventWhereInput
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type EnrollmentEventIdUserIdCompoundUniqueInput = {
@@ -8880,6 +8983,12 @@ export namespace Prisma {
     connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
   }
 
+  export type UserCreateNestedOneWithoutEventsCreatedInput = {
+    create?: XOR<UserCreateWithoutEventsCreatedInput, UserUncheckedCreateWithoutEventsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventsCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type EnrollmentUncheckedCreateNestedManyWithoutEventInput = {
     create?: XOR<EnrollmentCreateWithoutEventInput, EnrollmentUncheckedCreateWithoutEventInput> | EnrollmentCreateWithoutEventInput[] | EnrollmentUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutEventInput | EnrollmentCreateOrConnectWithoutEventInput[]
@@ -8931,6 +9040,14 @@ export namespace Prisma {
     deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
+  export type UserUpdateOneRequiredWithoutEventsCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutEventsCreatedInput, UserUncheckedCreateWithoutEventsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventsCreatedInput
+    upsert?: UserUpsertWithoutEventsCreatedInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEventsCreatedInput, UserUpdateWithoutEventsCreatedInput>, UserUncheckedUpdateWithoutEventsCreatedInput>
+  }
+
   export type EnrollmentUncheckedUpdateManyWithoutEventNestedInput = {
     create?: XOR<EnrollmentCreateWithoutEventInput, EnrollmentUncheckedCreateWithoutEventInput> | EnrollmentCreateWithoutEventInput[] | EnrollmentUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutEventInput | EnrollmentCreateOrConnectWithoutEventInput[]
@@ -8977,6 +9094,13 @@ export namespace Prisma {
     connect?: VerificationRequestWhereUniqueInput | VerificationRequestWhereUniqueInput[]
   }
 
+  export type EventCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<EventCreateWithoutCreatedByInput, EventUncheckedCreateWithoutCreatedByInput> | EventCreateWithoutCreatedByInput[] | EventUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutCreatedByInput | EventCreateOrConnectWithoutCreatedByInput[]
+    createMany?: EventCreateManyCreatedByInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
   export type EnrollmentUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<EnrollmentCreateWithoutUserInput, EnrollmentUncheckedCreateWithoutUserInput> | EnrollmentCreateWithoutUserInput[] | EnrollmentUncheckedCreateWithoutUserInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutUserInput | EnrollmentCreateOrConnectWithoutUserInput[]
@@ -9003,6 +9127,13 @@ export namespace Prisma {
     connectOrCreate?: VerificationRequestCreateOrConnectWithoutReviewedByInput | VerificationRequestCreateOrConnectWithoutReviewedByInput[]
     createMany?: VerificationRequestCreateManyReviewedByInputEnvelope
     connect?: VerificationRequestWhereUniqueInput | VerificationRequestWhereUniqueInput[]
+  }
+
+  export type EventUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<EventCreateWithoutCreatedByInput, EventUncheckedCreateWithoutCreatedByInput> | EventCreateWithoutCreatedByInput[] | EventUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutCreatedByInput | EventCreateOrConnectWithoutCreatedByInput[]
+    createMany?: EventCreateManyCreatedByInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
   }
 
   export type UserUpdateskillsInput = {
@@ -9082,6 +9213,20 @@ export namespace Prisma {
     deleteMany?: VerificationRequestScalarWhereInput | VerificationRequestScalarWhereInput[]
   }
 
+  export type EventUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<EventCreateWithoutCreatedByInput, EventUncheckedCreateWithoutCreatedByInput> | EventCreateWithoutCreatedByInput[] | EventUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutCreatedByInput | EventCreateOrConnectWithoutCreatedByInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutCreatedByInput | EventUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: EventCreateManyCreatedByInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutCreatedByInput | EventUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutCreatedByInput | EventUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
   export type EnrollmentUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<EnrollmentCreateWithoutUserInput, EnrollmentUncheckedCreateWithoutUserInput> | EnrollmentCreateWithoutUserInput[] | EnrollmentUncheckedCreateWithoutUserInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutUserInput | EnrollmentCreateOrConnectWithoutUserInput[]
@@ -9136,6 +9281,20 @@ export namespace Prisma {
     update?: VerificationRequestUpdateWithWhereUniqueWithoutReviewedByInput | VerificationRequestUpdateWithWhereUniqueWithoutReviewedByInput[]
     updateMany?: VerificationRequestUpdateManyWithWhereWithoutReviewedByInput | VerificationRequestUpdateManyWithWhereWithoutReviewedByInput[]
     deleteMany?: VerificationRequestScalarWhereInput | VerificationRequestScalarWhereInput[]
+  }
+
+  export type EventUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<EventCreateWithoutCreatedByInput, EventUncheckedCreateWithoutCreatedByInput> | EventCreateWithoutCreatedByInput[] | EventUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutCreatedByInput | EventCreateOrConnectWithoutCreatedByInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutCreatedByInput | EventUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: EventCreateManyCreatedByInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutCreatedByInput | EventUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutCreatedByInput | EventUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
   export type EventCreateNestedOneWithoutEnrollmentsInput = {
@@ -9528,6 +9687,55 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserCreateWithoutEventsCreatedInput = {
+    id?: string
+    fullName: string
+    email: string
+    password: string
+    phoneNumber: string
+    profileImage: string
+    skills?: UserCreateskillsInput | string[]
+    address: string
+    gender: $Enums.Gender
+    govIdImage: string
+    govIdType: $Enums.GovId
+    role?: $Enums.Role
+    isVerified?: boolean
+    lastActiveAt?: Date | string
+    createdAt?: Date | string
+    enrollments?: EnrollmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
+    reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutEventsCreatedInput = {
+    id?: string
+    fullName: string
+    email: string
+    password: string
+    phoneNumber: string
+    profileImage: string
+    skills?: UserCreateskillsInput | string[]
+    address: string
+    gender: $Enums.Gender
+    govIdImage: string
+    govIdType: $Enums.GovId
+    role?: $Enums.Role
+    isVerified?: boolean
+    lastActiveAt?: Date | string
+    createdAt?: Date | string
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
+    reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutEventsCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEventsCreatedInput, UserUncheckedCreateWithoutEventsCreatedInput>
+  }
+
   export type EnrollmentUpsertWithWhereUniqueWithoutEventInput = {
     where: EnrollmentWhereUniqueInput
     update: XOR<EnrollmentUpdateWithoutEventInput, EnrollmentUncheckedUpdateWithoutEventInput>
@@ -9554,6 +9762,61 @@ export namespace Prisma {
     cancelledAt?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     eventId?: StringFilter<"Enrollment"> | string
     userId?: StringFilter<"Enrollment"> | string
+  }
+
+  export type UserUpsertWithoutEventsCreatedInput = {
+    update: XOR<UserUpdateWithoutEventsCreatedInput, UserUncheckedUpdateWithoutEventsCreatedInput>
+    create: XOR<UserCreateWithoutEventsCreatedInput, UserUncheckedCreateWithoutEventsCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEventsCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEventsCreatedInput, UserUncheckedUpdateWithoutEventsCreatedInput>
+  }
+
+  export type UserUpdateWithoutEventsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    profileImage?: StringFieldUpdateOperationsInput | string
+    skills?: UserUpdateskillsInput | string[]
+    address?: StringFieldUpdateOperationsInput | string
+    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    govIdImage?: StringFieldUpdateOperationsInput | string
+    govIdType?: EnumGovIdFieldUpdateOperationsInput | $Enums.GovId
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
+    reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEventsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    profileImage?: StringFieldUpdateOperationsInput | string
+    skills?: UserUpdateskillsInput | string[]
+    address?: StringFieldUpdateOperationsInput | string
+    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    govIdImage?: StringFieldUpdateOperationsInput | string
+    govIdType?: EnumGovIdFieldUpdateOperationsInput | $Enums.GovId
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
+    reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type EnrollmentCreateWithoutUserInput = {
@@ -9666,6 +9929,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EventCreateWithoutCreatedByInput = {
+    id?: string
+    title: string
+    description: string
+    location: string
+    startDate: Date | string
+    endDate: Date | string
+    dressCode: string
+    category?: EventCreatecategoryInput | string[]
+    coverUrl: string
+    videoUrl?: string | null
+    eventImages?: EventCreateeventImagesInput | string[]
+    maxVolunteers?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    enrollments?: EnrollmentCreateNestedManyWithoutEventInput
+  }
+
+  export type EventUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    title: string
+    description: string
+    location: string
+    startDate: Date | string
+    endDate: Date | string
+    dressCode: string
+    category?: EventCreatecategoryInput | string[]
+    coverUrl: string
+    videoUrl?: string | null
+    eventImages?: EventCreateeventImagesInput | string[]
+    maxVolunteers?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type EventCreateOrConnectWithoutCreatedByInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutCreatedByInput, EventUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type EventCreateManyCreatedByInputEnvelope = {
+    data: EventCreateManyCreatedByInput | EventCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type EnrollmentUpsertWithWhereUniqueWithoutUserInput = {
     where: EnrollmentWhereUniqueInput
     update: XOR<EnrollmentUpdateWithoutUserInput, EnrollmentUncheckedUpdateWithoutUserInput>
@@ -9757,6 +10066,43 @@ export namespace Prisma {
     data: XOR<VerificationRequestUpdateManyMutationInput, VerificationRequestUncheckedUpdateManyWithoutReviewedByInput>
   }
 
+  export type EventUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: EventWhereUniqueInput
+    update: XOR<EventUpdateWithoutCreatedByInput, EventUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<EventCreateWithoutCreatedByInput, EventUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type EventUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: EventWhereUniqueInput
+    data: XOR<EventUpdateWithoutCreatedByInput, EventUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type EventUpdateManyWithWhereWithoutCreatedByInput = {
+    where: EventScalarWhereInput
+    data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type EventScalarWhereInput = {
+    AND?: EventScalarWhereInput | EventScalarWhereInput[]
+    OR?: EventScalarWhereInput[]
+    NOT?: EventScalarWhereInput | EventScalarWhereInput[]
+    id?: StringFilter<"Event"> | string
+    title?: StringFilter<"Event"> | string
+    description?: StringFilter<"Event"> | string
+    location?: StringFilter<"Event"> | string
+    startDate?: DateTimeFilter<"Event"> | Date | string
+    endDate?: DateTimeFilter<"Event"> | Date | string
+    dressCode?: StringFilter<"Event"> | string
+    category?: StringNullableListFilter<"Event">
+    coverUrl?: StringFilter<"Event"> | string
+    videoUrl?: StringNullableFilter<"Event"> | string | null
+    eventImages?: StringNullableListFilter<"Event">
+    maxVolunteers?: IntNullableFilter<"Event"> | number | null
+    createdAt?: DateTimeFilter<"Event"> | Date | string
+    updatedAt?: DateTimeFilter<"Event"> | Date | string
+    createdById?: StringFilter<"Event"> | string
+  }
+
   export type EventCreateWithoutEnrollmentsInput = {
     id?: string
     title: string
@@ -9772,6 +10118,7 @@ export namespace Prisma {
     maxVolunteers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutEventsCreatedInput
   }
 
   export type EventUncheckedCreateWithoutEnrollmentsInput = {
@@ -9789,6 +10136,7 @@ export namespace Prisma {
     maxVolunteers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById: string
   }
 
   export type EventCreateOrConnectWithoutEnrollmentsInput = {
@@ -9815,6 +10163,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
+    eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -9836,6 +10185,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
+    eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -9869,6 +10219,7 @@ export namespace Prisma {
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutEventsCreatedNestedInput
   }
 
   export type EventUncheckedUpdateWithoutEnrollmentsInput = {
@@ -9886,6 +10237,7 @@ export namespace Prisma {
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserUpsertWithoutEnrollmentsInput = {
@@ -9918,6 +10270,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
+    eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -9939,6 +10292,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+    eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -9960,6 +10314,7 @@ export namespace Prisma {
     enrollments?: EnrollmentCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
+    eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -9981,6 +10336,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
+    eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -10018,6 +10374,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
+    eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -10039,6 +10396,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+    eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutVerificationRequestsInput = {
@@ -10060,6 +10418,7 @@ export namespace Prisma {
     enrollments?: EnrollmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
+    eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutVerificationRequestsInput = {
@@ -10081,6 +10440,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
+    eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutVerificationRequestsInput = {
@@ -10107,6 +10467,7 @@ export namespace Prisma {
     enrollments?: EnrollmentCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
+    eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReviewedRequestsInput = {
@@ -10128,6 +10489,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
+    eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReviewedRequestsInput = {
@@ -10165,6 +10527,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
+    eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerificationRequestsInput = {
@@ -10186,6 +10549,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+    eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutReviewedRequestsInput = {
@@ -10218,6 +10582,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
+    eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewedRequestsInput = {
@@ -10239,6 +10604,7 @@ export namespace Prisma {
     enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
+    eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type EnrollmentCreateManyEventInput = {
@@ -10306,6 +10672,23 @@ export namespace Prisma {
     status?: $Enums.VerificationStatus
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
+  }
+
+  export type EventCreateManyCreatedByInput = {
+    id?: string
+    title: string
+    description: string
+    location: string
+    startDate: Date | string
+    endDate: Date | string
+    dressCode: string
+    category?: EventCreatecategoryInput | string[]
+    coverUrl: string
+    videoUrl?: string | null
+    eventImages?: EventCreateeventImagesInput | string[]
+    maxVolunteers?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type EnrollmentUpdateWithoutUserInput = {
@@ -10411,6 +10794,59 @@ export namespace Prisma {
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type EventUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dressCode?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    eventImages?: EventUpdateeventImagesInput | string[]
+    maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: EnrollmentUpdateManyWithoutEventNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dressCode?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    eventImages?: EventUpdateeventImagesInput | string[]
+    maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type EventUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dressCode?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    eventImages?: EventUpdateeventImagesInput | string[]
+    maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
