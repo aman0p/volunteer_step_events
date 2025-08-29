@@ -90,7 +90,7 @@ export function DeleteEvent({ eventId, eventTitle }: DeleteEventTriggerProps) {
                 onClick={() => setOpen(true)}
                 variant="destructive"
                 size="icon"
-                className="cursor-pointer hover:bg-red-500"
+                className="cursor-pointer hover:bg-red-500 z-5"
             >
                 <FaTrash className="w-4 h-4" />
             </Button>
