@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { Providers } from "@/components/Providers";
 import { prisma } from "@/lib/prisma";
+import ProfileCompletionBanner from "@/components/ProfileCompletionBanner";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const session = await getServerSession(authOptions);
@@ -41,9 +42,11 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <Providers session={session}>
-      <div className="flex flex-col items-center justify-center w-full max-w-6xl mx-auto h-full px-3 py-5 mt-7">
+      <div className="flex flex-col items-center justify-center w-full mx-auto h-full">
+      <ProfileCompletionBanner className="w-full sticky top-0" />
+
         <Navbar session={session} />
-        <div className="mt-10">{children}</div>
+        <div className="mt-10 max-w-6xl px-3">{children}</div>
       </div>
     </Providers>
   );

@@ -32,21 +32,69 @@ export default async function EventsPage() {
 
     return (
         <div className="w-full md:px-2 md:w-4xl lg:w-6xl mx-auto">
-            <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-6">Upcoming Events</h1>
-            
-            {/* Profile Completion Banner for USER role users */}
-            <ProfileCompletionBanner className="absolute top-0 left-0"/>
-            
+            <h1 className="text-xl md:text-3xl font-bold mb-2 md:mb-6">Upcoming Events</h1>
+
+            {/* Mobile List View */}
+            <div className="block md:hidden space-y-1.5">
+                {events.map((event) => {
+                    const start = new Date((event as any).startDate);
+                    const diffMs = start.getTime() - Date.now();
+                    const daysRemaining = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+
+                    return (
+                        <Link
+                            key={event.id}
+                            href={`/${event.id}`}
+                            className="relative group block bg-black/2 rounded-lg border overflow-hidden"
+                        >
+                            <div className="flex">
+                                <div className="relative w-24 h-24 flex-shrink-0">
+                                    <Image
+                                        urlEndpoint={config.env.imagekit.urlEndpoint}
+                                        src={event.coverUrl || "/events.jpg"}
+                                        alt={event.title}
+                                        fill
+                                        sizes="96px"
+                                        className="object-cover"
+                                        priority={false}
+                                        quality={80}
+                                    />
+                                </div>
+                                <div className="flex-1 p-3">
+                                    <h2 className="font-semibold text-base line-clamp-1 mb-1.5">
+                                        {event.title}
+                                    </h2>
+                                    <div className="flex items-center gap-2 text-[13px] text-gray-600 mb-2">
+                                        <span>{new Date(event.startDate).toLocaleDateString()}</span>
+                                        <span>•</span>
+                                        <span className="line-clamp-1">{event.location.split(",")[0]}</span>
+                                    </div>
+                                    <div className="relative top-2 text-right flex items-center justify-between w-full">
+                                        <div className="text-xxs text-gray-400">
+                                            {(event as any).enrollments?.length ?? 0} / {event.maxVolunteers ?? "-"}
+                                        </div>
+                                        <div className="text-xxs text-gray-400"> 
+                                            {daysRemaining} days left
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
+                    );
+                })}
+            </div>
+
+            {/* Desktop Mosaic Grid View */}
             <div
-                className="grid grid-cols-3 md:grid-cols-6 auto-rows-[5rem] md:auto-rows-[6rem] gap-1.5 md:gap-3"
+                className="hidden md:grid grid-cols-3 md:grid-cols-6 auto-rows-[5rem] md:auto-rows-[6rem] gap-1.5 md:gap-3"
             >
                 {Array.from({
                     length: Math.max(events.length, 7),
                 }).map((_, idx) => {
                     const klass = patternClasses[idx % patternClasses.length];
                     const event = events[idx];
-                        if (!event) {
-                            return (
+                    if (!event) {
+                        return (
                             <div
                                 key={`placeholder-${idx}`}
                                 className={` opacity-0 relative overflow-hidden rounded-lg border border-dashed bg-gray-50 ${klass} flex items-center justify-center`}
@@ -63,7 +111,7 @@ export default async function EventsPage() {
                         <Link
                             key={event.id}
                             href={`/${event.id}`}
-                            className={`group relative overflow-hidden rounded-md md:rounded-lg border bg-white ${klass}`}
+                            className={`group relative overflow-hidden rounded-2xl md:rounded-3xl border bg-white ${klass}`}
                         >
                             <Image
                                 urlEndpoint={config.env.imagekit.urlEndpoint}

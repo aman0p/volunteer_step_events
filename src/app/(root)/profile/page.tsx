@@ -183,11 +183,11 @@ export default function Profile() {
                           </select>
                         </div>
                       </FormControl>
-                      {field.value && (
+                      {/* {field.value && (
                         <p className="text-xs text-gray-500 mt-1">
                           Government ID type cannot be changed once selected. Contact support if you need to update it.
                         </p>
-                      )}
+                      )} */}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -325,7 +325,7 @@ export default function Profile() {
                     </div>
                     {field.value && (
                       <p className="text-xs text-gray-500 mt-1">
-                        Government ID image cannot be changed once uploaded. Contact support if you need to update it.
+                        Government ID type and image cannot be changed once uploaded. Contact support if you need to update it.
                       </p>
                     )}
                     <FormMessage />

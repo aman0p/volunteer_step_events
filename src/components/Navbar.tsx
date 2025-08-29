@@ -41,7 +41,7 @@ export function Navbar({ session }: { session: Session }) {
   };
 
   return (
-    <header className="z-10 flex items-center justify-between w-full">
+    <header className="z-10 flex items-center justify-between w-full max-w-6xl mx-auto px-3 mt-5">
       {/* Left: Hamburger on small screens; hidden on md+ */}
       <div className="flex items-center gap-1 md:gap-2">
         <Sheet>

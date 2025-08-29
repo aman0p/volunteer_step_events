@@ -6,6 +6,7 @@ import { requestEnrollment } from "@/lib/actions/user/enrollment";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 interface EnrollButtonProps {
   eventId: string;
@@ -122,7 +123,7 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
   if (!session?.user) {
     return (
       <Button
-        disabled
+        // disabled
         className={cn("w-45 h-fit rounded-full py-3 px-5 bg-gray-500 text-white/90", className)}
         title="Please sign in to enroll in events"
       >
@@ -134,13 +135,14 @@ export default function EnrollButton({ eventId, isFull, enrollmentStatus, classN
   // Check user role and show appropriate button
   if (session.user.role === "USER") {
     return (
-      <Button
-        disabled
-        className={cn("w-45 h-fit rounded-full py-3 px-5 bg-gray-500 text-white/90 hover:text-white", className)}
-        title="Complete your profile and request verification to enroll in events"
-      >
-        Apply for Verification
-      </Button>
+      <Link href="/profile">
+        <Button
+          className={cn("w-45 h-fit rounded-full py-3 px-5 bg-gray-700 text-white/90 hover:text-white", className)}
+          title="Complete your profile and request verification to enroll in events"
+        >
+          Apply for Verification
+        </Button>
+      </Link>
     );
   }
 
