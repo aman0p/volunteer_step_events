@@ -4,8 +4,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { UserCheck, Filter, Download } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import VerificationTable from "./VerificationTable";
+import VerificationTable from "@/components/admin/tables/VerificationTable";
 
 export default async function AccountVerification() {
   const session = await getServerSession(authOptions);

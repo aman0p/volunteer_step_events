@@ -147,7 +147,7 @@ const users = [
   }
 ]
 
-async function main() {
+export async function seedVerification() {
   console.log('🌱 Starting verification seeding...')
 
   try {
@@ -218,12 +218,15 @@ async function main() {
   }
 }
 
-main()
-  .then(() => {
-    console.log('🚀 Seeding script finished')
-    process.exit(0)
-  })
-  .catch((error) => {
-    console.error('💥 Seeding failed:', error)
-    process.exit(1)
-  })
+// Run the seeding if this file is executed directly
+if (require.main === module) {
+  seedVerification()
+    .then(() => {
+      console.log('🚀 Seeding script finished')
+      process.exit(0)
+    })
+    .catch((error) => {
+      console.error('💥 Seeding failed:', error)
+      process.exit(1)
+    })
+}

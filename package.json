@@ -14,6 +14,8 @@
     "db:studio": "dotenv -e .env.local -- prisma studio",
     "db:seed:verification": "pnpm db:generate && npx tsx src/database/seed/seed-verification.ts",
     "db:seed:events": "npx tsx src/database/seed/seed-events.ts",
+    "db:seed:enrollments": "npx tsx src/database/seed/seed-enrollments.ts",
+    "db:seed:all": "npx tsx src/database/seed/seed-all.ts",
     "postinstall": "node -e \"if(process.env.NODE_ENV==='production'){require('child_process').execSync('prisma migrate deploy',{stdio:'inherit'})}\""
   },
   "dependencies": {

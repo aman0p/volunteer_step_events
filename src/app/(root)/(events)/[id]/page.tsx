@@ -99,7 +99,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
               {event.enrollments
                 .filter((e: any) => e.user.profileImage) // Only show users with profile images
                 .sort(() => Math.random() - 0.5)
-                .slice(0, 5)
+                .slice(0, 3)
                 .map((e: any) => (
                   <Image
                     key={e.id}
@@ -108,7 +108,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                     alt="volunteer image"
                     width={100}
                     height={100}
-                    className="rounded-full size-10 border-2 aspect-square object-cover -ml-3"
+                    className="rounded-full size-11 border-3 aspect-square object-cover -ml-3"
                   />
                 ))}
               <div className="ml-4 text-[13px] flex flex-col items-start mt-1.5">
@@ -163,7 +163,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 alt="event image"
                 width={1000}
                 height={1000}
-                className="w-full aspect-video object-cover rounded-xl md:rounded-2xl lg:rounded-3xl object-top rotate-y-180"
+                className="w-full aspect-video object-cover rounded-xl md:rounded-2xl lg:rounded-3xl object-top"
               />
             ))}
           </div>

@@ -2,44 +2,47 @@
 
 import { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Check, X, Eye, Loader2, GripVertical, ArrowRight } from "lucide-react"
+import { MoreHorizontal, Eye, Loader2, GripVertical, ArrowRight } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Image } from "@imagekit/next"
 import Link from "next/link"
 import config from "@/lib/config"
 import { toast } from "sonner"
-import { approveVerificationRequest, rejectVerificationRequest } from "@/lib/actions/admin/verification"
+import { approveEnrollment, rejectEnrollment } from "@/lib/actions/admin/enrollment"
 
-type VerificationRequest = {
+type EventEnrollment = {
   id: string
+  event: {
+    id: string
+    title: string
+    maxVolunteers: number | null
+  }
   user: {
     id: string
     fullName: string
     email: string
     phoneNumber: string
     profileImage: string
-    createdAt: Date
   }
-  submittedAt: Date
+  status: string
 }
 
-interface VerificationTableProps {
-  verificationRequests: VerificationRequest[]
+interface EventEnrollmentTableProps {
+  enrollments: EventEnrollment[]
 }
 
-export default function VerificationTable({ verificationRequests }: VerificationTableProps) {
+export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTableProps) {
   const [page, setPage] = useState(1)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [processingIds, setProcessingIds] = useState<string[]>([])
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [isBulkProcessing, setIsBulkProcessing] = useState(false)
 
-  const paginatedData = verificationRequests.slice((page - 1) * rowsPerPage, page * rowsPerPage)
-  const totalPages = Math.ceil(verificationRequests.length / rowsPerPage)
+  const paginatedData = enrollments.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+  const totalPages = Math.ceil(enrollments.length / rowsPerPage)
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -65,7 +68,7 @@ export default function VerificationTable({ verificationRequests }: Verification
       }
     } catch (error) {
       console.error('Error approving all:', error)
-      toast.error("An error occurred while approving all selected requests")
+      toast.error("An error occurred while approving all selected enrollments")
     } finally {
       setIsBulkProcessing(false)
     }
@@ -79,7 +82,7 @@ export default function VerificationTable({ verificationRequests }: Verification
       }
     } catch (error) {
       console.error('Error rejecting all:', error)
-      toast.error("An error occurred while rejecting all selected requests")
+      toast.error("An error occurred while rejecting all selected enrollments")
     } finally {
       setIsBulkProcessing(false)
     }
@@ -88,17 +91,17 @@ export default function VerificationTable({ verificationRequests }: Verification
   const handleApprove = async (id: string) => {
     setProcessingIds(prev => [...prev, id])
     try {
-      const result = await approveVerificationRequest(id)
+      const result = await approveEnrollment(id)
       if (result.success) {
-        toast.success(result.message || "Verification request approved successfully")
+        toast.success(result.message || "Enrollment approved successfully")
         // Refresh the page to show updated data
         window.location.reload()
       } else {
-        toast.error(result.message || "Failed to approve verification request")
+        toast.error(result.message || "Failed to approve enrollment")
       }
     } catch (error) {
       console.error('Error approving:', error)
-      toast.error("An error occurred while approving the request")
+      toast.error("An error occurred while approving the enrollment")
     } finally {
       setProcessingIds(prev => prev.filter(procId => procId !== id))
     }
@@ -107,39 +110,31 @@ export default function VerificationTable({ verificationRequests }: Verification
   const handleReject = async (id: string) => {
     setProcessingIds(prev => [...prev, id])
     try {
-      const result = await rejectVerificationRequest(id)
+      const result = await rejectEnrollment(id)
       if (result.success) {
-        toast.success(result.message || "Verification request rejected successfully")
+        toast.success(result.message || "Enrollment rejected successfully")
         // Refresh the page to show updated data
         window.location.reload()
       } else {
-        toast.error(result.message || "Failed to reject verification request")
+        toast.error(result.message || "Failed to reject enrollment")
       }
     } catch (error) {
       console.error('Error rejecting:', error)
-      toast.error("An error occurred while rejecting the request")
+      toast.error("An error occurred while rejecting the enrollment")
     } finally {
       setProcessingIds(prev => prev.filter(procId => procId !== id))
     }
   }
 
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(date)
-  }
+
 
   return (
     <div className="space-y-4">
       {/* Top buttons */}
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={handleApproveAll}
             disabled={selectedRows.length === 0 || isBulkProcessing}
@@ -149,8 +144,8 @@ export default function VerificationTable({ verificationRequests }: Verification
             ) : null}
             Approve All ({selectedRows.length})
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={handleRejectAll}
             disabled={selectedRows.length === 0 || isBulkProcessing}
@@ -163,7 +158,7 @@ export default function VerificationTable({ verificationRequests }: Verification
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            {selectedRows.length} of {verificationRequests.length} selected
+            {selectedRows.length} of {enrollments.length} selected
           </span>
         </div>
       </div>
@@ -172,28 +167,33 @@ export default function VerificationTable({ verificationRequests }: Verification
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-10"></TableHead>
-            <TableHead className="w-10"></TableHead>
-            <TableHead className="px-10">Volunteer Name</TableHead>
-            <TableHead className="px-10">Email ID</TableHead>
-            <TableHead className="px-10">Phone No</TableHead>
-            <TableHead className="px-10">Submitted</TableHead>
-            <TableHead className="px-10">Actions</TableHead>
+                         <TableHead className="w-10"></TableHead>
+             <TableHead className="w-10">
+               <Checkbox 
+                 checked={selectedRows.length === paginatedData.length && paginatedData.length > 0}
+                 onCheckedChange={handleSelectAll}
+               />
+             </TableHead>
+            <TableHead>Event Name</TableHead>
+            <TableHead>Volunteer Name</TableHead>
+            <TableHead>Email ID</TableHead>
+            <TableHead>Phone No</TableHead>
+            <TableHead>Actions</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginatedData.map((request) => (
-            <TableRow 
-              key={request.id} 
+          {paginatedData.map((enrollment) => (
+            <TableRow
+              key={enrollment.id}
               className="hover:bg-muted/50 cursor-pointer"
               onClick={(e) => {
                 // Don't select row if clicking on the image link
                 if ((e.target as HTMLElement).closest('a')) {
                   return
                 }
-                const isSelected = selectedRows.includes(request.id)
-                handleSelectRow(request.id, !isSelected)
+                const isSelected = selectedRows.includes(enrollment.id)
+                handleSelectRow(enrollment.id, !isSelected)
               }}
             >
               <TableCell className="w-10">
@@ -202,51 +202,56 @@ export default function VerificationTable({ verificationRequests }: Verification
                 </div>
               </TableCell>
               <TableCell className="w-10">
-                <Checkbox 
-                  checked={selectedRows.includes(request.id)}
-                  onCheckedChange={(checked) => handleSelectRow(request.id, checked as boolean)}
+                <Checkbox
+                  checked={selectedRows.includes(enrollment.id)}
+                  onCheckedChange={(checked) => handleSelectRow(enrollment.id, checked as boolean)}
                 />
               </TableCell>
+              <TableCell className="group">
+                <Link href={`/admin/events/${enrollment.event.id}/details`} className="flex items-center space-x-2 group">
+                  <div className="font-medium text-blue-600 hover:text-blue-700">
+                    {enrollment.event.title}
+                  </div>
+                  <ArrowRight className="relative -top-2 -left-1 transition-all duration-150 h-3 w-3 text-blue-600 hover:text-blue-700 rotate-[-45deg] group-hover:-top-2.5 group-hover:-left-0.5" />
+                </Link>
+              </TableCell>
               <TableCell>
-                <Link href={`/admin/account-verification/${request.id}`} className="flex items-center space-x-3">
+                <Link href={`/admin/account-verification/${enrollment.user.id}`} className="flex items-center space-x-3">
                   <div className="flex-shrink-0">
-                    {request.user.profileImage ? (
+                    {enrollment.user.profileImage ? (
                       <Image
                         urlEndpoint={config.env.imagekit.urlEndpoint}
-                        src={request.user.profileImage}
-                        alt={request.user.fullName}
+                        src={enrollment.user.profileImage}
+                        alt={enrollment.user.fullName}
                         width={32}
                         height={32}
                         className="rounded-full"
                       />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                        <Link href={`/admin/account-verification/${request.id}`} className="text-xs font-medium">
-                          {request.user.fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
+                        <Link href={`/admin/account-verification/${enrollment.user.id}`} className="text-xs font-medium">
+                          {enrollment.user.fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
                         </Link>
                       </div>
                     )}
                   </div>
                   <div>
-                    <div className="font-medium">{request.user.fullName}</div>
+                    <div className="font-medium">{enrollment.user.fullName}</div>
                   </div>
                 </Link>
               </TableCell>
-              <TableCell className="font-mono text-sm">{request.user.email}</TableCell>
-              <TableCell className="font-mono text-sm">{request.user.phoneNumber}</TableCell>
-              <TableCell className="text-sm text-muted-foreground">
-                {formatDate(request.submittedAt)}
-              </TableCell>
+              <TableCell className="font-mono text-sm">{enrollment.user.email}</TableCell>
+              <TableCell className="font-mono text-sm">{enrollment.user.phoneNumber}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Button
                     size="sm"
                     variant="default"
-                    onClick={() => handleApprove(request.id)}
-                    disabled={processingIds.includes(request.id)}
-                    className="h-8 px-2 text-xs"
+                    onClick={() => handleApprove(enrollment.id)}
+                    disabled={processingIds.includes(enrollment.id)}
+                    className="h-8 px-2 text-xs w-20"
                   >
-                    {processingIds.includes(request.id) ? (
+                    {processingIds.includes(enrollment.id) ? (
                       <Loader2 className="h-3 w-3 animate-spin" />
                     ) : null}
                     Approve
@@ -254,11 +259,11 @@ export default function VerificationTable({ verificationRequests }: Verification
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleReject(request.id)}
-                    disabled={processingIds.includes(request.id)}
-                    className="h-8 px-2 text-xs"
+                    onClick={() => handleReject(enrollment.id)}
+                    disabled={processingIds.includes(enrollment.id)}
+                    className="h-8 px-2 text-xs w-20"
                   >
-                    {processingIds.includes(request.id) ? (
+                    {processingIds.includes(enrollment.id) ? (
                       <Loader2 className="h-3 w-3 animate-spin" />
                     ) : null}
                     Reject
@@ -274,9 +279,15 @@ export default function VerificationTable({ verificationRequests }: Verification
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                      <Link href={`/admin/account-verification/${request.id}`}>
+                      <Link href={`/${enrollment.event.id}`}>
                         <Eye className="mr-2 h-4 w-4" />
-                        View Details
+                        View Event
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/admin/account-verification/${enrollment.user.id}`}>
+                        <Eye className="mr-2 h-4 w-4" />
+                        View Volunteer Profile
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -290,7 +301,7 @@ export default function VerificationTable({ verificationRequests }: Verification
       {/* Pagination */}
       <div className="flex items-center justify-between py-2">
         <p className="text-sm text-muted-foreground">
-          {selectedRows.length} of {verificationRequests.length} row(s) selected
+          {selectedRows.length} of {enrollments.length} row(s) selected
         </p>
         <div className="flex items-center gap-2">
           <Select value={rowsPerPage.toString()} onValueChange={(value) => setRowsPerPage(parseInt(value))}>
@@ -305,33 +316,33 @@ export default function VerificationTable({ verificationRequests }: Verification
           </Select>
           <span className="text-sm">Page {page} of {totalPages}</span>
           <div className="flex gap-1">
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setPage(1)}
               disabled={page === 1}
             >
               «
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
             >
               ‹
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
             >
               ›
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setPage(totalPages)}
               disabled={page === totalPages}
             >
