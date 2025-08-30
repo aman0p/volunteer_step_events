@@ -8,6 +8,7 @@ export { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 export { FileInput } from "./file-input";
 export { MultiSelect } from "./multi-select";
 export { Tag } from "./tag";
+export { default as CopyButton } from "./copy-button";
 
 // Export StatusBadge components
 export { 

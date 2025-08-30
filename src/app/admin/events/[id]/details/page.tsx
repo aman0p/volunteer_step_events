@@ -9,6 +9,7 @@ import config from "@/lib/config";
 import { FaWhatsapp } from "react-icons/fa";
 import { Video } from "@imagekit/next";
 import EventRolesTable from "@/components/admin/tables/EventRolesTable";
+import { CopyButton } from "@/components/ui";
 
 export default async function EventDetailsPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
@@ -27,7 +28,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
     redirect("/");
   }
 
-  // Fetch event with enrollments and event roles
+  // Fetch event with enrollments, event roles, and quick links
   const event = await prisma.event.findUnique({
     where: { id: (await params).id },
     include: {
@@ -62,6 +63,14 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
               id: true
             }
           }
+        }
+      },
+      quickLinks: {
+        select: {
+          id: true,
+          title: true,
+          url: true,
+          isActive: true
         }
       }
     }
@@ -174,7 +183,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
               <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Volunteers Count</div>
               <div className="border p-2 pl-4 pr-6 border-black/20">{event.enrollments.length} / {event.maxVolunteers}</div>
               <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Volunteers List</div>
-                <div className="border p-2 pl-4 pr-6 border-black/20"><Link href={`/admin/events/${event.id}/enrollments`} className="text-blue-500 text-sm">Event Enrollment Page</Link></div>
+              <div className="border p-2 pl-4 pr-6 border-black/20"><Link href={`/admin/events/${event.id}/enrollments`} className="text-blue-500 text-sm">Event Enrollment Page</Link></div>
               <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Duration</div>
               <div className="border p-2 pl-4 pr-6 border-black/20">{getTimeRange(event.startDate, event.endDate)}</div>
               <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Start Date</div>
@@ -205,49 +214,39 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
           <div className="space-y-1">
             <p className="text-sm ml-1 text-black font-semibold">Quick Links</p>
 
-            {/* Edit Link */}
-            <div className="w-full text-sm grid grid-rows-auto grid-cols-[0.55fr_1fr] h-fit border border-black/30 overflow-hidden rounded-2xl">
-              <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
-                <Edit className="w-4 h-4" />
-                <span className="text-sm line-clamp-1">Edit Event</span>
-              </div>
-              <p className="p-2 mr-4 pl-4 pr-6 border-black/20 line-clamp-1">{event.title}/update</p>
-            </div>
+            {/* Dynamic Quick Links from Database */}
+            {event.quickLinks && event.quickLinks.length > 0 ? (
+              event.quickLinks.map((link) => (
+                <div key={link.id} className="w-full text-sm grid grid-rows-auto grid-cols-[auto_1fr_auto] h-fit border border-black/30 overflow-hidden rounded-2xl">
+                  <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
+                    <CopyButton
+                      text={link.url}
+                      size="sm"
+                      variant="ghost"
+                      className="mr-1"
+                    />
+                    <span className="text-sm line-clamp-1">{link.title}</span>
+                    {!link.isActive && (
+                      <span className="text-xs text-gray-500">(Inactive)</span>
+                    )}
+                  </div>
+                  <Link
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 pl-4 pr-6 border-black/20 line-clamp-1 hover:bg-gray-50 transition-colors items-center flex truncate"
+                  >
+                    <span className="overflow-hidden truncate">{link.url}</span>
+                  </Link>
 
-            {/* Whatsapp Link */}
-            <div className="w-full text-sm grid grid-rows-auto grid-cols-[0.55fr_1fr] h-fit border border-black/30 overflow-hidden rounded-2xl">
-              <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
-                <FaWhatsapp className="w-4 h-4" />
-                <span className="text-sm line-clamp-1">Whatsapp Link</span>
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-sm py-4 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
+                <p>No quick links defined yet</p>
+                <p className="text-xs">Add quick links when editing the event</p>
               </div>
-              <p className="p-2 pl-4 pr-6 border-black/20 line-clamp-1">edfrgthgfd</p>
-            </div>
-
-            <div className="w-full text-sm grid grid-rows-auto grid-cols-[0.55fr_1fr] h-fit border border-black/30 overflow-hidden rounded-2xl">
-              <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
-                <Instagram className="w-4 h-4" />
-                <span className="text-sm line-clamp-1">Instagram</span>
-              </div>
-              <p className="p-2 pl-4 pr-6 border-black/20 line-clamp-1">edfrgthgfd</p>
-            </div>
-
-            {/* Mail Link */}
-            <div className="w-full text-sm grid grid-rows-auto grid-cols-[0.55fr_1fr] h-fit border border-black/30 overflow-hidden rounded-2xl">
-              <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                <span className="text-sm line-clamp-1">Mail Link</span>
-              </div>
-              <p className="p-2 mr-4 pl-4 pr-6 border-black/20 line-clamp-1">edfrgthgfdefrgergwrgetfhgfwnekfjhbewnkjfvbenkjgbvejbgvjgb</p>
-            </div>
-
-            {/* Map Location */}
-            <div className="w-full text-sm grid grid-rows-auto grid-cols-[0.55fr_1fr] h-fit border border-black/30 overflow-hidden rounded-2xl">
-              <div className="rounded-tl-2xl border p-2 pl-4 pr-4 bg-black/10 border-r-black/30 flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                <span className="text-sm line-clamp-1">Map Location</span>
-              </div>
-              <p className="p-2 pl-4 pr-6 border-black/20 line-clamp-1">edfrgthgfd</p>
-            </div>
+            )}
           </div>
         </div>
       </div>

@@ -201,6 +201,17 @@ exports.Prisma.VerificationRequestScalarFieldEnum = {
   reviewedById: 'reviewedById'
 };
 
+exports.Prisma.QuickLinkScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  url: 'url',
+  isActive: 'isActive',
+  eventId: 'eventId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -270,7 +281,8 @@ exports.Prisma.ModelName = {
   EventRole: 'EventRole',
   Enrollment: 'Enrollment',
   Notification: 'Notification',
-  VerificationRequest: 'VerificationRequest'
+  VerificationRequest: 'VerificationRequest',
+  QuickLink: 'QuickLink'
 };
 
 /**

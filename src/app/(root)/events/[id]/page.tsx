@@ -12,6 +12,7 @@ import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { Video } from "@imagekit/next";
 import { Badge } from "@/components/ui/badge";
 import EventRolesTable from "@/components/admin/tables/EventRolesTable";
+import { CopyButton } from "@/components/ui";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -43,6 +44,16 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
               id: true
             }
           }
+        }
+      },
+      quickLinks: {
+        where: {
+          isActive: true
+        },
+        select: {
+          id: true,
+          title: true,
+          url: true
         }
       }
     }
@@ -267,25 +278,38 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
           {/* Quick Links */}
           <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/5">
-            <h1 className="text-base md:text-xl  font-bold">Quick Links</h1>
-            <div className="flex flex-col gap-3 overflow-hidden text-xs md:text-sm">
-              <Link href="/events" className="flex items-center gap-2 md:gap-3">
-                <FaWhatsapp className="size-3.5 md:size-4.5" />
-                <p className="truncate">https://wa.me/919876543210</p>
-              </Link>
-              <Link href="/events" className="flex items-center gap-2 md:gap-3">
-                <FaInstagram className="size-3.5 md:size-4.5" />
-                <p className="truncate">https://www.instagram.com/your_instagram_handle</p>
-              </Link>
-              <Link href="/events" className="flex items-center gap-2 md:gap-3">
-                <MailIcon className="size-3.5 md:size-4.5" />
-                <p className="truncate">your_email@example.com</p>
-              </Link>
-              <Link href="/events" className="flex items-center gap-2 md:gap-3">
-                <MapPin className="size-3.5 md:size-4.5" />
-                <p className="truncate">https://www.google.com/maps/place/5V4+MXP+,+91-/+5V4+MXP</p>
-              </Link>
-            </div>
+            <h1 className="text-base md:text-xl font-bold">Quick Links</h1>
+            {event.quickLinks && event.quickLinks.length > 0 ? (
+              <div className="flex flex-col gap-3 overflow-hidden text-xs md:text-sm">
+                {event.quickLinks.map((link) => (
+                  <div key={link.id} className="flex items-center md:gap-4 hover:bg-black/5 p-2  rounded-lg transition-colors">
+                    <div className="flex flex-col min-w-0 flex-1">
+                      <p className="font-medium text-black/80 truncate flex items-center">
+                      {link.title}
+                      <CopyButton 
+                        text={link.url}
+                        size="sm"
+                        variant="ghost"
+                        className="scale-90 ml-1"
+                      />
+                      </p>
+                      <Link 
+                      href={link.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-black/60 truncate max-w-xs text-xs">
+                        {link.url}
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4 text-black/50">
+                <p className="text-sm">No quick links available</p>
+                <p className="text-xs">Check back later for helpful resources</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

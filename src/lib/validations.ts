@@ -79,6 +79,12 @@ export const eventSchema = z
       payout: z.number().min(0, "Payout must be non-negative").max(1000000, "Payout cannot exceed ₹10,00,000"),
       maxCount: z.number().int().min(1, "Max count must be at least 1").max(100, "Max count cannot exceed 100")
     })).optional(),
+    quickLinks: z.array(z.object({
+      id: z.string().optional(),
+      title: z.string().min(1, "Link title is required").max(100, "Link title must be less than 100 characters"),
+      url: z.string().url("Must be a valid URL"),
+      isActive: z.boolean().default(true)
+    })).optional(),
   })
   .refine((data) => data.startDate >= new Date(), {
     message: "Start date cannot be in the past",
@@ -99,6 +105,18 @@ export const eventSchema = z
   }, {
     message: "Role names must be unique",
     path: ["eventRoles"],
+  })
+  .refine((data) => {
+    if (data.quickLinks && data.quickLinks.length > 0) {
+      // Check if all quicklink titles are unique
+      const linkTitles = data.quickLinks.map(link => link.title.trim().toLowerCase());
+      const uniqueTitles = new Set(linkTitles);
+      return uniqueTitles.size === linkTitles.length;
+    }
+    return true;
+  }, {
+    message: "Quicklink titles must be unique",
+    path: ["quickLinks"],
   });
 
 export const profileSchema = z.object({

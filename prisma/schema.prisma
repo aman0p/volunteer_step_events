@@ -31,6 +31,7 @@ model Event {
   updatedAt     DateTime     @updatedAt
   enrollments   Enrollment[]
   eventRoles    EventRole[]
+  quickLinks    QuickLink[]
   createdBy     User         @relation(fields: [createdById], references: [id])
   createdById   String
 }
@@ -57,6 +58,8 @@ model User {
   reviewedRequests     VerificationRequest[] @relation("ReviewedBy")
   // Events created/owned by this user
   eventsCreated        Event[]
+  // QuickLinks created by this user (for admins)
+  quickLinksCreated    QuickLink[]
 }
 
 model EventRole {
@@ -112,6 +115,19 @@ model VerificationRequest {
   reviewedAt       DateTime?
   reviewedBy       User?               @relation("ReviewedBy", fields: [reviewedById], references: [id])
   reviewedById     String?
+}
+
+model QuickLink {
+  id          String   @id @default(uuid())
+  title       String   // Display name for the link (e.g., "Event Schedule", "Volunteer Guide")
+  url         String   // The actual URL
+  isActive    Boolean  @default(true) // Admin can disable links without deleting them
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId     String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 enum Gender {

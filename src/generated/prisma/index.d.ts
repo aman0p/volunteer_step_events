@@ -43,6 +43,11 @@ export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
  * 
  */
 export type VerificationRequest = $Result.DefaultSelection<Prisma.$VerificationRequestPayload>
+/**
+ * Model QuickLink
+ * 
+ */
+export type QuickLink = $Result.DefaultSelection<Prisma.$QuickLinkPayload>
 
 /**
  * Enums
@@ -317,6 +322,16 @@ export class PrismaClient<
     * ```
     */
   get verificationRequest(): Prisma.VerificationRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.quickLink`: Exposes CRUD operations for the **QuickLink** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QuickLinks
+    * const quickLinks = await prisma.quickLink.findMany()
+    * ```
+    */
+  get quickLink(): Prisma.QuickLinkDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -762,7 +777,8 @@ export namespace Prisma {
     EventRole: 'EventRole',
     Enrollment: 'Enrollment',
     Notification: 'Notification',
-    VerificationRequest: 'VerificationRequest'
+    VerificationRequest: 'VerificationRequest',
+    QuickLink: 'QuickLink'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -781,7 +797,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "event" | "user" | "eventRole" | "enrollment" | "notification" | "verificationRequest"
+      modelProps: "event" | "user" | "eventRole" | "enrollment" | "notification" | "verificationRequest" | "quickLink"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1229,6 +1245,80 @@ export namespace Prisma {
           }
         }
       }
+      QuickLink: {
+        payload: Prisma.$QuickLinkPayload<ExtArgs>
+        fields: Prisma.QuickLinkFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QuickLinkFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QuickLinkFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload>
+          }
+          findFirst: {
+            args: Prisma.QuickLinkFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QuickLinkFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload>
+          }
+          findMany: {
+            args: Prisma.QuickLinkFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload>[]
+          }
+          create: {
+            args: Prisma.QuickLinkCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload>
+          }
+          createMany: {
+            args: Prisma.QuickLinkCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QuickLinkCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload>[]
+          }
+          delete: {
+            args: Prisma.QuickLinkDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload>
+          }
+          update: {
+            args: Prisma.QuickLinkUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload>
+          }
+          deleteMany: {
+            args: Prisma.QuickLinkDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QuickLinkUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.QuickLinkUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload>[]
+          }
+          upsert: {
+            args: Prisma.QuickLinkUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuickLinkPayload>
+          }
+          aggregate: {
+            args: Prisma.QuickLinkAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQuickLink>
+          }
+          groupBy: {
+            args: Prisma.QuickLinkGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QuickLinkGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QuickLinkCountArgs<ExtArgs>
+            result: $Utils.Optional<QuickLinkCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1327,6 +1417,7 @@ export namespace Prisma {
     enrollment?: EnrollmentOmit
     notification?: NotificationOmit
     verificationRequest?: VerificationRequestOmit
+    quickLink?: QuickLinkOmit
   }
 
   /* Types for Logging */
@@ -1409,11 +1500,13 @@ export namespace Prisma {
   export type EventCountOutputType = {
     enrollments: number
     eventRoles: number
+    quickLinks: number
   }
 
   export type EventCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | EventCountOutputTypeCountEnrollmentsArgs
     eventRoles?: boolean | EventCountOutputTypeCountEventRolesArgs
+    quickLinks?: boolean | EventCountOutputTypeCountQuickLinksArgs
   }
 
   // Custom InputTypes
@@ -1441,6 +1534,13 @@ export namespace Prisma {
     where?: EventRoleWhereInput
   }
 
+  /**
+   * EventCountOutputType without action
+   */
+  export type EventCountOutputTypeCountQuickLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuickLinkWhereInput
+  }
+
 
   /**
    * Count Type UserCountOutputType
@@ -1452,6 +1552,7 @@ export namespace Prisma {
     verificationRequests: number
     reviewedRequests: number
     eventsCreated: number
+    quickLinksCreated: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1460,6 +1561,7 @@ export namespace Prisma {
     verificationRequests?: boolean | UserCountOutputTypeCountVerificationRequestsArgs
     reviewedRequests?: boolean | UserCountOutputTypeCountReviewedRequestsArgs
     eventsCreated?: boolean | UserCountOutputTypeCountEventsCreatedArgs
+    quickLinksCreated?: boolean | UserCountOutputTypeCountQuickLinksCreatedArgs
   }
 
   // Custom InputTypes
@@ -1506,6 +1608,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountEventsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EventWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountQuickLinksCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuickLinkWhereInput
   }
 
 
@@ -1816,6 +1925,7 @@ export namespace Prisma {
     createdById?: boolean
     enrollments?: boolean | Event$enrollmentsArgs<ExtArgs>
     eventRoles?: boolean | Event$eventRolesArgs<ExtArgs>
+    quickLinks?: boolean | Event$quickLinksArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
@@ -1880,6 +1990,7 @@ export namespace Prisma {
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     enrollments?: boolean | Event$enrollmentsArgs<ExtArgs>
     eventRoles?: boolean | Event$eventRolesArgs<ExtArgs>
+    quickLinks?: boolean | Event$quickLinksArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -1895,6 +2006,7 @@ export namespace Prisma {
     objects: {
       enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
       eventRoles: Prisma.$EventRolePayload<ExtArgs>[]
+      quickLinks: Prisma.$QuickLinkPayload<ExtArgs>[]
       createdBy: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -2309,6 +2421,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     enrollments<T extends Event$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Event$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     eventRoles<T extends Event$eventRolesArgs<ExtArgs> = {}>(args?: Subset<T, Event$eventRolesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    quickLinks<T extends Event$quickLinksArgs<ExtArgs> = {}>(args?: Subset<T, Event$quickLinksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2798,6 +2911,30 @@ export namespace Prisma {
   }
 
   /**
+   * Event.quickLinks
+   */
+  export type Event$quickLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    where?: QuickLinkWhereInput
+    orderBy?: QuickLinkOrderByWithRelationInput | QuickLinkOrderByWithRelationInput[]
+    cursor?: QuickLinkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QuickLinkScalarFieldEnum | QuickLinkScalarFieldEnum[]
+  }
+
+  /**
    * Event without action
    */
   export type EventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3061,6 +3198,7 @@ export namespace Prisma {
     verificationRequests?: boolean | User$verificationRequestsArgs<ExtArgs>
     reviewedRequests?: boolean | User$reviewedRequestsArgs<ExtArgs>
     eventsCreated?: boolean | User$eventsCreatedArgs<ExtArgs>
+    quickLinksCreated?: boolean | User$quickLinksCreatedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3125,6 +3263,7 @@ export namespace Prisma {
     verificationRequests?: boolean | User$verificationRequestsArgs<ExtArgs>
     reviewedRequests?: boolean | User$reviewedRequestsArgs<ExtArgs>
     eventsCreated?: boolean | User$eventsCreatedArgs<ExtArgs>
+    quickLinksCreated?: boolean | User$quickLinksCreatedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3138,6 +3277,7 @@ export namespace Prisma {
       verificationRequests: Prisma.$VerificationRequestPayload<ExtArgs>[]
       reviewedRequests: Prisma.$VerificationRequestPayload<ExtArgs>[]
       eventsCreated: Prisma.$EventPayload<ExtArgs>[]
+      quickLinksCreated: Prisma.$QuickLinkPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3554,6 +3694,7 @@ export namespace Prisma {
     verificationRequests<T extends User$verificationRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$verificationRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VerificationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviewedRequests<T extends User$reviewedRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VerificationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     eventsCreated<T extends User$eventsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$eventsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    quickLinksCreated<T extends User$quickLinksCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$quickLinksCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4103,6 +4244,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * User.quickLinksCreated
+   */
+  export type User$quickLinksCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    where?: QuickLinkWhereInput
+    orderBy?: QuickLinkOrderByWithRelationInput | QuickLinkOrderByWithRelationInput[]
+    cursor?: QuickLinkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QuickLinkScalarFieldEnum | QuickLinkScalarFieldEnum[]
   }
 
   /**
@@ -8694,6 +8859,1111 @@ export namespace Prisma {
 
 
   /**
+   * Model QuickLink
+   */
+
+  export type AggregateQuickLink = {
+    _count: QuickLinkCountAggregateOutputType | null
+    _min: QuickLinkMinAggregateOutputType | null
+    _max: QuickLinkMaxAggregateOutputType | null
+  }
+
+  export type QuickLinkMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    url: string | null
+    isActive: boolean | null
+    eventId: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QuickLinkMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    url: string | null
+    isActive: boolean | null
+    eventId: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QuickLinkCountAggregateOutputType = {
+    id: number
+    title: number
+    url: number
+    isActive: number
+    eventId: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type QuickLinkMinAggregateInputType = {
+    id?: true
+    title?: true
+    url?: true
+    isActive?: true
+    eventId?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QuickLinkMaxAggregateInputType = {
+    id?: true
+    title?: true
+    url?: true
+    isActive?: true
+    eventId?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QuickLinkCountAggregateInputType = {
+    id?: true
+    title?: true
+    url?: true
+    isActive?: true
+    eventId?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type QuickLinkAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QuickLink to aggregate.
+     */
+    where?: QuickLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuickLinks to fetch.
+     */
+    orderBy?: QuickLinkOrderByWithRelationInput | QuickLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QuickLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuickLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuickLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QuickLinks
+    **/
+    _count?: true | QuickLinkCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QuickLinkMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QuickLinkMaxAggregateInputType
+  }
+
+  export type GetQuickLinkAggregateType<T extends QuickLinkAggregateArgs> = {
+        [P in keyof T & keyof AggregateQuickLink]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQuickLink[P]>
+      : GetScalarType<T[P], AggregateQuickLink[P]>
+  }
+
+
+
+
+  export type QuickLinkGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuickLinkWhereInput
+    orderBy?: QuickLinkOrderByWithAggregationInput | QuickLinkOrderByWithAggregationInput[]
+    by: QuickLinkScalarFieldEnum[] | QuickLinkScalarFieldEnum
+    having?: QuickLinkScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QuickLinkCountAggregateInputType | true
+    _min?: QuickLinkMinAggregateInputType
+    _max?: QuickLinkMaxAggregateInputType
+  }
+
+  export type QuickLinkGroupByOutputType = {
+    id: string
+    title: string
+    url: string
+    isActive: boolean
+    eventId: string
+    createdById: string
+    createdAt: Date
+    updatedAt: Date
+    _count: QuickLinkCountAggregateOutputType | null
+    _min: QuickLinkMinAggregateOutputType | null
+    _max: QuickLinkMaxAggregateOutputType | null
+  }
+
+  type GetQuickLinkGroupByPayload<T extends QuickLinkGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QuickLinkGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QuickLinkGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QuickLinkGroupByOutputType[P]>
+            : GetScalarType<T[P], QuickLinkGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QuickLinkSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    url?: boolean
+    isActive?: boolean
+    eventId?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | EventDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["quickLink"]>
+
+  export type QuickLinkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    url?: boolean
+    isActive?: boolean
+    eventId?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | EventDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["quickLink"]>
+
+  export type QuickLinkSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    url?: boolean
+    isActive?: boolean
+    eventId?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | EventDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["quickLink"]>
+
+  export type QuickLinkSelectScalar = {
+    id?: boolean
+    title?: boolean
+    url?: boolean
+    isActive?: boolean
+    eventId?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type QuickLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "url" | "isActive" | "eventId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["quickLink"]>
+  export type QuickLinkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | EventDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type QuickLinkIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | EventDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type QuickLinkIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | EventDefaultArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $QuickLinkPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QuickLink"
+    objects: {
+      event: Prisma.$EventPayload<ExtArgs>
+      createdBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      url: string
+      isActive: boolean
+      eventId: string
+      createdById: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["quickLink"]>
+    composites: {}
+  }
+
+  type QuickLinkGetPayload<S extends boolean | null | undefined | QuickLinkDefaultArgs> = $Result.GetResult<Prisma.$QuickLinkPayload, S>
+
+  type QuickLinkCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<QuickLinkFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: QuickLinkCountAggregateInputType | true
+    }
+
+  export interface QuickLinkDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QuickLink'], meta: { name: 'QuickLink' } }
+    /**
+     * Find zero or one QuickLink that matches the filter.
+     * @param {QuickLinkFindUniqueArgs} args - Arguments to find a QuickLink
+     * @example
+     * // Get one QuickLink
+     * const quickLink = await prisma.quickLink.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QuickLinkFindUniqueArgs>(args: SelectSubset<T, QuickLinkFindUniqueArgs<ExtArgs>>): Prisma__QuickLinkClient<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one QuickLink that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {QuickLinkFindUniqueOrThrowArgs} args - Arguments to find a QuickLink
+     * @example
+     * // Get one QuickLink
+     * const quickLink = await prisma.quickLink.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QuickLinkFindUniqueOrThrowArgs>(args: SelectSubset<T, QuickLinkFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QuickLinkClient<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first QuickLink that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuickLinkFindFirstArgs} args - Arguments to find a QuickLink
+     * @example
+     * // Get one QuickLink
+     * const quickLink = await prisma.quickLink.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QuickLinkFindFirstArgs>(args?: SelectSubset<T, QuickLinkFindFirstArgs<ExtArgs>>): Prisma__QuickLinkClient<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first QuickLink that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuickLinkFindFirstOrThrowArgs} args - Arguments to find a QuickLink
+     * @example
+     * // Get one QuickLink
+     * const quickLink = await prisma.quickLink.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QuickLinkFindFirstOrThrowArgs>(args?: SelectSubset<T, QuickLinkFindFirstOrThrowArgs<ExtArgs>>): Prisma__QuickLinkClient<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more QuickLinks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuickLinkFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QuickLinks
+     * const quickLinks = await prisma.quickLink.findMany()
+     * 
+     * // Get first 10 QuickLinks
+     * const quickLinks = await prisma.quickLink.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const quickLinkWithIdOnly = await prisma.quickLink.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QuickLinkFindManyArgs>(args?: SelectSubset<T, QuickLinkFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a QuickLink.
+     * @param {QuickLinkCreateArgs} args - Arguments to create a QuickLink.
+     * @example
+     * // Create one QuickLink
+     * const QuickLink = await prisma.quickLink.create({
+     *   data: {
+     *     // ... data to create a QuickLink
+     *   }
+     * })
+     * 
+     */
+    create<T extends QuickLinkCreateArgs>(args: SelectSubset<T, QuickLinkCreateArgs<ExtArgs>>): Prisma__QuickLinkClient<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many QuickLinks.
+     * @param {QuickLinkCreateManyArgs} args - Arguments to create many QuickLinks.
+     * @example
+     * // Create many QuickLinks
+     * const quickLink = await prisma.quickLink.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QuickLinkCreateManyArgs>(args?: SelectSubset<T, QuickLinkCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QuickLinks and returns the data saved in the database.
+     * @param {QuickLinkCreateManyAndReturnArgs} args - Arguments to create many QuickLinks.
+     * @example
+     * // Create many QuickLinks
+     * const quickLink = await prisma.quickLink.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QuickLinks and only return the `id`
+     * const quickLinkWithIdOnly = await prisma.quickLink.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QuickLinkCreateManyAndReturnArgs>(args?: SelectSubset<T, QuickLinkCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a QuickLink.
+     * @param {QuickLinkDeleteArgs} args - Arguments to delete one QuickLink.
+     * @example
+     * // Delete one QuickLink
+     * const QuickLink = await prisma.quickLink.delete({
+     *   where: {
+     *     // ... filter to delete one QuickLink
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QuickLinkDeleteArgs>(args: SelectSubset<T, QuickLinkDeleteArgs<ExtArgs>>): Prisma__QuickLinkClient<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one QuickLink.
+     * @param {QuickLinkUpdateArgs} args - Arguments to update one QuickLink.
+     * @example
+     * // Update one QuickLink
+     * const quickLink = await prisma.quickLink.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QuickLinkUpdateArgs>(args: SelectSubset<T, QuickLinkUpdateArgs<ExtArgs>>): Prisma__QuickLinkClient<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more QuickLinks.
+     * @param {QuickLinkDeleteManyArgs} args - Arguments to filter QuickLinks to delete.
+     * @example
+     * // Delete a few QuickLinks
+     * const { count } = await prisma.quickLink.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QuickLinkDeleteManyArgs>(args?: SelectSubset<T, QuickLinkDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QuickLinks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuickLinkUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QuickLinks
+     * const quickLink = await prisma.quickLink.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QuickLinkUpdateManyArgs>(args: SelectSubset<T, QuickLinkUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QuickLinks and returns the data updated in the database.
+     * @param {QuickLinkUpdateManyAndReturnArgs} args - Arguments to update many QuickLinks.
+     * @example
+     * // Update many QuickLinks
+     * const quickLink = await prisma.quickLink.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more QuickLinks and only return the `id`
+     * const quickLinkWithIdOnly = await prisma.quickLink.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends QuickLinkUpdateManyAndReturnArgs>(args: SelectSubset<T, QuickLinkUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one QuickLink.
+     * @param {QuickLinkUpsertArgs} args - Arguments to update or create a QuickLink.
+     * @example
+     * // Update or create a QuickLink
+     * const quickLink = await prisma.quickLink.upsert({
+     *   create: {
+     *     // ... data to create a QuickLink
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QuickLink we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QuickLinkUpsertArgs>(args: SelectSubset<T, QuickLinkUpsertArgs<ExtArgs>>): Prisma__QuickLinkClient<$Result.GetResult<Prisma.$QuickLinkPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of QuickLinks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuickLinkCountArgs} args - Arguments to filter QuickLinks to count.
+     * @example
+     * // Count the number of QuickLinks
+     * const count = await prisma.quickLink.count({
+     *   where: {
+     *     // ... the filter for the QuickLinks we want to count
+     *   }
+     * })
+    **/
+    count<T extends QuickLinkCountArgs>(
+      args?: Subset<T, QuickLinkCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QuickLinkCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QuickLink.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuickLinkAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QuickLinkAggregateArgs>(args: Subset<T, QuickLinkAggregateArgs>): Prisma.PrismaPromise<GetQuickLinkAggregateType<T>>
+
+    /**
+     * Group by QuickLink.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuickLinkGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QuickLinkGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QuickLinkGroupByArgs['orderBy'] }
+        : { orderBy?: QuickLinkGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QuickLinkGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQuickLinkGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QuickLink model
+   */
+  readonly fields: QuickLinkFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QuickLink.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QuickLinkClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    event<T extends EventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EventDefaultArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QuickLink model
+   */
+  interface QuickLinkFieldRefs {
+    readonly id: FieldRef<"QuickLink", 'String'>
+    readonly title: FieldRef<"QuickLink", 'String'>
+    readonly url: FieldRef<"QuickLink", 'String'>
+    readonly isActive: FieldRef<"QuickLink", 'Boolean'>
+    readonly eventId: FieldRef<"QuickLink", 'String'>
+    readonly createdById: FieldRef<"QuickLink", 'String'>
+    readonly createdAt: FieldRef<"QuickLink", 'DateTime'>
+    readonly updatedAt: FieldRef<"QuickLink", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QuickLink findUnique
+   */
+  export type QuickLinkFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which QuickLink to fetch.
+     */
+    where: QuickLinkWhereUniqueInput
+  }
+
+  /**
+   * QuickLink findUniqueOrThrow
+   */
+  export type QuickLinkFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which QuickLink to fetch.
+     */
+    where: QuickLinkWhereUniqueInput
+  }
+
+  /**
+   * QuickLink findFirst
+   */
+  export type QuickLinkFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which QuickLink to fetch.
+     */
+    where?: QuickLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuickLinks to fetch.
+     */
+    orderBy?: QuickLinkOrderByWithRelationInput | QuickLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QuickLinks.
+     */
+    cursor?: QuickLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuickLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuickLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QuickLinks.
+     */
+    distinct?: QuickLinkScalarFieldEnum | QuickLinkScalarFieldEnum[]
+  }
+
+  /**
+   * QuickLink findFirstOrThrow
+   */
+  export type QuickLinkFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which QuickLink to fetch.
+     */
+    where?: QuickLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuickLinks to fetch.
+     */
+    orderBy?: QuickLinkOrderByWithRelationInput | QuickLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QuickLinks.
+     */
+    cursor?: QuickLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuickLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuickLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QuickLinks.
+     */
+    distinct?: QuickLinkScalarFieldEnum | QuickLinkScalarFieldEnum[]
+  }
+
+  /**
+   * QuickLink findMany
+   */
+  export type QuickLinkFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which QuickLinks to fetch.
+     */
+    where?: QuickLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuickLinks to fetch.
+     */
+    orderBy?: QuickLinkOrderByWithRelationInput | QuickLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QuickLinks.
+     */
+    cursor?: QuickLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuickLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuickLinks.
+     */
+    skip?: number
+    distinct?: QuickLinkScalarFieldEnum | QuickLinkScalarFieldEnum[]
+  }
+
+  /**
+   * QuickLink create
+   */
+  export type QuickLinkCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    /**
+     * The data needed to create a QuickLink.
+     */
+    data: XOR<QuickLinkCreateInput, QuickLinkUncheckedCreateInput>
+  }
+
+  /**
+   * QuickLink createMany
+   */
+  export type QuickLinkCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QuickLinks.
+     */
+    data: QuickLinkCreateManyInput | QuickLinkCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QuickLink createManyAndReturn
+   */
+  export type QuickLinkCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * The data used to create many QuickLinks.
+     */
+    data: QuickLinkCreateManyInput | QuickLinkCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * QuickLink update
+   */
+  export type QuickLinkUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    /**
+     * The data needed to update a QuickLink.
+     */
+    data: XOR<QuickLinkUpdateInput, QuickLinkUncheckedUpdateInput>
+    /**
+     * Choose, which QuickLink to update.
+     */
+    where: QuickLinkWhereUniqueInput
+  }
+
+  /**
+   * QuickLink updateMany
+   */
+  export type QuickLinkUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QuickLinks.
+     */
+    data: XOR<QuickLinkUpdateManyMutationInput, QuickLinkUncheckedUpdateManyInput>
+    /**
+     * Filter which QuickLinks to update
+     */
+    where?: QuickLinkWhereInput
+    /**
+     * Limit how many QuickLinks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * QuickLink updateManyAndReturn
+   */
+  export type QuickLinkUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * The data used to update QuickLinks.
+     */
+    data: XOR<QuickLinkUpdateManyMutationInput, QuickLinkUncheckedUpdateManyInput>
+    /**
+     * Filter which QuickLinks to update
+     */
+    where?: QuickLinkWhereInput
+    /**
+     * Limit how many QuickLinks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * QuickLink upsert
+   */
+  export type QuickLinkUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    /**
+     * The filter to search for the QuickLink to update in case it exists.
+     */
+    where: QuickLinkWhereUniqueInput
+    /**
+     * In case the QuickLink found by the `where` argument doesn't exist, create a new QuickLink with this data.
+     */
+    create: XOR<QuickLinkCreateInput, QuickLinkUncheckedCreateInput>
+    /**
+     * In case the QuickLink was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QuickLinkUpdateInput, QuickLinkUncheckedUpdateInput>
+  }
+
+  /**
+   * QuickLink delete
+   */
+  export type QuickLinkDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+    /**
+     * Filter which QuickLink to delete.
+     */
+    where: QuickLinkWhereUniqueInput
+  }
+
+  /**
+   * QuickLink deleteMany
+   */
+  export type QuickLinkDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QuickLinks to delete
+     */
+    where?: QuickLinkWhereInput
+    /**
+     * Limit how many QuickLinks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * QuickLink without action
+   */
+  export type QuickLinkDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuickLink
+     */
+    select?: QuickLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuickLink
+     */
+    omit?: QuickLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuickLinkInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -8804,6 +10074,20 @@ export namespace Prisma {
   };
 
   export type VerificationRequestScalarFieldEnum = (typeof VerificationRequestScalarFieldEnum)[keyof typeof VerificationRequestScalarFieldEnum]
+
+
+  export const QuickLinkScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    url: 'url',
+    isActive: 'isActive',
+    eventId: 'eventId',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type QuickLinkScalarFieldEnum = (typeof QuickLinkScalarFieldEnum)[keyof typeof QuickLinkScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -9006,6 +10290,7 @@ export namespace Prisma {
     createdById?: StringFilter<"Event"> | string
     enrollments?: EnrollmentListRelationFilter
     eventRoles?: EventRoleListRelationFilter
+    quickLinks?: QuickLinkListRelationFilter
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -9027,6 +10312,7 @@ export namespace Prisma {
     createdById?: SortOrder
     enrollments?: EnrollmentOrderByRelationAggregateInput
     eventRoles?: EventRoleOrderByRelationAggregateInput
+    quickLinks?: QuickLinkOrderByRelationAggregateInput
     createdBy?: UserOrderByWithRelationInput
   }
 
@@ -9051,6 +10337,7 @@ export namespace Prisma {
     createdById?: StringFilter<"Event"> | string
     enrollments?: EnrollmentListRelationFilter
     eventRoles?: EventRoleListRelationFilter
+    quickLinks?: QuickLinkListRelationFilter
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
@@ -9122,6 +10409,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestListRelationFilter
     reviewedRequests?: VerificationRequestListRelationFilter
     eventsCreated?: EventListRelationFilter
+    quickLinksCreated?: QuickLinkListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -9145,6 +10433,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestOrderByRelationAggregateInput
     reviewedRequests?: VerificationRequestOrderByRelationAggregateInput
     eventsCreated?: EventOrderByRelationAggregateInput
+    quickLinksCreated?: QuickLinkOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -9171,6 +10460,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestListRelationFilter
     reviewedRequests?: VerificationRequestListRelationFilter
     eventsCreated?: EventListRelationFilter
+    quickLinksCreated?: QuickLinkListRelationFilter
   }, "id" | "email" | "phoneNumber">
 
   export type UserOrderByWithAggregationInput = {
@@ -9517,6 +10807,79 @@ export namespace Prisma {
     reviewedById?: StringNullableWithAggregatesFilter<"VerificationRequest"> | string | null
   }
 
+  export type QuickLinkWhereInput = {
+    AND?: QuickLinkWhereInput | QuickLinkWhereInput[]
+    OR?: QuickLinkWhereInput[]
+    NOT?: QuickLinkWhereInput | QuickLinkWhereInput[]
+    id?: StringFilter<"QuickLink"> | string
+    title?: StringFilter<"QuickLink"> | string
+    url?: StringFilter<"QuickLink"> | string
+    isActive?: BoolFilter<"QuickLink"> | boolean
+    eventId?: StringFilter<"QuickLink"> | string
+    createdById?: StringFilter<"QuickLink"> | string
+    createdAt?: DateTimeFilter<"QuickLink"> | Date | string
+    updatedAt?: DateTimeFilter<"QuickLink"> | Date | string
+    event?: XOR<EventScalarRelationFilter, EventWhereInput>
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type QuickLinkOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    url?: SortOrder
+    isActive?: SortOrder
+    eventId?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    event?: EventOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+  }
+
+  export type QuickLinkWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: QuickLinkWhereInput | QuickLinkWhereInput[]
+    OR?: QuickLinkWhereInput[]
+    NOT?: QuickLinkWhereInput | QuickLinkWhereInput[]
+    title?: StringFilter<"QuickLink"> | string
+    url?: StringFilter<"QuickLink"> | string
+    isActive?: BoolFilter<"QuickLink"> | boolean
+    eventId?: StringFilter<"QuickLink"> | string
+    createdById?: StringFilter<"QuickLink"> | string
+    createdAt?: DateTimeFilter<"QuickLink"> | Date | string
+    updatedAt?: DateTimeFilter<"QuickLink"> | Date | string
+    event?: XOR<EventScalarRelationFilter, EventWhereInput>
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type QuickLinkOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    url?: SortOrder
+    isActive?: SortOrder
+    eventId?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: QuickLinkCountOrderByAggregateInput
+    _max?: QuickLinkMaxOrderByAggregateInput
+    _min?: QuickLinkMinOrderByAggregateInput
+  }
+
+  export type QuickLinkScalarWhereWithAggregatesInput = {
+    AND?: QuickLinkScalarWhereWithAggregatesInput | QuickLinkScalarWhereWithAggregatesInput[]
+    OR?: QuickLinkScalarWhereWithAggregatesInput[]
+    NOT?: QuickLinkScalarWhereWithAggregatesInput | QuickLinkScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"QuickLink"> | string
+    title?: StringWithAggregatesFilter<"QuickLink"> | string
+    url?: StringWithAggregatesFilter<"QuickLink"> | string
+    isActive?: BoolWithAggregatesFilter<"QuickLink"> | boolean
+    eventId?: StringWithAggregatesFilter<"QuickLink"> | string
+    createdById?: StringWithAggregatesFilter<"QuickLink"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"QuickLink"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"QuickLink"> | Date | string
+  }
+
   export type EventCreateInput = {
     id?: string
     title: string
@@ -9534,6 +10897,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     enrollments?: EnrollmentCreateNestedManyWithoutEventInput
     eventRoles?: EventRoleCreateNestedManyWithoutEventInput
+    quickLinks?: QuickLinkCreateNestedManyWithoutEventInput
     createdBy: UserCreateNestedOneWithoutEventsCreatedInput
   }
 
@@ -9555,6 +10919,7 @@ export namespace Prisma {
     createdById: string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutEventInput
     eventRoles?: EventRoleUncheckedCreateNestedManyWithoutEventInput
+    quickLinks?: QuickLinkUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventUpdateInput = {
@@ -9574,6 +10939,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUpdateManyWithoutEventNestedInput
     eventRoles?: EventRoleUpdateManyWithoutEventNestedInput
+    quickLinks?: QuickLinkUpdateManyWithoutEventNestedInput
     createdBy?: UserUpdateOneRequiredWithoutEventsCreatedNestedInput
   }
 
@@ -9595,6 +10961,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutEventNestedInput
     eventRoles?: EventRoleUncheckedUpdateManyWithoutEventNestedInput
+    quickLinks?: QuickLinkUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type EventCreateManyInput = {
@@ -9671,6 +11038,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
     eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
+    quickLinksCreated?: QuickLinkCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -9694,6 +11062,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
     eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
+    quickLinksCreated?: QuickLinkUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUpdateInput = {
@@ -9717,6 +11086,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
     eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
+    quickLinksCreated?: QuickLinkUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -9740,6 +11110,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
     eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
+    quickLinksCreated?: QuickLinkUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -10108,6 +11479,81 @@ export namespace Prisma {
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type QuickLinkCreateInput = {
+    id?: string
+    title: string
+    url: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    event: EventCreateNestedOneWithoutQuickLinksInput
+    createdBy: UserCreateNestedOneWithoutQuickLinksCreatedInput
+  }
+
+  export type QuickLinkUncheckedCreateInput = {
+    id?: string
+    title: string
+    url: string
+    isActive?: boolean
+    eventId: string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuickLinkUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: EventUpdateOneRequiredWithoutQuickLinksNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutQuickLinksCreatedNestedInput
+  }
+
+  export type QuickLinkUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    eventId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuickLinkCreateManyInput = {
+    id?: string
+    title: string
+    url: string
+    isActive?: boolean
+    eventId: string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuickLinkUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuickLinkUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    eventId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -10180,6 +11626,12 @@ export namespace Prisma {
     none?: EventRoleWhereInput
   }
 
+  export type QuickLinkListRelationFilter = {
+    every?: QuickLinkWhereInput
+    some?: QuickLinkWhereInput
+    none?: QuickLinkWhereInput
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -10195,6 +11647,10 @@ export namespace Prisma {
   }
 
   export type EventRoleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type QuickLinkOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -10800,6 +12256,39 @@ export namespace Prisma {
     _max?: NestedEnumVerificationStatusFilter<$PrismaModel>
   }
 
+  export type QuickLinkCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    url?: SortOrder
+    isActive?: SortOrder
+    eventId?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QuickLinkMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    url?: SortOrder
+    isActive?: SortOrder
+    eventId?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QuickLinkMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    url?: SortOrder
+    isActive?: SortOrder
+    eventId?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type EventCreatecategoryInput = {
     set: string[]
   }
@@ -10822,6 +12311,13 @@ export namespace Prisma {
     connect?: EventRoleWhereUniqueInput | EventRoleWhereUniqueInput[]
   }
 
+  export type QuickLinkCreateNestedManyWithoutEventInput = {
+    create?: XOR<QuickLinkCreateWithoutEventInput, QuickLinkUncheckedCreateWithoutEventInput> | QuickLinkCreateWithoutEventInput[] | QuickLinkUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: QuickLinkCreateOrConnectWithoutEventInput | QuickLinkCreateOrConnectWithoutEventInput[]
+    createMany?: QuickLinkCreateManyEventInputEnvelope
+    connect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutEventsCreatedInput = {
     create?: XOR<UserCreateWithoutEventsCreatedInput, UserUncheckedCreateWithoutEventsCreatedInput>
     connectOrCreate?: UserCreateOrConnectWithoutEventsCreatedInput
@@ -10840,6 +12336,13 @@ export namespace Prisma {
     connectOrCreate?: EventRoleCreateOrConnectWithoutEventInput | EventRoleCreateOrConnectWithoutEventInput[]
     createMany?: EventRoleCreateManyEventInputEnvelope
     connect?: EventRoleWhereUniqueInput | EventRoleWhereUniqueInput[]
+  }
+
+  export type QuickLinkUncheckedCreateNestedManyWithoutEventInput = {
+    create?: XOR<QuickLinkCreateWithoutEventInput, QuickLinkUncheckedCreateWithoutEventInput> | QuickLinkCreateWithoutEventInput[] | QuickLinkUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: QuickLinkCreateOrConnectWithoutEventInput | QuickLinkCreateOrConnectWithoutEventInput[]
+    createMany?: QuickLinkCreateManyEventInputEnvelope
+    connect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -10900,6 +12403,20 @@ export namespace Prisma {
     deleteMany?: EventRoleScalarWhereInput | EventRoleScalarWhereInput[]
   }
 
+  export type QuickLinkUpdateManyWithoutEventNestedInput = {
+    create?: XOR<QuickLinkCreateWithoutEventInput, QuickLinkUncheckedCreateWithoutEventInput> | QuickLinkCreateWithoutEventInput[] | QuickLinkUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: QuickLinkCreateOrConnectWithoutEventInput | QuickLinkCreateOrConnectWithoutEventInput[]
+    upsert?: QuickLinkUpsertWithWhereUniqueWithoutEventInput | QuickLinkUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: QuickLinkCreateManyEventInputEnvelope
+    set?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    disconnect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    delete?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    connect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    update?: QuickLinkUpdateWithWhereUniqueWithoutEventInput | QuickLinkUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: QuickLinkUpdateManyWithWhereWithoutEventInput | QuickLinkUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: QuickLinkScalarWhereInput | QuickLinkScalarWhereInput[]
+  }
+
   export type UserUpdateOneRequiredWithoutEventsCreatedNestedInput = {
     create?: XOR<UserCreateWithoutEventsCreatedInput, UserUncheckedCreateWithoutEventsCreatedInput>
     connectOrCreate?: UserCreateOrConnectWithoutEventsCreatedInput
@@ -10934,6 +12451,20 @@ export namespace Prisma {
     update?: EventRoleUpdateWithWhereUniqueWithoutEventInput | EventRoleUpdateWithWhereUniqueWithoutEventInput[]
     updateMany?: EventRoleUpdateManyWithWhereWithoutEventInput | EventRoleUpdateManyWithWhereWithoutEventInput[]
     deleteMany?: EventRoleScalarWhereInput | EventRoleScalarWhereInput[]
+  }
+
+  export type QuickLinkUncheckedUpdateManyWithoutEventNestedInput = {
+    create?: XOR<QuickLinkCreateWithoutEventInput, QuickLinkUncheckedCreateWithoutEventInput> | QuickLinkCreateWithoutEventInput[] | QuickLinkUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: QuickLinkCreateOrConnectWithoutEventInput | QuickLinkCreateOrConnectWithoutEventInput[]
+    upsert?: QuickLinkUpsertWithWhereUniqueWithoutEventInput | QuickLinkUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: QuickLinkCreateManyEventInputEnvelope
+    set?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    disconnect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    delete?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    connect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    update?: QuickLinkUpdateWithWhereUniqueWithoutEventInput | QuickLinkUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: QuickLinkUpdateManyWithWhereWithoutEventInput | QuickLinkUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: QuickLinkScalarWhereInput | QuickLinkScalarWhereInput[]
   }
 
   export type UserCreateskillsInput = {
@@ -10975,6 +12506,13 @@ export namespace Prisma {
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
   }
 
+  export type QuickLinkCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<QuickLinkCreateWithoutCreatedByInput, QuickLinkUncheckedCreateWithoutCreatedByInput> | QuickLinkCreateWithoutCreatedByInput[] | QuickLinkUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: QuickLinkCreateOrConnectWithoutCreatedByInput | QuickLinkCreateOrConnectWithoutCreatedByInput[]
+    createMany?: QuickLinkCreateManyCreatedByInputEnvelope
+    connect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+  }
+
   export type EnrollmentUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<EnrollmentCreateWithoutUserInput, EnrollmentUncheckedCreateWithoutUserInput> | EnrollmentCreateWithoutUserInput[] | EnrollmentUncheckedCreateWithoutUserInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutUserInput | EnrollmentCreateOrConnectWithoutUserInput[]
@@ -11008,6 +12546,13 @@ export namespace Prisma {
     connectOrCreate?: EventCreateOrConnectWithoutCreatedByInput | EventCreateOrConnectWithoutCreatedByInput[]
     createMany?: EventCreateManyCreatedByInputEnvelope
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type QuickLinkUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<QuickLinkCreateWithoutCreatedByInput, QuickLinkUncheckedCreateWithoutCreatedByInput> | QuickLinkCreateWithoutCreatedByInput[] | QuickLinkUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: QuickLinkCreateOrConnectWithoutCreatedByInput | QuickLinkCreateOrConnectWithoutCreatedByInput[]
+    createMany?: QuickLinkCreateManyCreatedByInputEnvelope
+    connect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
   }
 
   export type UserUpdateskillsInput = {
@@ -11101,6 +12646,20 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
+  export type QuickLinkUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<QuickLinkCreateWithoutCreatedByInput, QuickLinkUncheckedCreateWithoutCreatedByInput> | QuickLinkCreateWithoutCreatedByInput[] | QuickLinkUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: QuickLinkCreateOrConnectWithoutCreatedByInput | QuickLinkCreateOrConnectWithoutCreatedByInput[]
+    upsert?: QuickLinkUpsertWithWhereUniqueWithoutCreatedByInput | QuickLinkUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: QuickLinkCreateManyCreatedByInputEnvelope
+    set?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    disconnect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    delete?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    connect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    update?: QuickLinkUpdateWithWhereUniqueWithoutCreatedByInput | QuickLinkUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: QuickLinkUpdateManyWithWhereWithoutCreatedByInput | QuickLinkUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: QuickLinkScalarWhereInput | QuickLinkScalarWhereInput[]
+  }
+
   export type EnrollmentUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<EnrollmentCreateWithoutUserInput, EnrollmentUncheckedCreateWithoutUserInput> | EnrollmentCreateWithoutUserInput[] | EnrollmentUncheckedCreateWithoutUserInput[]
     connectOrCreate?: EnrollmentCreateOrConnectWithoutUserInput | EnrollmentCreateOrConnectWithoutUserInput[]
@@ -11169,6 +12728,20 @@ export namespace Prisma {
     update?: EventUpdateWithWhereUniqueWithoutCreatedByInput | EventUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: EventUpdateManyWithWhereWithoutCreatedByInput | EventUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type QuickLinkUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<QuickLinkCreateWithoutCreatedByInput, QuickLinkUncheckedCreateWithoutCreatedByInput> | QuickLinkCreateWithoutCreatedByInput[] | QuickLinkUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: QuickLinkCreateOrConnectWithoutCreatedByInput | QuickLinkCreateOrConnectWithoutCreatedByInput[]
+    upsert?: QuickLinkUpsertWithWhereUniqueWithoutCreatedByInput | QuickLinkUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: QuickLinkCreateManyCreatedByInputEnvelope
+    set?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    disconnect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    delete?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    connect?: QuickLinkWhereUniqueInput | QuickLinkWhereUniqueInput[]
+    update?: QuickLinkUpdateWithWhereUniqueWithoutCreatedByInput | QuickLinkUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: QuickLinkUpdateManyWithWhereWithoutCreatedByInput | QuickLinkUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: QuickLinkScalarWhereInput | QuickLinkScalarWhereInput[]
   }
 
   export type EventCreateNestedOneWithoutEventRolesInput = {
@@ -11353,6 +12926,34 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewedRequestsInput, UserUpdateWithoutReviewedRequestsInput>, UserUncheckedUpdateWithoutReviewedRequestsInput>
+  }
+
+  export type EventCreateNestedOneWithoutQuickLinksInput = {
+    create?: XOR<EventCreateWithoutQuickLinksInput, EventUncheckedCreateWithoutQuickLinksInput>
+    connectOrCreate?: EventCreateOrConnectWithoutQuickLinksInput
+    connect?: EventWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutQuickLinksCreatedInput = {
+    create?: XOR<UserCreateWithoutQuickLinksCreatedInput, UserUncheckedCreateWithoutQuickLinksCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutQuickLinksCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EventUpdateOneRequiredWithoutQuickLinksNestedInput = {
+    create?: XOR<EventCreateWithoutQuickLinksInput, EventUncheckedCreateWithoutQuickLinksInput>
+    connectOrCreate?: EventCreateOrConnectWithoutQuickLinksInput
+    upsert?: EventUpsertWithoutQuickLinksInput
+    connect?: EventWhereUniqueInput
+    update?: XOR<XOR<EventUpdateToOneWithWhereWithoutQuickLinksInput, EventUpdateWithoutQuickLinksInput>, EventUncheckedUpdateWithoutQuickLinksInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutQuickLinksCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutQuickLinksCreatedInput, UserUncheckedCreateWithoutQuickLinksCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutQuickLinksCreatedInput
+    upsert?: UserUpsertWithoutQuickLinksCreatedInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutQuickLinksCreatedInput, UserUpdateWithoutQuickLinksCreatedInput>, UserUncheckedUpdateWithoutQuickLinksCreatedInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -11754,6 +13355,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type QuickLinkCreateWithoutEventInput = {
+    id?: string
+    title: string
+    url: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutQuickLinksCreatedInput
+  }
+
+  export type QuickLinkUncheckedCreateWithoutEventInput = {
+    id?: string
+    title: string
+    url: string
+    isActive?: boolean
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuickLinkCreateOrConnectWithoutEventInput = {
+    where: QuickLinkWhereUniqueInput
+    create: XOR<QuickLinkCreateWithoutEventInput, QuickLinkUncheckedCreateWithoutEventInput>
+  }
+
+  export type QuickLinkCreateManyEventInputEnvelope = {
+    data: QuickLinkCreateManyEventInput | QuickLinkCreateManyEventInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserCreateWithoutEventsCreatedInput = {
     id?: string
     fullName: string
@@ -11774,6 +13405,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
+    quickLinksCreated?: QuickLinkCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEventsCreatedInput = {
@@ -11796,6 +13428,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
+    quickLinksCreated?: QuickLinkUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEventsCreatedInput = {
@@ -11864,6 +13497,36 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"EventRole"> | Date | string
   }
 
+  export type QuickLinkUpsertWithWhereUniqueWithoutEventInput = {
+    where: QuickLinkWhereUniqueInput
+    update: XOR<QuickLinkUpdateWithoutEventInput, QuickLinkUncheckedUpdateWithoutEventInput>
+    create: XOR<QuickLinkCreateWithoutEventInput, QuickLinkUncheckedCreateWithoutEventInput>
+  }
+
+  export type QuickLinkUpdateWithWhereUniqueWithoutEventInput = {
+    where: QuickLinkWhereUniqueInput
+    data: XOR<QuickLinkUpdateWithoutEventInput, QuickLinkUncheckedUpdateWithoutEventInput>
+  }
+
+  export type QuickLinkUpdateManyWithWhereWithoutEventInput = {
+    where: QuickLinkScalarWhereInput
+    data: XOR<QuickLinkUpdateManyMutationInput, QuickLinkUncheckedUpdateManyWithoutEventInput>
+  }
+
+  export type QuickLinkScalarWhereInput = {
+    AND?: QuickLinkScalarWhereInput | QuickLinkScalarWhereInput[]
+    OR?: QuickLinkScalarWhereInput[]
+    NOT?: QuickLinkScalarWhereInput | QuickLinkScalarWhereInput[]
+    id?: StringFilter<"QuickLink"> | string
+    title?: StringFilter<"QuickLink"> | string
+    url?: StringFilter<"QuickLink"> | string
+    isActive?: BoolFilter<"QuickLink"> | boolean
+    eventId?: StringFilter<"QuickLink"> | string
+    createdById?: StringFilter<"QuickLink"> | string
+    createdAt?: DateTimeFilter<"QuickLink"> | Date | string
+    updatedAt?: DateTimeFilter<"QuickLink"> | Date | string
+  }
+
   export type UserUpsertWithoutEventsCreatedInput = {
     update: XOR<UserUpdateWithoutEventsCreatedInput, UserUncheckedUpdateWithoutEventsCreatedInput>
     create: XOR<UserCreateWithoutEventsCreatedInput, UserUncheckedCreateWithoutEventsCreatedInput>
@@ -11895,6 +13558,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
+    quickLinksCreated?: QuickLinkUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventsCreatedInput = {
@@ -11917,6 +13581,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+    quickLinksCreated?: QuickLinkUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type EnrollmentCreateWithoutUserInput = {
@@ -12056,6 +13721,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     enrollments?: EnrollmentCreateNestedManyWithoutEventInput
     eventRoles?: EventRoleCreateNestedManyWithoutEventInput
+    quickLinks?: QuickLinkCreateNestedManyWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutCreatedByInput = {
@@ -12075,6 +13741,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutEventInput
     eventRoles?: EventRoleUncheckedCreateNestedManyWithoutEventInput
+    quickLinks?: QuickLinkUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutCreatedByInput = {
@@ -12084,6 +13751,36 @@ export namespace Prisma {
 
   export type EventCreateManyCreatedByInputEnvelope = {
     data: EventCreateManyCreatedByInput | EventCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type QuickLinkCreateWithoutCreatedByInput = {
+    id?: string
+    title: string
+    url: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    event: EventCreateNestedOneWithoutQuickLinksInput
+  }
+
+  export type QuickLinkUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    title: string
+    url: string
+    isActive?: boolean
+    eventId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuickLinkCreateOrConnectWithoutCreatedByInput = {
+    where: QuickLinkWhereUniqueInput
+    create: XOR<QuickLinkCreateWithoutCreatedByInput, QuickLinkUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type QuickLinkCreateManyCreatedByInputEnvelope = {
+    data: QuickLinkCreateManyCreatedByInput | QuickLinkCreateManyCreatedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -12216,6 +13913,22 @@ export namespace Prisma {
     createdById?: StringFilter<"Event"> | string
   }
 
+  export type QuickLinkUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: QuickLinkWhereUniqueInput
+    update: XOR<QuickLinkUpdateWithoutCreatedByInput, QuickLinkUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<QuickLinkCreateWithoutCreatedByInput, QuickLinkUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type QuickLinkUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: QuickLinkWhereUniqueInput
+    data: XOR<QuickLinkUpdateWithoutCreatedByInput, QuickLinkUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type QuickLinkUpdateManyWithWhereWithoutCreatedByInput = {
+    where: QuickLinkScalarWhereInput
+    data: XOR<QuickLinkUpdateManyMutationInput, QuickLinkUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
   export type EventCreateWithoutEventRolesInput = {
     id?: string
     title: string
@@ -12232,6 +13945,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     enrollments?: EnrollmentCreateNestedManyWithoutEventInput
+    quickLinks?: QuickLinkCreateNestedManyWithoutEventInput
     createdBy: UserCreateNestedOneWithoutEventsCreatedInput
   }
 
@@ -12252,6 +13966,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdById: string
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutEventInput
+    quickLinks?: QuickLinkUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutEventRolesInput = {
@@ -12318,6 +14033,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUpdateManyWithoutEventNestedInput
+    quickLinks?: QuickLinkUpdateManyWithoutEventNestedInput
     createdBy?: UserUpdateOneRequiredWithoutEventsCreatedNestedInput
   }
 
@@ -12338,6 +14054,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutEventNestedInput
+    quickLinks?: QuickLinkUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutEventRoleInput = {
@@ -12372,6 +14089,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     eventRoles?: EventRoleCreateNestedManyWithoutEventInput
+    quickLinks?: QuickLinkCreateNestedManyWithoutEventInput
     createdBy: UserCreateNestedOneWithoutEventsCreatedInput
   }
 
@@ -12392,6 +14110,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdById: string
     eventRoles?: EventRoleUncheckedCreateNestedManyWithoutEventInput
+    quickLinks?: QuickLinkUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutEnrollmentsInput = {
@@ -12419,6 +14138,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
     eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
+    quickLinksCreated?: QuickLinkCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -12441,6 +14161,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
     eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
+    quickLinksCreated?: QuickLinkUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -12502,6 +14223,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eventRoles?: EventRoleUpdateManyWithoutEventNestedInput
+    quickLinks?: QuickLinkUpdateManyWithoutEventNestedInput
     createdBy?: UserUpdateOneRequiredWithoutEventsCreatedNestedInput
   }
 
@@ -12522,6 +14244,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
     eventRoles?: EventRoleUncheckedUpdateManyWithoutEventNestedInput
+    quickLinks?: QuickLinkUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type UserUpsertWithoutEnrollmentsInput = {
@@ -12555,6 +14278,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
     eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
+    quickLinksCreated?: QuickLinkUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -12577,6 +14301,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
     eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
+    quickLinksCreated?: QuickLinkUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type EventRoleUpsertWithoutEnrollmentsInput = {
@@ -12632,6 +14357,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
     eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
+    quickLinksCreated?: QuickLinkCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -12654,6 +14380,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
     eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
+    quickLinksCreated?: QuickLinkUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -12692,6 +14419,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
     eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
+    quickLinksCreated?: QuickLinkUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -12714,6 +14442,7 @@ export namespace Prisma {
     verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
     eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
+    quickLinksCreated?: QuickLinkUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutVerificationRequestsInput = {
@@ -12736,6 +14465,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
     eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
+    quickLinksCreated?: QuickLinkCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutVerificationRequestsInput = {
@@ -12758,6 +14488,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
     eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
+    quickLinksCreated?: QuickLinkUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutVerificationRequestsInput = {
@@ -12785,6 +14516,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
     eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
+    quickLinksCreated?: QuickLinkCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReviewedRequestsInput = {
@@ -12807,6 +14539,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
     eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
+    quickLinksCreated?: QuickLinkUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReviewedRequestsInput = {
@@ -12845,6 +14578,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
     eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
+    quickLinksCreated?: QuickLinkUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerificationRequestsInput = {
@@ -12867,6 +14601,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
     eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
+    quickLinksCreated?: QuickLinkUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutReviewedRequestsInput = {
@@ -12900,6 +14635,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
     eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
+    quickLinksCreated?: QuickLinkUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewedRequestsInput = {
@@ -12922,6 +14658,211 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
     eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
+    quickLinksCreated?: QuickLinkUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type EventCreateWithoutQuickLinksInput = {
+    id?: string
+    title: string
+    description: string
+    location: string
+    startDate: Date | string
+    endDate: Date | string
+    dressCode: string
+    category?: EventCreatecategoryInput | string[]
+    coverUrl: string
+    videoUrl?: string | null
+    eventImages?: EventCreateeventImagesInput | string[]
+    maxVolunteers?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    enrollments?: EnrollmentCreateNestedManyWithoutEventInput
+    eventRoles?: EventRoleCreateNestedManyWithoutEventInput
+    createdBy: UserCreateNestedOneWithoutEventsCreatedInput
+  }
+
+  export type EventUncheckedCreateWithoutQuickLinksInput = {
+    id?: string
+    title: string
+    description: string
+    location: string
+    startDate: Date | string
+    endDate: Date | string
+    dressCode: string
+    category?: EventCreatecategoryInput | string[]
+    coverUrl: string
+    videoUrl?: string | null
+    eventImages?: EventCreateeventImagesInput | string[]
+    maxVolunteers?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById: string
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutEventInput
+    eventRoles?: EventRoleUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type EventCreateOrConnectWithoutQuickLinksInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutQuickLinksInput, EventUncheckedCreateWithoutQuickLinksInput>
+  }
+
+  export type UserCreateWithoutQuickLinksCreatedInput = {
+    id?: string
+    fullName: string
+    email: string
+    password: string
+    phoneNumber: string
+    profileImage: string
+    skills?: UserCreateskillsInput | string[]
+    address: string
+    gender: $Enums.Gender
+    govIdImage: string
+    govIdType: $Enums.GovId
+    role?: $Enums.Role
+    isVerified?: boolean
+    lastActiveAt?: Date | string
+    createdAt?: Date | string
+    enrollments?: EnrollmentCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    verificationRequests?: VerificationRequestCreateNestedManyWithoutUserInput
+    reviewedRequests?: VerificationRequestCreateNestedManyWithoutReviewedByInput
+    eventsCreated?: EventCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutQuickLinksCreatedInput = {
+    id?: string
+    fullName: string
+    email: string
+    password: string
+    phoneNumber: string
+    profileImage: string
+    skills?: UserCreateskillsInput | string[]
+    address: string
+    gender: $Enums.Gender
+    govIdImage: string
+    govIdType: $Enums.GovId
+    role?: $Enums.Role
+    isVerified?: boolean
+    lastActiveAt?: Date | string
+    createdAt?: Date | string
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    verificationRequests?: VerificationRequestUncheckedCreateNestedManyWithoutUserInput
+    reviewedRequests?: VerificationRequestUncheckedCreateNestedManyWithoutReviewedByInput
+    eventsCreated?: EventUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutQuickLinksCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutQuickLinksCreatedInput, UserUncheckedCreateWithoutQuickLinksCreatedInput>
+  }
+
+  export type EventUpsertWithoutQuickLinksInput = {
+    update: XOR<EventUpdateWithoutQuickLinksInput, EventUncheckedUpdateWithoutQuickLinksInput>
+    create: XOR<EventCreateWithoutQuickLinksInput, EventUncheckedCreateWithoutQuickLinksInput>
+    where?: EventWhereInput
+  }
+
+  export type EventUpdateToOneWithWhereWithoutQuickLinksInput = {
+    where?: EventWhereInput
+    data: XOR<EventUpdateWithoutQuickLinksInput, EventUncheckedUpdateWithoutQuickLinksInput>
+  }
+
+  export type EventUpdateWithoutQuickLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dressCode?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    eventImages?: EventUpdateeventImagesInput | string[]
+    maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: EnrollmentUpdateManyWithoutEventNestedInput
+    eventRoles?: EventRoleUpdateManyWithoutEventNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutEventsCreatedNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutQuickLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    dressCode?: StringFieldUpdateOperationsInput | string
+    category?: EventUpdatecategoryInput | string[]
+    coverUrl?: StringFieldUpdateOperationsInput | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    eventImages?: EventUpdateeventImagesInput | string[]
+    maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutEventNestedInput
+    eventRoles?: EventRoleUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type UserUpsertWithoutQuickLinksCreatedInput = {
+    update: XOR<UserUpdateWithoutQuickLinksCreatedInput, UserUncheckedUpdateWithoutQuickLinksCreatedInput>
+    create: XOR<UserCreateWithoutQuickLinksCreatedInput, UserUncheckedCreateWithoutQuickLinksCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutQuickLinksCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutQuickLinksCreatedInput, UserUncheckedUpdateWithoutQuickLinksCreatedInput>
+  }
+
+  export type UserUpdateWithoutQuickLinksCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    profileImage?: StringFieldUpdateOperationsInput | string
+    skills?: UserUpdateskillsInput | string[]
+    address?: StringFieldUpdateOperationsInput | string
+    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    govIdImage?: StringFieldUpdateOperationsInput | string
+    govIdType?: EnumGovIdFieldUpdateOperationsInput | $Enums.GovId
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    verificationRequests?: VerificationRequestUpdateManyWithoutUserNestedInput
+    reviewedRequests?: VerificationRequestUpdateManyWithoutReviewedByNestedInput
+    eventsCreated?: EventUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutQuickLinksCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    profileImage?: StringFieldUpdateOperationsInput | string
+    skills?: UserUpdateskillsInput | string[]
+    address?: StringFieldUpdateOperationsInput | string
+    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    govIdImage?: StringFieldUpdateOperationsInput | string
+    govIdType?: EnumGovIdFieldUpdateOperationsInput | $Enums.GovId
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    verificationRequests?: VerificationRequestUncheckedUpdateManyWithoutUserNestedInput
+    reviewedRequests?: VerificationRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+    eventsCreated?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type EnrollmentCreateManyEventInput = {
@@ -12941,6 +14882,16 @@ export namespace Prisma {
     description: string
     payout: number
     maxCount: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuickLinkCreateManyEventInput = {
+    id?: string
+    title: string
+    url: string
+    isActive?: boolean
+    createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13010,6 +14961,36 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type QuickLinkUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutQuickLinksCreatedNestedInput
+  }
+
+  export type QuickLinkUncheckedUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuickLinkUncheckedUpdateManyWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type EnrollmentCreateManyUserInput = {
     id?: string
     status?: $Enums.Status
@@ -13063,6 +15044,16 @@ export namespace Prisma {
     videoUrl?: string | null
     eventImages?: EventCreateeventImagesInput | string[]
     maxVolunteers?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuickLinkCreateManyCreatedByInput = {
+    id?: string
+    title: string
+    url: string
+    isActive?: boolean
+    eventId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13204,6 +15195,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUpdateManyWithoutEventNestedInput
     eventRoles?: EventRoleUpdateManyWithoutEventNestedInput
+    quickLinks?: QuickLinkUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutCreatedByInput = {
@@ -13223,6 +15215,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     enrollments?: EnrollmentUncheckedUpdateManyWithoutEventNestedInput
     eventRoles?: EventRoleUncheckedUpdateManyWithoutEventNestedInput
+    quickLinks?: QuickLinkUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateManyWithoutCreatedByInput = {
@@ -13238,6 +15231,36 @@ export namespace Prisma {
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     eventImages?: EventUpdateeventImagesInput | string[]
     maxVolunteers?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuickLinkUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: EventUpdateOneRequiredWithoutQuickLinksNestedInput
+  }
+
+  export type QuickLinkUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    eventId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuickLinkUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    eventId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

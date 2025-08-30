@@ -51,6 +51,14 @@ interface EventRole {
   maxCount: number;
 }
 
+// Type for quick links
+interface QuickLink {
+  id?: string;
+  title: string;
+  url: string;
+  isActive: boolean;
+}
+
 // Type for creating an event based on the Prisma schema
 interface EventParams {
   title: string;
@@ -67,6 +75,7 @@ interface EventParams {
   createdAt?: Date;
   updatedAt?: Date;
   eventRoles?: EventRole[];
+  quickLinks?: QuickLink[];
 }
 
 // Type for events returned from database (includes id and matches Prisma schema exactly)

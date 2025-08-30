@@ -79,6 +79,19 @@ export const createEvent = async (params: EventParams) => {
       });
     }
 
+    // Create quick links if provided
+    if (params.quickLinks && params.quickLinks.length > 0) {
+      await prisma.quickLink.createMany({
+        data: params.quickLinks.map(link => ({
+          title: link.title.trim(),
+          url: link.url.trim(),
+          isActive: link.isActive,
+          eventId: newEvent.id,
+          createdById: session.user.id,
+        }))
+      });
+    }
+
     // Broadcast to volunteers that a new event has been added
     await broadcastNewEventNotification(newEvent.id);
 
@@ -182,6 +195,27 @@ export const updateEvent = async (id: string, params: EventParams) => {
             payout: role.payout,
             maxCount: role.maxCount,
             eventId: id,
+          }))
+        });
+      }
+    }
+
+    // Update quick links if provided
+    if (params.quickLinks !== undefined) {
+      // Delete existing quick links
+      await prisma.quickLink.deleteMany({
+        where: { eventId: id }
+      });
+
+      // Create new quick links
+      if (params.quickLinks.length > 0) {
+        await prisma.quickLink.createMany({
+          data: params.quickLinks.map(link => ({
+            title: link.title.trim(),
+            url: link.url.trim(),
+            isActive: link.isActive,
+            eventId: id,
+            createdById: session.user.id,
           }))
         });
       }

@@ -48,6 +48,12 @@ interface Props {
     payout: number;
     maxCount: number;
   }[];
+  quickLinks?: {
+    id?: string;
+    title: string;
+    url: string;
+    isActive: boolean;
+  }[];
 }
 
 const EventForm = ({ type, ...event }: Props) => {
@@ -75,6 +81,7 @@ const EventForm = ({ type, ...event }: Props) => {
         createdAt: event.createdAt ? new Date(event.createdAt) : new Date(),
         updatedAt: new Date(),
         eventRoles: event.eventRoles ?? [],
+        quickLinks: event.quickLinks ?? [],
       }
       : {
         title: "",
@@ -91,12 +98,18 @@ const EventForm = ({ type, ...event }: Props) => {
         createdAt: new Date(),
         updatedAt: new Date(),
         eventRoles: [],
+        quickLinks: [],
       },
   }) as UseFormReturn<z.infer<typeof eventSchema>>);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "eventRoles",
+  });
+
+  const { fields: quickLinkFields, append: appendQuickLink, remove: removeQuickLink } = useFieldArray({
+    control: form.control,
+    name: "quickLinks",
   });
 
   const formatDateTimeLocal = (date: Date) => {
@@ -126,6 +139,7 @@ const EventForm = ({ type, ...event }: Props) => {
       createdAt: values.createdAt,
       updatedAt: values.updatedAt,
       eventRoles: values.eventRoles,
+      quickLinks: values.quickLinks,
     };
 
     const result = isUpdate && event.id
@@ -530,6 +544,121 @@ const EventForm = ({ type, ...event }: Props) => {
                   >
                     <Plus className="w-4 h-4" />
                     Add Role
+                  </Button>
+
+                </div>
+
+                {/* Quick Links */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
+                      Quick Links
+                    </FormLabel>
+                  </div>
+
+                  {quickLinkFields.length === 0 && (
+                    <div className="text-center text-sm py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
+                      <p>No quick links defined yet</p>
+                      <p>Click "Add Link" to define helpful links for enrolled volunteers</p>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col gap-4">
+                    {quickLinkFields.map((field, index) => (
+                      <div key={field.id} className="border border-gray-300 rounded-lg p-4 space-y-4">
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="font-medium text-gray-900">Link #{index + 1}</h4>
+                          <Button
+                            type="button"
+                            onClick={() => removeQuickLink(index)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr_1fr] gap-4">
+                          {/* Link Title */}
+                          <FormField
+                            control={form.control}
+                            name={`quickLinks.${index}.title`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-col gap-1">
+                                <label className="text-xs font-medium text-gray-700">Link Title</label>
+                                <FormControl>
+                                  <Input
+                                    placeholder="e.g., Event Schedule"
+                                    {...field}
+                                    className="w-full px-3 py-2 text-sm rounded-md border-dashed border-gray-400"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          {/* URL */}
+                          <FormField
+                            control={form.control}
+                            name={`quickLinks.${index}.url`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-col gap-1">
+                                <label className="text-xs font-medium text-gray-700">URL</label>
+                                <FormControl>
+                                  <Input
+                                    type="url"
+                                    placeholder="https://example.com"
+                                    {...field}
+                                    className="w-full px-3 py-2 text-sm rounded-md border-dashed border-gray-400"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          {/* Active Status */}
+                          <FormField
+                            control={form.control}
+                            name={`quickLinks.${index}.isActive`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-col gap-1">
+                                <label className="text-xs font-medium text-gray-700">Status</label>
+                                <FormControl>
+                                  <select
+                                    {...field}
+                                    value={field.value ? "true" : "false"}
+                                    onChange={(e) => field.onChange(e.target.value === "true")}
+                                    className="w-full px-3 py-2 text-sm rounded-md border-dashed border-gray-400"
+                                  >
+                                    <option value="true">Active</option>
+                                    <option value="false">Inactive</option>
+                                  </select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button
+                    type="button"
+                    onClick={() => appendQuickLink({
+                      title: "",
+                      url: "",
+                      isActive: true
+                    })}
+                    variant="default"
+                    size="sm"
+                    className="flex items-center py-4 gap-2 mt-3 bg-black text-white hover:bg-gray-800"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Link
                   </Button>
 
                 </div>

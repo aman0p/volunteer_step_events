@@ -16,6 +16,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         },
         include: {
             eventRoles: true,
+            quickLinks: true,
         },
     });
     if (!event) {
