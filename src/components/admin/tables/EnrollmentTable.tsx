@@ -238,7 +238,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
                 />
               </TableCell>
               <TableCell className="group">
-                <Link href={`/admin/events/${enrollment.event.id}/details`} className="flex items-center space-x-2 group">
+                <Link href={`/admin/events/${enrollment.event.id}/details`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 group">
                   <div className="font-medium text-blue-600 hover:text-blue-700">
                     {enrollment.event.title}
                   </div>
@@ -246,7 +246,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
                 </Link>
               </TableCell>
               <TableCell>
-                <Link href={`/admin/account-verification/${enrollment.user.id}`} className="flex items-center space-x-3">
+                <Link href={`/admin/volunteer/${enrollment.user.id}`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3">
                   <div className="flex-shrink-0">
                     {enrollment.user.profileImage ? (
                       <Image
@@ -259,7 +259,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
                       />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                        <Link href={`/admin/account-verification/${enrollment.user.id}`} className="text-xs font-medium">
+                        <Link href={`/admin/volunteer/${enrollment.user.id}`} target="_blank" rel="noopener noreferrer" className="text-xs font-medium">
                           {enrollment.user.fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
                         </Link>
                       </div>
@@ -303,13 +303,13 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                      <Link href={`/admin/events/${enrollment.event.id}`}>
+                      <Link href={`/admin/events/${enrollment.event.id}/details`} target="_blank" rel="noopener noreferrer">
                         <Eye className="mr-2 h-4 w-4" />
                         View Event
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href={`/admin/account-verification/${enrollment.user.id}`}>
+                      <Link href={`/admin/volunteer/${enrollment.user.id}`} target="_blank" rel="noopener noreferrer">
                         <Eye className="mr-2 h-4 w-4" />
                         View Volunteer Profile
                       </Link>

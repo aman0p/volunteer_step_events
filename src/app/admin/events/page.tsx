@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import EventCard from "@/components/EventCard";
+import EventsList from "@/components/admin/EventsList";
 
 export default async function EventsPage() {
   const session = await getServerSession(authOptions);
@@ -38,18 +38,7 @@ export default async function EventsPage() {
       </div>
 
       <div className="mt-5 md:mt-7 w-full h-full min-h-screen">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-5">
-          {events?.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((event) => {
-
-            return (
-              <EventCard
-                key={event.id}
-                event={event}
-              />
-            )
-          })}
-        </div>
-
+        <EventsList events={events} />
       </div>
     </section>
   );

@@ -120,9 +120,6 @@ export default function Profile() {
               <div className="flex items-start gap-3">
                 <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
                 <div className="flex-1">
-                  <h3 className="text-sm font-medium text-red-800 dark:text-red-200 mb-2">
-                    Verification Request Rejected
-                  </h3>
                   {rejectionReason ? (
                     <p className="text-sm text-red-700 dark:text-red-300 mb-2">
                       <span className="font-medium">Reason:</span> {rejectionReason}

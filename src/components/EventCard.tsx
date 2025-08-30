@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
@@ -5,7 +7,7 @@ import config from "@/lib/config";
 import { Image } from "@imagekit/next";
 import { DeleteEvent } from "@/components/admin/forms/DeleteEvent";
 
-export default async function EventCard({event}: {event: any}) {
+export default function EventCard({event}: {event: any}) {
     return (
         <div
         key={event.id}

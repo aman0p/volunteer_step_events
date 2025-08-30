@@ -1,5 +1,5 @@
 import React from "react";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { authOptions } from "@/auth";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
@@ -28,7 +28,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
     }
   });
 
-  if (!event) redirect("/404");
+  if (!event) notFound();
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
@@ -176,7 +176,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 src={event.videoUrl}
                 alt="event video"
                 controls
-                className="w-full h-full object-cover rounded-xl md:rounded-2xl lg:rounded-3xl aspect-video"
+                className="w-full h-full object-cover rounded-xl md:rounded-2xl lg:rounded-3xl aspect-video bg-black/10"
                 poster={event.coverUrl || undefined}
               />
             )}
@@ -194,6 +194,20 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
       </div>
 
       <div className="flex flex-col gap-2 md:gap-5">
+
+        {/* Event Category */}
+        <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7  rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
+          <h1 className="text-base md:text-xl font-bold">Event Category</h1>
+          <div className="flex flex-wrap gap-2">
+            {event.category.map((cat, index) => (
+              <Badge key={index} variant="secondary" className="bg-black/70 text-white">
+                <span className="text-xxs md:text-xs font-semibold">{cat}</span>
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+
         {/* Event Details */}
         <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7  rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
           <h1 className="text-base md:text-xl font-bold">Event Details</h1>

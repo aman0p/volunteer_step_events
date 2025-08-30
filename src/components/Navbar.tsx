@@ -11,7 +11,6 @@ import { getInitials } from "@/lib/utils";
 import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 import { useState } from "react";
-import { IoNotifications } from "react-icons/io5";
 import { NotificationDrawer } from "./NotificationDrawer";
 
 export function Navbar({ session }: { session: Session | null }) {
@@ -64,8 +63,10 @@ export function Navbar({ session }: { session: Session | null }) {
                   {/* Home */}
                   <Link href="/" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Home</Link>
                   
-                  {/* Events */}
-                  <Link href="/my-events" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">My Events</Link>
+                  {/* Events - only for volunteer users */}
+                  {session.user.role === "VOLUNTEER" && (
+                    <Link href="/my-events" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">My Events</Link>
+                  )}
                   
                   {/* Profile */}
                   <Link href="/profile" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Profile</Link>
@@ -117,7 +118,10 @@ export function Navbar({ session }: { session: Session | null }) {
         {session && (
           <>
             <Link href="/" className="hidden md:block">Home</Link>
-            <Link href="/my-events" className="hidden md:block">My Events</Link>
+            {/* Events - only for volunteer users */}
+            {session.user.role === "VOLUNTEER" && (
+              <Link href="/my-events" className="hidden md:block">My Events</Link>
+            )}
             {/* Admin Panel - only for admin and organizer users */}
             {(session.user.role === "ADMIN" || session.user.role === "ORGANIZER") && (
               <Link href="/admin" className="hidden md:block text-blue-600 font-medium">Admin Panel</Link>
