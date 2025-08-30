@@ -30,7 +30,6 @@ model Event {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   enrollments   Enrollment[]
-  // Owner of the event (admin/organizer who created it)
   createdBy     User         @relation(fields: [createdById], references: [id])
   createdById   String
 }

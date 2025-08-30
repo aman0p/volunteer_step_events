@@ -15,7 +15,8 @@ export const config = {
   matcher: [
     // Add routes that require authentication
     "/admin/:path*",
-    // Exclude auth routes and root route
-    "/((?!sign-in|sign-up|api|_next/static|_next/image|favicon.ico|$).*)",
+    "/profile/:path*",
+    // Exclude auth routes, root route, events routes, and static files
+    "/((?!sign-in|sign-up|api|_next/static|_next/image|favicon.ico|events|$).*)",
   ]
 }

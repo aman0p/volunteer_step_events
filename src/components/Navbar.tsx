@@ -14,7 +14,7 @@ import { useState } from "react";
 import { IoNotifications } from "react-icons/io5";
 import { NotificationDrawer } from "./NotificationDrawer";
 
-export function Navbar({ session }: { session: Session }) {
+export function Navbar({ session }: { session: Session | null }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
@@ -58,25 +58,42 @@ export function Navbar({ session }: { session: Session }) {
 
             {/* Nav */}
             <nav className="flex flex-col p-2 text-sm">
-              
-              {/* Home */}
-              <Link href="/" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Home</Link>
-              
-              {/* Events */}
-              <Link href="/events" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Events</Link>
-
-              {/* Profile */}
-              <Link href="/profile" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Profile</Link>
-              
-              {/* Sign out */}
-              <button
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                className="mt-2 inline-flex items-center gap-2 rounded-md px-3 py-2 text-left hover:bg-gray-100 disabled:opacity-50"
-              >
-                <PiSignOutBold className="w-5 h-5" />
-                <span>{isLoggingOut ? "Signing out..." : "Sign out"}</span>
-              </button>
+              {/* Conditional navigation based on authentication */}
+              {session ? (
+                <>
+                  {/* Home */}
+                  <Link href="/" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Home</Link>
+                  
+                  {/* Events */}
+                  <Link href="/my-events" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">My Events</Link>
+                  
+                  {/* Profile */}
+                  <Link href="/profile" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Profile</Link>
+                  
+                  {/* Admin Panel - only for admin and organizer users */}
+                  {(session.user.role === "ADMIN" || session.user.role === "ORGANIZER") && (
+                    <Link href="/admin" className="text-base rounded-md px-3 py-2 hover:bg-gray-100 text-blue-600 font-medium">Admin Panel</Link>
+                  )}
+                  
+                  {/* Sign out */}
+                  <button
+                    onClick={handleLogout}
+                    disabled={isLoggingOut}
+                    className="mt-2 inline-flex items-center gap-2 rounded-md px-3 py-2 text-left hover:bg-gray-100 disabled:opacity-50"
+                  >
+                    <PiSignOutBold className="w-5 h-5" />
+                    <span>{isLoggingOut ? "Signing out..." : "Sign out"}</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  {/* Sign in */}
+                  <Link href="/sign-in" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Sign In</Link>
+                  
+                  {/* Sign up */}
+                  <Link href="/sign-up" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Sign Up</Link>
+                </>
+              )}
             </nav>
           </SheetContent>
         </Sheet>
@@ -97,32 +114,57 @@ export function Navbar({ session }: { session: Session }) {
       {/* Right: Profile + desktop nav/actions */}
       <div className="flex items-center justify-center gap-4 md:gap-8 w-fit text-sm">
         {/* Desktop nav visible only on md+; on mobile these live in the sidebar */}
-        <Link href="/" className="hidden md:block">Home</Link>
-        <Link href="/events" className="hidden md:block">Events</Link>
+        {session && (
+          <>
+            <Link href="/" className="hidden md:block">Home</Link>
+            <Link href="/my-events" className="hidden md:block">My Events</Link>
+            {/* Admin Panel - only for admin and organizer users */}
+            {(session.user.role === "ADMIN" || session.user.role === "ORGANIZER") && (
+              <Link href="/admin" className="hidden md:block text-blue-600 font-medium">Admin Panel</Link>
+            )}
+          </>
+        )}
 
-        {/* Notifications (desktop) */}
-        <NotificationDrawer />
+        {/* Conditional right side based on authentication */}
+        {session ? (
+          <>
+            {/* Notifications (desktop) */}
+            <NotificationDrawer />
 
-        <Link href="/profile" aria-label="Profile">
-          <Avatar className="w-7 h-7 md:w-7 md:h-7 mb-1 md:mb-0.5">
-            {/* <AvatarImage src={session?.user?.image || ""} /> */}
-            <AvatarFallback >
-              {getInitials(session?.user?.name || "V")}
-            </AvatarFallback>
-          </Avatar>
-        </Link>
+            <Link href="/profile" aria-label="Profile">
+              <Avatar className="w-7 h-7 md:w-7 md:h-7 mb-1 md:mb-0.5">
+                {/* <AvatarImage src={session?.user?.image || ""} /> */}
+                <AvatarFallback >
+                  {getInitials(session?.user?.name || "V")}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
 
-        <button
-          onClick={handleLogout}
-          disabled={isLoggingOut}
-          className="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          title="Sign out"
-        >
-          <PiSignOutBold className="w-5 h-5" />
-          <span className="hidden md:block">
-            {isLoggingOut ? "Signing out..." : "Sign out"}
-          </span>
-        </button>
+            <button
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Sign out"
+            >
+              <PiSignOutBold className="w-5 h-5" />
+              <span className="hidden md:block">
+                {isLoggingOut ? "Signing out..." : "Sign out"}
+              </span>
+            </button>
+          </>
+        ) : (
+          <>
+            {/* Sign in */}
+            <Link href="/sign-in" className="hidden md:inline-flex items-center gap-2 py-2 rounded-md transition-colors duration-200">
+              Sign In
+            </Link>
+            
+            {/* Sign up */}
+            <Link href="/sign-up" className="hidden md:inline-flex items-center gap-2 px-7 py-2 rounded-md bg-black text-white hover:bg-black/90 transition-colors duration-200">
+              Sign Up
+            </Link>
+          </>
+        )}
       </div>
     </header>
   )

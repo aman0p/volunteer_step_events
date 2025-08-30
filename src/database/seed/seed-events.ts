@@ -1,4 +1,5 @@
 import { PrismaClient } from '@/generated/prisma'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -219,9 +220,39 @@ export async function seedEvents() {
 
     console.log('🎉 Creating events...')
     
+    // Ensure we have at least one user to associate as the creator/owner of events
+    let creators = await prisma.user.findMany({})
+    if (creators.length === 0) {
+      console.log('👤 No users found. Creating a default event creator user...')
+      const hashedPassword = await bcrypt.hash('password123', 12)
+      const defaultUser = await prisma.user.create({
+        data: {
+          fullName: 'Default Organizer',
+          email: 'organizer@example.com',
+          phoneNumber: '+91-9000000000',
+          skills: ['Organizing', 'Planning'],
+          address: 'Default City',
+          gender: 'OTHER',
+          govIdType: 'AADHAR_CARD',
+          password: hashedPassword,
+          profileImage: 'https://ik.imagekit.io/praveenlodhiofficial/users/profile/profile_nQkcdEiM1.webp?updatedAt=1756423316001',
+          govIdImage: 'https://ik.imagekit.io/praveenlodhiofficial/users/gov-id/govt-id_hTp9DNNv8.webp?updatedAt=1756423306534',
+          role: 'USER',
+          isVerified: false,
+        }
+      })
+      creators = [defaultUser]
+    }
+
     for (const eventData of events) {
+      const creator = creators[events.indexOf(eventData) % creators.length]
       const event = await prisma.event.create({
-        data: eventData
+        data: {
+          ...eventData,
+          createdBy: {
+            connect: { id: creator.id }
+          }
+        }
       })
 
       console.log(`✅ Created event: ${event.title} (${event.location})`)

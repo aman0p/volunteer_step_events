@@ -1,18 +1,14 @@
 import { authOptions } from "@/auth";
 import { Navbar } from "@/components/Navbar";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import { Providers } from "@/components/Providers";
 import { prisma } from "@/lib/prisma";
 import ProfileCompletionBanner from "@/components/ProfileCompletionBanner";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/sign-in");
-  }
 
-  // Update lastActiveAt once per day
+  // Update lastActiveAt once per day for authenticated users
   if (session?.user?.id) {
     try {
       const user = await prisma.user.findUnique({
@@ -43,8 +39,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <Providers session={session}>
       <div className="flex flex-col items-center justify-center w-full mx-auto h-full">
-      <ProfileCompletionBanner className="w-full sticky top-0" />
-
+        {session && <ProfileCompletionBanner className="w-full sticky top-0" />}
         <Navbar session={session} />
         <div className="mt-10 max-w-6xl">{children}</div>
       </div>

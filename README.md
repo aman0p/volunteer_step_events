@@ -17,6 +17,11 @@ Volunteer Management App with Admin panel
 pnpm dotenv -e .env -- prisma migrate deploy
 ```
 
+## cmd to reset the local postgres database
+```bash
+npx dotenv -e .env.local -- npx prisma migrate reset
+```
+
 ## Local Database Seeding
 
 To seed your local Docker database with verification data:
@@ -36,7 +41,6 @@ To seed events in your local database:
 npx dotenv -e .env.local -- npx tsx src/database/seed/seed-events.ts
 
 # Seed verification data in local database
-npx dotenv -e .env.local -- npx tsx src/database/seed/seed-verification.ts
 
 # Seed enrollment requests in local database
 npx dotenv -e .env.local -- npx tsx src/database/seed/seed-enrollments.ts

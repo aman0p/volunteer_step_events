@@ -47,7 +47,7 @@ export function Sidebar({ session, enrollmentCount, verificationCount }: { sessi
                     <SidebarGroupLabel>Administration</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {adminSideBarLinks.map((link) => {
+                            {adminSideBarLinks.filter(link => link.text !== "Home").map((link) => {
                                 const isSelected =
                                     (link.route === "/admin" && pathname === "/admin") ||
                                     (link.route !== "/admin" && pathname.includes(link.route) && link.route.length > 1);

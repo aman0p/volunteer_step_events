@@ -44,7 +44,7 @@ export default async function AccountVerification() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
+        <div className="space-y-1">
           <h1 className="text-3xl font-bold tracking-tight">Account Verification Requests</h1>
           <p className="text-muted-foreground">
             Review and approve user verification requests
