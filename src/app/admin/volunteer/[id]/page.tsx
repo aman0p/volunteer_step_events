@@ -9,6 +9,7 @@ import { Image } from "@imagekit/next";
 import config from "@/lib/config";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default async function VolunteerDetailsPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
@@ -95,9 +96,20 @@ export default async function VolunteerDetailsPage({ params }: { params: { id: s
   const stats = getEnrollmentStats(volunteer.enrollments);
 
   return (
-    <div className="">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      {/* Back Button */}
+      <div className="flex items-center">
+        <Link 
+          href="/admin/volunteer" 
+          className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Volunteers
+        </Link>
+      </div>
+
+      <div className="flex justify-between w-full">
+        {/* Header */}
         <div className="space-y-1">
           <h1 className="text-3xl font-bold tracking-tight">{volunteer.fullName}</h1>
           <p className="text-muted-foreground">
@@ -116,104 +128,76 @@ export default async function VolunteerDetailsPage({ params }: { params: { id: s
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Side - Volunteer Details */}
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
+        <div className="space-y-6">
           {/* Profile Information */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6">
-              {/* Profile Image */}
-              <div className="flex md:flex-shrink-0 w-full md:w-fit justify-center md:justify-start">
-                {volunteer.profileImage ? (
-                  <div className="w-24 h-24 rounded-full overflow-hidden">
-                    <Image
-                      urlEndpoint={config.env.imagekit.urlEndpoint}
-                      src={volunteer.profileImage}
-                      alt={volunteer.fullName}
-                      width={96}
-                      height={96}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center">
-                    <span className="text-4xl">{volunteer.gender.charAt(0).toUpperCase()}</span>
-                  </div>
-                )}
+          <div className="rounded-lg border p-6 bg-black/10">
+            <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Name</label>
+                <p className="text-sm">{volunteer.fullName}</p>
               </div>
 
-              {/* Basic Info */}
-              <div className="flex-1 space-y-4 w-full">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <p className="text-sm text-gray-500">Email</p>
-                      <p className="font-medium text-gray-900">{volunteer.email}</p>
-                    </div>
-                  </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Email</label>
+                <p className="text-sm">{volunteer.email}</p>
+              </div>
 
-                  <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <p className="text-sm text-gray-500">Phone</p>
-                      <p className="font-medium text-gray-900">
-                        <span className="text-gray-700 select-none">+91</span>
-                        <span className="text-gray-700">{volunteer.phoneNumber}</span>
-                      </p>
-                    </div>
-                  </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Phone Number</label>
+                <p className="text-sm">
+                  <span className="text-gray-700 select-none">+91</span>
+                  {volunteer.phoneNumber}
+                </p>
+              </div>
 
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <p className="text-sm text-gray-500">Address</p>
-                      <p className="font-medium text-gray-900">{volunteer.address}</p>
-                    </div>
-                  </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Gender</label>
+                <p className="text-sm">{volunteer.gender}</p>
+              </div>
 
-                  <div className="flex items-center gap-3">
-                    <Users className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <p className="text-sm text-gray-500">Role</p>
-                      <Badge variant="outline">{volunteer.role}</Badge>
-                    </div>
-                  </div>
-                </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Address</label>
+                <p className="text-sm">{volunteer.address}</p>
+              </div>
 
-                {/* Skills */}
-                {volunteer.skills && volunteer.skills.length > 0 && (
-                  <div>
-                    <p className="text-sm text-gray-500 mb-2">Skills</p>
-                    <div className="flex flex-wrap gap-2">
-                      {volunteer.skills.map((skill, index) => (
-                        <Badge key={index} variant="outline">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Role</label>
+                <p className="text-sm">
+                  <Badge variant="outline">{volunteer.role}</Badge>
+                </p>
+              </div>
 
-                {/* Additional Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-500">Member Since</p>
-                    <p className="font-medium text-gray-900">{formatDate(volunteer.createdAt)}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Gender</p>
-                    <p className="font-medium text-gray-900">{volunteer.gender}</p>
-                  </div>
-                </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Member Since</label>
+                <p className="text-sm">{formatDate(volunteer.createdAt)}</p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Volunteer ID</label>
+                <p className="text-sm font-mono text-xs">{volunteer.id}</p>
               </div>
             </div>
+
+            {/* Skills */}
+            {volunteer.skills && volunteer.skills.length > 0 && (
+              <div className="mt-4">
+                <label className="text-sm font-medium text-muted-foreground">Skills</label>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {volunteer.skills.map((skill, index) => (
+                    <Badge key={index} variant="default" className="text-xs py-1 px-2">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Event History */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Event History ({volunteer.enrollments.length})</h2>
+          <div className="rounded-lg border p-6 bg-black/10">
+            <h2 className="text-xl font-semibold mb-4">Event History ({volunteer.enrollments.length})</h2>
 
             {volunteer.enrollments.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
@@ -222,95 +206,67 @@ export default async function VolunteerDetailsPage({ params }: { params: { id: s
                 <p className="text-gray-500">This volunteer hasn't enrolled in any events yet.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {volunteer.enrollments.map((enrollment) => (
-                  <div key={enrollment.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                    {/* Event Card Header */}
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2">
-                          {enrollment.event.title}
-                        </h3>
-                        <div className="flex items-center gap-2 mb-2">
-                          <StatusBadge status={enrollment.status} />
-                          <span className="text-xs text-gray-500">
-                            Enrolled: {formatDate(enrollment.enrolledAt)}
-                          </span>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Event Name</TableHead>
+                    <TableHead>Location</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {volunteer.enrollments.map((enrollment) => (
+                    <TableRow
+                      key={enrollment.id}
+                      className="hover:bg-muted/50"
+                    >
+                      <TableCell className="group">
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1">
+                            <h3 className="font-medium text-gray-900">{enrollment.event.title}</h3>
+                            <div className="flex items-center gap-2 mt-1">
+                              <StatusBadge status={enrollment.status} />
+                              <span className="text-xs text-gray-500">
+                                Enrolled: {formatDate(enrollment.enrolledAt)}
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-
-                      {/* Event Cover Image */}
-                      {enrollment.event.coverUrl && (
-                        <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                          <Image
-                            urlEndpoint={config.env.imagekit.urlEndpoint}
-                            src={enrollment.event.coverUrl}
-                            alt={enrollment.event.title}
-                            width={64}
-                            height={64}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Event Details */}
-                    <div className="space-y-2 text-sm text-gray-600 mb-3">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span>{formatDate(enrollment.event.startDate)}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span>{getTimeRange(enrollment.event.startDate, enrollment.event.endDate)}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" />
-                        <span>{enrollment.event.location}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Tag className="w-4 h-4" />
-                        <span>{enrollment.event.category.join(", ")}</span>
-                      </div>
-                    </div>
-
-                    {/* Event Description */}
-                    {enrollment.event.description && (
-                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                        {enrollment.event.description}
-                      </p>
-                    )}
-
-                    {/* Event Capacity */}
-                    <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-                      <span>Event Capacity</span>
-                      <span>
-                        {enrollment.event.enrollments.length}
-                        {enrollment.event.maxVolunteers && `/${enrollment.event.maxVolunteers}`}
-                      </span>
-                    </div>
-
-                    {/* Action Button */}
-                    <div className="flex justify-end">
-                      <Link href={`/admin/events/${enrollment.event.id}/details`}>
-                        <Button size="sm" variant="outline" className="w-full">
-                          <ExternalLink className="w-3 h-3 mr-1" />
-                          View Event Details
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                      </TableCell>
+                      <TableCell className="text-gray-600">{enrollment.event.location}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             )}
           </div>
         </div>
 
-        {/* Right Side - Statistics & Actions */}
+        {/* Right Side - Statistics & Profile Image */}
         <div className="space-y-6">
+          {/* Profile Image */}
+          <div className="rounded-lg border p-6 bg-black/10">
+            <h2 className="text-xl font-semibold mb-4">Profile Image</h2>
+            <div className="relative">
+              {volunteer.profileImage ? (
+                <Image
+                  urlEndpoint={config.env.imagekit.urlEndpoint}
+                  src={volunteer.profileImage}
+                  alt={volunteer.fullName}
+                  width={1000}
+                  height={1000}
+                  className="rounded-lg aspect-video object-cover object-top"
+                />
+              ) : (
+                <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                  <span className="text-6xl text-gray-400">{volunteer.gender.charAt(0).toUpperCase()}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Enrollment Statistics */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Enrollment Statistics</h2>
+          <div className="rounded-lg border p-6 bg-black/10">
+            <h2 className="text-xl font-semibold mb-4">Enrollment Statistics</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                 <div className="flex items-center gap-3">
@@ -342,22 +298,6 @@ export default async function VolunteerDetailsPage({ params }: { params: { id: s
                   <span className="text-lg font-bold text-gray-900">{stats.total}</span>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Volunteer Metadata */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Volunteer Metadata</h2>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-500">Volunteer ID</span>
-                <span className="text-gray-900 font-mono text-xs">{volunteer.id}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Created</span>
-                <span className="text-gray-900">{formatDate(volunteer.createdAt)}</span>
-              </div>
-
             </div>
           </div>
         </div>
