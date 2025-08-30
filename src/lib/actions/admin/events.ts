@@ -19,6 +19,32 @@ export const createEvent = async (params: EventParams) => {
       return { success: false, message: "Authentication required" };
     }
 
+    // Validate event roles if provided
+    if (params.eventRoles && params.eventRoles.length > 0) {
+      // Check for duplicate role names
+      const roleNames = params.eventRoles.map(role => role.name.trim().toLowerCase());
+      const uniqueNames = new Set(roleNames);
+      if (uniqueNames.size !== roleNames.length) {
+        return { success: false, message: "Role names must be unique" };
+      }
+
+      // Validate individual role fields
+      for (const role of params.eventRoles) {
+        if (!role.name.trim()) {
+          return { success: false, message: "Role name is required for all roles" };
+        }
+        if (!role.description.trim() || role.description.length < 3) {
+          return { success: false, message: "Role description must be at least 3 characters" };
+        }
+        if (role.payout < 0 || role.payout > 1000000) {
+          return { success: false, message: "Payout must be between ₹0 and ₹10,00,000" };
+        }
+        if (role.maxCount < 1 || role.maxCount > 100) {
+          return { success: false, message: "Max volunteers must be between 1 and 100" };
+        }
+      }
+    }
+
     // Map incoming params to Prisma create shape
     const data: Prisma.EventUncheckedCreateInput = {
       title: params.title,
@@ -39,6 +65,19 @@ export const createEvent = async (params: EventParams) => {
     };
 
     const newEvent = await prisma.event.create({ data });
+
+    // Create event roles if provided
+    if (params.eventRoles && params.eventRoles.length > 0) {
+      await prisma.eventRole.createMany({
+        data: params.eventRoles.map(role => ({
+          name: role.name.trim(),
+          description: role.description.trim(),
+          payout: role.payout,
+          maxCount: role.maxCount,
+          eventId: newEvent.id,
+        }))
+      });
+    }
 
     // Broadcast to volunteers that a new event has been added
     await broadcastNewEventNotification(newEvent.id);
@@ -79,6 +118,34 @@ export const updateEvent = async (id: string, params: EventParams) => {
       return { success: false, message: "You can only update your own events" };
     }
 
+    // Validate event roles if provided
+    if (params.eventRoles !== undefined) {
+      if (params.eventRoles.length > 0) {
+        // Check for duplicate role names
+        const roleNames = params.eventRoles.map(role => role.name.trim().toLowerCase());
+        const uniqueNames = new Set(roleNames);
+        if (uniqueNames.size !== roleNames.length) {
+          return { success: false, message: "Role names must be unique" };
+        }
+
+        // Validate individual role fields
+        for (const role of params.eventRoles) {
+          if (!role.name.trim()) {
+            return { success: false, message: "Role name is required for all roles" };
+          }
+          if (!role.description.trim() || role.description.length < 10) {
+            return { success: false, message: "Role description must be at least 10 characters" };
+          }
+          if (role.payout < 0 || role.payout > 100000) {
+            return { success: false, message: "Payout must be between ₹0 and ₹1,00,000" };
+          }
+          if (role.maxCount < 1 || role.maxCount > 100) {
+            return { success: false, message: "Max volunteers must be between 1 and 100" };
+          }
+        }
+      }
+    }
+
     const updateData: Prisma.EventUpdateInput = {
       title: params.title,
       description: params.description,
@@ -98,6 +165,27 @@ export const updateEvent = async (id: string, params: EventParams) => {
       where: { id },
       data: updateData,
     });
+
+    // Update event roles if provided
+    if (params.eventRoles !== undefined) {
+      // Delete existing roles
+      await prisma.eventRole.deleteMany({
+        where: { eventId: id }
+      });
+
+      // Create new roles
+      if (params.eventRoles.length > 0) {
+        await prisma.eventRole.createMany({
+          data: params.eventRoles.map(role => ({
+            name: role.name.trim(),
+            description: role.description.trim(),
+            payout: role.payout,
+            maxCount: role.maxCount,
+            eventId: id,
+          }))
+        });
+      }
+    }
 
     // Notify all enrolled volunteers about the event update
     await notifyEnrolledVolunteersOnEventUpdate(id);

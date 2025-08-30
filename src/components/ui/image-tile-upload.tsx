@@ -28,7 +28,7 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
       return (
         <div className={cn("flex items-start gap-3 flex-wrap", className)}>
           {pending.map((item) => (
-            <div key={item.id} className="relative w-[310px] md:w-[290px] aspect-video rounded-md overflow-hidden bg-white shadow-xs">
+            <div key={item.id} className="relative w-[310px] md:w-[217px] aspect-video rounded-md overflow-hidden bg-white shadow-xs">
               <div className="absolute inset-0 bg-green-100" />
               <div className="absolute inset-0 bg-green-300" style={{ width: `${item.progress}%` }} />
               <div className="absolute inset-0 flex items-center justify-center text-sm text-slate-700">{item.progress}% Uploading...</div>
@@ -40,7 +40,7 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
               e.preventDefault();
               inputRef.current?.click();
             }}
-            className="w-[310px] md:w-[290px] aspect-video rounded-md bg-gray-50 hover:bg-gray-100 flex items-center justify-center"
+            className="w-[310px] md:w-[217px] aspect-video rounded-md bg-gray-50 hover:bg-gray-100 flex items-center justify-center"
             title="Add images"
           >
             <div className="flex items-center gap-1.5">
@@ -75,7 +75,7 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
     // Single add: delegate to FileUpload so its built-in progress is used
     const [nonce, setNonce] = useState(0);
     return (
-      <div className="w-[310px] md:w-[290px]">
+      <div className="w-[310px] md:w-[217px]">
         <FileUpload
           key={nonce}
           type={mediaType === "video" ? "video" : "image"}
@@ -87,7 +87,7 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
             onChange(p);
             setNonce((n) => n + 1);
           }}
-          className={cn("w-[310px] md:w-[290px] aspect-video")}
+          className={cn("w-[310px] md:w-[217px] aspect-video")}
         />
       </div>
     );
@@ -103,7 +103,7 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
   };
 
   return (
-    <div className={cn("w-[310px] md:w-[290px]", className)}>
+    <div className={cn("w-[310px] md:w-[217px]", className)}>
       <FileUpload
         type={detectMediaType(value || "")}
         accept={mediaType === "both" ? "image/*,video/*" : mediaType === "video" ? "video/*" : "image/*"}
@@ -114,7 +114,7 @@ export default function ImageTileUpload({ value, onChange, folder, className, ad
         onFileChange={(p) => onChange(p)}
         overlayMode="remove"
         onRemove={() => onChange(null)}
-        className="w-[310px] md:w-[290px]"
+        className="w-[310px] md:w-[217px]"
       />
     </div>
   );

@@ -42,6 +42,15 @@ interface AuthCredentials {
   profileImage?: string;
 }
 
+// Type for event roles
+interface EventRole {
+  id?: string;
+  name: string;
+  description: string;
+  payout: number;
+  maxCount: number;
+}
+
 // Type for creating an event based on the Prisma schema
 interface EventParams {
   title: string;
@@ -57,6 +66,7 @@ interface EventParams {
   maxVolunteers?: number;
   createdAt?: Date;
   updatedAt?: Date;
+  eventRoles?: EventRole[];
 }
 
 // Type for events returned from database (includes id and matches Prisma schema exactly)

@@ -72,6 +72,13 @@ export const eventSchema = z
       .optional(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
+    eventRoles: z.array(z.object({
+      id: z.string().optional(),
+      name: z.string().min(1, "Role name is required"),
+      description: z.string().min(10, "Role description must be at least 10 characters"),
+      payout: z.number().min(0, "Payout must be non-negative").max(1000000, "Payout cannot exceed ₹10,00,000"),
+      maxCount: z.number().int().min(1, "Max count must be at least 1").max(100, "Max count cannot exceed 100")
+    })).optional(),
   })
   .refine((data) => data.startDate >= new Date(), {
     message: "Start date cannot be in the past",
@@ -80,6 +87,18 @@ export const eventSchema = z
   .refine((data) => data.endDate > data.startDate, {
     message: "End date must be after start date",
     path: ["endDate"],
+  })
+  .refine((data) => {
+    if (data.eventRoles && data.eventRoles.length > 0) {
+      // Check if all roles have unique names
+      const roleNames = data.eventRoles.map(role => role.name.trim().toLowerCase());
+      const uniqueNames = new Set(roleNames);
+      return uniqueNames.size === roleNames.length;
+    }
+    return true;
+  }, {
+    message: "Role names must be unique",
+    path: ["eventRoles"],
   });
 
 export const profileSchema = z.object({

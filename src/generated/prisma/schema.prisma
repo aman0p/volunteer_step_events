@@ -30,6 +30,7 @@ model Event {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   enrollments   Enrollment[]
+  eventRoles    EventRole[]
   createdBy     User         @relation(fields: [createdById], references: [id])
   createdById   String
 }
@@ -58,16 +59,32 @@ model User {
   eventsCreated        Event[]
 }
 
+model EventRole {
+  id          String       @id @default(uuid())
+  name        String // e.g., "Event Coordinator", "Registration Helper", "Security"
+  description String // Description of what this role entails
+  payout      Float // Amount in currency (e.g., 500.00 for $500)
+  maxCount    Int // Maximum number of volunteers needed for this role
+  event       Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId     String
+  enrollments Enrollment[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
 model Enrollment {
-  id                String    @id @default(uuid())
-  status            Status    @default(PENDING)
-  enrolledAt        DateTime  @default(now())
+  id                String     @id @default(uuid())
+  status            Status     @default(PENDING)
+  enrolledAt        DateTime   @default(now())
   cancelledAt       DateTime? // Track when user cancels enrollment
-  cancellationCount Int       @default(0)
-  event             Event     @relation(fields: [eventId], references: [id])
+  cancellationCount Int        @default(0)
+  event             Event      @relation(fields: [eventId], references: [id])
   eventId           String
-  user              User      @relation(fields: [userId], references: [id])
+  user              User       @relation(fields: [userId], references: [id])
   userId            String
+  eventRole         EventRole? @relation(fields: [eventRoleId], references: [id])
+  eventRoleId       String?
+  payoutAmount      Float? // Actual payout amount (can be different from role's default payout)
 
   @@unique([eventId, userId])
 }

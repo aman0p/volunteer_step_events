@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type UseFormReturn, type SubmitHandler } from "react-hook-form";
+import { useForm, type UseFormReturn, type SubmitHandler, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 import {
@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import Tag from "@/components/ui/tag";
 import { createEvent, updateEvent } from "@/lib/actions/admin/events";
 import { EventParams } from "@/types";
+import { Trash2, Plus } from "lucide-react";
 
 
 interface Props {
@@ -41,49 +42,63 @@ interface Props {
   maxVolunteers?: number | null;
   createdAt?: Date | string;
   updatedAt?: Date | string;
+  eventRoles?: {
+    name: string;
+    description: string;
+    payout: number;
+    maxCount: number;
+  }[];
 }
 
 const EventForm = ({ type, ...event }: Props) => {
   const router = useRouter();
   const isUpdate = type === "update" && !!event.id;
 
+
+
   const form = (useForm({
     resolver: zodResolver(eventSchema),
     defaultValues: isUpdate
       ? {
-          title: (event.title as string) ?? "",
-          description: (event.description as string) ?? "",
-          location: (event.location as string) ?? "",
-          startDate: event.startDate ? new Date(event.startDate) : new Date(),
-          endDate: event.endDate ? new Date(event.endDate) : new Date(),
-          dressCode: (event.dressCode as string) ?? "",
-          coverUrl: (event.coverUrl as string) ?? "",
-
-          videoUrl: (event.videoUrl as string) ?? "",
-          eventImages: (event.eventImages as string[]) ?? [],
-          category: (event.category as string[]) ?? [],
-          maxVolunteers:
-            typeof event.maxVolunteers === "number" ? event.maxVolunteers : undefined,
-          createdAt: event.createdAt ? new Date(event.createdAt) : new Date(),
-          updatedAt: new Date(),
-        }
+        title: (event.title as string) ?? "",
+        description: (event.description as string) ?? "",
+        location: (event.location as string) ?? "",
+        startDate: event.startDate ? new Date(event.startDate) : new Date(),
+        endDate: event.endDate ? new Date(event.endDate) : new Date(),
+        dressCode: (event.dressCode as string) ?? "",
+        coverUrl: (event.coverUrl as string) ?? "",
+        videoUrl: (event.videoUrl as string) ?? "",
+        eventImages: (event.eventImages as string[]) ?? [],
+        category: (event.category as string[]) ?? [],
+        maxVolunteers:
+          typeof event.maxVolunteers === "number" ? event.maxVolunteers : undefined,
+        createdAt: event.createdAt ? new Date(event.createdAt) : new Date(),
+        updatedAt: new Date(),
+        eventRoles: event.eventRoles ?? [],
+      }
       : {
-          title: "",
-          description: "",
-          location: "",
-          startDate: new Date(),
-          endDate: new Date(),
-          dressCode: "",
-          coverUrl: "",
-
-          videoUrl: "",
-          eventImages: [],
-          category: [],
-          maxVolunteers: undefined,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+        title: "",
+        description: "",
+        location: "",
+        startDate: new Date(),
+        endDate: new Date(),
+        dressCode: "",
+        coverUrl: "",
+        videoUrl: "",
+        eventImages: [],
+        category: [],
+        maxVolunteers: undefined,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        eventRoles: [],
+      },
   }) as UseFormReturn<z.infer<typeof eventSchema>>);
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "eventRoles",
+  });
+
   const formatDateTimeLocal = (date: Date) => {
     const pad = (n: number) => String(n).padStart(2, "0");
     const yyyy = date.getFullYear();
@@ -110,6 +125,7 @@ const EventForm = ({ type, ...event }: Props) => {
       maxVolunteers: values.maxVolunteers,
       createdAt: values.createdAt,
       updatedAt: values.updatedAt,
+      eventRoles: values.eventRoles,
     };
 
     const result = isUpdate && event.id
@@ -313,7 +329,7 @@ const EventForm = ({ type, ...event }: Props) => {
                               placeholder={
                                 Array.isArray(field.value) && field.value.length >= 3
                                   ? "Maximum 3 categories"
-                                  : "Type and press Enter"
+                                  : "Type and press Enter to add Event Category (genre, theme, etc.)"
                               }
                               disabled={Array.isArray(field.value) && field.value.length >= 3}
                               className="flex-1 min-w-[160px] bg-transparent outline-none text-sm placeholder:text-gray-500 placeholder:pl-1"
@@ -336,14 +352,14 @@ const EventForm = ({ type, ...event }: Props) => {
                         Event Description
                       </FormLabel>
                       <FormControl>
-                                                  <div className="w-full border border-gray-300 rounded-md">
-                            <Textarea
-                              placeholder="Event description"
-                              {...field}
-                              rows={8}
-                              className="w-full px-3 py-2 text-sm rounded-md bg-transparent transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0 border-0"
-                            />
-                          </div>
+                        <div className="w-full border border-gray-300 rounded-md">
+                          <Textarea
+                            placeholder="Event description"
+                            {...field}
+                            rows={8}
+                            className="w-full px-3 py-2 text-sm rounded-md bg-transparent transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0 border-0"
+                          />
+                        </div>
                       </FormControl>
 
                       <FormMessage />
@@ -351,52 +367,172 @@ const EventForm = ({ type, ...event }: Props) => {
                   )}
                 />
 
-                            {/* Event Images */}
-            <FormField
-              control={form.control}
-              name={"eventImages"}
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-1">
-                  <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
-                    Event Media (Images & Videos)
-                  </FormLabel>
-                  <FormControl>
-                    <div className="flex flex-wrap gap-3">
-                      {Array.isArray(field.value) && field.value.length > 0 && field.value.map((img, idx) => (
-                        <div key={`${img}-${idx}`} className="rounded-md border border-gray-300">
-                          <ImageTileUpload
-                            value={img}
-                            placeholder="Upload multiple event image"
-                            mediaType="both"
-                            onChange={(newPath: string | null) => {
-                              const list = Array.isArray(field.value) ? [...field.value] : [];
-                              list[idx] = newPath ?? "";
-                              field.onChange(list.filter(Boolean));
-                            }}
-                            folder="events/images"
-                            // className="border border-black"
+
+
+                {/* Event Roles */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
+                      Volunteer Roles & Payouts
+                    </FormLabel>
+                  </div>
+
+                  {fields.length === 0 && (
+                    <div className="text-center text-sm py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
+                      <p>No volunteer roles defined yet</p>
+                      <p>Click "Add Role" to define volunteer positions and payouts</p>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col gap-4">
+                    {fields.map((field, index) => (
+                      <div key={field.id} className="border border-gray-300 rounded-lg p-4 space-y-4">
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="font-medium text-gray-900">Role #{index + 1}</h4>
+                          <Button
+                            type="button"
+                            onClick={() => remove(index)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr_1fr] gap-4">
+                          {/* Role Name */}
+                          <FormField
+                            control={form.control}
+                            name={`eventRoles.${index}.name`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-col gap-1">
+                                <label className="text-xs font-medium text-gray-700">Role Name</label>
+                                <FormControl>
+                                  <Input
+                                    placeholder="e.g., Event Coordinator"
+                                    {...field}
+                                    className="w-full px-3 py-2 text-sm rounded-md border-dashed border-gray-400"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          {/* Payout */}
+                          <FormField
+                            control={form.control}
+                            name={`eventRoles.${index}.payout`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-col gap-1">
+                                <label className="text-xs font-medium text-gray-700">Payout Amount</label>
+                                <FormControl>
+                                  <Input
+                                    type="number"
+                                    placeholder="0.00"
+                                    {...field}
+                                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                                    className="w-full px-3 py-2 text-sm rounded-md border-dashed border-gray-400"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          {/* Max Count */}
+                          <FormField
+                            control={form.control}
+                            name={`eventRoles.${index}.maxCount`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-col gap-1">
+                                <label className="text-xs font-medium text-gray-700">Max Volunteers</label>
+                                <FormControl>
+                                  <Input
+                                    type="number"
+                                    placeholder="1"
+                                    {...field}
+                                    onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
+                                    className="w-full px-3 py-2 text-sm rounded-md border-dashed border-gray-400"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
                           />
                         </div>
-                      ))}
 
-                      {/* Add tile */}
-                      <ImageTileUpload
-                        add
-                        multiple
-                        mediaType="both"
-                        onChange={(newPath: string | null) => {
-                          const current = (form.getValues("eventImages") as string[] | undefined) ?? [];
-                          field.onChange([...current, newPath ?? ""].filter(Boolean));
-                        }}
-                        folder="events/images"
-                        className="border border-gray-400 border-dashed rounded-md"
-                      />
+
+                        {/* Role Description */}
+                        <FormField
+                          control={form.control}
+                          name={`eventRoles.${index}.description`}
+                          render={({ field }) => (
+                            <FormItem className="flex flex-col gap-1 md:col-span-2">
+                              <label className="text-xs font-medium text-gray-700">Role Description</label>
+                              <FormControl>
+                                <Textarea
+                                  placeholder="Describe the responsibilities and requirements for this role..."
+                                  {...field}
+                                  rows={3}
+                                  className="w-full px-3 py-2 text-sm rounded-md border border-dashed border-gray-400 bg-white focus:ring-0 focus:ring-offset-0 "
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Summary Section */}
+                  {fields.length > 0 && (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex flex-col gap-2">
+                          <h5 className="font-semibold text-sm text-gray-900">Roles Summary</h5>
+                          <p className="text-sm text-gray-600">
+                            Total Roles: {fields.length} | 
+                            Total Max Volunteers: {fields.reduce((sum, _, index) => {
+                              const maxCount = form.watch(`eventRoles.${index}.maxCount`) || 0;
+                              return sum + maxCount;
+                            }, 0)}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-gray-900">Total Payout</p>
+                          <p className="text-sm text-gray-600">
+                            ₹{fields.reduce((sum, _, index) => {
+                              const payout = form.watch(`eventRoles.${index}.payout`) || 0;
+                              const maxCount = form.watch(`eventRoles.${index}.maxCount`) || 0;
+                              return sum + (payout * maxCount);
+                            }, 0).toLocaleString('en-IN')}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  )}
+
+                  <Button
+                    type="button"
+                    onClick={() => append({
+                      name: "",
+                      description: "",
+                      payout: 0,
+                      maxCount: 1
+                    })}
+                    variant="default"
+                    size="sm"
+                    className="flex items-center py-4 gap-2 mt-3 bg-black text-white hover:bg-gray-800"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Role
+                  </Button>
+
+                </div>
 
               </div>
 
@@ -500,7 +636,7 @@ const EventForm = ({ type, ...event }: Props) => {
                         </FormLabel>
                         <FormControl>
                           <div className="w-full border border-gray-300 rounded-md">
-                          <FileUpload
+                            <FileUpload
                               type="video"
                               accept="video/*"
                               placeholder="Upload an event video"
@@ -517,19 +653,65 @@ const EventForm = ({ type, ...event }: Props) => {
                     )}
                   />
 
+                  {/* Event Images */}
+                  <FormField
+                    control={form.control}
+                    name={"eventImages"}
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col gap-1">
+                        <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
+                          Event Media (Images & Videos)
+                        </FormLabel>
+                        <FormControl>
+                          <div className="flex flex-wrap gap-3">
+                            {Array.isArray(field.value) && field.value.length > 0 && field.value.map((img, idx) => (
+                              <div key={`${img}-${idx}`} className="rounded-md border border-gray-300">
+                                <ImageTileUpload
+                                  value={img}
+                                  placeholder="Upload multiple event image"
+                                  mediaType="both"
+                                  onChange={(newPath: string | null) => {
+                                    const list = Array.isArray(field.value) ? [...field.value] : [];
+                                    list[idx] = newPath ?? "";
+                                    field.onChange(list.filter(Boolean));
+                                  }}
+                                  folder="events/images"
+                                />
+                              </div>
+                            ))}
+
+                            {/* Add tile */}
+                            <ImageTileUpload
+                              add
+                              multiple
+                              mediaType="both"
+                              onChange={(newPath: string | null) => {
+                                const current = (form.getValues("eventImages") as string[] | undefined) ?? [];
+                                field.onChange([...current, newPath ?? ""].filter(Boolean));
+                              }}
+                              folder="events/images"
+                              className="border border-gray-400 border-dashed rounded-md"
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                 </div>
               </div>
             </div>
           </form>
 
-            {/* Submit Button */}
-            <Button 
-            type="submit" 
+          {/* Submit Button */}
+          <Button
+            type="submit"
             onClick={form.handleSubmit(onSubmit)}
-            className="w-full mt-5 bg-black text-white block md:hidden" 
-            >
-              {isUpdate ? "Update Event" : "Create Event"}
-            </Button>
+            className="w-full mt-5 bg-black text-white block md:hidden"
+          >
+            {isUpdate ? "Update Event" : "Create Event"}
+          </Button>
         </Form>
       </div>
     </>

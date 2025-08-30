@@ -156,6 +156,17 @@ exports.Prisma.UserScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.EventRoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  payout: 'payout',
+  maxCount: 'maxCount',
+  eventId: 'eventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.EnrollmentScalarFieldEnum = {
   id: 'id',
   status: 'status',
@@ -163,7 +174,9 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   cancelledAt: 'cancelledAt',
   cancellationCount: 'cancellationCount',
   eventId: 'eventId',
-  userId: 'userId'
+  userId: 'userId',
+  eventRoleId: 'eventRoleId',
+  payoutAmount: 'payoutAmount'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
@@ -254,6 +267,7 @@ exports.VerificationStatus = exports.$Enums.VerificationStatus = {
 exports.Prisma.ModelName = {
   Event: 'Event',
   User: 'User',
+  EventRole: 'EventRole',
   Enrollment: 'Enrollment',
   Notification: 'Notification',
   VerificationRequest: 'VerificationRequest'

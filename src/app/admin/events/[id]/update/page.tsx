@@ -14,10 +14,15 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         where: {
             id,
         },
+        include: {
+            eventRoles: true,
+        },
     });
     if (!event) {
         return notFound();
     }
+
+
 
     // Owner guard
     const owner = await prisma.event.findUnique({
