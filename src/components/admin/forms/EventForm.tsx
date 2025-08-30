@@ -123,6 +123,12 @@ const EventForm = ({ type, ...event }: Props) => {
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof eventSchema>> = async (values) => {
+    // Calculate maxVolunteers from event roles
+    const calculatedMaxVolunteers = fields.reduce((sum, _, index) => {
+      const maxCount = form.watch(`eventRoles.${index}.maxCount`) || 0;
+      return sum + maxCount;
+    }, 0);
+
     // Normalize schema values to match EventParams shape
     const payload: EventParams = {
       title: values.title,
@@ -135,7 +141,7 @@ const EventForm = ({ type, ...event }: Props) => {
       coverUrl: values.coverUrl,
       videoUrl: values.videoUrl ?? null,
       eventImages: values.eventImages,
-      maxVolunteers: values.maxVolunteers,
+      maxVolunteers: calculatedMaxVolunteers,
       createdAt: values.createdAt,
       updatedAt: values.updatedAt,
       eventRoles: values.eventRoles,
@@ -414,7 +420,7 @@ const EventForm = ({ type, ...event }: Props) => {
                           </Button>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr_1fr] gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-[3fr_1.5fr_1fr] gap-4">
                           {/* Role Name */}
                           <FormField
                             control={form.control}
@@ -442,13 +448,18 @@ const EventForm = ({ type, ...event }: Props) => {
                               <FormItem className="flex flex-col gap-1">
                                 <label className="text-xs font-medium text-gray-700">Payout Amount</label>
                                 <FormControl>
-                                  <Input
-                                    type="number"
-                                    placeholder="0.00"
-                                    {...field}
-                                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                                    className="w-full px-3 py-2 text-sm rounded-md border-dashed border-gray-400"
-                                  />
+                                  <div className="w-full flex border border-dashed border-gray-400 rounded-md overflow-hidden">
+                                    <span className="px-3 py-2 text-sm text-gray-500 bg-gray-50 border-r border-gray-400 flex items-center">
+                                      ₹
+                                    </span>
+                                    <Input
+                                      type="number"
+                                      placeholder="0.00"
+                                      value={field.value === 0 ? "" : field.value}
+                                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                                      className="flex-1 px-3 py-2 text-sm rounded-r-md border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                                    />
+                                  </div>
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -466,7 +477,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                   <Input
                                     type="number"
                                     placeholder="1"
-                                    {...field}
+                                    value={field.value === 0 ? "" : field.value}
                                     onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
                                     className="w-full px-3 py-2 text-sm rounded-md border-dashed border-gray-400"
                                   />
@@ -536,7 +547,7 @@ const EventForm = ({ type, ...event }: Props) => {
                       name: "",
                       description: "",
                       payout: 0,
-                      maxCount: 1
+                      maxCount: 0
                     })}
                     variant="default"
                     size="sm"
@@ -723,30 +734,30 @@ const EventForm = ({ type, ...event }: Props) => {
                     )}
                   />
 
-                  {/* Max Volunteers */}
+                  {/* Max Volunteers - Auto-calculated */}
                   <FormField
                     control={form.control}
                     name={"maxVolunteers"}
                     render={({ field }) => (
                       <FormItem className="flex flex-col gap-1">
                         <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
-                          Max Volunteers
+                          Max Volunteers (Auto-calculated)
                         </FormLabel>
                         <FormControl>
-                          <div className="w-full border border-gray-300 rounded-md">
+                          <div className="w-full border border-gray-300 rounded-md bg-gray-50">
                             <Input
                               type="number"
-                              placeholder="Maximum volunteers"
-                              value={field.value ?? ""}
-                              onChange={(e) =>
-                                field.onChange(
-                                  e.target.value === "" ? undefined : Number(e.target.value)
-                                )
-                              }
-                              className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0"
+                              placeholder="Auto-calculated from roles"
+                              value={fields.reduce((sum, _, index) => {
+                                const maxCount = form.watch(`eventRoles.${index}.maxCount`) || 0;
+                                return sum + maxCount;
+                              }, 0)}
+                              disabled
+                              className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0 bg-gray-50 cursor-not-allowed"
                             />
                           </div>
                         </FormControl>
+                        <p className="text-xs text-gray-500">This value is automatically calculated from the sum of all role max counts</p>
                         <FormMessage />
                       </FormItem>
                     )}
