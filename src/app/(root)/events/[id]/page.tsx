@@ -13,6 +13,7 @@ import { Video } from "@imagekit/next";
 import { Badge } from "@/components/ui/badge";
 import EventRolesTable from "@/components/admin/tables/EventRolesTable";
 import { CopyButton } from "@/components/ui";
+import QuickLinks from "@/components/QuickLinks";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -54,6 +55,11 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
           id: true,
           title: true,
           url: true
+        }
+      },
+      createdBy: {
+        select: {
+          id: true
         }
       }
     }
@@ -277,40 +283,14 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
           </div>
 
           {/* Quick Links */}
-          <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/5">
-            <h1 className="text-base md:text-xl font-bold">Quick Links</h1>
-            {event.quickLinks && event.quickLinks.length > 0 ? (
-              <div className="flex flex-col gap-3 overflow-hidden text-xs md:text-sm">
-                {event.quickLinks.map((link) => (
-                  <div key={link.id} className="flex items-center md:gap-4 hover:bg-black/5 p-2  rounded-lg transition-colors">
-                    <div className="flex flex-col min-w-0 flex-1">
-                      <p className="font-medium text-black/80 truncate flex items-center">
-                      {link.title}
-                      <CopyButton 
-                        text={link.url}
-                        size="sm"
-                        variant="ghost"
-                        className="scale-90 ml-1"
-                      />
-                      </p>
-                      <Link 
-                      href={link.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="text-black/60 truncate max-w-xs text-xs">
-                        {link.url}
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-4 text-black/50">
-                <p className="text-sm">No quick links available</p>
-                <p className="text-xs">Check back later for helpful resources</p>
-              </div>
+          <QuickLinks 
+            quickLinks={event.quickLinks || []}
+            isEnrolled={event.enrollments.some((e: any) => 
+              e.userId === session?.user?.id && 
+              e.status === 'APPROVED'
             )}
-          </div>
+            isEventCreator={event.createdBy?.id === session?.user?.id}
+          />
         </div>
       </div>
     </div >

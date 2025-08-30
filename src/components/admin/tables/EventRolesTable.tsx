@@ -51,18 +51,16 @@ export default function EventRolesTable({ eventRoles, className }: EventRolesTab
                 <TableBody>
                     {eventRoles.map((role) => (
                         <TableRow key={role.id} className="">
-                            <TableCell className="p-4 text-center border border-black/30 rounded-tl-2xl h-24">
-                                <button
-                                    onClick={() => toggleRow(role.id)}
-                                    className="p-2 rounded transition-colors"
-                                    title={expandedRows[role.id] ? "Collapse description" : "Expand description"}
-                                >
-                                    {expandedRows[role.id] ? (
-                                        <ChevronDown className="h-4 w-4 text-gray-600" />
-                                    ) : (
-                                        <ChevronRight className="h-4 w-4 text-gray-600" />
-                                    )}
-                                </button>
+                            <TableCell 
+                                className="p-4 text-center border border-black/30 rounded-tl-2xl h-24 cursor-pointer hover:bg-black/5 transition-colors"
+                                onClick={() => toggleRow(role.id)}
+                                title={expandedRows[role.id] ? "Collapse description" : "Expand description"}
+                            >
+                                {expandedRows[role.id] ? (
+                                    <ChevronDown className="h-4 w-4 text-gray-600 mx-auto" />
+                                ) : (
+                                    <ChevronRight className="h-4 w-4 text-gray-600 mx-auto" />
+                                )}
                             </TableCell>
                             <TableCell className="p-4 font-medium border border-black/30 border-l max-w-[12rem] truncate h-24" title={role.name}>
                             <div className="whitespace-normal break-words leading-relaxed">
