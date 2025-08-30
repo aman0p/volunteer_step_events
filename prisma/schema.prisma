@@ -90,6 +90,7 @@ model VerificationRequest {
   user             User                @relation(fields: [userId], references: [id])
   userId           String
   status           VerificationStatus  @default(PENDING)
+  rejectionReason  String?
   submittedAt      DateTime            @default(now())
   reviewedAt       DateTime?
   reviewedBy       User?               @relation("ReviewedBy", fields: [reviewedById], references: [id])

@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/FileUpload";
 import Tag from "@/components/ui/tag";
 import { GOV_ID_OPTIONS } from "@/constants";
-import { UserCheck, Loader2, RefreshCw } from "lucide-react";
+import { UserCheck, Loader2, RefreshCw, XCircle } from "lucide-react";
 import { useProfile } from "@/hooks/useProfile";
 
 export default function Profile() {
@@ -27,6 +27,8 @@ export default function Profile() {
     refreshVerificationStatus,
     handleSubmitVerification,
     onSubmit,
+    hasRejectedRequest,
+    rejectionReason,
   } = useProfile();
 
   const handleFormSubmit: SubmitHandler<z.infer<typeof profileSchema>> = async (values) => {
@@ -50,6 +52,26 @@ export default function Profile() {
                   <Button disabled variant="outline">
                     <UserCheck className="mr-2 h-4 w-4" />
                     Verification Pending
+                  </Button>
+                  <Button
+                    onClick={refreshVerificationStatus}
+                    disabled={isRefreshingVerification}
+                    variant="outline"
+                    size="sm"
+                    title="Refresh verification status"
+                  >
+                    {isRefreshingVerification ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <RefreshCw className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              ) : hasRejectedRequest ? (
+                <div className="flex items-center gap-2">
+                  <Button disabled variant="outline" className="border-red-300 text-red-600">
+                    <XCircle className="mr-2 h-4 w-4" />
+                    Verification Rejected
                   </Button>
                   <Button
                     onClick={refreshVerificationStatus}
@@ -91,6 +113,66 @@ export default function Profile() {
               <Button type="submit" className="w-fit bg-black text-white hidden md:block">Save Changes</Button>
             </div>
           </div>
+
+          {/* Rejection Reason Display */}
+          {hasRejectedRequest && (
+            <div className="mt-4 p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <div className="flex items-start gap-3">
+                <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <h3 className="text-sm font-medium text-red-800 dark:text-red-200 mb-2">
+                    Verification Request Rejected
+                  </h3>
+                  {rejectionReason ? (
+                    <p className="text-sm text-red-700 dark:text-red-300 mb-2">
+                      <span className="font-medium">Reason:</span> {rejectionReason}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-red-700 dark:text-red-300 mb-2">
+                      No specific reason was provided for the rejection.
+                    </p>
+                  )}
+                  <p className="text-xs text-red-600 dark:text-red-400 mb-3">
+                    You can update your profile and submit a new verification request.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <Button
+                      onClick={handleSubmitVerification}
+                      disabled={isSubmittingVerification || !areAllFieldsFilled()}
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                      title={
+                        !areAllFieldsFilled() 
+                          ? "Please fill all required fields before requesting verification" 
+                          : "Submit new verification request"
+                      }
+                    >
+                      {isSubmittingVerification ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <UserCheck className="mr-2 h-4 w-4" />
+                      )}
+                      Apply for Verification Again
+                    </Button>
+                    <Button
+                      onClick={refreshVerificationStatus}
+                      disabled={isRefreshingVerification}
+                      variant="outline"
+                      size="sm"
+                      title="Refresh verification status"
+                    >
+                      {isRefreshingVerification ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <RefreshCw className="h-4 w-4" />
+                      )}
+                      Refresh Status
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-5 lg:gap-10 w-full">
             <div className="flex flex-col gap-5">

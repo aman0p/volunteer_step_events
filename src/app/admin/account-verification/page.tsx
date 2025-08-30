@@ -23,9 +23,8 @@ export default async function AccountVerification() {
     redirect("/admin");
   }
 
-  // Fetch all pending verification requests
+  // Fetch all verification requests with proper separation
   const verificationRequests = await prisma.verificationRequest.findMany({
-    where: { status: "PENDING" },
     include: {
       user: {
         select: {
@@ -41,37 +40,40 @@ export default async function AccountVerification() {
     orderBy: { submittedAt: "asc" }
   });
 
+  // Separate requests: only show the latest request per user
+  const userLatestRequests = new Map();
+  
+  verificationRequests.forEach(request => {
+    const userId = request.user.id;
+    if (!userLatestRequests.has(userId) || 
+        request.submittedAt > userLatestRequests.get(userId).submittedAt) {
+      userLatestRequests.set(userId, request);
+    }
+  });
+
+  const allRequests = Array.from(userLatestRequests.values());
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h1 className="text-3xl font-bold tracking-tight">Account Verification Requests</h1>
           <p className="text-muted-foreground">
-            Review and approve user verification requests
+            Review and manage user verification requests
           </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Filter className="mr-2 h-4 w-4" />
-            Filter
-          </Button>
-          <Button variant="outline" size="sm">
-            <Download className="mr-2 h-4 w-4" />
-            Export
-          </Button>
         </div>
       </div>
 
-      {verificationRequests.length === 0 ? (
+      {allRequests.length === 0 ? (
         <div className="text-center py-12">
           <UserCheck className="mx-auto h-12 w-12 text-muted-foreground" />
-          <h3 className="mt-4 text-lg font-semibold">No pending verification requests</h3>
+          <h3 className="mt-4 text-lg font-semibold">No verification requests</h3>
           <p className="text-muted-foreground">
-            All users have been verified or there are no pending requests.
+            All users have been verified or there are no requests.
           </p>
         </div>
       ) : (
-        <VerificationTable verificationRequests={verificationRequests} />
+        <VerificationTable verificationRequests={allRequests} />
       )}
     </div>
   );

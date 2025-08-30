@@ -112,7 +112,7 @@ export const approveVerificationRequest = async (requestId: string) => {
   }
 };
 
-export const rejectVerificationRequest = async (requestId: string) => {
+export const rejectVerificationRequest = async (requestId: string, rejectionReason?: string) => {
   const session = await getServerSession(authOptions);
   
   if (!session?.user?.id) {
@@ -136,7 +136,8 @@ export const rejectVerificationRequest = async (requestId: string) => {
       data: {
         status: "REJECTED",
         reviewedAt: new Date(),
-        reviewedById: session.user.id
+        reviewedById: session.user.id,
+        rejectionReason: rejectionReason || null
       }
     });
 

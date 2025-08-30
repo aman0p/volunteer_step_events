@@ -182,6 +182,7 @@ exports.Prisma.VerificationRequestScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   status: 'status',
+  rejectionReason: 'rejectionReason',
   submittedAt: 'submittedAt',
   reviewedAt: 'reviewedAt',
   reviewedById: 'reviewedById'

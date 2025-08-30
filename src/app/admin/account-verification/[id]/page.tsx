@@ -2,14 +2,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle, Clock, Image as ImageIcon, XCircle } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Image } from "@imagekit/next";
 import { Badge } from "@/components/ui/badge";
-import { StatusBadge } from "@/components/ui/StatusBadge";
-import VerificationActions from "@/components/admin/VerificationActions";
+import VerificationDetailActions from "@/components/admin/VerificationDetailActions";
 import config from "@/lib/config";
+import RejectionReasonInput from "@/components/admin/RejectionReasonInput";
 
 export default async function AccountVerificationDetail({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
@@ -60,6 +59,23 @@ export default async function AccountVerificationDetail({ params }: { params: { 
     redirect("/admin/account-verification");
   }
 
+  // Fetch the most recent rejected verification request to get the previous rejection reason
+  const previousRejectedRequest = await prisma.verificationRequest.findFirst({
+    where: { 
+      userId: request.user.id,
+      status: "REJECTED",
+      id: { not: (await params).id } // Exclude current request
+    },
+    orderBy: { submittedAt: 'desc' },
+    include: {
+      reviewedBy: {
+        select: {
+          fullName: true
+        }
+      }
+    }
+  });
+
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
@@ -73,6 +89,17 @@ export default async function AccountVerificationDetail({ params }: { params: { 
 
   return (
     <div className="space-y-6">
+      {/* Back Button */}
+      <div className="flex items-center">
+        <Link 
+          href="/admin/account-verification" 
+          className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Verification Requests
+        </Link>
+      </div>
+
       <div className="flex justify-between w-full ">
 
         {/* Header */}
@@ -84,20 +111,10 @@ export default async function AccountVerificationDetail({ params }: { params: { 
         </div>
 
         {/* Actions - Accept & Reject */}
-        <div className="flex gap-2">
-          <Button variant="default" className="w-28">
-            <CheckCircle className="w-4 h-4" />
-            Accept
-          </Button>
-          <Button variant="outline" className="w-28">
-            <Clock className="w-4 h-4" />
-            Waitlisted
-          </Button>
-          <Button variant="destructive" className="w-28">
-            <XCircle className="w-4 h-4" />
-            Reject
-          </Button>
-        </div>
+        <VerificationDetailActions 
+          requestId={request.id} 
+          currentStatus={request.status} 
+        />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
@@ -141,6 +158,11 @@ export default async function AccountVerificationDetail({ params }: { params: { 
                 <label className="text-sm font-medium text-muted-foreground">Member Since</label>
                 <p className="text-sm">{formatDate(request.user.createdAt)}</p>
               </div>
+
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Submitted On</label>
+                <p className="text-sm">{formatDate(request.submittedAt)}</p>
+              </div>
             </div>
 
             <div className="mt-4">
@@ -159,14 +181,23 @@ export default async function AccountVerificationDetail({ params }: { params: { 
             </div>
           </div>
 
-          {/*  */}
+          {/* Rejection Reason Input - Show for both pending and rejected requests */}
+          {(request.status === "PENDING" || request.status === "REJECTED") && (
+            <RejectionReasonInput 
+              requestId={request.id}
+              currentStatus={request.status}
+              existingReason={request.rejectionReason || previousRejectedRequest?.rejectionReason || ""}
+              reviewedAt={request.reviewedAt}
+              reviewedBy={request.reviewedBy}
+            />
+          )}
         </div>
 
         {/* Profile Image & Gov ID Image */}
         <div className="space-y-6">
           <div className="rounded-lg border p-6 bg-black/10">
             <h2 className="text-xl font-semibold mb-4">Profile Image</h2>
-            <div className="relative ">
+            <div className="relative">
               {request.user.profileImage && (
                 <Image
                   urlEndpoint={config.env.imagekit.urlEndpoint}
@@ -178,12 +209,11 @@ export default async function AccountVerificationDetail({ params }: { params: { 
                 />
               )}
             </div>
-
           </div>
 
           <div className="rounded-lg border p-6 bg-black/10">
             <h2 className="text-xl font-semibold mb-4">Government ID Image</h2>
-            <div className="relative ">
+            <div className="relative">
               {request.user.govIdImage && (
                 <Image
                   urlEndpoint={config.env.imagekit.urlEndpoint}
@@ -195,58 +225,9 @@ export default async function AccountVerificationDetail({ params }: { params: { 
                 />
               )}
             </div>
-
           </div>
         </div>
-
-
-
-
-
       </div>
     </div>
   );
 }
-
-
-
-
-{/* <div className="space-y-6">
-<div className="rounded-lg border p-6">
-  <h2 className="text-xl font-semibold mb-4">Request Details</h2>
-
-  <div className="space-y-3">
-    <div>
-      <label className="text-sm font-medium text-muted-foreground">Status</label>
-      <div className="mt-1">
-        <StatusBadge status={request.status} />
-      </div>
-    </div>
-
-    <div>
-      <label className="text-sm font-medium text-muted-foreground">Submitted</label>
-      <p className="text-sm">{formatDate(request.submittedAt)}</p>
-    </div>
-
-    {request.reviewedAt && (
-      <div>
-        <label className="text-sm font-medium text-muted-foreground">Reviewed</label>
-        <p className="text-sm">{formatDate(request.reviewedAt)}</p>
-      </div>
-    )}
-
-    {request.reviewedBy && (
-      <div>
-        <label className="text-sm font-medium text-muted-foreground">Reviewed By</label>
-        <p className="text-sm">{request.reviewedBy.fullName}</p>
-      </div>
-    )}
-
-
-  </div>
-</div>
-
-{request.status === "PENDING" && (
-  <VerificationActions requestId={request.id} />
-)}
-</div> */}

@@ -5,16 +5,21 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Eye, GripVertical } from "lucide-react"
+import { MoreHorizontal, Eye, GripVertical, Loader2, XCircle } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Image } from "@imagekit/next"
 import Link from "next/link"
 import config from "@/lib/config"
 import { toast } from "sonner"
 import { approveVerificationRequest, rejectVerificationRequest } from "@/lib/actions/admin/verification"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { createPortal } from "react-dom"
+import { PiSpinner, PiX } from "react-icons/pi"
 
 type VerificationRequest = {
   id: string
+  status: "PENDING" | "APPROVED" | "REJECTED"
   user: {
     id: string
     fullName: string
@@ -24,6 +29,7 @@ type VerificationRequest = {
     createdAt: Date
   }
   submittedAt: Date
+  rejectionReason?: string | null
 }
 
 interface VerificationTableProps {
@@ -38,19 +44,33 @@ export default function VerificationTable({ verificationRequests }: Verification
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [isBulkApproveProcessing, setIsBulkApproveProcessing] = useState(false)
   const [isBulkRejectProcessing, setIsBulkRejectProcessing] = useState(false)
+  const [rejectionReason, setRejectionReason] = useState("")
+  const [showRejectionModal, setShowRejectionModal] = useState(false)
+  const [rejectionType, setRejectionType] = useState<"bulk" | "individual" | null>(null)
+  const [individualRejectId, setIndividualRejectId] = useState<string | null>(null)
 
-  const paginatedData = verificationRequests.slice((page - 1) * rowsPerPage, page * rowsPerPage)
-  const totalPages = Math.ceil(verificationRequests.length / rowsPerPage)
+  // Filter to only show pending and rejected requests (exclude approved)
+  const filteredRequests = verificationRequests.filter(req => req.status !== "APPROVED")
+  const pendingRequests = filteredRequests.filter(req => req.status === "PENDING")
+  const paginatedData = filteredRequests.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+  const totalPages = Math.ceil(filteredRequests.length / rowsPerPage)
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedRows(verificationRequests.map(row => row.id))
+      // Only select pending requests
+      setSelectedRows(pendingRequests.map(row => row.id))
     } else {
       setSelectedRows([])
     }
   }
 
   const handleSelectRow = (id: string, checked: boolean) => {
+    // Only allow selecting pending requests
+    const request = filteredRequests.find(req => req.id === id)
+    if (request && request.status !== "PENDING") {
+      return
+    }
+    
     if (checked) {
       setSelectedRows(prev => [...prev, id])
     } else {
@@ -92,10 +112,15 @@ export default function VerificationTable({ verificationRequests }: Verification
       return
     }
 
+    setRejectionType("bulk")
+    setShowRejectionModal(true)
+  }
+
+  const executeBulkReject = async () => {
     setIsBulkRejectProcessing(true)
     try {
       const promises = selectedRows.map(async (id) => {
-        const result = await rejectVerificationRequest(id)
+        const result = await rejectVerificationRequest(id, rejectionReason)
         if (result.success) {
           toast.success(result.message || `Request ${id} rejected`)
         } else {
@@ -105,6 +130,8 @@ export default function VerificationTable({ verificationRequests }: Verification
       await Promise.all(promises)
       toast.success(`Successfully processed ${selectedRows.length} verification request(s)`)
       setSelectedRows([])
+      setRejectionReason("")
+      setShowRejectionModal(false)
       window.location.reload() // reload once after all are done
     } catch (error) {
       console.error("Error rejecting all:", error)
@@ -150,6 +177,42 @@ export default function VerificationTable({ verificationRequests }: Verification
     }
   }
 
+  const handleRejectWithReason = async (id: string) => {
+    setRejectionType("individual")
+    setIndividualRejectId(id)
+    setShowRejectionModal(true)
+  }
+
+  const executeIndividualReject = async () => {
+    if (!individualRejectId) return
+    
+    setRejectProcessingIds(prev => [...prev, individualRejectId])
+    try {
+      const result = await rejectVerificationRequest(individualRejectId, rejectionReason)
+      if (result.success) {
+        toast.success(result.message || "Verification request rejected successfully")
+        setRejectionReason("")
+        setShowRejectionModal(false)
+        setIndividualRejectId(null)
+        window.location.reload()
+      } else {
+        toast.error(result.message || "Failed to reject verification request")
+      }
+    } catch (error) {
+      console.error("Error rejecting:", error)
+      toast.error("An error occurred while rejecting the request")
+    } finally {
+      setRejectProcessingIds(prev => prev.filter(procId => procId !== individualRejectId))
+    }
+  }
+
+  const handleCancelRejection = () => {
+    setShowRejectionModal(false)
+    setRejectionReason("")
+    setRejectionType(null)
+    setIndividualRejectId(null)
+  }
+
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("en-US", {
       year: "numeric",
@@ -160,7 +223,7 @@ export default function VerificationTable({ verificationRequests }: Verification
     }).format(date)
   }
 
-  const isAllSelected = selectedRows.length === verificationRequests.length && verificationRequests.length > 0
+  const isAllSelected = selectedRows.length === pendingRequests.length && pendingRequests.length > 0
 
   return (
     <div className="space-y-4">
@@ -190,7 +253,7 @@ export default function VerificationTable({ verificationRequests }: Verification
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            {selectedRows.length} of {verificationRequests.length} selected
+            {selectedRows.length} of {pendingRequests.length} pending selected
           </span>
           {selectedRows.length > 0 && (
             <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])} className="text-xs">
@@ -211,6 +274,7 @@ export default function VerificationTable({ verificationRequests }: Verification
             <TableHead>Volunteer Name</TableHead>
             <TableHead>Email ID</TableHead>
             <TableHead>Phone No</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead>Submitted</TableHead>
             <TableHead>Actions</TableHead>
             <TableHead></TableHead>
@@ -228,6 +292,7 @@ export default function VerificationTable({ verificationRequests }: Verification
                 <Checkbox
                   checked={selectedRows.includes(request.id)}
                   onCheckedChange={(checked) => handleSelectRow(request.id, checked as boolean)}
+                  disabled={request.status !== "PENDING"}
                 />
               </TableCell>
               <TableCell>
@@ -261,28 +326,48 @@ export default function VerificationTable({ verificationRequests }: Verification
               </TableCell>
               <TableCell className="font-mono text-sm">{request.user.email}</TableCell>
               <TableCell className="font-mono text-sm">{request.user.phoneNumber}</TableCell>
+              <TableCell>
+                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                  request.status === "PENDING" 
+                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400"
+                    : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
+                }`}>
+                  {request.status}
+                </span>
+              </TableCell>
               <TableCell className="text-sm text-muted-foreground">{formatDate(request.submittedAt)}</TableCell>
               <TableCell>
-                <div className="flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    variant="default"
-                    onClick={() => handleApprove(request.id)}
-                    loading={approveProcessingIds.includes(request.id)}
-                    className="h-8 px-2 text-xs w-20"
-                  >
-                    Approve
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleReject(request.id)}
-                    loading={rejectProcessingIds.includes(request.id)}
-                    className="h-8 px-2 text-xs w-20"
-                  >
-                    Reject
-                  </Button>
-                </div>
+                {request.status === "PENDING" ? (
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="default"
+                      onClick={() => handleApprove(request.id)}
+                      loading={approveProcessingIds.includes(request.id)}
+                      className="h-8 px-2 text-xs w-20"
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleReject(request.id)}
+                      loading={rejectProcessingIds.includes(request.id)}
+                      className="h-8 px-2 text-xs w-20"
+                    >
+                      Reject
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-red-600 dark:text-red-400 font-medium">Rejected</span>
+                    {request.rejectionReason && (
+                      <span className="text-xs text-muted-foreground max-w-32 truncate" title={request.rejectionReason}>
+                        Reason: {request.rejectionReason}
+                      </span>
+                    )}
+                  </div>
+                )}
               </TableCell>
               <TableCell>
                 <DropdownMenu>
@@ -298,6 +383,12 @@ export default function VerificationTable({ verificationRequests }: Verification
                         View Details
                       </Link>
                     </DropdownMenuItem>
+                    {request.status === "PENDING" && (
+                      <DropdownMenuItem onClick={() => handleRejectWithReason(request.id)}>
+                        <XCircle className="mr-2 h-4 w-4" />
+                        Reject with Reason
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
@@ -309,7 +400,7 @@ export default function VerificationTable({ verificationRequests }: Verification
       {/* Pagination */}
       <div className="flex items-center justify-between py-2">
         <p className="text-sm text-muted-foreground">
-          {selectedRows.length} of {verificationRequests.length} row(s) selected
+          {selectedRows.length} of {pendingRequests.length} pending selected
         </p>
         <div className="flex items-center gap-2">
           <Select value={rowsPerPage.toString()} onValueChange={(value) => setRowsPerPage(parseInt(value))}>
@@ -356,6 +447,68 @@ export default function VerificationTable({ verificationRequests }: Verification
           </div>
         </div>
       </div>
+
+      {/* Rejection Reason Modal */}
+      {showRejectionModal && createPortal(
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[1000] backdrop-blur-sm">
+          <div className="relative aspect-video flex flex-col max-w-lg w-full mx-4 justify-center gap-8 px-15 py-10 rounded-md bg-white/5 backdrop-blur-md shadow-lg shadow-black/40">
+            <PiX
+              className="text-white/80 size-6 p-1 transition-all duration-200 hover:bg-black/25 rounded-full absolute top-3 right-3 cursor-pointer"
+              onClick={handleCancelRejection}
+            />
+            <h1 className="text-2xl text-white/80 font-bold text-center">
+              {rejectionType === "bulk" 
+                ? `Reject ${selectedRows.length} Verification Request(s)` 
+                : "Reject Verification Request"
+              }
+            </h1>
+
+            <p className="text-center tracking-wide text-white/80 text-sm md:text-base font-light">
+              Provide a reason for rejection. The user will be able to see this reason.
+            </p>
+
+            <div className="space-y-4 w-full">
+              <div>
+                <Label htmlFor="rejection-reason" className="text-white/80">Rejection Reason (Optional)</Label>
+                <Textarea
+                  id="rejection-reason"
+                  placeholder="Enter reason for rejection..."
+                  value={rejectionReason}
+                  onChange={(e) => setRejectionReason(e.target.value)}
+                  className="mt-2 bg-white/5 border-white/20 text-white/80 placeholder:text-white/60 focus:ring-0 focus:ring-offset-0 focus:outline-none "
+                  rows={4}
+                />
+              </div>
+            </div>
+
+            <form onSubmit={(e) => {
+              e.preventDefault()
+              rejectionType === "bulk" ? executeBulkReject() : executeIndividualReject()
+            }} className="grid grid-cols-2 w-full gap-2">
+              <Button
+                onClick={handleCancelRejection}
+                variant="outline"
+                className="w-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white text-sm md:text-base transition-all duration-300 cursor-pointer rounded-md p-2 flex justify-center items-center"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isBulkRejectProcessing || rejectProcessingIds.length > 0}
+                className="bg-red-500 w-full hover:bg-red-500/80 text-white/80 text-sm md:text-base transition-all duration-300 cursor-pointer rounded-md p-2 flex justify-center items-center"
+              >
+                {isBulkRejectProcessing || rejectProcessingIds.length > 0 ? (
+                  <PiSpinner className="animate-spin" />
+                ) : (
+                  <XCircle className="w-4 h-4" />
+                )}
+                Reject
+              </Button>
+            </form>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   )
 }

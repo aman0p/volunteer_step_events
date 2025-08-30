@@ -25,6 +25,8 @@ export function useProfile() {
   const [role, setRole] = useState("");
   const [isVerified, setIsVerified] = useState(false);
   const [hasPendingRequest, setHasPendingRequest] = useState(false);
+  const [hasRejectedRequest, setHasRejectedRequest] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState<string | null>(null);
   const [isSubmittingVerification, setIsSubmittingVerification] = useState(false);
   const [isRefreshingVerification, setIsRefreshingVerification] = useState(false);
   const [formCompletionStatus, setFormCompletionStatus] = useState({
@@ -78,6 +80,8 @@ export function useProfile() {
 
       setIsVerified(result.isVerified ?? false);
       setHasPendingRequest(result.latestRequest?.status === "PENDING");
+      setHasRejectedRequest(result.latestRequest?.status === "REJECTED");
+      setRejectionReason(result.latestRequest?.rejectionReason ?? null);
 
       // No need for toast notifications here - sidebar notifications will handle this
     }
@@ -207,6 +211,8 @@ export function useProfile() {
     role,
     isVerified,
     hasPendingRequest,
+    hasRejectedRequest,
+    rejectionReason,
     isSubmittingVerification,
     isRefreshingVerification,
     formCompletionStatus,

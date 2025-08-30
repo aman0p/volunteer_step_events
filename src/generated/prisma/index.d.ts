@@ -6215,6 +6215,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     status: $Enums.VerificationStatus | null
+    rejectionReason: string | null
     submittedAt: Date | null
     reviewedAt: Date | null
     reviewedById: string | null
@@ -6224,6 +6225,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     status: $Enums.VerificationStatus | null
+    rejectionReason: string | null
     submittedAt: Date | null
     reviewedAt: Date | null
     reviewedById: string | null
@@ -6233,6 +6235,7 @@ export namespace Prisma {
     id: number
     userId: number
     status: number
+    rejectionReason: number
     submittedAt: number
     reviewedAt: number
     reviewedById: number
@@ -6244,6 +6247,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     status?: true
+    rejectionReason?: true
     submittedAt?: true
     reviewedAt?: true
     reviewedById?: true
@@ -6253,6 +6257,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     status?: true
+    rejectionReason?: true
     submittedAt?: true
     reviewedAt?: true
     reviewedById?: true
@@ -6262,6 +6267,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     status?: true
+    rejectionReason?: true
     submittedAt?: true
     reviewedAt?: true
     reviewedById?: true
@@ -6344,6 +6350,7 @@ export namespace Prisma {
     id: string
     userId: string
     status: $Enums.VerificationStatus
+    rejectionReason: string | null
     submittedAt: Date
     reviewedAt: Date | null
     reviewedById: string | null
@@ -6370,6 +6377,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     status?: boolean
+    rejectionReason?: boolean
     submittedAt?: boolean
     reviewedAt?: boolean
     reviewedById?: boolean
@@ -6381,6 +6389,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     status?: boolean
+    rejectionReason?: boolean
     submittedAt?: boolean
     reviewedAt?: boolean
     reviewedById?: boolean
@@ -6392,6 +6401,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     status?: boolean
+    rejectionReason?: boolean
     submittedAt?: boolean
     reviewedAt?: boolean
     reviewedById?: boolean
@@ -6403,12 +6413,13 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     status?: boolean
+    rejectionReason?: boolean
     submittedAt?: boolean
     reviewedAt?: boolean
     reviewedById?: boolean
   }
 
-  export type VerificationRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "status" | "submittedAt" | "reviewedAt" | "reviewedById", ExtArgs["result"]["verificationRequest"]>
+  export type VerificationRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "status" | "rejectionReason" | "submittedAt" | "reviewedAt" | "reviewedById", ExtArgs["result"]["verificationRequest"]>
   export type VerificationRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     reviewedBy?: boolean | VerificationRequest$reviewedByArgs<ExtArgs>
@@ -6432,6 +6443,7 @@ export namespace Prisma {
       id: string
       userId: string
       status: $Enums.VerificationStatus
+      rejectionReason: string | null
       submittedAt: Date
       reviewedAt: Date | null
       reviewedById: string | null
@@ -6863,6 +6875,7 @@ export namespace Prisma {
     readonly id: FieldRef<"VerificationRequest", 'String'>
     readonly userId: FieldRef<"VerificationRequest", 'String'>
     readonly status: FieldRef<"VerificationRequest", 'VerificationStatus'>
+    readonly rejectionReason: FieldRef<"VerificationRequest", 'String'>
     readonly submittedAt: FieldRef<"VerificationRequest", 'DateTime'>
     readonly reviewedAt: FieldRef<"VerificationRequest", 'DateTime'>
     readonly reviewedById: FieldRef<"VerificationRequest", 'String'>
@@ -7387,6 +7400,7 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     status: 'status',
+    rejectionReason: 'rejectionReason',
     submittedAt: 'submittedAt',
     reviewedAt: 'reviewedAt',
     reviewedById: 'reviewedById'
@@ -7954,6 +7968,7 @@ export namespace Prisma {
     id?: StringFilter<"VerificationRequest"> | string
     userId?: StringFilter<"VerificationRequest"> | string
     status?: EnumVerificationStatusFilter<"VerificationRequest"> | $Enums.VerificationStatus
+    rejectionReason?: StringNullableFilter<"VerificationRequest"> | string | null
     submittedAt?: DateTimeFilter<"VerificationRequest"> | Date | string
     reviewedAt?: DateTimeNullableFilter<"VerificationRequest"> | Date | string | null
     reviewedById?: StringNullableFilter<"VerificationRequest"> | string | null
@@ -7965,6 +7980,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     status?: SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
     submittedAt?: SortOrder
     reviewedAt?: SortOrderInput | SortOrder
     reviewedById?: SortOrderInput | SortOrder
@@ -7979,6 +7995,7 @@ export namespace Prisma {
     NOT?: VerificationRequestWhereInput | VerificationRequestWhereInput[]
     userId?: StringFilter<"VerificationRequest"> | string
     status?: EnumVerificationStatusFilter<"VerificationRequest"> | $Enums.VerificationStatus
+    rejectionReason?: StringNullableFilter<"VerificationRequest"> | string | null
     submittedAt?: DateTimeFilter<"VerificationRequest"> | Date | string
     reviewedAt?: DateTimeNullableFilter<"VerificationRequest"> | Date | string | null
     reviewedById?: StringNullableFilter<"VerificationRequest"> | string | null
@@ -7990,6 +8007,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     status?: SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
     submittedAt?: SortOrder
     reviewedAt?: SortOrderInput | SortOrder
     reviewedById?: SortOrderInput | SortOrder
@@ -8005,6 +8023,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"VerificationRequest"> | string
     userId?: StringWithAggregatesFilter<"VerificationRequest"> | string
     status?: EnumVerificationStatusWithAggregatesFilter<"VerificationRequest"> | $Enums.VerificationStatus
+    rejectionReason?: StringNullableWithAggregatesFilter<"VerificationRequest"> | string | null
     submittedAt?: DateTimeWithAggregatesFilter<"VerificationRequest"> | Date | string
     reviewedAt?: DateTimeNullableWithAggregatesFilter<"VerificationRequest"> | Date | string | null
     reviewedById?: StringNullableWithAggregatesFilter<"VerificationRequest"> | string | null
@@ -8439,6 +8458,7 @@ export namespace Prisma {
   export type VerificationRequestCreateInput = {
     id?: string
     status?: $Enums.VerificationStatus
+    rejectionReason?: string | null
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
     user: UserCreateNestedOneWithoutVerificationRequestsInput
@@ -8449,6 +8469,7 @@ export namespace Prisma {
     id?: string
     userId: string
     status?: $Enums.VerificationStatus
+    rejectionReason?: string | null
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
     reviewedById?: string | null
@@ -8457,6 +8478,7 @@ export namespace Prisma {
   export type VerificationRequestUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutVerificationRequestsNestedInput
@@ -8467,6 +8489,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8476,6 +8499,7 @@ export namespace Prisma {
     id?: string
     userId: string
     status?: $Enums.VerificationStatus
+    rejectionReason?: string | null
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
     reviewedById?: string | null
@@ -8484,6 +8508,7 @@ export namespace Prisma {
   export type VerificationRequestUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -8492,6 +8517,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9033,6 +9059,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     status?: SortOrder
+    rejectionReason?: SortOrder
     submittedAt?: SortOrder
     reviewedAt?: SortOrder
     reviewedById?: SortOrder
@@ -9042,6 +9069,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     status?: SortOrder
+    rejectionReason?: SortOrder
     submittedAt?: SortOrder
     reviewedAt?: SortOrder
     reviewedById?: SortOrder
@@ -9051,6 +9079,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     status?: SortOrder
+    rejectionReason?: SortOrder
     submittedAt?: SortOrder
     reviewedAt?: SortOrder
     reviewedById?: SortOrder
@@ -10018,6 +10047,7 @@ export namespace Prisma {
   export type VerificationRequestCreateWithoutUserInput = {
     id?: string
     status?: $Enums.VerificationStatus
+    rejectionReason?: string | null
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
     reviewedBy?: UserCreateNestedOneWithoutReviewedRequestsInput
@@ -10026,6 +10056,7 @@ export namespace Prisma {
   export type VerificationRequestUncheckedCreateWithoutUserInput = {
     id?: string
     status?: $Enums.VerificationStatus
+    rejectionReason?: string | null
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
     reviewedById?: string | null
@@ -10044,6 +10075,7 @@ export namespace Prisma {
   export type VerificationRequestCreateWithoutReviewedByInput = {
     id?: string
     status?: $Enums.VerificationStatus
+    rejectionReason?: string | null
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
     user: UserCreateNestedOneWithoutVerificationRequestsInput
@@ -10053,6 +10085,7 @@ export namespace Prisma {
     id?: string
     userId: string
     status?: $Enums.VerificationStatus
+    rejectionReason?: string | null
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
   }
@@ -10183,6 +10216,7 @@ export namespace Prisma {
     id?: StringFilter<"VerificationRequest"> | string
     userId?: StringFilter<"VerificationRequest"> | string
     status?: EnumVerificationStatusFilter<"VerificationRequest"> | $Enums.VerificationStatus
+    rejectionReason?: StringNullableFilter<"VerificationRequest"> | string | null
     submittedAt?: DateTimeFilter<"VerificationRequest"> | Date | string
     reviewedAt?: DateTimeNullableFilter<"VerificationRequest"> | Date | string | null
     reviewedById?: StringNullableFilter<"VerificationRequest"> | string | null
@@ -10804,6 +10838,7 @@ export namespace Prisma {
   export type VerificationRequestCreateManyUserInput = {
     id?: string
     status?: $Enums.VerificationStatus
+    rejectionReason?: string | null
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
     reviewedById?: string | null
@@ -10813,6 +10848,7 @@ export namespace Prisma {
     id?: string
     userId: string
     status?: $Enums.VerificationStatus
+    rejectionReason?: string | null
     submittedAt?: Date | string
     reviewedAt?: Date | string | null
   }
@@ -10897,6 +10933,7 @@ export namespace Prisma {
   export type VerificationRequestUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedBy?: UserUpdateOneWithoutReviewedRequestsNestedInput
@@ -10905,6 +10942,7 @@ export namespace Prisma {
   export type VerificationRequestUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10913,6 +10951,7 @@ export namespace Prisma {
   export type VerificationRequestUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10921,6 +10960,7 @@ export namespace Prisma {
   export type VerificationRequestUpdateWithoutReviewedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutVerificationRequestsNestedInput
@@ -10930,6 +10970,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -10938,6 +10979,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     status?: EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
