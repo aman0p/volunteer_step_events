@@ -3,10 +3,12 @@ import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { MapPin, Edit, Instagram, Mail } from "lucide-react";
+import Link from "next/link";
 import { Image } from "@imagekit/next";
 import config from "@/lib/config";
 import { FaWhatsapp } from "react-icons/fa";
 import { Video } from "@imagekit/next";
+import EventRolesTable from "@/components/admin/tables/EventRolesTable";
 
 export default async function EventDetailsPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
@@ -25,7 +27,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
     redirect("/");
   }
 
-  // Fetch event with enrollments
+  // Fetch event with enrollments and event roles
   const event = await prisma.event.findUnique({
     where: { id: (await params).id },
     include: {
@@ -39,6 +41,25 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
               phoneNumber: true,
               skills: true,
               profileImage: true
+            }
+          }
+        }
+      },
+      eventRoles: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          payout: true,
+          maxCount: true,
+          enrollments: {
+            where: {
+              status: {
+                in: ['APPROVED', 'PENDING']
+              }
+            },
+            select: {
+              id: true
             }
           }
         }
@@ -92,7 +113,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
         <h1 className="text-3xl font-bold">{event.title}</h1>
       </div>
       <div className="w-full h-full grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-10">
-        <div className="w-full h-full space-y-2 md:space-y-5">
+        <div className="w-full h-full space-y-2 md:space-y-5 lg:space-y-10">
           <div className="space-y-2">
             <p className="hidden md:block text-sm ml-1 font-semibold text-black">Cover Image</p>
 
@@ -108,7 +129,13 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
               />
             )}
           </div>
-          <p className="text-sm">{event.description}</p>
+
+          <div className="space-y-1">
+            <p className="text-sm ml-1 text-black font-semibold">Description</p>
+            <div className="p-5 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
+              <p className="text-sm">{event.description}</p>
+            </div>
+          </div>
 
           <div className="grid grid-cols-2 gap-2 md:gap-5">
             {event.eventImages.map((imageUrl, index) => (
@@ -126,6 +153,14 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
         </div>
         <div className="w-full h-full space-y-10">
 
+          {/* Event Roles */}
+          {event.eventRoles && event.eventRoles.length > 0 && (
+            <div className="space-y-1">
+              <p className="text-sm ml-1 text-black font-semibold">Event Roles</p>
+              <EventRolesTable eventRoles={event.eventRoles} />
+            </div>
+          )}
+
           {/* Event Details */}
           <div className="space-y-1">
             <p className="text-sm ml-1 text-black font-semibold">Event Details</p>
@@ -138,6 +173,8 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
               <div className="border p-2 pl-4 pr-6 border-black/20">{event.dressCode}</div>
               <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Volunteers Count</div>
               <div className="border p-2 pl-4 pr-6 border-black/20">{event.enrollments.length} / {event.maxVolunteers}</div>
+              <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Volunteers List</div>
+                <div className="border p-2 pl-4 pr-6 border-black/20"><Link href={`/admin/events/${event.id}/enrollments`} className="text-blue-500 text-sm">Event Enrollment Page</Link></div>
               <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Duration</div>
               <div className="border p-2 pl-4 pr-6 border-black/20">{getTimeRange(event.startDate, event.endDate)}</div>
               <div className="border p-2 pl-4 pr-6 bg-black/10 border-black/30">Start Date</div>
