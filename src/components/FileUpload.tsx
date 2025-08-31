@@ -8,11 +8,21 @@ import { cn } from "@/lib/utils";
 import { Image as IKImage, Video as IKVideo } from "@imagekit/next";
 import useSingleFileUpload from "@/hooks/useSingleFileUpload";
 
-const {
-  env: {
-    imagekit: { publicKey, urlEndpoint },
-  },
-} = config;
+// Get ImageKit config - handle potential undefined values
+const getImageKitConfig = () => {
+  try {
+    return {
+      publicKey: config.env.imagekit.publicKey,
+      urlEndpoint: config.env.imagekit.urlEndpoint,
+    };
+  } catch (error) {
+    console.error('Error loading ImageKit config:', error);
+    return {
+      publicKey: '',
+      urlEndpoint: '',
+    };
+  }
+};
 
 // Legacy authenticator kept for backward compatibility, now unused internally
 const authenticator = async () => {
@@ -70,6 +80,9 @@ const FileUpload = ({
   useEffect(() => {
     setFile({ filePath: value ?? null });
   }, [value]);
+
+  // Get ImageKit config
+  const { urlEndpoint } = getImageKitConfig();
 
   const styles = {
     button:

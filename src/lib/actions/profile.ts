@@ -4,16 +4,17 @@ import { prisma } from "../prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { profileSchema } from "@/lib/validations";
+import { Session } from "next-auth";
 
 export const updateCurrentUserProfile = async (formData: unknown) => {
-  const session = await getServerSession(authOptions as any);
+  const session = await getServerSession(authOptions) as Session | null;
   if (!session?.user?.id) {
     return { success: false, message: "Unauthorized" };
   }
 
   const parse = profileSchema.safeParse(formData);
   if (!parse.success) {
-    return { success: false, message: parse.error.errors[0]?.message || "Invalid data" };
+    return { success: false, message: parse.error.issues[0]?.message || "Invalid data" };
   }
 
   const { fullName, phoneNumber, address, gender, profileImage, skills } = parse.data;
