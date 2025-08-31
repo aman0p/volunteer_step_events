@@ -268,7 +268,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Praveen Lodhi\\Desktop\\volunteer_step_events\\src\\generated\\prisma",
+      "value": "C:\\Users\\Praveen Lodhi\\Desktop\\amna\\volunteer_step_events\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -282,7 +282,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Praveen Lodhi\\Desktop\\volunteer_step_events\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\Praveen Lodhi\\Desktop\\amna\\volunteer_step_events\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
