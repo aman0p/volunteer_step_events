@@ -51,22 +51,15 @@ export default async function EnrollmentsPage() {
   return (
     <div className="space-y-6">
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Event Enrollment Requests</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight">Event Enrollment Requests</h1>
+          <p className="text-muted-foreground text-sm md:text-base">
             Review and approve event enrollment requests
           </p>
         </div>
-        <div className="flex items-center gap-5">
-
-          <Button variant="outline" size="sm">
-            <Filter className="mr-2 h-4 w-4" />
-            Filter
-          </Button>
-          <div className="text-sm text-gray-600">
+        <div className="mt-3 md:mt-0 flex text-sm text-gray-600 items-center gap-5">
              Pending request{pendingEnrollments.length !== 1 ? 's' : ''} ( {pendingEnrollments.length} )
-          </div>
         </div>
       </div>
 

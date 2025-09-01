@@ -67,7 +67,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
       toast.error("Please select at least one enrollment")
       return
     }
-    
+
     setIsBulkApproveProcessing(true)
     try {
       const promises = selectedRows.map(async (id) => {
@@ -79,7 +79,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
         }
       })
       await Promise.all(promises)
-      toast.success(`Successfully processed ${selectedRows.length} enrollment(s)`) 
+      toast.success(`Successfully processed ${selectedRows.length} enrollment(s)`)
       setSelectedRows([])
       window.location.reload()
     } catch (error) {
@@ -95,7 +95,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
       toast.error("Please select at least one enrollment")
       return
     }
-    
+
     setIsBulkRejectProcessing(true)
     try {
       const promises = selectedRows.map(async (id) => {
@@ -107,7 +107,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
         }
       })
       await Promise.all(promises)
-      toast.success(`Successfully processed ${selectedRows.length} enrollment(s)`) 
+      toast.success(`Successfully processed ${selectedRows.length} enrollment(s)`)
       setSelectedRows([])
       window.location.reload()
     } catch (error) {
@@ -161,7 +161,7 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
   return (
     <div className="space-y-4">
       {/* Top buttons */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
@@ -189,8 +189,8 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
             {selectedRows.length} of {enrollments.length} selected
           </span>
           {selectedRows.length > 0 && (
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
               onClick={() => setSelectedRows([])}
               className="text-xs"
@@ -201,129 +201,139 @@ export default function EventEnrollmentTable({ enrollments }: EventEnrollmentTab
         </div>
       </div>
 
-      {/* Table */}
-      <Table>
-        <TableHeader>
-          <TableRow>
-                         <TableHead className="w-10"></TableHead>
-             <TableHead className="w-10">
-               <Checkbox 
-                 checked={isAllSelected}
-                 onCheckedChange={handleSelectAll}
-               />
-             </TableHead>
-            <TableHead>Event Name</TableHead>
-            <TableHead>Volunteer Name</TableHead>
-            <TableHead>Email ID</TableHead>
-            <TableHead>Phone No</TableHead>
-            <TableHead>Actions</TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {paginatedData.map((enrollment) => (
-            <TableRow
-              key={enrollment.id}
-              className="hover:bg-muted/50"
-            >
-              <TableCell className="w-10">
-                <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
-                  <GripVertical className="h-4 w-4 text-gray-400" />
-                </div>
-              </TableCell>
-              <TableCell className="w-10">
+      {/* Responsive Table Container */}
+      <div className="overflow-x-auto border rounded-md">
+        <Table className="min-w-[800px]">
+          <TableHeader className="bg-black/10 border-b border-black">
+            <TableRow>
+              <TableHead className="w-10 min-w-[40px]"></TableHead>
+              <TableHead className="w-10 min-w-[40px]">
                 <Checkbox
-                  checked={selectedRows.includes(enrollment.id)}
-                  onCheckedChange={(checked) => handleSelectRow(enrollment.id, checked as boolean)}
+                  checked={isAllSelected}
+                  onCheckedChange={handleSelectAll}
                 />
-              </TableCell>
-              <TableCell className="group">
-                <Link href={`/admin/events/${enrollment.event.id}/details`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 group">
-                  <div className="font-medium text-blue-600 hover:text-blue-700">
-                    {enrollment.event.title}
-                  </div>
-                  <ArrowRight className="relative -top-2 -left-1 transition-all duration-150 h-3 w-3 text-blue-600 hover:text-blue-700 rotate-[-45deg] group-hover:-top-2.5 group-hover:-left-0.5" />
-                </Link>
-              </TableCell>
-              <TableCell>
-                <Link href={`/admin/volunteer/${enrollment.user.id}`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3">
-                  <div className="flex-shrink-0">
-                    {enrollment.user.profileImage ? (
-                      <Image
-                        urlEndpoint={config.env.imagekit.urlEndpoint}
-                        src={enrollment.user.profileImage}
-                        alt={enrollment.user.fullName}
-                        width={60}
-                        height={60}
-                        className="rounded-full w-8 h-8 aspect-square object-cover"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                        <Link href={`/admin/volunteer/${enrollment.user.id}`} target="_blank" rel="noopener noreferrer" className="text-xs font-medium">
-                          {enrollment.user.fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <div className="font-medium">{enrollment.user.fullName}</div>
-                  </div>
-                </Link>
-              </TableCell>
-              <TableCell className="font-mono text-sm">{enrollment.user.email}</TableCell>
-              <TableCell className="font-mono text-sm">{enrollment.user.phoneNumber}</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    variant="default"
-                    onClick={() => handleApprove(enrollment.id)}
-                    loading={approveProcessingIds.includes(enrollment.id)}
-                    className="h-8 px-2 text-xs w-20"
-                  >
-                    Approve
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleReject(enrollment.id)}
-                    loading={rejectProcessingIds.includes(enrollment.id)}
-                    className="h-8 px-2 text-xs w-20"
-                  >
-                    Reject
-                  </Button>
-                </div>
-              </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href={`/admin/events/${enrollment.event.id}/details`} target="_blank" rel="noopener noreferrer">
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Event
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/admin/volunteer/${enrollment.user.id}`} target="_blank" rel="noopener noreferrer">
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Volunteer Profile
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+              </TableHead>
+              <TableHead className="min-w-[150px]">Event Name</TableHead>
+              <TableHead className="min-w-[180px]">Volunteer Name</TableHead>
+              <TableHead className="min-w-[200px]">Email ID</TableHead>
+              <TableHead className="min-w-[120px]">Phone No</TableHead>
+              <TableHead className="min-w-[160px]">Actions</TableHead>
+              <TableHead className="w-10 min-w-[40px]"></TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {paginatedData.map((enrollment) => (
+              <TableRow
+                key={enrollment.id}
+                className="hover:bg-muted/50"
+              >
+                <TableCell className="w-10 min-w-[40px]">
+                  <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
+                    <GripVertical className="h-4 w-4 text-gray-400" />
+                  </div>
+                </TableCell>
+                <TableCell className="w-10 min-w-[40px]">
+                  <Checkbox
+                    checked={selectedRows.includes(enrollment.id)}
+                    onCheckedChange={(checked) => handleSelectRow(enrollment.id, checked as boolean)}
+                  />
+                </TableCell>
+                <TableCell className="group min-w-[150px]">
+                  <Link href={`/admin/events/${enrollment.event.id}/details`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 group">
+                    <div className="font-medium text-blue-600 hover:text-blue-700 truncate">
+                      {enrollment.event.title}
+                    </div>
+                    <ArrowRight className="relative -top-2 -left-1 transition-all duration-150 h-3 w-3 text-blue-600 hover:text-blue-700 rotate-[-45deg] group-hover:-top-2.5 group-hover:-left-0.5 flex-shrink-0" />
+                  </Link>
+                </TableCell>
+                <TableCell className="min-w-[180px]">
+                  <Link href={`/admin/volunteer/${enrollment.user.id}`} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3">
+                    <div className="flex-shrink-0">
+                      {enrollment.user.profileImage ? (
+                        <Image
+                          urlEndpoint={config.env.imagekit.urlEndpoint}
+                          src={enrollment.user.profileImage}
+                          alt={enrollment.user.fullName}
+                          width={60}
+                          height={60}
+                          className="rounded-full w-8 h-8 aspect-square object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                          <Link href={`/admin/volunteer/${enrollment.user.id}`} target="_blank" rel="noopener noreferrer" className="text-xs font-medium">
+                            {enrollment.user.fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-medium truncate">{enrollment.user.fullName}</div>
+                    </div>
+                  </Link>
+                </TableCell>
+                <TableCell className="font-mono text-sm min-w-[200px]">
+                  <div className="truncate" title={enrollment.user.email}>
+                    {enrollment.user.email}
+                  </div>
+                </TableCell>
+                <TableCell className="font-mono text-sm min-w-[120px]">
+                  <div className="truncate" title={enrollment.user.phoneNumber}>
+                    {enrollment.user.phoneNumber}
+                  </div>
+                </TableCell>
+                <TableCell className="min-w-[160px]">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="default"
+                      onClick={() => handleApprove(enrollment.id)}
+                      loading={approveProcessingIds.includes(enrollment.id)}
+                      className="h-8 px-2 text-xs w-20"
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleReject(enrollment.id)}
+                      loading={rejectProcessingIds.includes(enrollment.id)}
+                      className="h-8 px-2 text-xs w-20"
+                    >
+                      Reject
+                    </Button>
+                  </div>
+                </TableCell>
+                <TableCell className="w-10 min-w-[40px]">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link href={`/admin/events/${enrollment.event.id}/details`} target="_blank" rel="noopener noreferrer">
+                          <Eye className="mr-2 h-4 w-4" />
+                          View Event
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href={`/admin/volunteer/${enrollment.user.id}`} target="_blank" rel="noopener noreferrer">
+                          <Eye className="mr-2 h-4 w-4" />
+                          View Volunteer Profile
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between py-2">
+      <div className="flex flex-col gap-3 md:gap-0 md:flex-row items-start md:items-center md:justify-between py-2">
         <p className="text-sm text-muted-foreground">
           {selectedRows.length} of {enrollments.length} row(s) selected
         </p>

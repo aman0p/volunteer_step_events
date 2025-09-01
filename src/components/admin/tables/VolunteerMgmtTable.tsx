@@ -130,7 +130,7 @@ export default function VolunteerMgmtTable({ volunteers, currentUserRole }: Volu
   return (
     <div className="relative space-y-4">
       {/* Search Section */}
-      <div className="w-xl absolute top-0 right-0">
+      <div className="w-full md:w-xl md:absolute top-0 right-0">
         <VolunteerSearch
           placeholder="Search volunteers by name or email . . ."
           className="w-full"
@@ -142,17 +142,17 @@ export default function VolunteerMgmtTable({ volunteers, currentUserRole }: Volu
       </div>
 
       {/* Top bar */}
-      <div className="flex justify-between items-center">
-          <span className="text-sm text-muted-foreground">
+      <div className="flex flex-col gap-3 md:gap-0 md:flex-row items-start md:items-center md:justify-between">
+          <span className="text-sm text-muted-foreground order-last md:order-first">
             Showing {paginatedData.length} of {volunteers.length} volunteers
           </span>
-          <div className="flex items-center gap-2 z-10 pt-0.5 pr-1">
-            <Button
+          <div className="flex text-sm text-gray-600 items-center gap-2 z-10 pt-0.5 pr-1">
+              <Button
               variant="default"
               size="sm"
               onClick={handleSave}
               disabled={isSaving || Object.keys(pendingRoles).length === 0}
-              className="bg-black hover:bg-black/90 w-28"
+              className="bg-black hover:bg-black/90 w-28 order-first md:order-last"
             >
               {isSaving ? 'Saving...' : 'Save changes'}
             </Button>
@@ -160,126 +160,128 @@ export default function VolunteerMgmtTable({ volunteers, currentUserRole }: Volu
       </div>
 
       {/* Table */}
-      <Table className="mt-5">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-8"></TableHead>
-            <TableHead className="w-48">Volunteer</TableHead>
-            <TableHead className="w-48">Contact Info</TableHead>
-            <TableHead className="w-24">Gender</TableHead>
-            <TableHead className="w-40">Enrollment Stats</TableHead>
-            <TableHead className="w-10">Role</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {paginatedData.map((volunteer) => {
-            const stats = getEnrollmentStats(volunteer.enrollments)
-            return (
-              <TableRow key={volunteer.id} className="hover:bg-muted/50">
-                <TableCell className="w-8">
-                  <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
-                    <GripVertical className="h-4 w-4 text-gray-400" />
-                  </div>
-                </TableCell>
-                <TableCell className="w-48">
-                  <Link href={`/admin/volunteer/${volunteer.id}`} className="flex items-center space-x-3">
-                    <div className="flex-shrink-0">
-                      {volunteer.profileImage ? (
-                        <Image
-                          urlEndpoint={config.env.imagekit.urlEndpoint}
-                          src={volunteer.profileImage}
-                          alt={volunteer.fullName}
-                          width={70}
-                          height={70}
-                          className="rounded-full w-10 h-10 aspect-square object-cover"
-                        />
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                          <span className="text-sm font-medium">
-                            {volunteer.fullName
-                              .split(" ")
-                              .map((n: string) => n[0])
-                              .join("")
-                              .toUpperCase()}
-                          </span>
-                        </div>
-                      )}
+      <div className="overflow-x-auto border rounded-md">
+        <Table className="min-w-[900px]">
+          <TableHeader className="bg-black/10 border-b border-black">
+            <TableRow>
+              <TableHead className="w-8 min-w-[32px]"></TableHead>
+              <TableHead className="w-48 min-w-[192px]">Volunteer</TableHead>
+              <TableHead className="w-48 min-w-[192px]">Contact Info</TableHead>
+              <TableHead className="w-24 min-w-[96px]">Gender</TableHead>
+              <TableHead className="w-40 min-w-[160px]">Enrollment Stats</TableHead>
+              <TableHead className="w-10 min-w-[40px]">Role</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {paginatedData.map((volunteer) => {
+              const stats = getEnrollmentStats(volunteer.enrollments)
+              return (
+                <TableRow key={volunteer.id} className="hover:bg-muted/50">
+                  <TableCell className="w-8 min-w-[32px]">
+                    <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
+                      <GripVertical className="h-4 w-4 text-gray-400" />
                     </div>
-                    <div>
-                      <div className="font-medium">{volunteer.fullName}</div>
-                      {/* <div className="text-sm text-muted-foreground">ID: {volunteer.id.slice(0, 8)}...</div> */}
+                  </TableCell>
+                  <TableCell className="w-48 min-w-[192px]">
+                    <Link href={`/admin/volunteer/${volunteer.id}`} className="flex items-center space-x-3">
+                      <div className="flex-shrink-0">
+                        {volunteer.profileImage ? (
+                          <Image
+                            urlEndpoint={config.env.imagekit.urlEndpoint}
+                            src={volunteer.profileImage}
+                            alt={volunteer.fullName}
+                            width={70}
+                            height={70}
+                            className="rounded-full w-10 h-10 aspect-square object-cover"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                            <span className="text-sm font-medium">
+                              {volunteer.fullName
+                                .split(" ")
+                                .map((n: string) => n[0])
+                                .join("")
+                                .toUpperCase()}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="font-medium truncate">{volunteer.fullName}</div>
+                        {/* <div className="text-sm text-muted-foreground">ID: {volunteer.id.slice(0, 8)}...</div> */}
+                      </div>
+                    </Link>
+                  </TableCell>
+                  <TableCell className="w-48 min-w-[192px]">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-sm">
+                        <Mail className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                        <span className="font-mono truncate" title={volunteer.email}>{volunteer.email}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Phone className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                        <span className="font-mono truncate" title={volunteer.phoneNumber}>{volunteer.phoneNumber}</span>
+                      </div>
                     </div>
-                  </Link>
-                </TableCell>
-                <TableCell className="w-48">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Mail className="h-3 w-3 text-muted-foreground" />
-                      <span className="font-mono">{volunteer.email}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Phone className="h-3 w-3 text-muted-foreground" />
-                      <span className="font-mono">{volunteer.phoneNumber}</span>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell className="w-24">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm capitalize">{volunteer.gender?.toLowerCase() || 'Not specified'}</span>
-                  </div>
-                </TableCell>
-                <TableCell className="w-40">
-                  <div className="space-y-2">
+                  </TableCell>
+                  <TableCell className="w-24 min-w-[96px]">
                     <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-100">
-                        {stats.approved}
-                      </Badge>
-                      <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
-                        {stats.pending}
-                      </Badge>
-                      <Badge variant="secondary" className="bg-red-100 text-red-800 hover:bg-red-100">
-                        {stats.rejected}
-                      </Badge>
+                      <span className="text-sm capitalize truncate">{volunteer.gender?.toLowerCase() || 'Not specified'}</span>
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      Total: {stats.total} enrollments
+                  </TableCell>
+                  <TableCell className="w-40 min-w-[160px]">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-100">
+                          {stats.approved}
+                        </Badge>
+                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
+                          {stats.pending}
+                        </Badge>
+                        <Badge variant="secondary" className="bg-red-100 text-red-800 hover:bg-red-100">
+                          {stats.rejected}
+                        </Badge>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Total: {stats.total} enrollments
+                      </div>
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell className="w-24">
-                  <Select
-                    value={pendingRoles[volunteer.id] ?? volunteer.role}
-                    onValueChange={(newRole) => handleLocalRoleChange(volunteer.id, newRole)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue>
-                          <span className="text-sm">{pendingRoles[volunteer.id] ?? volunteer.role}</span>
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      {allowedRoles.includes('USER') && (
-                        <SelectItem value="USER">User</SelectItem>
-                      )}
-                      {allowedRoles.includes('VOLUNTEER') && (
-                        <SelectItem value="VOLUNTEER">Volunteer</SelectItem>
-                      )}
-                      {allowedRoles.includes('ADMIN') && (
-                        <SelectItem value="ADMIN">Admin</SelectItem>
-                      )}
-                      {allowedRoles.includes('ORGANIZER') && (
-                        <SelectItem value="ORGANIZER">Organizer</SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
-                </TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
+                  </TableCell>
+                  <TableCell className="w-24 min-w-[96px]">
+                    <Select
+                      value={pendingRoles[volunteer.id] ?? volunteer.role}
+                      onValueChange={(newRole) => handleLocalRoleChange(volunteer.id, newRole)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue>
+                            <span className="text-sm">{pendingRoles[volunteer.id] ?? volunteer.role}</span>
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {allowedRoles.includes('USER') && (
+                          <SelectItem value="USER">User</SelectItem>
+                        )}
+                        {allowedRoles.includes('VOLUNTEER') && (
+                          <SelectItem value="VOLUNTEER">Volunteer</SelectItem>
+                        )}
+                        {allowedRoles.includes('ADMIN') && (
+                          <SelectItem value="ADMIN">Admin</SelectItem>
+                        )}
+                        {allowedRoles.includes('ORGANIZER') && (
+                          <SelectItem value="ORGANIZER">Organizer</SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
+      </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between py-2">
+      <div className="flex flex-col gap-3 md:gap-0 md:flex-row items-start md:items-center md:justify-between py-2">
         <p className="text-sm text-muted-foreground">
           Showing {paginatedData.length} of {volunteers.length} volunteers
         </p>

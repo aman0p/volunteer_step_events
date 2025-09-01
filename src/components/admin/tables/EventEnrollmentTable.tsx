@@ -133,7 +133,7 @@ export default function EventEnrollmentTable({
         <div className="flex items-center justify-between">
           <div className="space-y-2">
             <h2 className="text-xl font-semibold text-gray-900">{eventTitle}</h2>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4 text-sm text-gray-600">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <span>{formatDate(eventStartDate)} - {formatDate(eventEndDate)}</span>
@@ -144,7 +144,7 @@ export default function EventEnrollmentTable({
               </div>
             </div>
           </div>
-          <div className="text-right">
+          <div className="text-right hidden md:block">
             <div className="text-2xl font-bold text-gray-900">{enrollments.length}</div>
             <div className="text-sm text-gray-600">Total Enrollments</div>
           </div>
@@ -178,138 +178,140 @@ export default function EventEnrollmentTable({
       </div>
 
       {/* Table */}
-      <Table className="mt-5">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-8"></TableHead>
-            <TableHead className="w-40">Volunteer</TableHead>
-            <TableHead className="w-48">Contact Info</TableHead>
-            <TableHead className="w-32">Role & Skills</TableHead>
-            <TableHead className="w-32">Enrollment Details</TableHead>
-            <TableHead className="w-24">Status</TableHead>
-            <TableHead className="w-24">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {paginatedData.map((enrollment) => (
-            <TableRow key={enrollment.id} className="hover:bg-muted/50">
-              <TableCell className="w-8">
-                <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
-                  <GripVertical className="h-4 w-4 text-gray-400" />
-                </div>
-              </TableCell>
-              <TableCell className="w-48">
-                <Link href={`/admin/volunteer/${enrollment.user.id}`} className="flex items-center space-x-3">
-                  <div className="flex-shrink-0">
-                    {enrollment.user.profileImage ? (
-                      <Image
-                        urlEndpoint={config.env.imagekit.urlEndpoint}
-                        src={enrollment.user.profileImage}
-                        alt={enrollment.user.fullName}
-                        width={40}
-                        height={40}
-                        className="rounded-full w-10 h-10 aspect-square object-cover"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                        <span className="text-sm font-medium">
-                          {enrollment.user.fullName
-                            .split(" ")
-                            .map((n: string) => n[0])
-                            .join("")
-                            .toUpperCase()}
-                        </span>
+      <div className="overflow-x-auto border rounded-md">
+        <Table className="min-w-[900px]">
+          <TableHeader className="bg-black/10 border-b border-black">
+            <TableRow>
+              <TableHead className="w-8 min-w-[32px]"></TableHead>
+              <TableHead className="w-40 min-w-[160px]">Volunteer</TableHead>
+              <TableHead className="w-48 min-w-[192px]">Contact Info</TableHead>
+              <TableHead className="w-32 min-w-[128px]">Role & Skills</TableHead>
+              <TableHead className="w-32 min-w-[128px]">Enrollment Details</TableHead>
+              <TableHead className="w-24 min-w-[96px]">Status</TableHead>
+              <TableHead className="w-24 min-w-[96px]">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {paginatedData.map((enrollment) => (
+              <TableRow key={enrollment.id} className="hover:bg-muted/50">
+                <TableCell className="w-8 min-w-[32px]">
+                  <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
+                    <GripVertical className="h-4 w-4 text-gray-400" />
+                  </div>
+                </TableCell>
+                <TableCell className="w-48 min-w-[192px]">
+                  <Link href={`/admin/volunteer/${enrollment.user.id}`} className="flex items-center space-x-3">
+                    <div className="flex-shrink-0">
+                      {enrollment.user.profileImage ? (
+                        <Image
+                          urlEndpoint={config.env.imagekit.urlEndpoint}
+                          src={enrollment.user.profileImage}
+                          alt={enrollment.user.fullName}
+                          width={40}
+                          height={40}
+                          className="rounded-full w-10 h-10 aspect-square object-cover"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                          <span className="text-sm font-medium">
+                            {enrollment.user.fullName
+                              .split(" ")
+                              .map((n: string) => n[0])
+                              .join("")
+                              .toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-medium truncate">{enrollment.user.fullName}</div>
+                      <div className="text-sm text-muted-foreground capitalize truncate">{enrollment.user.gender?.toLowerCase() || 'Not specified'}</div>
+                    </div>
+                  </Link>
+                </TableCell>
+                <TableCell className="w-40 min-w-[160px]">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Mail className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                      <span className="font-mono text-sm truncate" title={enrollment.user.email}>{enrollment.user.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Phone className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                      <span className="font-mono text-sm truncate" title={enrollment.user.phoneNumber}>{enrollment.user.phoneNumber}</span>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="w-32 min-w-[128px]">
+                  <div className="space-y-2">
+                    {enrollment.eventRole && (
+                      <div className="flex items-center gap-2">
+                        <User className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                        <span className="text-sm font-medium truncate" title={enrollment.eventRole.name}>{enrollment.eventRole.name}</span>
+                      </div>
+                    )}
+                    {enrollment.user.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {enrollment.user.skills.slice(0, 2).map((skill, index) => (
+                          <Badge key={index} variant="outline" className="text-xs">
+                            {skill}
+                          </Badge>
+                        ))}
+                        {enrollment.user.skills.length > 2 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{enrollment.user.skills.length - 2}
+                          </Badge>
+                        )}
                       </div>
                     )}
                   </div>
-                  <div>
-                    <div className="font-medium">{enrollment.user.fullName}</div>
-                    <div className="text-sm text-muted-foreground capitalize">{enrollment.user.gender?.toLowerCase() || 'Not specified'}</div>
+                </TableCell>
+                <TableCell className="w-32 min-w-[128px]">
+                  <div className="space-y-1 text-sm">
+                    <div className="text-muted-foreground truncate" title={`Enrolled: ${formatEnrollmentDate(enrollment.enrolledAt)}`}>
+                      Enrolled: {formatEnrollmentDate(enrollment.enrolledAt)}
+                    </div>
+                    {enrollment.cancelledAt && (
+                      <div className="text-red-600 truncate" title={`Cancelled: ${formatEnrollmentDate(enrollment.cancelledAt)}`}>
+                        Cancelled: {formatEnrollmentDate(enrollment.cancelledAt)}
+                      </div>
+                    )}
+                    {enrollment.cancellationCount > 0 && (
+                      <div className="text-orange-600">
+                        Cancellations: {enrollment.cancellationCount}
+                      </div>
+                    )}
+                    {enrollment.payoutAmount && (
+                      <div className="font-medium text-green-600">
+                        ₹{enrollment.payoutAmount.toLocaleString('en-IN')}
+                      </div>
+                    )}
                   </div>
-                </Link>
-              </TableCell>
-              <TableCell className="w-40">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail className="h-3 w-3 text-muted-foreground" />
-                    <span className="font-mono text-sm">{enrollment.user.email}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Phone className="h-3 w-3 text-muted-foreground" />
-                    <span className="font-mono text-sm">{enrollment.user.phoneNumber}</span>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell className="w-32">
-                <div className="space-y-2">
-                  {enrollment.eventRole && (
-                    <div className="flex items-center gap-2">
-                      <User className="h-3 w-3 text-muted-foreground" />
-                      <span className="text-sm font-medium">{enrollment.eventRole.name}</span>
-                    </div>
-                  )}
-                  {enrollment.user.skills.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
-                      {enrollment.user.skills.slice(0, 2).map((skill, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
-                          {skill}
-                        </Badge>
-                      ))}
-                      {enrollment.user.skills.length > 2 && (
-                        <Badge variant="outline" className="text-xs">
-                          +{enrollment.user.skills.length - 2}
-                        </Badge>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </TableCell>
-              <TableCell className="w-32">
-                <div className="space-y-1 text-sm">
-                  <div className="text-muted-foreground">
-                    Enrolled: {formatEnrollmentDate(enrollment.enrolledAt)}
-                  </div>
-                  {enrollment.cancelledAt && (
-                    <div className="text-red-600">
-                      Cancelled: {formatEnrollmentDate(enrollment.cancelledAt)}
-                    </div>
-                  )}
-                  {enrollment.cancellationCount > 0 && (
-                    <div className="text-orange-600">
-                      Cancellations: {enrollment.cancellationCount}
-                    </div>
-                  )}
-                  {enrollment.payoutAmount && (
-                    <div className="font-medium text-green-600">
-                      ₹{enrollment.payoutAmount.toLocaleString('en-IN')}
-                    </div>
-                  )}
-                </div>
-              </TableCell>
-              <TableCell className="w-24">
-                <Badge variant={getStatusBadgeVariant(enrollment.status)}>
-                  {getStatusDisplayName(enrollment.status)}
-                </Badge>
-              </TableCell>
-              <TableCell className="w-24">
-                <div className="flex flex-col gap-2">
-                  <Button variant="outline" size="sm" className="w-full">
-                    View Profile
-                  </Button>
-                  {enrollment.status === 'PENDING' && (
-                    <Button variant="default" size="sm" className="w-full bg-green-600 hover:bg-green-700">
-                      Approve
+                </TableCell>
+                <TableCell className="w-24 min-w-[96px]">
+                  <Badge variant={getStatusBadgeVariant(enrollment.status)}>
+                    {getStatusDisplayName(enrollment.status)}
+                  </Badge>
+                </TableCell>
+                <TableCell className="w-24 min-w-[96px]">
+                  <div className="flex flex-col gap-2">
+                    <Button variant="outline" size="sm" className="w-full">
+                      View Profile
                     </Button>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                    {enrollment.status === 'PENDING' && (
+                      <Button variant="default" size="sm" className="w-full bg-green-600 hover:bg-green-700">
+                        Approve
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between py-2">
+      <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between py-2">
         <p className="text-sm text-muted-foreground">
           Showing {paginatedData.length} of {filteredEnrollments.length} enrollments
         </p>

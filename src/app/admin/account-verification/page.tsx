@@ -56,8 +56,8 @@ export default async function AccountVerification() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">Account Verification Requests</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight">Account Verification Requests</h1>
+          <p className="text-muted-foreground text-sm md:text-base">
             Review and manage user verification requests
           </p>
         </div>

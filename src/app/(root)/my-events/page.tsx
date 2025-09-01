@@ -53,11 +53,11 @@ export default async function VolunteerEventsPage() {
   }));
 
   return (
-    <div className="space-y-6 w-6xl px-2">
-      <div className="flex items-center justify-between w-full">
+    <div className="space-y-6 px-2">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">My Enrolled Events</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight">My Enrolled Events</h1>
+          <p className="text-muted-foreground text-sm md:text-base">
             View your enrolled events and their status
           </p>
         </div>

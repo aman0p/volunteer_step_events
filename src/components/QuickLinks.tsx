@@ -20,7 +20,7 @@ const QuickLinks: React.FC<QuickLinksProps> = ({ quickLinks, isEnrolled, isEvent
   const canAccessQuickLinks = isEnrolled || isEventCreator;
   
   return (
-    <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-3 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/5 relative">
+    <div className="h-fit mb-5 w-full flex flex-col gap-3 md:gap-5 p-3 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/5 relative">
       <h1 className="text-base md:text-xl font-bold">Quick Links</h1>
       
       {/* Lock overlay for non-enrolled users and non-creators */}

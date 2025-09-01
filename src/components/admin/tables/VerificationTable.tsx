@@ -229,7 +229,7 @@ export default function VerificationTable({ verificationRequests }: Verification
     <div className="space-y-4">
       {/* Top buttons */}
       <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col md:flex-row items-center gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -251,12 +251,12 @@ export default function VerificationTable({ verificationRequests }: Verification
             Reject All ({selectedRows.length})
           </Button>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">
+        <div className="flex flex-col md:flex-row items-center gap-2">
+          <span className="order-last md:order-first text-sm text-muted-foreground">
             {selectedRows.length} of {pendingRequests.length} pending selected
           </span>
           {selectedRows.length > 0 && (
-            <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])} className="text-xs">
+            <Button variant="ghost" size="sm" onClick={() => setSelectedRows([])} className="text-xs order-first md:order-last">
               Clear Selection
             </Button>
           )}
@@ -264,138 +264,148 @@ export default function VerificationTable({ verificationRequests }: Verification
       </div>
 
       {/* Table */}
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-10"></TableHead>
-            <TableHead className="w-10">
-              <Checkbox checked={isAllSelected} onCheckedChange={handleSelectAll} />
-            </TableHead>
-            <TableHead>Volunteer Name</TableHead>
-            <TableHead>Email ID</TableHead>
-            <TableHead>Phone No</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Submitted</TableHead>
-            <TableHead>Actions</TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {paginatedData.map((request) => (
-            <TableRow key={request.id} className="hover:bg-muted/50">
-              <TableCell className="w-10">
-                <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
-                  <GripVertical className="h-4 w-4 text-gray-400" />
-                </div>
-              </TableCell>
-              <TableCell className="w-10">
-                <Checkbox
-                  checked={selectedRows.includes(request.id)}
-                  onCheckedChange={(checked) => handleSelectRow(request.id, checked as boolean)}
-                  disabled={request.status !== "PENDING"}
-                />
-              </TableCell>
-              <TableCell>
-                <Link href={`/admin/account-verification/${request.id}`} className="flex items-center space-x-3">
-                  <div className="flex-shrink-0">
-                    {request.user.profileImage ? (
-                      <Image
-                        urlEndpoint={config.env.imagekit.urlEndpoint}
-                        src={request.user.profileImage}
-                        alt={request.user.fullName}
-                        width={70}
-                        height={70}
-                        className="rounded-full w-8 h-8 aspect-square object-cover"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                        <Link href={`/admin/account-verification/${request.id}`} className="text-xs font-medium">
-                          {request.user.fullName
-                            .split(" ")
-                            .map((n: string) => n[0])
-                            .join("")
-                            .toUpperCase()}
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <div className="font-medium">{request.user.fullName}</div>
-                  </div>
-                </Link>
-              </TableCell>
-              <TableCell className="font-mono text-sm">{request.user.email}</TableCell>
-              <TableCell className="font-mono text-sm">{request.user.phoneNumber}</TableCell>
-              <TableCell>
-                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                  request.status === "PENDING" 
-                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400"
-                    : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
-                }`}>
-                  {request.status}
-                </span>
-              </TableCell>
-              <TableCell className="text-sm text-muted-foreground">{formatDate(request.submittedAt)}</TableCell>
-              <TableCell>
-                {request.status === "PENDING" ? (
-                  <div className="flex items-center gap-2">
-                    <Button
-                      size="sm"
-                      variant="default"
-                      onClick={() => handleApprove(request.id)}
-                      loading={approveProcessingIds.includes(request.id)}
-                      className="h-8 px-2 text-xs w-20"
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleReject(request.id)}
-                      loading={rejectProcessingIds.includes(request.id)}
-                      className="h-8 px-2 text-xs w-20"
-                    >
-                      Reject
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-red-600 dark:text-red-400 font-medium">Rejected</span>
-                    {request.rejectionReason && (
-                      <span className="text-xs text-muted-foreground max-w-32 truncate" title={request.rejectionReason}>
-                        Reason: {request.rejectionReason}
-                      </span>
-                    )}
-                  </div>
-                )}
-              </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href={`/admin/account-verification/${request.id}`}>
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Details
-                      </Link>
-                    </DropdownMenuItem>
-                    {request.status === "PENDING" && (
-                      <DropdownMenuItem onClick={() => handleRejectWithReason(request.id)}>
-                        <XCircle className="mr-2 h-4 w-4" />
-                        Reject with Reason
-                      </DropdownMenuItem>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+      <div className="overflow-x-auto border rounded-md">
+        <Table className="min-w-[900px]">
+          <TableHeader className="bg-black/10 border-b border-black">
+            <TableRow>
+              <TableHead className="w-10 min-w-[40px]"></TableHead>
+              <TableHead className="w-10 min-w-[40px]">
+                <Checkbox checked={isAllSelected} onCheckedChange={handleSelectAll} />
+              </TableHead>
+              <TableHead className="w-48 min-w-[192px]">Volunteer Name</TableHead>
+              <TableHead className="w-30 min-w-[120px]">Email ID</TableHead>
+              <TableHead className="w-30 min-w-[120px]">Phone No</TableHead>
+              <TableHead className="w-24 min-w-[96px]">Status</TableHead>
+              <TableHead className="w-40 min-w-[160px]">Submitted</TableHead>
+              <TableHead className="w-48 min-w-[192px]">Actions</TableHead>
+              <TableHead className="w-10 min-w-[40px]"></TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {paginatedData.map((request) => (
+              <TableRow key={request.id} className="hover:bg-muted/50">
+                <TableCell className="w-10 min-w-[40px]">
+                  <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
+                    <GripVertical className="h-4 w-4 text-gray-400" />
+                  </div>
+                </TableCell>
+                <TableCell className="w-10 min-w-[40px]">
+                  <Checkbox
+                    checked={selectedRows.includes(request.id)}
+                    onCheckedChange={(checked) => handleSelectRow(request.id, checked as boolean)}
+                    disabled={request.status !== "PENDING"}
+                  />
+                </TableCell>
+                <TableCell className="min-w-[192px]">
+                  <Link href={`/admin/account-verification/${request.id}`} className="flex items-center space-x-3">
+                    <div className="flex-shrink-0">
+                      {request.user.profileImage ? (
+                        <Image
+                          urlEndpoint={config.env.imagekit.urlEndpoint}
+                          src={request.user.profileImage}
+                          alt={request.user.fullName}
+                          width={70}
+                          height={70}
+                          className="rounded-full w-8 h-8 aspect-square object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                          <Link href={`/admin/account-verification/${request.id}`} className="text-xs font-medium">
+                            {request.user.fullName
+                              .split(" ")
+                              .map((n: string) => n[0])
+                              .join("")
+                              .toUpperCase()}
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-medium truncate">{request.user.fullName}</div>
+                    </div>
+                  </Link>
+                </TableCell>
+                <TableCell className="font-mono text-sm min-w-[120px]">
+                  <div className="truncate" title={request.user.email}>
+                    {request.user.email}
+                  </div>
+                </TableCell>
+                <TableCell className="font-mono text-sm min-w-[120px]">
+                  <div className="truncate" title={request.user.phoneNumber}>
+                    {request.user.phoneNumber}
+                  </div>
+                </TableCell>
+                <TableCell className="min-w-[96px]">
+                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                    request.status === "PENDING" 
+                      ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400"
+                      : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
+                  }`}>
+                    {request.status}
+                  </span>
+                </TableCell>
+                <TableCell className="text-sm text-muted-foreground min-w-[160px]">{formatDate(request.submittedAt)}</TableCell>
+                <TableCell className="min-w-[192px]">
+                  {request.status === "PENDING" ? (
+                    <div className="flex items-center gap-2">
+                      <Button
+                        size="sm"
+                        variant="default"
+                        onClick={() => handleApprove(request.id)}
+                        loading={approveProcessingIds.includes(request.id)}
+                        className="h-8 px-2 text-xs w-20"
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => handleReject(request.id)}
+                        loading={rejectProcessingIds.includes(request.id)}
+                        className="h-8 px-2 text-xs w-20"
+                      >
+                        Reject
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-red-600 dark:text-red-400 font-medium">Rejected</span>
+                      {request.rejectionReason && (
+                        <span className="text-xs text-muted-foreground max-w-32 truncate" title={request.rejectionReason}>
+                          Reason: {request.rejectionReason}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </TableCell>
+                <TableCell className="min-w-[40px]">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link href={`/admin/account-verification/${request.id}`}>
+                          <Eye className="mr-2 h-4 w-4" />
+                          View Details
+                        </Link>
+                      </DropdownMenuItem>
+                      {request.status === "PENDING" && (
+                        <DropdownMenuItem onClick={() => handleRejectWithReason(request.id)}>
+                          <XCircle className="mr-2 h-4 w-4" />
+                          Reject with Reason
+                        </DropdownMenuItem>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       {/* Pagination */}
       <div className="flex items-center justify-between py-2">
