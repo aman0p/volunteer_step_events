@@ -84,3 +84,14 @@ IMAGEKIT_PRIVATE_KEY=your_private_key
 
 1. Rate limit is not working as expected
 2. Change the email from `` to the actual professional email
+
+
+
+
+
+update changes
+
+check in postman both get ,post
+commit the codes
+check auths
+check cors
