@@ -1,6 +1,13 @@
 const config = {
   env: {
-    apiEndpoint: process.env.NEXT_PUBLIC_API_ENDPOINT!,
+    apiEndpoint: (() => {
+      // In production (Vercel), use the production endpoint
+      if (process.env.NODE_ENV === 'production') {
+        return process.env.NEXT_PUBLIC_PROD_API_ENDPOINT || 'https://volunteer-step-events-eta.vercel.app';
+      }
+      // In development, use local endpoint
+      return process.env.NEXT_PUBLIC_API_ENDPOINT || 'http://localhost:3000';
+    })(),
     prodApiEndpoint: process.env.NEXT_PUBLIC_PROD_API_ENDPOINT!,
     imagekit: {
       publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
