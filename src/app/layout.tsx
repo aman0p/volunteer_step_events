@@ -11,6 +11,9 @@ const exo = Exo({
 export const metadata: Metadata = {
   title: "Volunteer Step Events",
   description: "Manage your events and volunteers",
+  icons: {
+    icon: "/default/logo.svg",
+  },
 };
 
 export default async function RootLayout({

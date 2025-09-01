@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, X, Mail, Phone } from "lucide-react";
+import { Search, X, Mail, Phone, Shield, Users, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Image } from "@imagekit/next";
@@ -34,13 +34,23 @@ interface VolunteerSearchProps {
   placeholder?: string;
   className?: string;
   eventId?: string; // Add eventId to filter volunteers by specific event
+  includeAdmins?: boolean; // New prop to control whether to include admins
+  showToggle?: boolean; // Show toggle for admin inclusion
 }
 
-export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Search volunteers by name...", className = "", eventId }: VolunteerSearchProps) {
+export default function VolunteerSearch({ 
+  onVolunteerSelect, 
+  placeholder = "Search users by name...", 
+  className = "", 
+  eventId,
+  includeAdmins = true, // Default to true to include admins
+  showToggle = true // Show toggle by default
+}: VolunteerSearchProps) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Volunteer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [includeAdminsState, setIncludeAdminsState] = useState(includeAdmins);
 
   useEffect(() => {
     const searchVolunteers = async () => {
@@ -52,7 +62,7 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
 
       setIsLoading(true);
       try {
-        const searchUrl = `/api/admin/volunteer/search?q=${encodeURIComponent(query)}${eventId ? `&eventId=${eventId}` : ''}`;
+        const searchUrl = `/api/admin/volunteer/search?q=${encodeURIComponent(query)}${eventId ? `&eventId=${eventId}` : ''}${includeAdminsState ? '&includeAdmins=true' : ''}`;
         
         const response = await fetch(searchUrl);
         
@@ -74,9 +84,7 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
 
     const debounceTimer = setTimeout(searchVolunteers, 300);
     return () => clearTimeout(debounceTimer);
-  }, [query, eventId]);
-
-
+  }, [query, eventId, includeAdminsState]);
 
   const handleVolunteerClick = (volunteer: Volunteer) => {
     if (onVolunteerSelect) {
@@ -97,7 +105,7 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
       case "PENDING":
         return <Badge variant="secondary" className="text-xs">Pending</Badge>;
       case "APPROVED":
-        return <Badge variant="default" className="bg-green-600 text-white text-xs">Approved</Badge>;
+        return <Badge variant="default" className="text-xs bg-green-600 text-white">Approved</Badge>;
       case "REJECTED":
         return <Badge variant="destructive" className="text-xs">Rejected</Badge>;
       default:
@@ -105,27 +113,77 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
     }
   };
 
+  const getRoleBadge = (role: string) => {
+    switch (role) {
+      case "ADMIN":
+        return <Badge variant="destructive" className="text-xs bg-red-600 text-white">Admin</Badge>;
+      case "ORGANIZER":
+        return <Badge variant="default" className="text-xs bg-blue-600 text-white">Organizer</Badge>;
+      case "VOLUNTEER":
+        return <Badge variant="secondary" className="text-xs bg-green-600 text-white">Volunteer</Badge>;
+      case "USER":
+        return <Badge variant="outline" className="text-xs">User</Badge>;
+      default:
+        return <Badge variant="outline" className="text-xs">{role}</Badge>;
+    }
+  };
+
+  const toggleAdminInclusion = () => {
+    setIncludeAdminsState(!includeAdminsState);
+    // Clear results when toggling to trigger new search
+    if (query.trim().length >= 2) {
+      setResults([]);
+      setShowResults(false);
+    }
+  };
+
   return (
     <div className={`relative ${className}`}>
-      {/* Search Input */}
-      <div className="relative ">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={placeholder}
-          className="w-full pl-10 pr-10 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          onFocus={() => query.trim().length >= 2 && setShowResults(true)}
-        />
-        {query && (
-          <button
-            onClick={clearSearch}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+      {/* Search Input and Toggle */}
+      <div className="flex gap-2 mb-2">
+        {/* Search Input */}
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={placeholder}
+            className="w-full pl-10 pr-10 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            onFocus={() => query.trim().length >= 2 && setShowResults(true)}
+          />
+          {query && (
+            <button
+              onClick={clearSearch}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Admin Toggle */}
+        {/* {showToggle && (
+          <Button
+            type="button"
+            variant={includeAdminsState ? "default" : "outline"}
+            size="sm"
+            onClick={toggleAdminInclusion}
+            className="flex items-center gap-2 whitespace-nowrap"
           >
-            <X className="w-4 h-4" />
-          </button>
-        )}
+            {includeAdminsState ? (
+              <>
+                <Shield className="w-4 h-4" />
+                Include Admins
+              </>
+            ) : (
+              <>
+                <Users className="w-4 h-4" />
+                Users Only
+              </>
+            )}
+          </Button>
+        )} */}
       </div>
 
       {/* Search Results */}
@@ -138,7 +196,7 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
             </div>
           ) : results.length === 0 ? (
             <div className="p-4 text-center text-gray-500">
-              {query.trim().length >= 2 ? "No volunteers found" : "Type at least 2 characters to search"}
+              {query.trim().length >= 2 ? "No users found" : "Type at least 2 characters to search"}
             </div>
           ) : (
             <div className="py-2">
@@ -164,7 +222,13 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
                         </div>
                       ) : (
                         <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                          <span className="text-lg">{volunteer.gender}</span>
+                          <span className="text-lg">
+                          {volunteer.fullName
+                              .split(" ")
+                              .map((n: string) => n[0])
+                              .join("")
+                              .toUpperCase()}
+                          </span>
                         </div>
                       )}
                     </div>
@@ -173,9 +237,13 @@ export default function VolunteerSearch({ onVolunteerSelect, placeholder = "Sear
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-1">
                         <h4 className="font-medium text-gray-900 truncate">{volunteer.fullName}</h4>
-                        <Badge variant="outline" className="text-xs">
-                          {volunteer.role}
-                        </Badge>
+                        {getRoleBadge(volunteer.role)}
+                        {volunteer.role === "ADMIN" && (
+                          <Shield className="w-4 h-4 text-red-600" />
+                        )}
+                        {volunteer.role === "ORGANIZER" && (
+                          <UserCheck className="w-4 h-4 text-blue-600" />
+                        )}
                       </div>
                       
                       <div className="mt-1 flex items-center gap-4 text-sm text-gray-600">

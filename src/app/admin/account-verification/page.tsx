@@ -2,8 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { Button } from "@/components/ui/button";
-import { UserCheck, Filter, Download } from "lucide-react";
+import { UserCheck } from "lucide-react";
 import VerificationTable from "@/components/admin/tables/VerificationTable";
 
 export default async function AccountVerification() {

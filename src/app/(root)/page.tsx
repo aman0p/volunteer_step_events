@@ -35,7 +35,7 @@ export default async function HomePage() {
             <h1 className="text-xl md:text-3xl font-bold mb-2 md:mb-6">Upcoming Events</h1>
 
             {/* Mobile List View */}
-            <div className="block md:hidden space-y-1.5">
+            <div className="block md:hidden space-y-1.5 w-full">
                 {events.map((event) => {
                     const start = new Date((event as any).startDate);
                     const diffMs = start.getTime() - Date.now();

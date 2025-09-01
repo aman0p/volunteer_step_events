@@ -101,7 +101,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       {/* main content */}
       <div
-        className="grid grid-cols-1 md:grid-cols-[2fr_1fr] w-full rounded-xl md:rounded-2xl lg:rounded-3xl h-full md:p-7 gap-10 bg-black/10"
+        className="grid p-3 grid-cols-1 md:grid-cols-[2fr_1fr] w-full rounded-xl md:rounded-2xl lg:rounded-3xl h-full md:p-7 gap-10 bg-black/10"
 
       >
         <div className="flex flex-col gap-3 md:gap-7 justify-end order-2 md:order-1">
@@ -145,7 +145,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
                     alt="volunteer image"
                     width={100}
                     height={100}
-                    className="rounded-full size-11 border-3 aspect-square object-cover -ml-3"
+                    className="rounded-full size-11 border-3 aspect-square object-cover -ml-3 m-2"
                   />
                 ))}
               <div className="ml-4 text-[13px] flex flex-col items-start mt-1.5">
@@ -206,14 +206,14 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
           }
 
           {/* Description */}
-          <div className="h-fit w-full order-1 flex flex-col gap-3 md:gap-5 p-5 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
+          <div className="h-fit w-full order-1 flex flex-col gap-3 md:gap-5 p-3 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
             <h1 className="text-base md:text-xl font-bold">Description</h1>
             <p className="text-xs md:text-sm tracking-wide leading-5.5 line-clamp-4 md:line-clamp-none">{event.description}</p>
           </div>
 
           {/* Event Roles */}
           {event.eventRoles && event.eventRoles.length > 0 && (
-            <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
+            <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-3 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
               <h1 className="text-base md:text-xl font-bold">Volunteer Roles & Payouts</h1>
               <EventRolesTable eventRoles={event.eventRoles} />
             </div>
@@ -256,7 +256,7 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
 
           {/* Event Details */}
-          <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7  rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
+          <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-3 md:p-7  rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
             <h1 className="text-base md:text-xl font-bold">Event Details</h1>
             <div className="flex flex-col gap-3 overflow-hidden text-xs md:text-sm">
               <p className="space-x-1">

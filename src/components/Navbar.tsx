@@ -48,10 +48,16 @@ export function Navbar({ session }: { session: Session | null }) {
             <Menu className="h-5 w-5 md:h-6 md:w-6" />
           </SheetTrigger>
           <SheetContent side="left" className="p-0">
-           
+
             {/* Logo */}
             <div className="flex items-center gap-2 border-b p-4">
-              <Image src="/icons/logo.svg" alt="logo" width={20} height={20} className="w-6 h-6 invert" />
+              <Image
+                src="/default/logo.svg"
+                alt="logo"
+                width={30}
+                height={30}
+                className="w-6 h-6 md:w-8 md:h-8 invert"
+              />
               <span className="text-lg font-bold">Volunteer Step Events</span>
             </div>
 
@@ -62,20 +68,20 @@ export function Navbar({ session }: { session: Session | null }) {
                 <>
                   {/* Home */}
                   <Link href="/" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Home</Link>
-                  
+
                   {/* Events - only for volunteer users */}
                   {session.user.role === "VOLUNTEER" && (
                     <Link href="/my-events" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">My Events</Link>
                   )}
-                  
+
                   {/* Profile */}
                   <Link href="/profile" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Profile</Link>
-                  
+
                   {/* Admin Panel - only for admin and organizer users */}
                   {(session.user.role === "ADMIN" || session.user.role === "ORGANIZER") && (
                     <Link href="/admin" className="text-base rounded-md px-3 py-2 hover:bg-gray-100 text-blue-600 font-medium">Admin Panel</Link>
                   )}
-                  
+
                   {/* Sign out */}
                   <button
                     onClick={handleLogout}
@@ -90,7 +96,7 @@ export function Navbar({ session }: { session: Session | null }) {
                 <>
                   {/* Sign in */}
                   <Link href="/sign-in" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Sign In</Link>
-                  
+
                   {/* Sign up */}
                   <Link href="/sign-up" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Sign Up</Link>
                 </>
@@ -102,13 +108,13 @@ export function Navbar({ session }: { session: Session | null }) {
         {/* Center: Logo + Title */}
         <Link href="/" className="gap-2 flex items-center w-fit">
           <Image
-            src="/icons/logo.svg"
+            src="/default/logo.svg"
             alt="logo"
-            width={20}
-            height={20}
-            className="w-5 h-5 md:w-6 md:h-6 invert"
+            width={30}
+            height={30}
+            className="w-6 h-6 md:w-8 md:h-8 invert"
           />
-          <h1 className="font-bold text-base md:text-lg">Volunteer Step Events</h1>
+          <h1 className="font-bold text-base md:text-xl">Volunteer Step Events</h1>
         </Link>
       </div>
 
@@ -162,7 +168,7 @@ export function Navbar({ session }: { session: Session | null }) {
             <Link href="/sign-in" className="hidden md:inline-flex items-center gap-2 py-2 rounded-md transition-colors duration-200">
               Sign In
             </Link>
-            
+
             {/* Sign up */}
             <Link href="/sign-up" className="hidden md:inline-flex items-center gap-2 px-7 py-2 rounded-md bg-black text-white hover:bg-black/90 transition-colors duration-200">
               Sign Up

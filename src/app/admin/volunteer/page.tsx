@@ -2,13 +2,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Filter, Download, Plus, ArrowRight, ExternalLink } from "lucide-react";
-import Link from "next/link";
-import { Image } from "@imagekit/next";
-import config from "@/lib/config";
-import VolunteerSearch from "@/components/admin/VolunteerSearch";
 import VolunteerMgmtTable from "@/components/admin/tables/VolunteerMgmtTable";
 
 export default async function VolunteerPage() {

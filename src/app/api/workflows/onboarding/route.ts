@@ -1,6 +1,7 @@
 import { serve } from "@upstash/workflow/nextjs";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/workflow";
+import { corsOptionsResponse } from "@/lib/utils";
 
 type UserState = "non-active" | "active";
 
@@ -74,3 +75,8 @@ export const { POST } = serve<InitialData>(async (context) => {
     await context.sleep("wait-for-1-month", 60 * 60 * 24 * 30);
   }
 });
+
+// Handle preflight OPTIONS request for CORS
+export async function OPTIONS() {
+  return corsOptionsResponse()
+}

@@ -32,7 +32,7 @@ export function Sidebar({ session, enrollmentCount, verificationCount }: { sessi
             <SidebarHeader>
                 <Link href="/" className="mt-1 md:mt-0 flex items-center gap-2 px-2 py-1.5">
                     <Image
-                        src="/icons/logo.svg"
+                        src="/default/logo.svg"
                         alt="logo"
                         width={28}
                         height={28}

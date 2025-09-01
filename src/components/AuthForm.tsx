@@ -212,10 +212,10 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen h-full w-full bg-black/5">
-            <div className={`grid grid-cols-2 overflow-hidden rounded-3xl w-full h-fit border bg-white border-gray-200 ${isSignIn ? 'max-w-4xl' : 'max-w-5xl'}`}>
-                <div className="flex flex-col gap-7 justify-start h-full w-full p-8 pl-12 rounded-lg">
+            <div className={`grid max-md:grid-cols-1 grid-cols-2 overflow-hidden rounded-3xl mx-4 md:w-full h-fit border bg-white border-gray-200 ${isSignIn ? 'max-w-4xl' : 'max-w-5xl'}`}>
+                <div className="flex flex-col gap-7 justify-start h-full p-4 md:w-full md:p-8 md:pl-12 rounded-lg">
                     <div className="flex gap-2 items-center">
-                        <Image src="/icons/logo.svg" alt="logo" width={30} height={30} className="invert" />
+                        <Image src="/default/logo.svg" alt="logo" width={30} height={30} className="invert" />
                         <h1 className="font-bold text-xl">Volunteer Step Events</h1>
                     </div>
                     <div className="">
@@ -260,7 +260,15 @@ export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, o
                     </Form>
                 </div>
 
-                <div className="w-full h-full bg-black/20"></div>
+                <div className="w-full h-full  bg-black/20">
+                <Image 
+                    src="/default/corporate-event-organizer.jpg"
+                    alt="auth image"
+                    width={1000}
+                    height={1000}
+                    className="w-full h-full object-cover contrast-110 saturate-80"
+                />
+                </div>
             </div>
             <p className="relative top-7 text-center text-sm text-gray-600">
                 {isSignIn ? "New to Volunteer Step Events? " : "Already have an account? "}

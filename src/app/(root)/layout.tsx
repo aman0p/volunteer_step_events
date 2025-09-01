@@ -41,7 +41,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
       <div className="flex flex-col items-center justify-center w-full mx-auto h-full">
         {session && <ProfileCompletionBanner className="w-full sticky top-0" />}
         <Navbar session={session} />
-        <div className="mt-10 max-w-6xl">{children}</div>
+        <div className="mt-10 px-3 md:px-0 w-full md:w-4xl lg:w-6xl">{children}</div>
       </div>
     </Providers>
   );

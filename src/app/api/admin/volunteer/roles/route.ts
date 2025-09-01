@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { NotificationType } from "@/generated/prisma";
+import { getCorsHeaders, corsOptionsResponse } from "@/lib/utils";
 
 type Role = "USER" | "VOLUNTEER" | "ORGANIZER" | "ADMIN";
 
@@ -10,7 +11,10 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { 
+        status: 401,
+        headers: getCorsHeaders()
+      });
     }
 
     const currentUser = await prisma.user.findUnique({
@@ -19,13 +23,18 @@ export async function POST(request: Request) {
     });
 
     if (!currentUser || (currentUser.role !== "ADMIN" && currentUser.role !== "ORGANIZER")) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden" }, { 
+        status: 403,
+        headers: getCorsHeaders()
+      });
     }
 
     const body = await request.json();
     const updates: Array<{ userId: string; role: Role }> = Array.isArray(body?.updates) ? body.updates : [];
     if (updates.length === 0) {
-      return NextResponse.json({ ok: true, updated: 0 });
+      return NextResponse.json({ ok: true, updated: 0 }, {
+        headers: getCorsHeaders()
+      });
     }
 
     const allowedRoles: Role[] = currentUser.role === "ADMIN"
@@ -35,7 +44,9 @@ export async function POST(request: Request) {
     const validUpdates = updates.filter((u) => allowedRoles.includes(u.role));
 
     if (validUpdates.length === 0) {
-      return NextResponse.json({ ok: true, updated: 0 });
+      return NextResponse.json({ ok: true, updated: 0 }, {
+        headers: getCorsHeaders()
+      });
     }
 
     // Get current roles for comparison
@@ -77,11 +88,21 @@ export async function POST(request: Request) {
       });
     }
 
-    return NextResponse.json({ ok: true, updated: result.length });
+    return NextResponse.json({ ok: true, updated: result.length }, {
+      headers: getCorsHeaders()
+    });
   } catch (error) {
     console.error("Error updating roles", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal Server Error" }, { 
+      status: 500,
+      headers: getCorsHeaders()
+    });
   }
+}
+
+// Handle preflight OPTIONS request
+export async function OPTIONS() {
+  return corsOptionsResponse()
 }
 
 
