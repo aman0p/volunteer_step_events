@@ -1,6 +1,6 @@
-import { Event } from '@/types';
-import { Button } from './ui/button';
-import Image from 'next/image';
+import { Event } from "@/types";
+import { Button } from "./ui/button";
+import Image from "next/image";
 
 interface EventListProps {
    events?: Event[];
@@ -23,7 +23,7 @@ export default function EventList({ events, title }: EventListProps) {
                   className="flex w-60 cursor-pointer flex-col gap-1 rounded-lg border p-2 backdrop-blur-sm"
                >
                   <Image
-                     src={event.coverUrl || '/events.jpg'}
+                     src={event.coverUrl || "/events.jpg"}
                      alt={event.title}
                      width={1500}
                      height={1500}
@@ -33,7 +33,7 @@ export default function EventList({ events, title }: EventListProps) {
                      <h2 className="text-sm font-bold md:text-base">
                         {event.title}
                      </h2>
-                     <p className="text-xs">{event.category.join(', ')}</p>
+                     <p className="text-xs">{event.category.join(", ")}</p>
                   </div>
                </div>
             ))}

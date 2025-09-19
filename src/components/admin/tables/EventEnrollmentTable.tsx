@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
    Table,
    TableBody,
@@ -8,19 +8,19 @@ import {
    TableHead,
    TableHeader,
    TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from '@/components/ui/select';
-import { Image } from '@imagekit/next';
-import Link from 'next/link';
-import config from '@/lib/config';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/select";
+import { Image } from "@imagekit/next";
+import Link from "next/link";
+import config from "@/lib/config";
+import { Badge } from "@/components/ui/badge";
 import {
    GripVertical,
    Mail,
@@ -28,7 +28,7 @@ import {
    Calendar,
    MapPin,
    User,
-} from 'lucide-react';
+} from "lucide-react";
 
 type Enrollment = {
    id: string;
@@ -60,7 +60,7 @@ interface EventEnrollmentTableProps {
    eventLocation: string;
    eventStartDate: Date;
    eventEndDate: Date;
-   currentUserRole: 'ADMIN' | 'ORGANIZER';
+   currentUserRole: "ADMIN" | "ORGANIZER";
 }
 
 export default function EventEnrollmentTable({
@@ -73,56 +73,56 @@ export default function EventEnrollmentTable({
 }: EventEnrollmentTableProps) {
    const [page, setPage] = useState(1);
    const [rowsPerPage, setRowsPerPage] = useState(10);
-   const [statusFilter, setStatusFilter] = useState<string>('ALL');
+   const [statusFilter, setStatusFilter] = useState<string>("ALL");
 
    const formatDate = (date: Date) => {
-      return new Intl.DateTimeFormat('en-US', {
-         year: 'numeric',
-         month: 'short',
-         day: 'numeric',
-         hour: '2-digit',
-         minute: '2-digit',
+      return new Intl.DateTimeFormat("en-US", {
+         year: "numeric",
+         month: "short",
+         day: "numeric",
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(date);
    };
 
    const formatEnrollmentDate = (date: Date) => {
-      return new Intl.DateTimeFormat('en-US', {
-         month: 'short',
-         day: 'numeric',
-         hour: '2-digit',
-         minute: '2-digit',
+      return new Intl.DateTimeFormat("en-US", {
+         month: "short",
+         day: "numeric",
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(date);
    };
 
    const getStatusBadgeVariant = (status: string) => {
       switch (status) {
-         case 'APPROVED':
-            return 'default';
-         case 'PENDING':
-            return 'secondary';
-         case 'REJECTED':
-            return 'destructive';
-         case 'WAITLISTED':
-            return 'outline';
-         case 'CANCELLED':
-            return 'outline';
+         case "APPROVED":
+            return "default";
+         case "PENDING":
+            return "secondary";
+         case "REJECTED":
+            return "destructive";
+         case "WAITLISTED":
+            return "outline";
+         case "CANCELLED":
+            return "outline";
          default:
-            return 'outline';
+            return "outline";
       }
    };
 
    const getStatusDisplayName = (status: string) => {
       switch (status) {
-         case 'APPROVED':
-            return 'Approved';
-         case 'PENDING':
-            return 'Pending';
-         case 'REJECTED':
-            return 'Rejected';
-         case 'WAITLISTED':
-            return 'Waitlisted';
-         case 'CANCELLED':
-            return 'Cancelled';
+         case "APPROVED":
+            return "Approved";
+         case "PENDING":
+            return "Pending";
+         case "REJECTED":
+            return "Rejected";
+         case "WAITLISTED":
+            return "Waitlisted";
+         case "CANCELLED":
+            return "Cancelled";
          default:
             return status;
       }
@@ -130,7 +130,7 @@ export default function EventEnrollmentTable({
 
    // Filter enrollments based on status
    const filteredEnrollments = enrollments.filter((enrollment) => {
-      if (statusFilter === 'ALL') return true;
+      if (statusFilter === "ALL") return true;
       return enrollment.status === statusFilter;
    });
 
@@ -142,11 +142,11 @@ export default function EventEnrollmentTable({
 
    const statusCounts = {
       ALL: enrollments.length,
-      APPROVED: enrollments.filter((e) => e.status === 'APPROVED').length,
-      PENDING: enrollments.filter((e) => e.status === 'PENDING').length,
-      REJECTED: enrollments.filter((e) => e.status === 'REJECTED').length,
-      WAITLISTED: enrollments.filter((e) => e.status === 'WAITLISTED').length,
-      CANCELLED: enrollments.filter((e) => e.status === 'CANCELLED').length,
+      APPROVED: enrollments.filter((e) => e.status === "APPROVED").length,
+      PENDING: enrollments.filter((e) => e.status === "PENDING").length,
+      REJECTED: enrollments.filter((e) => e.status === "REJECTED").length,
+      WAITLISTED: enrollments.filter((e) => e.status === "WAITLISTED").length,
+      CANCELLED: enrollments.filter((e) => e.status === "CANCELLED").length,
    };
 
    return (
@@ -162,7 +162,7 @@ export default function EventEnrollmentTable({
                      <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4" />
                         <span>
-                           {formatDate(eventStartDate)} -{' '}
+                           {formatDate(eventStartDate)} -{" "}
                            {formatDate(eventEndDate)}
                         </span>
                      </div>
@@ -216,7 +216,7 @@ export default function EventEnrollmentTable({
 
             <div className="flex items-center gap-4 text-sm">
                <span className="text-muted-foreground">
-                  Showing {paginatedData.length} of {filteredEnrollments.length}{' '}
+                  Showing {paginatedData.length} of {filteredEnrollments.length}{" "}
                   enrollments
                </span>
             </div>
@@ -278,9 +278,9 @@ export default function EventEnrollmentTable({
                                     <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
                                        <span className="text-sm font-medium">
                                           {enrollment.user.fullName
-                                             .split(' ')
+                                             .split(" ")
                                              .map((n: string) => n[0])
-                                             .join('')
+                                             .join("")
                                              .toUpperCase()}
                                        </span>
                                     </div>
@@ -292,7 +292,7 @@ export default function EventEnrollmentTable({
                                  </div>
                                  <div className="text-muted-foreground truncate text-sm capitalize">
                                     {enrollment.user.gender?.toLowerCase() ||
-                                       'Not specified'}
+                                       "Not specified"}
                                  </div>
                               </div>
                            </Link>
@@ -363,7 +363,7 @@ export default function EventEnrollmentTable({
                                  className="text-muted-foreground truncate"
                                  title={`Enrolled: ${formatEnrollmentDate(enrollment.enrolledAt)}`}
                               >
-                                 Enrolled:{' '}
+                                 Enrolled:{" "}
                                  {formatEnrollmentDate(enrollment.enrolledAt)}
                               </div>
                               {enrollment.cancelledAt && (
@@ -371,7 +371,7 @@ export default function EventEnrollmentTable({
                                     className="truncate text-red-600"
                                     title={`Cancelled: ${formatEnrollmentDate(enrollment.cancelledAt)}`}
                                  >
-                                    Cancelled:{' '}
+                                    Cancelled:{" "}
                                     {formatEnrollmentDate(
                                        enrollment.cancelledAt
                                     )}
@@ -379,7 +379,7 @@ export default function EventEnrollmentTable({
                               )}
                               {enrollment.cancellationCount > 0 && (
                                  <div className="text-orange-600">
-                                    Cancellations:{' '}
+                                    Cancellations:{" "}
                                     {enrollment.cancellationCount}
                                  </div>
                               )}
@@ -387,7 +387,7 @@ export default function EventEnrollmentTable({
                                  <div className="font-medium text-green-600">
                                     ₹
                                     {enrollment.payoutAmount.toLocaleString(
-                                       'en-IN'
+                                       "en-IN"
                                     )}
                                  </div>
                               )}
@@ -409,7 +409,7 @@ export default function EventEnrollmentTable({
                               >
                                  View Profile
                               </Button>
-                              {enrollment.status === 'PENDING' && (
+                              {enrollment.status === "PENDING" && (
                                  <Button
                                     variant="default"
                                     size="sm"
@@ -429,7 +429,7 @@ export default function EventEnrollmentTable({
          {/* Pagination */}
          <div className="flex flex-col items-start py-2 md:flex-row md:items-center md:justify-between">
             <p className="text-muted-foreground text-sm">
-               Showing {paginatedData.length} of {filteredEnrollments.length}{' '}
+               Showing {paginatedData.length} of {filteredEnrollments.length}{" "}
                enrollments
             </p>
             <div className="flex items-center gap-2">

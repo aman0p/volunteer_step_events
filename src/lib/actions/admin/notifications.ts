@@ -1,25 +1,25 @@
-'use server';
+"use server";
 
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { prisma } from '@/lib/prisma';
-import { NotificationType, Status } from '@/generated/prisma';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { NotificationType, Status } from "@/generated/prisma";
 
 export const getAdminNotifications = async () => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' } as const;
+      return { success: false, message: "Authentication required" } as const;
    }
 
-   if (session.user.role !== 'ADMIN' && session.user.role !== 'ORGANIZER') {
-      return { success: false, message: 'Unauthorized' } as const;
+   if (session.user.role !== "ADMIN" && session.user.role !== "ORGANIZER") {
+      return { success: false, message: "Unauthorized" } as const;
    }
 
    try {
       const notifications = await prisma.notification.findMany({
          where: { userId: session.user.id },
-         orderBy: { createdAt: 'desc' },
+         orderBy: { createdAt: "desc" },
       });
 
       const unreadCount = await prisma.notification.count({
@@ -28,10 +28,10 @@ export const getAdminNotifications = async () => {
 
       return { success: true, data: { notifications, unreadCount } } as const;
    } catch (error) {
-      console.error('getAdminNotifications error', error);
+      console.error("getAdminNotifications error", error);
       return {
          success: false,
-         message: 'Failed to fetch notifications',
+         message: "Failed to fetch notifications",
       } as const;
    }
 };
@@ -40,7 +40,7 @@ export const markAdminNotificationRead = async (notificationId: string) => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' } as const;
+      return { success: false, message: "Authentication required" } as const;
    }
 
    try {
@@ -48,10 +48,10 @@ export const markAdminNotificationRead = async (notificationId: string) => {
          where: { id: notificationId },
          data: { isRead: true },
       });
-      return { success: true, message: 'Marked as read' } as const;
+      return { success: true, message: "Marked as read" } as const;
    } catch (error) {
-      console.error('markAdminNotificationRead error', error);
-      return { success: false, message: 'Failed to mark as read' } as const;
+      console.error("markAdminNotificationRead error", error);
+      return { success: false, message: "Failed to mark as read" } as const;
    }
 };
 
@@ -59,7 +59,7 @@ export const markAllAdminNotificationsRead = async () => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' } as const;
+      return { success: false, message: "Authentication required" } as const;
    }
 
    try {
@@ -67,10 +67,10 @@ export const markAllAdminNotificationsRead = async () => {
          where: { userId: session.user.id, isRead: false },
          data: { isRead: true },
       });
-      return { success: true, message: 'All marked as read' } as const;
+      return { success: true, message: "All marked as read" } as const;
    } catch (error) {
-      console.error('markAllAdminNotificationsRead error', error);
-      return { success: false, message: 'Failed to mark all as read' } as const;
+      console.error("markAllAdminNotificationsRead error", error);
+      return { success: false, message: "Failed to mark all as read" } as const;
    }
 };
 
@@ -92,10 +92,10 @@ export const notifyAdminsOnEnrollmentApplication = async (params: {
          data: {
             userId: event.createdById,
             type: NotificationType.ENROLLMENT_APPLICATION,
-            title: 'New Enrollment Application',
+            title: "New Enrollment Application",
             message: params.applicantName
                ? `${params.applicantName} applied to your event.`
-               : 'A user applied to your event.',
+               : "A user applied to your event.",
             relatedEventId: params.eventId,
             relatedEnrollmentId: params.enrollmentId,
          },
@@ -103,8 +103,8 @@ export const notifyAdminsOnEnrollmentApplication = async (params: {
 
       return { success: true } as const;
    } catch (error) {
-      console.error('notifyAdminsOnEnrollmentApplication error', error);
-      return { success: false, message: 'Failed to notify admins' } as const;
+      console.error("notifyAdminsOnEnrollmentApplication error", error);
+      return { success: false, message: "Failed to notify admins" } as const;
    }
 };
 
@@ -130,13 +130,13 @@ export const notifyUserOnEnrollmentStatusChange = async (params: {
          where: { id: params.eventId },
          select: { title: true },
       });
-      const eventTitle = event?.title ?? 'the event';
+      const eventTitle = event?.title ?? "the event";
 
       await prisma.notification.create({
          data: {
             userId: params.userId,
             type,
-            title: 'Enrollment Update',
+            title: "Enrollment Update",
             message: `Your enrollment status for ${eventTitle} is ${params.status.toLowerCase()}.`,
             relatedEventId: params.eventId,
             relatedEnrollmentId: params.enrollmentId,
@@ -145,15 +145,15 @@ export const notifyUserOnEnrollmentStatusChange = async (params: {
 
       return { success: true } as const;
    } catch (error) {
-      console.error('notifyUserOnEnrollmentStatusChange error', error);
-      return { success: false, message: 'Failed to notify user' } as const;
+      console.error("notifyUserOnEnrollmentStatusChange error", error);
+      return { success: false, message: "Failed to notify user" } as const;
    }
 };
 
 export const broadcastNewEventNotification = async (eventId: string) => {
    try {
       const volunteers = await prisma.user.findMany({
-         where: { role: 'VOLUNTEER' },
+         where: { role: "VOLUNTEER" },
          select: { id: true },
       });
 
@@ -163,41 +163,41 @@ export const broadcastNewEventNotification = async (eventId: string) => {
          data: volunteers.map((u) => ({
             userId: u.id,
             type: NotificationType.NEW_EVENT_ADDED,
-            title: 'New Event Added',
-            message: 'A new event has been added. Check it out!',
+            title: "New Event Added",
+            message: "A new event has been added. Check it out!",
             relatedEventId: eventId,
          })),
       });
 
       return { success: true } as const;
    } catch (error) {
-      console.error('broadcastNewEventNotification error', error);
+      console.error("broadcastNewEventNotification error", error);
       return {
          success: false,
-         message: 'Failed to broadcast new event',
+         message: "Failed to broadcast new event",
       } as const;
    }
 };
 
 export const notifyUserOnVerificationStatusChange = async (params: {
    userId: string;
-   status: 'APPROVED' | 'REJECTED';
+   status: "APPROVED" | "REJECTED";
 }) => {
    try {
-      const typeMap: Record<'APPROVED' | 'REJECTED', NotificationType> = {
+      const typeMap: Record<"APPROVED" | "REJECTED", NotificationType> = {
          APPROVED: NotificationType.VERIFICATION_APPROVED,
          REJECTED: NotificationType.VERIFICATION_REJECTED,
       } as const;
 
       const type = typeMap[params.status];
       const title =
-         params.status === 'APPROVED'
-            ? 'Verification Approved'
-            : 'Verification Rejected';
+         params.status === "APPROVED"
+            ? "Verification Approved"
+            : "Verification Rejected";
       const message =
-         params.status === 'APPROVED'
-            ? 'Congratulations! Your account has been verified. You can now enroll in events as a volunteer.'
-            : 'Your verification request was rejected. Please check with admin for details or submit a new request.';
+         params.status === "APPROVED"
+            ? "Congratulations! Your account has been verified. You can now enroll in events as a volunteer."
+            : "Your verification request was rejected. Please check with admin for details or submit a new request.";
 
       await prisma.notification.create({
          data: {
@@ -210,8 +210,8 @@ export const notifyUserOnVerificationStatusChange = async (params: {
 
       return { success: true } as const;
    } catch (error) {
-      console.error('notifyUserOnVerificationStatusChange error', error);
-      return { success: false, message: 'Failed to notify user' } as const;
+      console.error("notifyUserOnVerificationStatusChange error", error);
+      return { success: false, message: "Failed to notify user" } as const;
    }
 };
 
@@ -223,7 +223,7 @@ export const notifyEnrolledVolunteersOnEventUpdate = async (
       const enrollments = await prisma.enrollment.findMany({
          where: {
             eventId,
-            status: { in: ['APPROVED', 'WAITLISTED', 'PENDING'] }, // Only notify active enrollments
+            status: { in: ["APPROVED", "WAITLISTED", "PENDING"] }, // Only notify active enrollments
          },
          include: {
             user: { select: { id: true } },
@@ -233,13 +233,13 @@ export const notifyEnrolledVolunteersOnEventUpdate = async (
 
       if (enrollments.length === 0) return { success: true } as const;
 
-      const eventTitle = enrollments[0]?.event.title ?? 'the event';
+      const eventTitle = enrollments[0]?.event.title ?? "the event";
 
       await prisma.notification.createMany({
          data: enrollments.map((enrollment) => ({
             userId: enrollment.user.id,
             type: NotificationType.EVENT_UPDATE,
-            title: 'Event Updated',
+            title: "Event Updated",
             message: `The event "${eventTitle}" has been updated. Please check the latest details.`,
             relatedEventId: eventId,
          })),
@@ -247,10 +247,10 @@ export const notifyEnrolledVolunteersOnEventUpdate = async (
 
       return { success: true } as const;
    } catch (error) {
-      console.error('notifyEnrolledVolunteersOnEventUpdate error', error);
+      console.error("notifyEnrolledVolunteersOnEventUpdate error", error);
       return {
          success: false,
-         message: 'Failed to notify volunteers',
+         message: "Failed to notify volunteers",
       } as const;
    }
 };
@@ -264,7 +264,7 @@ export const notifyEnrolledVolunteersOnEventDeletion = async (
       const enrollments = await prisma.enrollment.findMany({
          where: {
             eventId,
-            status: { in: ['APPROVED', 'WAITLISTED', 'PENDING'] }, // Only notify active enrollments
+            status: { in: ["APPROVED", "WAITLISTED", "PENDING"] }, // Only notify active enrollments
          },
          include: {
             user: { select: { id: true } },
@@ -277,7 +277,7 @@ export const notifyEnrolledVolunteersOnEventDeletion = async (
          data: enrollments.map((enrollment) => ({
             userId: enrollment.user.id,
             type: NotificationType.SYSTEM_MESSAGE,
-            title: 'Event Cancelled',
+            title: "Event Cancelled",
             message: `The event "${eventTitle}" has been cancelled and removed from the platform.`,
             relatedEventId: eventId,
          })),
@@ -285,10 +285,10 @@ export const notifyEnrolledVolunteersOnEventDeletion = async (
 
       return { success: true } as const;
    } catch (error) {
-      console.error('notifyEnrolledVolunteersOnEventDeletion error', error);
+      console.error("notifyEnrolledVolunteersOnEventDeletion error", error);
       return {
          success: false,
-         message: 'Failed to notify volunteers',
+         message: "Failed to notify volunteers",
       } as const;
    }
 };

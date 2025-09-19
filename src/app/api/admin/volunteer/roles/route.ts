@@ -1,18 +1,18 @@
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { prisma } from '@/lib/prisma';
-import { NotificationType } from '@/generated/prisma';
-import { getCorsHeaders, corsOptionsResponse } from '@/lib/utils';
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { NotificationType } from "@/generated/prisma";
+import { getCorsHeaders, corsOptionsResponse } from "@/lib/utils";
 
-type Role = 'USER' | 'VOLUNTEER' | 'ORGANIZER' | 'ADMIN';
+type Role = "USER" | "VOLUNTEER" | "ORGANIZER" | "ADMIN";
 
 export async function POST(request: Request) {
    try {
       const session = await getServerSession(authOptions);
       if (!session?.user?.id) {
          return NextResponse.json(
-            { error: 'Unauthorized' },
+            { error: "Unauthorized" },
             {
                status: 401,
                headers: getCorsHeaders(),
@@ -27,10 +27,10 @@ export async function POST(request: Request) {
 
       if (
          !currentUser ||
-         (currentUser.role !== 'ADMIN' && currentUser.role !== 'ORGANIZER')
+         (currentUser.role !== "ADMIN" && currentUser.role !== "ORGANIZER")
       ) {
          return NextResponse.json(
-            { error: 'Forbidden' },
+            { error: "Forbidden" },
             {
                status: 403,
                headers: getCorsHeaders(),
@@ -54,9 +54,9 @@ export async function POST(request: Request) {
       }
 
       const allowedRoles: Role[] =
-         currentUser.role === 'ADMIN'
-            ? ['USER', 'VOLUNTEER']
-            : ['USER', 'VOLUNTEER', 'ADMIN'];
+         currentUser.role === "ADMIN"
+            ? ["USER", "VOLUNTEER"]
+            : ["USER", "VOLUNTEER", "ADMIN"];
 
       const validUpdates = updates.filter((u) => allowedRoles.includes(u.role));
 
@@ -99,16 +99,16 @@ export async function POST(request: Request) {
                   VOLUNTEER: 3,
                   USER: 4,
                };
-               const oldRole = currentRoles[u.userId] || 'USER';
+               const oldRole = currentRoles[u.userId] || "USER";
                const oldPriority = rolePriority[oldRole] ?? 99;
                const newPriority = rolePriority[u.role] ?? 99;
                const isUpgrade = newPriority < oldPriority;
-               const action = isUpgrade ? 'upgraded' : 'downgraded';
+               const action = isUpgrade ? "upgraded" : "downgraded";
 
                return {
                   userId: u.userId,
                   type: NotificationType.SYSTEM_MESSAGE,
-                  title: 'Role Updated',
+                  title: "Role Updated",
                   message: `Your role has been ${action} to ${u.role.toLowerCase()}.`,
                };
             }),
@@ -122,9 +122,9 @@ export async function POST(request: Request) {
          }
       );
    } catch (error) {
-      console.error('Error updating roles', error);
+      console.error("Error updating roles", error);
       return NextResponse.json(
-         { error: 'Internal Server Error' },
+         { error: "Internal Server Error" },
          {
             status: 500,
             headers: getCorsHeaders(),

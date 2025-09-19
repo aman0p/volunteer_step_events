@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { Menu, LogOut } from 'lucide-react';
-import { Avatar, AvatarFallback } from './ui/avatar';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Session } from 'next-auth';
-import { getInitials } from '@/lib/utils';
-import { signOut } from 'next-auth/react';
-import { toast } from 'sonner';
-import { useState } from 'react';
-import { NotificationDrawer } from './NotificationDrawer';
-import { ThemeToggleButton } from './ThemeToggleButton';
+import Link from "next/link";
+import Image from "next/image";
+import { Menu, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { Session } from "next-auth";
+import { getInitials } from "@/lib/utils";
+import { signOut } from "next-auth/react";
+import { toast } from "sonner";
+import { useState } from "react";
+import { NotificationDrawer } from "./NotificationDrawer";
+import { ThemeToggleButton } from "./ThemeToggleButton";
 
 export function Navbar({ session }: { session: Session | null }) {
    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
    const handleLogout = async () => {
-      const confirmed = window.confirm('Are you sure you want to sign out?');
+      const confirmed = window.confirm("Are you sure you want to sign out?");
       if (!confirmed) return;
 
       setIsLoggingOut(true);
       try {
-         await signOut({ redirect: true, callbackUrl: '/sign-in' });
-         toast.success('Logged out successfully');
+         await signOut({ redirect: true, callbackUrl: "/sign-in" });
+         toast.success("Logged out successfully");
       } catch (error) {
-         console.error('Logout error:', error);
-         toast.error('Failed to logout');
+         console.error("Logout error:", error);
+         toast.error("Failed to logout");
          setIsLoggingOut(false);
       }
    };
@@ -34,7 +34,7 @@ export function Navbar({ session }: { session: Session | null }) {
    const NavLink = ({
       href,
       children,
-      className = '',
+      className = "",
    }: {
       href: string;
       children: React.ReactNode;
@@ -72,12 +72,12 @@ export function Navbar({ session }: { session: Session | null }) {
                {session ? (
                   <>
                      <NavLink href="/">Home</NavLink>
-                     {session.user.role === 'VOLUNTEER' && (
+                     {session.user.role === "VOLUNTEER" && (
                         <NavLink href="/my-events">My Events</NavLink>
                      )}
                      <NavLink href="/profile">Profile</NavLink>
-                     {(session.user.role === 'ADMIN' ||
-                        session.user.role === 'ORGANIZER') && (
+                     {(session.user.role === "ADMIN" ||
+                        session.user.role === "ORGANIZER") && (
                         <NavLink
                            href="/admin"
                            className="text-foreground font-medium"
@@ -92,7 +92,7 @@ export function Navbar({ session }: { session: Session | null }) {
                         className="hover:bg-accent flex w-full items-center gap-2 rounded-md px-3 py-2 disabled:opacity-50"
                      >
                         <LogOut className="h-4 w-4" />
-                        {isLoggingOut ? 'Signing out...' : 'Sign out'}
+                        {isLoggingOut ? "Signing out..." : "Sign out"}
                      </button>
                   </>
                ) : (
@@ -139,11 +139,11 @@ export function Navbar({ session }: { session: Session | null }) {
                   {session && (
                      <nav className="hidden items-center gap-1 md:flex">
                         <NavLink href="/">Home</NavLink>
-                        {session.user.role === 'VOLUNTEER' && (
+                        {session.user.role === "VOLUNTEER" && (
                            <NavLink href="/my-events">My Events</NavLink>
                         )}
-                        {(session.user.role === 'ADMIN' ||
-                           session.user.role === 'ORGANIZER') && (
+                        {(session.user.role === "ADMIN" ||
+                           session.user.role === "ORGANIZER") && (
                            <NavLink
                               href="/admin"
                               className="text-foreground font-medium"
@@ -171,7 +171,7 @@ export function Navbar({ session }: { session: Session | null }) {
                         >
                            <Avatar className="h-8 w-8">
                               <AvatarFallback className="text-sm">
-                                 {getInitials(session.user.name || 'V')}
+                                 {getInitials(session.user.name || "V")}
                               </AvatarFallback>
                            </Avatar>
                         </Link>
@@ -184,7 +184,7 @@ export function Navbar({ session }: { session: Session | null }) {
                         >
                            <LogOut className="h-4 w-4" />
                            <span className="text-sm">
-                              {isLoggingOut ? 'Signing out...' : 'Sign out'}
+                              {isLoggingOut ? "Signing out..." : "Sign out"}
                            </span>
                         </button>
                      </div>

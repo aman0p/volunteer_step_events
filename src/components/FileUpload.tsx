@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import config from '@/lib/config';
-import { useRef, useState, useEffect } from 'react';
-import Image from 'next/image';
-import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
-import { Image as IKImage, Video as IKVideo } from '@imagekit/next';
-import useSingleFileUpload from '@/hooks/useSingleFileUpload';
+import config from "@/lib/config";
+import { useRef, useState, useEffect } from "react";
+import Image from "next/image";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { Image as IKImage, Video as IKVideo } from "@imagekit/next";
+import useSingleFileUpload from "@/hooks/useSingleFileUpload";
 
 // Get ImageKit config - handle potential undefined values
 const getImageKitConfig = () => {
@@ -16,10 +16,10 @@ const getImageKitConfig = () => {
          urlEndpoint: config.env.imagekit.urlEndpoint,
       };
    } catch (error) {
-      console.error('Error loading ImageKit config:', error);
+      console.error("Error loading ImageKit config:", error);
       return {
-         publicKey: '',
-         urlEndpoint: '',
+         publicKey: "",
+         urlEndpoint: "",
       };
    }
 };
@@ -39,19 +39,19 @@ const authenticator = async () => {
 };
 
 interface FileUploadProps {
-   type: 'image' | 'video';
+   type: "image" | "video";
    accept: string;
    placeholder: string;
    folder: string;
-   variant: 'dark' | 'light';
+   variant: "dark" | "light";
    onFileChange: (filePath: string) => void;
    value?: string;
    className?: string;
-   overlayMode?: 'change' | 'remove'; // which overlay button to show when file is present
+   overlayMode?: "change" | "remove"; // which overlay button to show when file is present
    onRemove?: () => void; // called when overlayMode is remove and user clicks
-   objectFit?: 'cover' | 'contain'; // control media fit inside preview
+   objectFit?: "cover" | "contain"; // control media fit inside preview
    mediaClassName?: string; // extra classes for IKImage/IKVideo
-   aspectRatio?: '16:9' | '4:3' | '1:1' | '9:16'; // control media aspect ratio
+   aspectRatio?: "16:9" | "4:3" | "1:1" | "9:16"; // control media aspect ratio
    disabled?: boolean; // disable file upload functionality
 }
 
@@ -64,10 +64,10 @@ const FileUpload = ({
    onFileChange,
    value,
    className,
-   overlayMode = 'change',
+   overlayMode = "change",
    onRemove,
-   objectFit = 'cover',
-   aspectRatio = '16:9',
+   objectFit = "cover",
+   aspectRatio = "16:9",
    mediaClassName,
    disabled = false,
 }: FileUploadProps) => {
@@ -88,14 +88,14 @@ const FileUpload = ({
 
    const styles = {
       button:
-         variant === 'dark'
-            ? 'bg-dark-300'
-            : 'bg-light-600 border-gray-100 border',
+         variant === "dark"
+            ? "bg-dark-300"
+            : "bg-light-600 border-gray-100 border",
       placeholder:
-         variant === 'dark'
-            ? 'text-light-100 text-sm'
-            : 'text-slate-500 text-sm',
-      text: variant === 'dark' ? 'text-light-100' : 'text-dark-400',
+         variant === "dark"
+            ? "text-light-100 text-sm"
+            : "text-slate-500 text-sm",
+      text: variant === "dark" ? "text-light-100" : "text-dark-400",
    };
 
    const onError = (error: any) => {
@@ -120,20 +120,20 @@ const FileUpload = ({
    };
 
    const onValidate = (file: File) => {
-      if (type === 'image') {
+      if (type === "image") {
          if (file.size > 20 * 1024 * 1024) {
-            toast.error('File size too large', {
+            toast.error("File size too large", {
                description:
-                  'Please upload a file that is less than 20MB in size',
+                  "Please upload a file that is less than 20MB in size",
             });
 
             return false;
          }
-      } else if (type === 'video') {
+      } else if (type === "video") {
          if (file.size > 50 * 1024 * 1024) {
-            toast.error('File size too large', {
+            toast.error("File size too large", {
                description:
-                  'Please upload a file that is less than 50MB in size',
+                  "Please upload a file that is less than 50MB in size",
             });
             return false;
          }
@@ -179,10 +179,10 @@ const FileUpload = ({
          {!file.filePath ? (
             <button
                className={cn(
-                  'relative flex min-h-9 w-full items-center justify-center gap-1.5 overflow-hidden rounded-md border border-gray-200 bg-white text-sm shadow-xs transition-all duration-200 focus:outline-none',
+                  "relative flex min-h-9 w-full items-center justify-center gap-1.5 overflow-hidden rounded-md border border-gray-200 bg-white text-sm shadow-xs transition-all duration-200 focus:outline-none",
                   styles.button,
                   className,
-                  disabled && 'cursor-not-allowed bg-gray-100 opacity-50'
+                  disabled && "cursor-not-allowed bg-gray-100 opacity-50"
                )}
                onClick={(e) => {
                   e.preventDefault();
@@ -213,31 +213,31 @@ const FileUpload = ({
                   className="relative z-9 object-contain"
                />
 
-               <p className={cn('relative z-9 text-sm', styles.placeholder)}>
+               <p className={cn("relative z-9 text-sm", styles.placeholder)}>
                   {isUploading
                      ? `${progress}% Uploading...`
                      : disabled
-                       ? 'File uploaded - cannot be changed'
+                       ? "File uploaded - cannot be changed"
                        : placeholder}
                </p>
             </button>
          ) : (
-            <div className={cn('relative', className)}>
+            <div className={cn("relative", className)}>
                <div
                   className={cn(
-                     'relative w-full overflow-hidden rounded-md border',
-                     aspectRatio === '16:9'
-                        ? 'aspect-video'
-                        : aspectRatio === '4:3'
-                          ? 'aspect-4/3'
-                          : aspectRatio === '1:1'
-                            ? 'aspect-square'
-                            : aspectRatio === '9:16'
-                              ? 'aspect-9/16'
-                              : 'aspect-video'
+                     "relative w-full overflow-hidden rounded-md border",
+                     aspectRatio === "16:9"
+                        ? "aspect-video"
+                        : aspectRatio === "4:3"
+                          ? "aspect-4/3"
+                          : aspectRatio === "1:1"
+                            ? "aspect-square"
+                            : aspectRatio === "9:16"
+                              ? "aspect-9/16"
+                              : "aspect-video"
                   )}
                >
-                  {type === 'image' ? (
+                  {type === "image" ? (
                      <IKImage
                         src={file.filePath}
                         urlEndpoint={urlEndpoint}
@@ -245,30 +245,30 @@ const FileUpload = ({
                         width={400}
                         height={225}
                         className={cn(
-                           'h-full w-full',
-                           objectFit === 'contain'
-                              ? 'object-contain'
-                              : 'object-cover',
+                           "h-full w-full",
+                           objectFit === "contain"
+                              ? "object-contain"
+                              : "object-cover",
                            mediaClassName
                         )}
                      />
-                  ) : type === 'video' ? (
+                  ) : type === "video" ? (
                      <IKVideo
                         src={file.filePath}
                         urlEndpoint={urlEndpoint}
                         controls={true}
                         className={cn(
-                           'h-full w-full',
-                           objectFit === 'contain'
-                              ? 'object-contain'
-                              : 'object-cover',
+                           "h-full w-full",
+                           objectFit === "contain"
+                              ? "object-contain"
+                              : "object-cover",
                            mediaClassName
                         )}
                      />
                   ) : null}
 
                   {/* Overlay button: change or remove in the exact same position */}
-                  {overlayMode === 'change' && !disabled ? (
+                  {overlayMode === "change" && !disabled ? (
                      <button
                         onClick={(e) => {
                            e.preventDefault();
@@ -302,7 +302,7 @@ const FileUpload = ({
                            // Clear current file and notify parent
                            setFile({ filePath: null });
                            try {
-                              onFileChange('');
+                              onFileChange("");
                            } catch {}
                            if (onRemove) onRemove();
                         }}

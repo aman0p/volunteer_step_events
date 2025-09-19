@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
    Table,
    TableBody,
@@ -8,9 +8,9 @@ import {
    TableHead,
    TableHeader,
    TableRow,
-} from '@/components/ui/table';
-import { ChevronDown, ChevronRight } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+} from "@/components/ui/table";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface EventRole {
    id: string;
@@ -52,7 +52,7 @@ export default function EventRolesTable({
    }
 
    return (
-      <Card className={`w-full overflow-hidden ${className || ''}`}>
+      <Card className={`w-full overflow-hidden ${className || ""}`}>
          <CardContent className="p-0">
             <div className="overflow-x-auto">
                <Table className="min-w-[700px]">
@@ -83,8 +83,8 @@ export default function EventRolesTable({
                               onClick={() => toggleRow(role.id)}
                               title={
                                  expandedRows[role.id]
-                                    ? 'Collapse description'
-                                    : 'Expand description'
+                                    ? "Collapse description"
+                                    : "Expand description"
                               }
                            >
                               {expandedRows[role.id] ? (
@@ -130,7 +130,7 @@ export default function EventRolesTable({
                               </div>
                            </TableCell>
                            <TableCell className="h-24 min-w-[120px] p-4 text-center font-mono">
-                              {role.payout.toLocaleString('en-IN')}
+                              {role.payout.toLocaleString("en-IN")}
                            </TableCell>
                         </TableRow>
                      ))}

@@ -1,25 +1,25 @@
-'use server';
+"use server";
 
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { prisma } from '@/lib/prisma';
-import { notifyAdminsOnEnrollmentApplication } from '@/lib/actions/admin/notifications';
-import { NotificationType, Status } from '@/generated/prisma';
-import { revalidatePath } from 'next/cache';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { notifyAdminsOnEnrollmentApplication } from "@/lib/actions/admin/notifications";
+import { NotificationType, Status } from "@/generated/prisma";
+import { revalidatePath } from "next/cache";
 
 export const requestEnrollment = async (eventId: string) => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' };
+      return { success: false, message: "Authentication required" };
    }
 
    // Check if user is a volunteer (only verified users can enroll)
-   if (session.user.role !== 'VOLUNTEER') {
+   if (session.user.role !== "VOLUNTEER") {
       return {
          success: false,
          message:
-            'Only verified volunteers can enroll in events. Please complete your profile and request verification first.',
+            "Only verified volunteers can enroll in events. Please complete your profile and request verification first.",
       };
    }
 
@@ -31,7 +31,7 @@ export const requestEnrollment = async (eventId: string) => {
 
       if (existing) {
          if (
-            existing.status === 'CANCELLED' &&
+            existing.status === "CANCELLED" &&
             (existing as any).cancellationCount === 1
          ) {
             // Allow one-time reapply by flipping back to PENDING on the same record
@@ -50,12 +50,12 @@ export const requestEnrollment = async (eventId: string) => {
             revalidatePath(`/${eventId}`);
             return {
                success: true,
-               message: 'Enrollment request sent successfully',
+               message: "Enrollment request sent successfully",
             };
          } else {
             return {
                success: false,
-               message: 'Already enrolled in this event',
+               message: "Already enrolled in this event",
             };
          }
       }
@@ -63,18 +63,18 @@ export const requestEnrollment = async (eventId: string) => {
       // Check event capacity
       const event = await prisma.event.findUnique({
          where: { id: eventId },
-         include: { enrollments: { where: { status: 'APPROVED' } } },
+         include: { enrollments: { where: { status: "APPROVED" } } },
       });
 
       if (!event) {
-         return { success: false, message: 'Event not found' };
+         return { success: false, message: "Event not found" };
       }
 
       if (
          event.maxVolunteers &&
          event.enrollments.length >= event.maxVolunteers
       ) {
-         return { success: false, message: 'Event is at full capacity' };
+         return { success: false, message: "Event is at full capacity" };
       }
 
       // Create enrollment
@@ -82,7 +82,7 @@ export const requestEnrollment = async (eventId: string) => {
          data: {
             eventId,
             userId: session.user.id,
-            status: 'PENDING',
+            status: "PENDING",
          },
       });
 
@@ -94,10 +94,10 @@ export const requestEnrollment = async (eventId: string) => {
       });
 
       revalidatePath(`/${eventId}`);
-      return { success: true, message: 'Enrollment request sent successfully' };
+      return { success: true, message: "Enrollment request sent successfully" };
    } catch (error) {
-      console.error('Enrollment error:', error);
-      return { success: false, message: 'Enrollment failed' };
+      console.error("Enrollment error:", error);
+      return { success: false, message: "Enrollment failed" };
    }
 };
 
@@ -105,14 +105,14 @@ export const cancelEnrollment = async (eventId: string) => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' };
+      return { success: false, message: "Authentication required" };
    }
 
    // Check if user is a volunteer
-   if (session.user.role !== 'VOLUNTEER') {
+   if (session.user.role !== "VOLUNTEER") {
       return {
          success: false,
-         message: 'Only volunteers can cancel enrollments',
+         message: "Only volunteers can cancel enrollments",
       };
    }
 
@@ -122,7 +122,7 @@ export const cancelEnrollment = async (eventId: string) => {
       });
 
       if (!existing) {
-         return { success: false, message: 'Enrollment not found' };
+         return { success: false, message: "Enrollment not found" };
       }
 
       const currentCount = (existing as any).cancellationCount ?? 0;
@@ -148,12 +148,12 @@ export const cancelEnrollment = async (eventId: string) => {
                   : NotificationType.ENROLLMENT_SELF_CANCELLED,
             title:
                nextStatus === Status.REJECTED
-                  ? 'Enrollment Rejected'
-                  : 'Enrollment Cancelled',
+                  ? "Enrollment Rejected"
+                  : "Enrollment Cancelled",
             message:
                nextStatus === Status.REJECTED
-                  ? 'You cancelled twice. Your enrollment is now rejected.'
-                  : 'You have cancelled your enrollment request.',
+                  ? "You cancelled twice. Your enrollment is now rejected."
+                  : "You have cancelled your enrollment request.",
             relatedEventId: eventId,
             relatedEnrollmentId: existing.id,
          },
@@ -165,12 +165,12 @@ export const cancelEnrollment = async (eventId: string) => {
          nextStatus,
          message:
             nextStatus === Status.REJECTED
-               ? 'Enrollment rejected due to repeated cancellation'
-               : 'Enrollment cancelled',
+               ? "Enrollment rejected due to repeated cancellation"
+               : "Enrollment cancelled",
       };
    } catch (error) {
-      console.error('Cancel error:', error);
-      return { success: false, message: 'Failed to cancel enrollment' };
+      console.error("Cancel error:", error);
+      return { success: false, message: "Failed to cancel enrollment" };
    }
 };
 
@@ -178,14 +178,14 @@ export const getUserEnrollmentStatus = async (eventId: string) => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' };
+      return { success: false, message: "Authentication required" };
    }
 
    // Check if user is a volunteer
-   if (session.user.role !== 'VOLUNTEER') {
+   if (session.user.role !== "VOLUNTEER") {
       return {
          success: false,
-         message: 'Only volunteers can check enrollment status',
+         message: "Only volunteers can check enrollment status",
       };
    }
 
@@ -199,7 +199,7 @@ export const getUserEnrollmentStatus = async (eventId: string) => {
          data: enrollment ? enrollment.status : null,
       };
    } catch (error) {
-      console.error('Status check error:', error);
-      return { success: false, message: 'Failed to check enrollment status' };
+      console.error("Status check error:", error);
+      return { success: false, message: "Failed to check enrollment status" };
    }
 };

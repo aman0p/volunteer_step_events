@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import config from '@/lib/config';
-import { upload } from '@imagekit/next';
-import { toast } from 'sonner';
+import { useState } from "react";
+import config from "@/lib/config";
+import { upload } from "@imagekit/next";
+import { toast } from "sonner";
 
 export type PendingUpload = { id: string; progress: number };
 
 export function useMultiFileUpload(
    folder: string,
    onFileDone: (filePath: string) => void,
-   mediaType: 'image' | 'video' | 'both' = 'image'
+   mediaType: "image" | "video" | "both" = "image"
 ) {
    const [pending, setPending] = useState<PendingUpload[]>([]);
 
@@ -57,14 +57,14 @@ export function useMultiFileUpload(
                   },
                });
 
-               onFileDone(res.filePath ?? '');
+               onFileDone(res.filePath ?? "");
                setPending((p) => p.filter((it) => it.id !== id));
             } catch (err: any) {
                setPending((p) => p.filter((it) => it.id !== id));
-               const mediaTypeText = mediaType === 'both' ? 'media' : mediaType;
+               const mediaTypeText = mediaType === "both" ? "media" : mediaType;
                toast.error(
                   `${mediaTypeText.charAt(0).toUpperCase() + mediaTypeText.slice(1)} upload failed`,
-                  { description: err?.message ?? 'Please try again.' }
+                  { description: err?.message ?? "Please try again." }
                );
             }
          })

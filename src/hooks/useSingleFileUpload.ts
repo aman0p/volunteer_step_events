@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import config from '@/lib/config';
-import { upload } from '@imagekit/next';
+import { useState } from "react";
+import config from "@/lib/config";
+import { upload } from "@imagekit/next";
 
 type Params = {
-   type: 'image' | 'video';
+   type: "image" | "video";
    folder: string;
    onProgress: (percent: number) => void;
    onSuccess: (res: any) => void;
@@ -22,18 +22,18 @@ export function useSingleFileUpload({
    const [isUploading, setIsUploading] = useState(false);
 
    const validate = (file: File) => {
-      if (type === 'image') {
+      if (type === "image") {
          if (file.size > 20 * 1024 * 1024) {
             return {
                ok: false,
-               message: 'Please upload an image smaller than 20MB',
+               message: "Please upload an image smaller than 20MB",
             };
          }
-      } else if (type === 'video') {
+      } else if (type === "video") {
          if (file.size > 50 * 1024 * 1024) {
             return {
                ok: false,
-               message: 'Please upload a video smaller than 50MB',
+               message: "Please upload a video smaller than 50MB",
             };
          }
       }

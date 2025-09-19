@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
    Table,
    TableBody,
@@ -8,21 +8,21 @@ import {
    TableHead,
    TableHeader,
    TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from '@/components/ui/select';
-import { Image } from '@imagekit/next';
-import Link from 'next/link';
-import config from '@/lib/config';
-import { Badge } from '@/components/ui/badge';
-import VolunteerSearch from '@/components/admin/VolunteerSearch';
-import { GripVertical, Mail, Phone } from 'lucide-react';
+} from "@/components/ui/select";
+import { Image } from "@imagekit/next";
+import Link from "next/link";
+import config from "@/lib/config";
+import { Badge } from "@/components/ui/badge";
+import VolunteerSearch from "@/components/admin/VolunteerSearch";
+import { GripVertical, Mail, Phone } from "lucide-react";
 
 type Volunteer = {
    id: string;
@@ -50,7 +50,7 @@ type Volunteer = {
 
 interface VolunteerMgmtTableProps {
    volunteers: Volunteer[];
-   currentUserRole: 'ADMIN' | 'ORGANIZER';
+   currentUserRole: "ADMIN" | "ORGANIZER";
 }
 
 export default function VolunteerMgmtTable({
@@ -68,8 +68,8 @@ export default function VolunteerMgmtTable({
       USER: 2,
    };
    const sortedVolunteers = [...volunteers].sort((a, b) => {
-      const aRole = (pendingRoles[a.id] ?? a.role) || '';
-      const bRole = (pendingRoles[b.id] ?? b.role) || '';
+      const aRole = (pendingRoles[a.id] ?? a.role) || "";
+      const bRole = (pendingRoles[b.id] ?? b.role) || "";
       const aPri = rolePriority[aRole] ?? 99;
       const bPri = rolePriority[bRole] ?? 99;
       if (aPri !== bPri) return aPri - bPri;
@@ -84,30 +84,30 @@ export default function VolunteerMgmtTable({
    const totalPages = Math.ceil(volunteers.length / rowsPerPage);
 
    const formatDate = (date: Date) => {
-      return new Intl.DateTimeFormat('en-US', {
-         year: 'numeric',
-         month: 'short',
-         day: 'numeric',
-         hour: '2-digit',
-         minute: '2-digit',
+      return new Intl.DateTimeFormat("en-US", {
+         year: "numeric",
+         month: "short",
+         day: "numeric",
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(date);
    };
 
    const getEnrollmentStats = (enrollments: any[]) => {
       const approved = enrollments.filter(
-         (e) => e.status === 'APPROVED'
+         (e) => e.status === "APPROVED"
       ).length;
-      const pending = enrollments.filter((e) => e.status === 'PENDING').length;
+      const pending = enrollments.filter((e) => e.status === "PENDING").length;
       const rejected = enrollments.filter(
-         (e) => e.status === 'REJECTED'
+         (e) => e.status === "REJECTED"
       ).length;
       return { approved, pending, rejected, total: enrollments.length };
    };
 
    const allowedRoles =
-      currentUserRole === 'ADMIN'
-         ? ['USER', 'VOLUNTEER']
-         : ['USER', 'VOLUNTEER', 'ADMIN'];
+      currentUserRole === "ADMIN"
+         ? ["USER", "VOLUNTEER"]
+         : ["USER", "VOLUNTEER", "ADMIN"];
 
    const handleLocalRoleChange = (volunteerId: string, newRole: string) => {
       setPendingRoles((prev) => ({ ...prev, [volunteerId]: newRole }));
@@ -122,36 +122,36 @@ export default function VolunteerMgmtTable({
 
       setIsSaving(true);
       try {
-         const res = await fetch('/api/admin/volunteer/roles', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+         const res = await fetch("/api/admin/volunteer/roles", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ updates }),
          });
          if (!res.ok) {
-            console.error('Failed to save role updates');
+            console.error("Failed to save role updates");
             setIsSaving(false);
             return;
          }
          // Refresh to reflect changes
          window.location.reload();
       } catch (err) {
-         console.error('Error saving roles', err);
+         console.error("Error saving roles", err);
          setIsSaving(false);
       }
    };
 
    const getRoleBadgeVariant = (role: string) => {
       switch (role) {
-         case 'ADMIN':
-            return 'destructive';
-         case 'ORGANIZER':
-            return 'default';
-         case 'VOLUNTEER':
-            return 'secondary';
-         case 'USER':
-            return 'outline';
+         case "ADMIN":
+            return "destructive";
+         case "ORGANIZER":
+            return "default";
+         case "VOLUNTEER":
+            return "secondary";
+         case "USER":
+            return "outline";
          default:
-            return 'outline';
+            return "outline";
       }
    };
 
@@ -164,7 +164,7 @@ export default function VolunteerMgmtTable({
                className="w-full"
                onVolunteerSelect={(volunteer) => {
                   // Handle volunteer selection - could navigate to their profile or highlight in table
-                  console.log('Selected volunteer:', volunteer);
+                  console.log("Selected volunteer:", volunteer);
                }}
             />
          </div>
@@ -182,7 +182,7 @@ export default function VolunteerMgmtTable({
                   disabled={isSaving || Object.keys(pendingRoles).length === 0}
                   className="order-first w-28 bg-black hover:bg-black/90 md:order-last"
                >
-                  {isSaving ? 'Saving...' : 'Save changes'}
+                  {isSaving ? "Saving..." : "Save changes"}
                </Button>
             </div>
          </div>
@@ -240,9 +240,9 @@ export default function VolunteerMgmtTable({
                                        <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
                                           <span className="text-sm font-medium">
                                              {volunteer.fullName
-                                                .split(' ')
+                                                .split(" ")
                                                 .map((n: string) => n[0])
-                                                .join('')
+                                                .join("")
                                                 .toUpperCase()}
                                           </span>
                                        </div>
@@ -282,7 +282,7 @@ export default function VolunteerMgmtTable({
                               <div className="flex items-center gap-2">
                                  <span className="truncate text-sm capitalize">
                                     {volunteer.gender?.toLowerCase() ||
-                                       'Not specified'}
+                                       "Not specified"}
                                  </span>
                               </div>
                            </TableCell>
@@ -331,22 +331,22 @@ export default function VolunteerMgmtTable({
                                     </SelectValue>
                                  </SelectTrigger>
                                  <SelectContent>
-                                    {allowedRoles.includes('USER') && (
+                                    {allowedRoles.includes("USER") && (
                                        <SelectItem value="USER">
                                           User
                                        </SelectItem>
                                     )}
-                                    {allowedRoles.includes('VOLUNTEER') && (
+                                    {allowedRoles.includes("VOLUNTEER") && (
                                        <SelectItem value="VOLUNTEER">
                                           Volunteer
                                        </SelectItem>
                                     )}
-                                    {allowedRoles.includes('ADMIN') && (
+                                    {allowedRoles.includes("ADMIN") && (
                                        <SelectItem value="ADMIN">
                                           Admin
                                        </SelectItem>
                                     )}
-                                    {allowedRoles.includes('ORGANIZER') && (
+                                    {allowedRoles.includes("ORGANIZER") && (
                                        <SelectItem value="ORGANIZER">
                                           Organizer
                                        </SelectItem>

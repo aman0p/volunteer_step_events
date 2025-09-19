@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { CheckCircle, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
-import { approveVerificationRequest } from '@/lib/actions/admin/verification';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { approveVerificationRequest } from "@/lib/actions/admin/verification";
 
 interface VerificationDetailActionsProps {
    requestId: string;
@@ -18,7 +18,7 @@ export default function VerificationDetailActions({
    const [isApproving, setIsApproving] = useState(false);
 
    // Don't show actions if already reviewed
-   if (currentStatus !== 'PENDING') {
+   if (currentStatus !== "PENDING") {
       return null;
    }
 
@@ -27,16 +27,16 @@ export default function VerificationDetailActions({
       try {
          const result = await approveVerificationRequest(requestId);
          if (result.success) {
-            toast.success('Verification request approved successfully');
+            toast.success("Verification request approved successfully");
             // Refresh the page to show updated status
             window.location.reload();
          } else {
             toast.error(
-               result.message || 'Failed to approve verification request'
+               result.message || "Failed to approve verification request"
             );
          }
       } catch (error) {
-         toast.error('An error occurred while approving the request');
+         toast.error("An error occurred while approving the request");
       } finally {
          setIsApproving(false);
       }

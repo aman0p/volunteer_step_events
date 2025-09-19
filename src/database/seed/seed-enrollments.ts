@@ -1,17 +1,17 @@
-import { PrismaClient } from '@/generated/prisma';
-import { Status } from '@/generated/prisma';
+import { PrismaClient } from "@/generated/prisma";
+import { Status } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
 export async function seedEnrollments() {
    try {
-      console.log('🌱 Starting enrollment request seeding...');
+      console.log("🌱 Starting enrollment request seeding...");
 
       // Get all users (volunteers)
       const users = await prisma.user.findMany({
          where: {
             role: {
-               in: ['USER', 'VOLUNTEER'],
+               in: ["USER", "VOLUNTEER"],
             },
          },
          select: {
@@ -20,7 +20,7 @@ export async function seedEnrollments() {
       });
 
       if (users.length === 0) {
-         console.log('❌ No users found. Please run user seeding first.');
+         console.log("❌ No users found. Please run user seeding first.");
          return;
       }
 
@@ -33,7 +33,7 @@ export async function seedEnrollments() {
       });
 
       if (events.length === 0) {
-         console.log('❌ No events found. Please run event seeding first.');
+         console.log("❌ No events found. Please run event seeding first.");
          return;
       }
 
@@ -41,14 +41,14 @@ export async function seedEnrollments() {
 
       // Clear existing enrollments
       await prisma.enrollment.deleteMany({});
-      console.log('🧹 Cleared existing enrollments');
+      console.log("🧹 Cleared existing enrollments");
 
       const enrollments = [];
       const statuses: Status[] = [
-         'PENDING',
-         'APPROVED',
-         'REJECTED',
-         'WAITLISTED',
+         "PENDING",
+         "APPROVED",
+         "REJECTED",
+         "WAITLISTED",
       ];
 
       // Create random enrollments
@@ -81,36 +81,36 @@ export async function seedEnrollments() {
 
       // Log some statistics
       const statusCounts = await prisma.enrollment.groupBy({
-         by: ['status'],
+         by: ["status"],
          _count: {
             status: true,
          },
       });
 
-      console.log('📈 Enrollment Status Distribution:');
+      console.log("📈 Enrollment Status Distribution:");
       statusCounts.forEach(({ status, _count }) => {
          console.log(`   ${status}: ${_count.status}`);
       });
 
       // Check event capacity
-      console.log('\n🎯 Event Capacity Check:');
+      console.log("\n🎯 Event Capacity Check:");
       for (const event of events) {
          const approvedCount = await prisma.enrollment.count({
             where: {
                eventId: event.id,
-               status: 'APPROVED',
+               status: "APPROVED",
             },
          });
 
-         const maxVolunteers = event.maxVolunteers || 'Unlimited';
+         const maxVolunteers = event.maxVolunteers || "Unlimited";
          console.log(
             `   Event ${event.id}: ${approvedCount}/${maxVolunteers} volunteers`
          );
       }
 
-      console.log('\n🎉 Enrollment seeding completed successfully!');
+      console.log("\n🎉 Enrollment seeding completed successfully!");
    } catch (error) {
-      console.error('❌ Error seeding enrollments:', error);
+      console.error("❌ Error seeding enrollments:", error);
       throw error;
    } finally {
       await prisma.$disconnect();
@@ -142,7 +142,7 @@ function getRandomStatus(statuses: Status[]): Status {
       }
    }
 
-   return 'PENDING'; // fallback
+   return "PENDING"; // fallback
 }
 
 function getRandomDate(): Date {
@@ -160,11 +160,11 @@ function getRandomDate(): Date {
 if (require.main === module) {
    seedEnrollments()
       .then(() => {
-         console.log('✅ Enrollment seeding script completed');
+         console.log("✅ Enrollment seeding script completed");
          process.exit(0);
       })
       .catch((error) => {
-         console.error('❌ Enrollment seeding script failed:', error);
+         console.error("❌ Enrollment seeding script failed:", error);
          process.exit(1);
       });
 }

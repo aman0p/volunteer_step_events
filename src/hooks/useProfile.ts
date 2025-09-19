@@ -1,34 +1,34 @@
-import { useState, useEffect } from 'react';
-import { useForm, type UseFormReturn } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { toast } from 'sonner';
-import { profileSchema } from '@/lib/validations';
+import { useState, useEffect } from "react";
+import { useForm, type UseFormReturn } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
+import { profileSchema } from "@/lib/validations";
 import {
    updateCurrentUserProfile,
    getCurrentUserProfile,
-} from '@/lib/actions/user/profile';
+} from "@/lib/actions/user/profile";
 import {
    submitVerificationRequest,
    getVerificationStatus,
-} from '@/lib/actions/user/verification';
+} from "@/lib/actions/user/verification";
 
 export function useProfile() {
    const form = useForm({
       resolver: zodResolver(profileSchema),
       defaultValues: {
-         fullName: '',
-         phoneNumber: '',
-         address: '',
+         fullName: "",
+         phoneNumber: "",
+         address: "",
          gender: undefined,
-         profileImage: '',
+         profileImage: "",
          skills: [],
          govIdType: undefined,
-         govIdImage: '',
+         govIdImage: "",
       },
    }) as UseFormReturn<z.infer<typeof profileSchema>>;
 
-   const [role, setRole] = useState('');
+   const [role, setRole] = useState("");
    const [isVerified, setIsVerified] = useState(false);
    const [hasPendingRequest, setHasPendingRequest] = useState(false);
    const [hasRejectedRequest, setHasRejectedRequest] = useState(false);
@@ -56,26 +56,26 @@ export function useProfile() {
    const updateFormCompletionStatus = () => {
       const values = form.getValues();
       setFormCompletionStatus({
-         fullName: values.fullName.trim() !== '',
-         phoneNumber: values.phoneNumber.trim() !== '',
-         address: values.address.trim() !== '',
+         fullName: values.fullName.trim() !== "",
+         phoneNumber: values.phoneNumber.trim() !== "",
+         address: values.address.trim() !== "",
          gender: !!values.gender,
-         profileImage: values.profileImage.trim() !== '',
+         profileImage: values.profileImage.trim() !== "",
          govIdType: !!values.govIdType,
-         govIdImage: values.govIdImage.trim() !== '',
+         govIdImage: values.govIdImage.trim() !== "",
       });
    };
 
    // Function to get missing fields for better error messages
    const getMissingFields = () => {
       const missing = [];
-      if (!formCompletionStatus.fullName) missing.push('Full Name');
-      if (!formCompletionStatus.phoneNumber) missing.push('Phone Number');
-      if (!formCompletionStatus.address) missing.push('Address');
-      if (!formCompletionStatus.gender) missing.push('Gender');
-      if (!formCompletionStatus.profileImage) missing.push('Profile Image');
-      if (!formCompletionStatus.govIdType) missing.push('Government ID Type');
-      if (!formCompletionStatus.govIdImage) missing.push('Government ID Image');
+      if (!formCompletionStatus.fullName) missing.push("Full Name");
+      if (!formCompletionStatus.phoneNumber) missing.push("Phone Number");
+      if (!formCompletionStatus.address) missing.push("Address");
+      if (!formCompletionStatus.gender) missing.push("Gender");
+      if (!formCompletionStatus.profileImage) missing.push("Profile Image");
+      if (!formCompletionStatus.govIdType) missing.push("Government ID Type");
+      if (!formCompletionStatus.govIdImage) missing.push("Government ID Image");
       return missing;
    };
 
@@ -87,8 +87,8 @@ export function useProfile() {
          const wasPending = hasPendingRequest;
 
          setIsVerified(result.isVerified ?? false);
-         setHasPendingRequest(result.latestRequest?.status === 'PENDING');
-         setHasRejectedRequest(result.latestRequest?.status === 'REJECTED');
+         setHasPendingRequest(result.latestRequest?.status === "PENDING");
+         setHasRejectedRequest(result.latestRequest?.status === "REJECTED");
          setRejectionReason(result.latestRequest?.rejectionReason ?? null);
 
          // No need for toast notifications here - sidebar notifications will handle this
@@ -100,9 +100,9 @@ export function useProfile() {
       setIsRefreshingVerification(true);
       try {
          await fetchVerificationStatus();
-         toast.success('Verification status refreshed');
+         toast.success("Verification status refreshed");
       } catch (error) {
-         toast.error('Failed to refresh verification status');
+         toast.error("Failed to refresh verification status");
       } finally {
          setIsRefreshingVerification(false);
       }
@@ -113,7 +113,7 @@ export function useProfile() {
       if (!areAllFieldsFilled()) {
          const missingFields = getMissingFields();
          toast.error(
-            `Please complete the following fields: ${missingFields.join(', ')}`
+            `Please complete the following fields: ${missingFields.join(", ")}`
          );
          return;
       }
@@ -125,7 +125,7 @@ export function useProfile() {
          const profileResult = await updateCurrentUserProfile(profileValues);
 
          if (!profileResult.success) {
-            toast.error('Failed to save profile changes. Please try again.');
+            toast.error("Failed to save profile changes. Please try again.");
             return;
          }
 
@@ -134,16 +134,16 @@ export function useProfile() {
          if (result.success) {
             setHasPendingRequest(true);
             toast.success(
-               'Profile saved and verification request submitted successfully'
+               "Profile saved and verification request submitted successfully"
             );
             // Toast notification removed - sidebar notification will handle this
          } else {
             toast.error(
-               result.message || 'Failed to submit verification request'
+               result.message || "Failed to submit verification request"
             );
          }
       } catch (error) {
-         toast.error('An error occurred while submitting the request');
+         toast.error("An error occurred while submitting the request");
       } finally {
          setIsSubmittingVerification(false);
       }
@@ -153,7 +153,7 @@ export function useProfile() {
    const onSubmit = async (values: z.infer<typeof profileSchema>) => {
       const result = await updateCurrentUserProfile(values);
       if (result.success) {
-         toast.success('Profile updated successfully');
+         toast.success("Profile updated successfully");
       } else {
          toast.error(result.message);
       }
@@ -166,18 +166,18 @@ export function useProfile() {
          const result = await getCurrentUserProfile();
          if (isMounted && result.success && result.data) {
             form.reset({
-               fullName: result.data.fullName ?? '',
-               phoneNumber: result.data.phoneNumber ?? '',
-               address: result.data.address ?? '',
+               fullName: result.data.fullName ?? "",
+               phoneNumber: result.data.phoneNumber ?? "",
+               address: result.data.address ?? "",
                gender: result.data.gender ?? undefined,
-               profileImage: result.data.profileImage ?? '',
+               profileImage: result.data.profileImage ?? "",
                skills: Array.isArray(result.data.skills)
                   ? result.data.skills
                   : [],
                govIdType: result.data.govIdType ?? undefined,
-               govIdImage: result.data.govIdImage ?? '',
+               govIdImage: result.data.govIdImage ?? "",
             });
-            setRole((result.data as any).role ?? '');
+            setRole((result.data as any).role ?? "");
 
             // Update form completion status after form is loaded
             setTimeout(() => updateFormCompletionStatus(), 100);
@@ -216,10 +216,10 @@ export function useProfile() {
          }
       };
 
-      document.addEventListener('visibilitychange', handleVisibilityChange);
+      document.addEventListener("visibilitychange", handleVisibilityChange);
       return () => {
          document.removeEventListener(
-            'visibilitychange',
+            "visibilitychange",
             handleVisibilityChange
          );
       };

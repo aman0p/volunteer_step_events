@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { Image } from '@imagekit/next';
-import { Button } from './ui/button';
-import { Event } from '@/types';
-import config from '@/lib/config';
-import Link from 'next/link';
-import { ArrowRightIcon } from 'lucide-react';
-import { requestEnrollment } from '@/lib/actions/user/enrollment';
-import { toast } from 'sonner';
-import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { Image } from "@imagekit/next";
+import { Button } from "./ui/button";
+import { Event } from "@/types";
+import config from "@/lib/config";
+import Link from "next/link";
+import { ArrowRightIcon } from "lucide-react";
+import { requestEnrollment } from "@/lib/actions/user/enrollment";
+import { toast } from "sonner";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 interface EventOverviewProps {
    latestEvents?: (Event & { enrollments?: any[] })[];
@@ -38,7 +38,7 @@ export default function EventOverview({
             toast.error(result.message);
          }
       } catch (error) {
-         toast.error('Failed to send enrollment request');
+         toast.error("Failed to send enrollment request");
       } finally {
          setIsEnrolling(false);
       }
@@ -47,7 +47,7 @@ export default function EventOverview({
    // Helper function to render enrollment button based on user role and status
    const renderEnrollmentButton = () => {
       // Show loading state while session is loading
-      if (status === 'loading') {
+      if (status === "loading") {
          return (
             <Button
                disabled
@@ -68,8 +68,8 @@ export default function EventOverview({
       }
 
       // Check if user is not a volunteer
-      if (session.user.role !== 'VOLUNTEER') {
-         if (session.user.role === 'USER') {
+      if (session.user.role !== "VOLUNTEER") {
+         if (session.user.role === "USER") {
             return (
                <Button
                   disabled
@@ -82,8 +82,8 @@ export default function EventOverview({
          }
 
          if (
-            session.user.role === 'ADMIN' ||
-            session.user.role === 'ORGANIZER'
+            session.user.role === "ADMIN" ||
+            session.user.role === "ORGANIZER"
          ) {
             return (
                <Button
@@ -112,10 +112,10 @@ export default function EventOverview({
          const userEnrollment = events[0].enrollments.find(
             (e: any) => e.userId === userId
          );
-         const isEnrolled = userEnrollment?.status === 'APPROVED';
-         const isPending = userEnrollment?.status === 'PENDING';
-         const isRejected = userEnrollment?.status === 'REJECTED';
-         const isWaitlisted = userEnrollment?.status === 'WAITLISTED';
+         const isEnrolled = userEnrollment?.status === "APPROVED";
+         const isPending = userEnrollment?.status === "PENDING";
+         const isRejected = userEnrollment?.status === "REJECTED";
+         const isWaitlisted = userEnrollment?.status === "WAITLISTED";
 
          if (isEnrolled) {
             return (
@@ -169,7 +169,7 @@ export default function EventOverview({
             disabled={isEnrolling}
             className="flex w-40 cursor-pointer items-center gap-2 bg-black px-10 py-5 text-white hover:bg-gray-800"
          >
-            {isEnrolling ? 'Enrolling...' : 'Enroll Now'}
+            {isEnrolling ? "Enrolling..." : "Enroll Now"}
          </Button>
       );
    };
@@ -207,7 +207,7 @@ export default function EventOverview({
                      <p>
                         Category:&nbsp;
                         <span className="font-bold">
-                           {events[0].category.join(', ')}
+                           {events[0].category.join(", ")}
                         </span>
                      </p>
                      <p>
@@ -217,7 +217,7 @@ export default function EventOverview({
                      <p>
                         Max Volunteers:&nbsp;
                         <span className="font-bold">
-                           {events[0].maxVolunteers || 'Unlimited'}
+                           {events[0].maxVolunteers || "Unlimited"}
                         </span>
                      </p>
                   </div>
@@ -238,7 +238,7 @@ export default function EventOverview({
                   {/* Event Image */}
                   <Image
                      urlEndpoint={`${config.env.imagekit.urlEndpoint}`}
-                     src={events[0].coverUrl || '/events.jpg'}
+                     src={events[0].coverUrl || "/events.jpg"}
                      width={1500}
                      height={1500}
                      alt={events[0].title}
@@ -271,7 +271,7 @@ export default function EventOverview({
                      className="flex w-60 cursor-pointer flex-col gap-1 rounded-lg border p-2 backdrop-blur-sm"
                   >
                      <Image
-                        src={event.coverUrl || '/events.jpg'}
+                        src={event.coverUrl || "/events.jpg"}
                         alt={event.title}
                         width={1500}
                         height={1500}
@@ -281,7 +281,7 @@ export default function EventOverview({
                         <h2 className="text-sm font-bold md:text-base">
                            {event.title}
                         </h2>
-                        <p className="text-xs">{event.category.join(', ')}</p>
+                        <p className="text-xs">{event.category.join(", ")}</p>
                      </div>
                   </div>
                ))}

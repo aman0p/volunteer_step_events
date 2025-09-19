@@ -1,16 +1,16 @@
-'use server';
+"use server";
 
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { prisma } from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
-import { notifyUserOnVerificationStatusChange } from './notifications';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+import { notifyUserOnVerificationStatusChange } from "./notifications";
 
 export const getVerificationRequests = async () => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' };
+      return { success: false, message: "Authentication required" };
    }
 
    // Check if user has admin role
@@ -19,13 +19,13 @@ export const getVerificationRequests = async () => {
       select: { role: true },
    });
 
-   if (!user || user.role !== 'ADMIN') {
-      return { success: false, message: 'Admin access required' };
+   if (!user || user.role !== "ADMIN") {
+      return { success: false, message: "Admin access required" };
    }
 
    try {
       const requests = await prisma.verificationRequest.findMany({
-         where: { status: 'PENDING' },
+         where: { status: "PENDING" },
          include: {
             user: {
                select: {
@@ -42,13 +42,13 @@ export const getVerificationRequests = async () => {
                },
             },
          },
-         orderBy: { submittedAt: 'asc' },
+         orderBy: { submittedAt: "asc" },
       });
 
       return { success: true, requests };
    } catch (error) {
-      console.error('Get verification requests error:', error);
-      return { success: false, message: 'Failed to get verification requests' };
+      console.error("Get verification requests error:", error);
+      return { success: false, message: "Failed to get verification requests" };
    }
 };
 
@@ -56,7 +56,7 @@ export const approveVerificationRequest = async (requestId: string) => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' };
+      return { success: false, message: "Authentication required" };
    }
 
    // Check if user has admin role
@@ -65,8 +65,8 @@ export const approveVerificationRequest = async (requestId: string) => {
       select: { role: true },
    });
 
-   if (!user || user.role !== 'ADMIN') {
-      return { success: false, message: 'Admin access required' };
+   if (!user || user.role !== "ADMIN") {
+      return { success: false, message: "Admin access required" };
    }
 
    try {
@@ -74,7 +74,7 @@ export const approveVerificationRequest = async (requestId: string) => {
       await prisma.verificationRequest.update({
          where: { id: requestId },
          data: {
-            status: 'APPROVED',
+            status: "APPROVED",
             reviewedAt: new Date(),
             reviewedById: session.user.id,
          },
@@ -92,29 +92,29 @@ export const approveVerificationRequest = async (requestId: string) => {
             where: { id: request.userId },
             data: {
                isVerified: true,
-               role: 'VOLUNTEER', // Upgrade from USER to VOLUNTEER
+               role: "VOLUNTEER", // Upgrade from USER to VOLUNTEER
             },
          });
 
          // Send notification to user about verification approval
          await notifyUserOnVerificationStatusChange({
             userId: request.userId,
-            status: 'APPROVED',
+            status: "APPROVED",
          });
       }
 
-      revalidatePath('/admin/account-verification');
-      revalidatePath('/profile');
+      revalidatePath("/admin/account-verification");
+      revalidatePath("/profile");
       return {
          success: true,
          message:
-            'Verification request approved successfully. User role upgraded to Volunteer.',
+            "Verification request approved successfully. User role upgraded to Volunteer.",
       };
    } catch (error) {
-      console.error('Approve verification error:', error);
+      console.error("Approve verification error:", error);
       return {
          success: false,
-         message: 'Failed to approve verification request',
+         message: "Failed to approve verification request",
       };
    }
 };
@@ -126,7 +126,7 @@ export const rejectVerificationRequest = async (
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' };
+      return { success: false, message: "Authentication required" };
    }
 
    // Check if user has admin role
@@ -135,8 +135,8 @@ export const rejectVerificationRequest = async (
       select: { role: true },
    });
 
-   if (!user || user.role !== 'ADMIN') {
-      return { success: false, message: 'Authentication required' };
+   if (!user || user.role !== "ADMIN") {
+      return { success: false, message: "Authentication required" };
    }
 
    try {
@@ -144,7 +144,7 @@ export const rejectVerificationRequest = async (
       await prisma.verificationRequest.update({
          where: { id: requestId },
          data: {
-            status: 'REJECTED',
+            status: "REJECTED",
             reviewedAt: new Date(),
             reviewedById: session.user.id,
             rejectionReason: rejectionReason || null,
@@ -161,20 +161,20 @@ export const rejectVerificationRequest = async (
          // Send notification to user about verification rejection
          await notifyUserOnVerificationStatusChange({
             userId: request.userId,
-            status: 'REJECTED',
+            status: "REJECTED",
          });
       }
 
-      revalidatePath('/admin/account-verification');
+      revalidatePath("/admin/account-verification");
       return {
          success: true,
-         message: 'Verification request rejected successfully',
+         message: "Verification request rejected successfully",
       };
    } catch (error) {
-      console.error('Reject verification error:', error);
+      console.error("Reject verification error:", error);
       return {
          success: false,
-         message: 'Failed to reject verification request',
+         message: "Failed to reject verification request",
       };
    }
 };
@@ -183,7 +183,7 @@ export const getVerificationRequestDetails = async (requestId: string) => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' };
+      return { success: false, message: "Authentication required" };
    }
 
    // Check if user has admin role
@@ -192,8 +192,8 @@ export const getVerificationRequestDetails = async (requestId: string) => {
       select: { role: true },
    });
 
-   if (!user || user.role !== 'ADMIN') {
-      return { success: false, message: 'Admin access required' };
+   if (!user || user.role !== "ADMIN") {
+      return { success: false, message: "Admin access required" };
    }
 
    try {
@@ -225,15 +225,15 @@ export const getVerificationRequestDetails = async (requestId: string) => {
       });
 
       if (!request) {
-         return { success: false, message: 'Verification request not found' };
+         return { success: false, message: "Verification request not found" };
       }
 
       return { success: true, request };
    } catch (error) {
-      console.error('Get verification request details error:', error);
+      console.error("Get verification request details error:", error);
       return {
          success: false,
-         message: 'Failed to get verification request details',
+         message: "Failed to get verification request details",
       };
    }
 };

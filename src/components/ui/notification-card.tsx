@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { X } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { NotificationType } from '@/types';
+import Link from "next/link";
+import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { NotificationType } from "@/types";
 
 type NotificationItem = {
    id: string;
@@ -32,22 +32,22 @@ export function EventNotificationCard({
    onCloseDrawer: () => void;
    className?: string;
 }) {
-   const getStatusFromType = (type: NotificationItem['type']) => {
+   const getStatusFromType = (type: NotificationItem["type"]) => {
       switch (type) {
-         case 'ENROLLMENT_APPROVED':
+         case "ENROLLMENT_APPROVED":
             return {
-               label: 'Approved',
-               color: 'bg-emerald-100 text-emerald-700',
+               label: "Approved",
+               color: "bg-emerald-100 text-emerald-700",
             };
-         case 'ENROLLMENT_REJECTED':
-            return { label: 'Rejected', color: 'bg-rose-100 text-rose-700' };
-         case 'ENROLLMENT_WAITLISTED':
+         case "ENROLLMENT_REJECTED":
+            return { label: "Rejected", color: "bg-rose-100 text-rose-700" };
+         case "ENROLLMENT_WAITLISTED":
             return {
-               label: 'Waitlisted',
-               color: 'bg-amber-100 text-amber-800',
+               label: "Waitlisted",
+               color: "bg-amber-100 text-amber-800",
             };
          default:
-            return { label: undefined, color: '' };
+            return { label: undefined, color: "" };
       }
    };
 
@@ -55,7 +55,7 @@ export function EventNotificationCard({
    const status = getStatusFromType(n.type);
 
    return (
-      <div className={cn('flex items-start justify-between gap-2', className)}>
+      <div className={cn("flex items-start justify-between gap-2", className)}>
          <div className="pt-[0.5px]">
             <input
                type="checkbox"
@@ -71,7 +71,7 @@ export function EventNotificationCard({
                {status.label && (
                   <span
                      className={cn(
-                        'rounded-full px-2 py-0.5 text-[10px] font-semibold',
+                        "rounded-full px-2 py-0.5 text-[10px] font-semibold",
                         status.color
                      )}
                   >
@@ -105,7 +105,7 @@ export function EventNotificationCard({
                   href={
                      n.relatedEventId
                         ? `/events/${n.relatedEventId}`
-                        : '/events'
+                        : "/events"
                   }
                   className="bg-primary inline-flex rounded-md px-2 py-1 text-xs text-white hover:opacity-90"
                   onClick={onCloseDrawer}
@@ -116,7 +116,7 @@ export function EventNotificationCard({
          </div>
          <div className="flex min-h-[64px] min-w-[96px] items-end gap-1">
             <span className="text-xxs text-muted-foreground absolute right-2 bottom-2">
-               {typeof n.createdAt === 'string'
+               {typeof n.createdAt === "string"
                   ? new Date(n.createdAt).toLocaleString()
                   : new Date(n.createdAt).toLocaleString()}
             </span>
@@ -144,17 +144,17 @@ export function ProfileVerificationCard({
 }) {
    const getStatusFromType = (type: NotificationType) => {
       switch (type) {
-         case 'VERIFICATION_APPROVED':
+         case "VERIFICATION_APPROVED":
             return {
-               label: 'Approved',
-               color: 'bg-emerald-100 text-emerald-700',
+               label: "Approved",
+               color: "bg-emerald-100 text-emerald-700",
             };
-         case 'VERIFICATION_REJECTED':
-            return { label: 'Rejected', color: 'bg-rose-100 text-rose-700' };
-         case 'VERIFICATION_REQUEST':
-            return { label: 'Pending', color: 'bg-amber-100 text-amber-800' };
+         case "VERIFICATION_REJECTED":
+            return { label: "Rejected", color: "bg-rose-100 text-rose-700" };
+         case "VERIFICATION_REQUEST":
+            return { label: "Pending", color: "bg-amber-100 text-amber-800" };
          default:
-            return { label: undefined, color: '' };
+            return { label: undefined, color: "" };
       }
    };
 
@@ -164,7 +164,7 @@ export function ProfileVerificationCard({
    return (
       <div
          className={cn(
-            'relative flex items-start justify-between gap-2',
+            "relative flex items-start justify-between gap-2",
             className
          )}
       >
@@ -183,7 +183,7 @@ export function ProfileVerificationCard({
                {status.label && (
                   <span
                      className={cn(
-                        'rounded-full px-2 py-0.5 text-[10px] font-semibold',
+                        "rounded-full px-2 py-0.5 text-[10px] font-semibold",
                         status.color
                      )}
                   >
@@ -206,7 +206,7 @@ export function ProfileVerificationCard({
          </div>
          <div className="flex min-h-[64px] min-w-[96px] items-end gap-1">
             <span className="text-xxs text-muted-foreground absolute right-2 bottom-2">
-               {typeof n.createdAt === 'string'
+               {typeof n.createdAt === "string"
                   ? new Date(n.createdAt).toLocaleString()
                   : new Date(n.createdAt).toLocaleString()}
             </span>

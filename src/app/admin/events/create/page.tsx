@@ -1,5 +1,5 @@
-'use client';
-import EventForm from '@/components/admin/forms/EventForm';
+"use client";
+import EventForm from "@/components/admin/forms/EventForm";
 
 export default function CreateEventPage() {
    return (

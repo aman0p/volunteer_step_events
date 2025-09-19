@@ -1,7 +1,7 @@
-import React from 'react';
-import Link from 'next/link';
-import { Search, Calendar, List } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import Link from "next/link";
+import { Search, Calendar, List } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
    return (

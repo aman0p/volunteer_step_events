@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
    useForm,
    type UseFormReturn,
    type SubmitHandler,
    useFieldArray,
-} from 'react-hook-form';
-import { z } from 'zod';
-import { useState } from 'react';
+} from "react-hook-form";
+import { z } from "zod";
+import { useState } from "react";
 import {
    Form,
    FormControl,
@@ -16,22 +16,22 @@ import {
    FormItem,
    FormLabel,
    FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { useRouter } from 'next/navigation';
-import { eventSchema } from '@/lib/validations';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import FileUpload from '@/components/FileUpload';
-import ImageTileUpload from '@/components/ui/image-tile-upload';
-import { toast } from 'sonner';
-import Tag from '@/components/ui/tag';
-import { createEvent, updateEvent } from '@/lib/actions/admin/events';
-import { EventParams } from '@/types';
-import { Trash2, Plus } from 'lucide-react';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { eventSchema } from "@/lib/validations";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import FileUpload from "@/components/FileUpload";
+import ImageTileUpload from "@/components/ui/image-tile-upload";
+import { toast } from "sonner";
+import Tag from "@/components/ui/tag";
+import { createEvent, updateEvent } from "@/lib/actions/admin/events";
+import { EventParams } from "@/types";
+import { Trash2, Plus } from "lucide-react";
 
 interface Props {
-   type?: 'create' | 'update';
+   type?: "create" | "update";
    id?: string;
    title?: string;
    description?: string;
@@ -62,26 +62,26 @@ interface Props {
 
 const EventForm = ({ type, ...event }: Props) => {
    const router = useRouter();
-   const isUpdate = type === 'update' && !!event.id;
+   const isUpdate = type === "update" && !!event.id;
 
    const form = useForm({
       resolver: zodResolver(eventSchema),
       defaultValues: isUpdate
          ? {
-              title: (event.title as string) ?? '',
-              description: (event.description as string) ?? '',
-              location: (event.location as string) ?? '',
+              title: (event.title as string) ?? "",
+              description: (event.description as string) ?? "",
+              location: (event.location as string) ?? "",
               startDate: event.startDate
                  ? new Date(event.startDate)
                  : new Date(),
               endDate: event.endDate ? new Date(event.endDate) : new Date(),
-              dressCode: (event.dressCode as string) ?? '',
-              coverUrl: (event.coverUrl as string) ?? '',
-              videoUrl: (event.videoUrl as string) ?? '',
+              dressCode: (event.dressCode as string) ?? "",
+              coverUrl: (event.coverUrl as string) ?? "",
+              videoUrl: (event.videoUrl as string) ?? "",
               eventImages: (event.eventImages as string[]) ?? [],
               category: (event.category as string[]) ?? [],
               maxVolunteers:
-                 typeof event.maxVolunteers === 'number'
+                 typeof event.maxVolunteers === "number"
                     ? event.maxVolunteers
                     : undefined,
               createdAt: event.createdAt
@@ -92,14 +92,14 @@ const EventForm = ({ type, ...event }: Props) => {
               quickLinks: event.quickLinks ?? [],
            }
          : {
-              title: '',
-              description: '',
-              location: '',
+              title: "",
+              description: "",
+              location: "",
               startDate: new Date(),
               endDate: new Date(),
-              dressCode: '',
-              coverUrl: '',
-              videoUrl: '',
+              dressCode: "",
+              coverUrl: "",
+              videoUrl: "",
               eventImages: [],
               category: [],
               maxVolunteers: undefined,
@@ -112,7 +112,7 @@ const EventForm = ({ type, ...event }: Props) => {
 
    const { fields, append, remove } = useFieldArray({
       control: form.control,
-      name: 'eventRoles',
+      name: "eventRoles",
    });
 
    const {
@@ -121,11 +121,11 @@ const EventForm = ({ type, ...event }: Props) => {
       remove: removeQuickLink,
    } = useFieldArray({
       control: form.control,
-      name: 'quickLinks',
+      name: "quickLinks",
    });
 
    const formatDateTimeLocal = (date: Date) => {
-      const pad = (n: number) => String(n).padStart(2, '0');
+      const pad = (n: number) => String(n).padStart(2, "0");
       const yyyy = date.getFullYear();
       const MM = pad(date.getMonth() + 1);
       const dd = pad(date.getDate());
@@ -170,8 +170,8 @@ const EventForm = ({ type, ...event }: Props) => {
       if (result.success) {
          toast.success(
             isUpdate
-               ? 'Event updated successfully'
-               : 'Event created successfully'
+               ? "Event updated successfully"
+               : "Event created successfully"
          );
          form.reset();
          router.push(`/admin/events`);
@@ -191,14 +191,14 @@ const EventForm = ({ type, ...event }: Props) => {
                >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                      <h2 className="text-xl font-bold md:text-2xl lg:text-3xl">
-                        {isUpdate ? 'Update Event' : 'Create a New Event'}
+                        {isUpdate ? "Update Event" : "Create a New Event"}
                      </h2>
                      {/* Submit Button */}
                      <Button
                         type="submit"
                         className="hidden w-fit bg-black text-white md:block"
                      >
-                        {isUpdate ? 'Update Event' : 'Create Event'}
+                        {isUpdate ? "Update Event" : "Create Event"}
                      </Button>
                   </div>
 
@@ -207,7 +207,7 @@ const EventForm = ({ type, ...event }: Props) => {
                         {/* Title */}
                         <FormField
                            control={form.control}
-                           name={'title'}
+                           name={"title"}
                            render={({ field }) => (
                               <FormItem className="flex flex-col gap-1">
                                  <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -233,7 +233,7 @@ const EventForm = ({ type, ...event }: Props) => {
                            {/* Starting Date */}
                            <FormField
                               control={form.control}
-                              name={'startDate'}
+                              name={"startDate"}
                               render={({ field }) => (
                                  <FormItem className="flex flex-col gap-1">
                                     <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -250,7 +250,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                                    ? formatDateTimeLocal(
                                                         field.value as Date
                                                      )
-                                                   : ''
+                                                   : ""
                                              }
                                              onChange={(e) =>
                                                 field.onChange(
@@ -272,7 +272,7 @@ const EventForm = ({ type, ...event }: Props) => {
                            {/* Ending Date */}
                            <FormField
                               control={form.control}
-                              name={'endDate'}
+                              name={"endDate"}
                               render={({ field }) => (
                                  <FormItem className="flex flex-col gap-1">
                                     <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -289,7 +289,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                                    ? formatDateTimeLocal(
                                                         field.value as Date
                                                      )
-                                                   : ''
+                                                   : ""
                                              }
                                              onChange={(e) =>
                                                 field.onChange(
@@ -311,7 +311,7 @@ const EventForm = ({ type, ...event }: Props) => {
                            {/* Dress Code */}
                            <FormField
                               control={form.control}
-                              name={'dressCode'}
+                              name={"dressCode"}
                               render={({ field }) => (
                                  <FormItem className="flex w-full flex-col gap-1">
                                     <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -335,10 +335,10 @@ const EventForm = ({ type, ...event }: Props) => {
                         {/* Categories */}
                         <FormField
                            control={form.control}
-                           name={'category'}
+                           name={"category"}
                            render={({ field }) => {
                               const [categoryInput, setCategoryInput] =
-                                 useState('');
+                                 useState("");
 
                               const addCategory = (text: string) => {
                                  const value = text.trim();
@@ -349,7 +349,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                  if (current.length >= 3) return; // UI cap; schema enforces too
                                  if (current.includes(value)) return; // avoid duplicates
                                  field.onChange([...current, value]);
-                                 setCategoryInput('');
+                                 setCategoryInput("");
                               };
 
                               const removeCategory = (
@@ -366,12 +366,12 @@ const EventForm = ({ type, ...event }: Props) => {
                               const handleKeyDown: React.KeyboardEventHandler<
                                  HTMLInputElement
                               > = (e) => {
-                                 if (e.key === 'Enter' || e.key === ',') {
+                                 if (e.key === "Enter" || e.key === ",") {
                                     e.preventDefault();
                                     addCategory(categoryInput);
                                  } else if (
-                                    e.key === 'Backspace' &&
-                                    categoryInput === ''
+                                    e.key === "Backspace" &&
+                                    categoryInput === ""
                                  ) {
                                     const current = Array.isArray(field.value)
                                        ? field.value
@@ -411,8 +411,8 @@ const EventForm = ({ type, ...event }: Props) => {
                                              placeholder={
                                                 Array.isArray(field.value) &&
                                                 field.value.length >= 3
-                                                   ? 'Maximum 3 categories'
-                                                   : 'Type and press Enter to add Event Category (genre, theme, etc.)'
+                                                   ? "Maximum 3 categories"
+                                                   : "Type and press Enter to add Event Category (genre, theme, etc.)"
                                              }
                                              disabled={
                                                 Array.isArray(field.value) &&
@@ -431,7 +431,7 @@ const EventForm = ({ type, ...event }: Props) => {
                         {/* Description */}
                         <FormField
                            control={form.control}
-                           name={'description'}
+                           name={"description"}
                            render={({ field }) => (
                               <FormItem className="flex flex-col gap-1">
                                  <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -533,7 +533,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                                          placeholder="0.00"
                                                          value={
                                                             field.value === 0
-                                                               ? ''
+                                                               ? ""
                                                                : field.value
                                                          }
                                                          onChange={(e) =>
@@ -567,7 +567,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                                       placeholder="1"
                                                       value={
                                                          field.value === 0
-                                                            ? ''
+                                                            ? ""
                                                             : field.value
                                                       }
                                                       onChange={(e) =>
@@ -621,7 +621,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                        </h5>
                                        <p className="text-sm text-gray-600">
                                           Total Roles: {fields.length} | Total
-                                          Max Volunteers:{' '}
+                                          Max Volunteers:{" "}
                                           {fields.reduce((sum, _, index) => {
                                              const maxCount =
                                                 form.watch(
@@ -649,7 +649,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                                    ) || 0;
                                                 return sum + payout * maxCount;
                                              }, 0)
-                                             .toLocaleString('en-IN')}
+                                             .toLocaleString("en-IN")}
                                        </p>
                                     </div>
                                  </div>
@@ -660,8 +660,8 @@ const EventForm = ({ type, ...event }: Props) => {
                               type="button"
                               onClick={() =>
                                  append({
-                                    name: '',
-                                    description: '',
+                                    name: "",
+                                    description: "",
                                     payout: 0,
                                     maxCount: 0,
                                  })
@@ -772,13 +772,13 @@ const EventForm = ({ type, ...event }: Props) => {
                                                       {...field}
                                                       value={
                                                          field.value
-                                                            ? 'true'
-                                                            : 'false'
+                                                            ? "true"
+                                                            : "false"
                                                       }
                                                       onChange={(e) =>
                                                          field.onChange(
                                                             e.target.value ===
-                                                               'true'
+                                                               "true"
                                                          )
                                                       }
                                                       className="w-full rounded-md border-dashed border-gray-400 px-3 py-2 text-sm"
@@ -804,8 +804,8 @@ const EventForm = ({ type, ...event }: Props) => {
                               type="button"
                               onClick={() =>
                                  appendQuickLink({
-                                    title: '',
-                                    url: '',
+                                    title: "",
+                                    url: "",
                                     isActive: true,
                                  })
                               }
@@ -823,7 +823,7 @@ const EventForm = ({ type, ...event }: Props) => {
                         {/* Cover */}
                         <FormField
                            control={form.control}
-                           name={'coverUrl'}
+                           name={"coverUrl"}
                            render={({ field }) => (
                               <FormItem className="flex flex-col gap-1">
                                  <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -854,7 +854,7 @@ const EventForm = ({ type, ...event }: Props) => {
                            {/* Location */}
                            <FormField
                               control={form.control}
-                              name={'location'}
+                              name={"location"}
                               render={({ field }) => (
                                  <FormItem className="flex flex-col gap-1">
                                     <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -878,7 +878,7 @@ const EventForm = ({ type, ...event }: Props) => {
                            {/* Max Volunteers - Auto-calculated */}
                            <FormField
                               control={form.control}
-                              name={'maxVolunteers'}
+                              name={"maxVolunteers"}
                               render={({ field }) => (
                                  <FormItem className="flex flex-col gap-1">
                                     <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -916,7 +916,7 @@ const EventForm = ({ type, ...event }: Props) => {
                            {/* Event Video */}
                            <FormField
                               control={form.control}
-                              name={'videoUrl'}
+                              name={"videoUrl"}
                               render={({ field }) => (
                                  <FormItem className="flex flex-col gap-1">
                                     <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -944,7 +944,7 @@ const EventForm = ({ type, ...event }: Props) => {
                            {/* Event Images */}
                            <FormField
                               control={form.control}
-                              name={'eventImages'}
+                              name={"eventImages"}
                               render={({ field }) => (
                                  <FormItem className="flex flex-col gap-1">
                                     <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -975,7 +975,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                                                  ]
                                                                : [];
                                                          list[idx] =
-                                                            newPath ?? '';
+                                                            newPath ?? "";
                                                          field.onChange(
                                                             list.filter(Boolean)
                                                          );
@@ -995,13 +995,13 @@ const EventForm = ({ type, ...event }: Props) => {
                                              ) => {
                                                 const current =
                                                    (form.getValues(
-                                                      'eventImages'
+                                                      "eventImages"
                                                    ) as string[] | undefined) ??
                                                    [];
                                                 field.onChange(
                                                    [
                                                       ...current,
-                                                      newPath ?? '',
+                                                      newPath ?? "",
                                                    ].filter(Boolean)
                                                 );
                                              }}
@@ -1025,7 +1025,7 @@ const EventForm = ({ type, ...event }: Props) => {
                   onClick={form.handleSubmit(onSubmit)}
                   className="mt-5 block w-full bg-black text-white md:hidden"
                >
-                  {isUpdate ? 'Update Event' : 'Create Event'}
+                  {isUpdate ? "Update Event" : "Create Event"}
                </Button>
             </Form>
          </div>

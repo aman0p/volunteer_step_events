@@ -1,6 +1,6 @@
-import config from '@/lib/config';
-import { getUploadAuthParams } from '@imagekit/next/server';
-import { getCorsHeaders, corsOptionsResponse } from '@/lib/utils';
+import config from "@/lib/config";
+import { getUploadAuthParams } from "@imagekit/next/server";
+import { getCorsHeaders, corsOptionsResponse } from "@/lib/utils";
 
 const {
    env: {
@@ -29,8 +29,8 @@ export async function GET() {
    } catch (error) {
       return Response.json(
          {
-            error: 'Authentication for Imagekit failed',
-            message: error instanceof Error ? error.message : 'Unknown error',
+            error: "Authentication for Imagekit failed",
+            message: error instanceof Error ? error.message : "Unknown error",
          },
          {
             status: 500,

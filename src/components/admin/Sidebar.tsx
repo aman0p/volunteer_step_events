@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, Users, Book, Bookmark, UserCheck } from 'lucide-react';
-import { adminSideBarLinks } from '@/constants';
-import { getInitials } from '@/lib/utils';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Home, Users, Book, Bookmark, UserCheck } from "lucide-react";
+import { adminSideBarLinks } from "@/constants";
+import { getInitials } from "@/lib/utils";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
    Sidebar as UISidebar,
    SidebarHeader,
@@ -20,9 +20,9 @@ import {
    SidebarMenuButton,
    SidebarSeparator,
    SidebarRail,
-} from '@/components/ui/sidebar';
-import { Session } from 'next-auth';
-import { NotificationCount } from '@/components/ui/notification';
+} from "@/components/ui/sidebar";
+import { Session } from "next-auth";
+import { NotificationCount } from "@/components/ui/notification";
 
 export function Sidebar({
    session,
@@ -66,25 +66,25 @@ export function Sidebar({
                <SidebarGroupContent>
                   <SidebarMenu>
                      {adminSideBarLinks
-                        .filter((link) => link.text !== 'Home')
+                        .filter((link) => link.text !== "Home")
                         .map((link) => {
                            const isSelected =
-                              (link.route === '/admin' &&
-                                 pathname === '/admin') ||
-                              (link.route !== '/admin' &&
+                              (link.route === "/admin" &&
+                                 pathname === "/admin") ||
+                              (link.route !== "/admin" &&
                                  pathname.includes(link.route) &&
                                  link.route.length > 1);
 
                            const Icon =
-                              link.text === 'Home'
+                              link.text === "Home"
                                  ? Home
-                                 : link.text === 'All Volunteers'
+                                 : link.text === "All Volunteers"
                                    ? Users
-                                   : link.text === 'All Events'
+                                   : link.text === "All Events"
                                      ? Book
-                                     : link.text === 'Event Enrollments'
+                                     : link.text === "Event Enrollments"
                                        ? Bookmark
-                                       : link.text === 'Verification Requests'
+                                       : link.text === "Verification Requests"
                                          ? UserCheck
                                          : Home;
 
@@ -99,7 +99,7 @@ export function Sidebar({
                                        <span className="text-sm">
                                           {link.text}
                                        </span>
-                                       {link.text === 'Event Enrollments' && (
+                                       {link.text === "Event Enrollments" && (
                                           <div className="ml-8">
                                              <NotificationCount
                                                 count={enrollmentCount}
@@ -107,7 +107,7 @@ export function Sidebar({
                                           </div>
                                        )}
                                        {link.text ===
-                                          'Verification Requests' && (
+                                          "Verification Requests" && (
                                           <div className="ml-8">
                                              <NotificationCount
                                                 count={verificationCount}
@@ -130,7 +130,7 @@ export function Sidebar({
             <div className="flex items-center justify-start gap-3 px-1 py-2">
                <Avatar className="scale-110">
                   <AvatarFallback className="bg-amber-100">
-                     {getInitials(session?.user?.name || 'IN')}
+                     {getInitials(session?.user?.name || "IN")}
                   </AvatarFallback>
                </Avatar>
                <div className="flex flex-col">

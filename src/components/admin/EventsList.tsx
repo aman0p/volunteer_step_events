@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import EventCard from '@/components/EventCard';
+import EventCard from "@/components/user/EventCard";
 
 interface EventsListProps {
    events: any[];

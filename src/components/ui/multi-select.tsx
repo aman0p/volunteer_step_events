@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface MultiSelectProps {
    options: string[];
@@ -16,7 +16,7 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
          options,
          selected,
          onChange,
-         placeholder = 'Select options...',
+         placeholder = "Select options...",
          className,
       },
       ref
@@ -34,7 +34,7 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
       };
 
       return (
-         <div className={cn('w-full', className)} ref={ref}>
+         <div className={cn("w-full", className)} ref={ref}>
             <div className="bg-background flex min-h-[40px] flex-wrap gap-2 rounded-md border border-2 border-black/50 p-2">
                {selected.map((option) => (
                   <div
@@ -64,10 +64,10 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
                      type="button"
                      onClick={() => toggleOption(option)}
                      className={cn(
-                        'rounded-md border px-3 py-2 text-left text-sm transition-colors',
+                        "rounded-md border px-3 py-2 text-left text-sm transition-colors",
                         selected.includes(option)
-                           ? 'border-blue-300 bg-blue-100 text-blue-800'
-                           : 'border-gray-200 bg-white hover:bg-gray-50'
+                           ? "border-blue-300 bg-blue-100 text-blue-800"
+                           : "border-gray-200 bg-white hover:bg-gray-50"
                      )}
                   >
                      {option}
@@ -78,6 +78,6 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
       );
    }
 );
-MultiSelect.displayName = 'MultiSelect';
+MultiSelect.displayName = "MultiSelect";
 
 export { MultiSelect };

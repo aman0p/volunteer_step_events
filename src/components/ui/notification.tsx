@@ -1,5 +1,5 @@
-import { IoNotifications } from 'react-icons/io5';
-import { cn } from '@/lib/utils';
+import { IoNotifications } from "react-icons/io5";
+import { cn } from "@/lib/utils";
 
 interface NotificationProps {
    count?: number;
@@ -7,13 +7,13 @@ interface NotificationProps {
 }
 
 export function NotificationBell({ count = 0, className }: NotificationProps) {
-   const displayCount = count > 999 ? '999+' : count;
+   const displayCount = count > 999 ? "999+" : count;
    return (
       <div
          aria-label="Notifications"
          title="Notifications"
          className={cn(
-            'relative inline-flex items-center justify-center rounded-md p-1',
+            "relative inline-flex items-center justify-center rounded-md p-1",
             className
          )}
       >
@@ -31,7 +31,7 @@ export function NotificationCount({
    count = 10,
    className,
 }: NotificationProps) {
-   const displayCount = count > 999 ? '999+' : count;
+   const displayCount = count > 999 ? "999+" : count;
    return (
       <>
          {count > 0 && (

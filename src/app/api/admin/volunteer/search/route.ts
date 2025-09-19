@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { prisma } from '@/lib/prisma';
-import { getCorsHeaders, corsOptionsResponse } from '@/lib/utils';
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { getCorsHeaders, corsOptionsResponse } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
    try {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
       if (!session) {
          return NextResponse.json(
-            { error: 'Unauthorized' },
+            { error: "Unauthorized" },
             {
                status: 401,
                headers: getCorsHeaders(),
@@ -24,9 +24,9 @@ export async function GET(request: NextRequest) {
          select: { role: true },
       });
 
-      if (!user || (user.role !== 'ADMIN' && user.role !== 'ORGANIZER')) {
+      if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
          return NextResponse.json(
-            { error: 'Forbidden' },
+            { error: "Forbidden" },
             {
                status: 403,
                headers: getCorsHeaders(),
@@ -35,9 +35,9 @@ export async function GET(request: NextRequest) {
       }
 
       const { searchParams } = new URL(request.url);
-      const query = searchParams.get('q');
-      const eventId = searchParams.get('eventId');
-      const includeAdmins = searchParams.get('includeAdmins') === 'true';
+      const query = searchParams.get("q");
+      const eventId = searchParams.get("eventId");
+      const includeAdmins = searchParams.get("includeAdmins") === "true";
 
       if (!query || query.trim().length < 2) {
          return NextResponse.json(
@@ -52,16 +52,16 @@ export async function GET(request: NextRequest) {
 
       // Build the where clause for roles
       let roleFilter: any = {
-         OR: [{ role: 'USER' }, { role: 'VOLUNTEER' }],
+         OR: [{ role: "USER" }, { role: "VOLUNTEER" }],
       };
 
       // Include admins if requested and user has permission
-      if (includeAdmins && user.role === 'ADMIN') {
-         roleFilter.OR.push({ role: 'ADMIN' });
-         roleFilter.OR.push({ role: 'ORGANIZER' });
-      } else if (includeAdmins && user.role === 'ORGANIZER') {
+      if (includeAdmins && user.role === "ADMIN") {
+         roleFilter.OR.push({ role: "ADMIN" });
+         roleFilter.OR.push({ role: "ORGANIZER" });
+      } else if (includeAdmins && user.role === "ORGANIZER") {
          // Organizers can see other organizers but not admins
-         roleFilter.OR.push({ role: 'ORGANIZER' });
+         roleFilter.OR.push({ role: "ORGANIZER" });
       }
 
       // Build the complete where clause
@@ -70,8 +70,8 @@ export async function GET(request: NextRequest) {
             roleFilter,
             {
                OR: [
-                  { fullName: { contains: searchTerm, mode: 'insensitive' } },
-                  { email: { contains: searchTerm, mode: 'insensitive' } },
+                  { fullName: { contains: searchTerm, mode: "insensitive" } },
+                  { email: { contains: searchTerm, mode: "insensitive" } },
                   // Note: skills search removed as hasSome doesn't work well with partial strings
                ],
             },
@@ -102,12 +102,12 @@ export async function GET(request: NextRequest) {
                      },
                   },
                },
-               orderBy: { enrolledAt: 'desc' },
+               orderBy: { enrolledAt: "desc" },
                take: 5, // Limit to recent 5 enrollments
             },
          },
          take: 10, // Limit search results
-         orderBy: { createdAt: 'desc' },
+         orderBy: { createdAt: "desc" },
       });
 
       return NextResponse.json(
@@ -117,9 +117,9 @@ export async function GET(request: NextRequest) {
          }
       );
    } catch (error) {
-      console.error('Volunteer search error:', error);
+      console.error("Volunteer search error:", error);
       return NextResponse.json(
-         { error: 'Internal server error' },
+         { error: "Internal server error" },
          {
             status: 500,
             headers: getCorsHeaders(),

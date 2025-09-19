@@ -1,11 +1,11 @@
 // animations.ts
-export type AnimationVariant = 'circle' | 'circle-blur' | 'polygon' | 'gif';
+export type AnimationVariant = "circle" | "circle-blur" | "polygon" | "gif";
 export type AnimationStart =
-   | 'top-left'
-   | 'top-right'
-   | 'bottom-left'
-   | 'bottom-right'
-   | 'center';
+   | "top-left"
+   | "top-right"
+   | "bottom-left"
+   | "bottom-right"
+   | "center";
 
 interface Animation {
    name: string;
@@ -14,19 +14,19 @@ interface Animation {
 
 const getPositionCoords = (position: AnimationStart) => {
    switch (position) {
-      case 'top-left':
-         return { cx: '0', cy: '0' };
-      case 'top-right':
-         return { cx: '40', cy: '0' };
-      case 'bottom-left':
-         return { cx: '0', cy: '40' };
-      case 'bottom-right':
-         return { cx: '40', cy: '40' };
+      case "top-left":
+         return { cx: "0", cy: "0" };
+      case "top-right":
+         return { cx: "40", cy: "0" };
+      case "bottom-left":
+         return { cx: "0", cy: "40" };
+      case "bottom-right":
+         return { cx: "40", cy: "40" };
    }
 };
 
 const generateSVG = (variant: AnimationVariant, start: AnimationStart) => {
-   if (start === 'center') return;
+   if (start === "center") return;
 
    const positionCoords = getPositionCoords(start);
    if (!positionCoords) {
@@ -34,27 +34,27 @@ const generateSVG = (variant: AnimationVariant, start: AnimationStart) => {
    }
    const { cx, cy } = positionCoords;
 
-   if (variant === 'circle') {
+   if (variant === "circle") {
       return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="${cx}" cy="${cy}" r="20" fill="white"/></svg>`;
    }
 
-   if (variant === 'circle-blur') {
+   if (variant === "circle-blur") {
       return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><defs><filter id="blur"><feGaussianBlur stdDeviation="2"/></filter></defs><circle cx="${cx}" cy="${cy}" r="18" fill="white" filter="url(%23blur)"/></svg>`;
    }
 
-   return '';
+   return "";
 };
 
 const getTransformOrigin = (start: AnimationStart) => {
    switch (start) {
-      case 'top-left':
-         return 'top left';
-      case 'top-right':
-         return 'top right';
-      case 'bottom-left':
-         return 'bottom left';
-      case 'bottom-right':
-         return 'bottom right';
+      case "top-left":
+         return "top left";
+      case "top-right":
+         return "top right";
+      case "bottom-left":
+         return "bottom left";
+      case "bottom-right":
+         return "bottom right";
    }
 };
 
@@ -66,7 +66,7 @@ export const createAnimation = (
    const svg = generateSVG(variant, start);
    const transformOrigin = getTransformOrigin(start);
 
-   if (variant === 'polygon') {
+   if (variant === "polygon") {
       return {
          name: `${variant}-${start}`,
          css: `
@@ -108,7 +108,7 @@ export const createAnimation = (
       `,
       };
    }
-   if (variant === 'circle' && start == 'center') {
+   if (variant === "circle" && start == "center") {
       return {
          name: `${variant}-${start}`,
          css: `
@@ -150,7 +150,7 @@ export const createAnimation = (
       `,
       };
    }
-   if (variant === 'gif') {
+   if (variant === "gif") {
       return {
          name: `${variant}-${start}`,
          css: `
@@ -192,7 +192,7 @@ export const createAnimation = (
         animation-timing-function: var(--expo-out);
       }
       ::view-transition-new(root) {
-        mask: url('${svg}') ${start.replace('-', ' ')} / 0 no-repeat;
+        mask: url('${svg}') ${start.replace("-", " ")} / 0 no-repeat;
         mask-origin: content-box;
         animation: scale-${start} 1s;
         transform-origin: ${transformOrigin};

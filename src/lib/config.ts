@@ -2,14 +2,14 @@ const config = {
    env: {
       apiEndpoint: (() => {
          // In production (Vercel), use the production endpoint
-         if (process.env.NODE_ENV === 'production') {
+         if (process.env.NODE_ENV === "production") {
             return (
                process.env.NEXT_PUBLIC_PROD_API_ENDPOINT ||
-               'https://volunteer-step-events-eta.vercel.app'
+               "https://volunteer-step-events-eta.vercel.app"
             );
          }
          // In development, use local endpoint
-         return process.env.NEXT_PUBLIC_API_ENDPOINT || 'http://localhost:3000';
+         return process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:3000";
       })(),
       prodApiEndpoint: process.env.NEXT_PUBLIC_PROD_API_ENDPOINT!,
       imagekit: {

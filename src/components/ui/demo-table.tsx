@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState } from "react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
    Table,
    TableBody,
@@ -9,30 +9,30 @@ import {
    TableHead,
    TableHeader,
    TableRow,
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
    DropdownMenu,
    DropdownMenuContent,
    DropdownMenuItem,
    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Loader2 } from 'lucide-react';
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal, Loader2 } from "lucide-react";
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
 type Section = {
    id: string;
    header: string;
    sectionType: string;
-   status: 'done' | 'inprocess';
+   status: "done" | "inprocess";
    target: number;
    limit: number;
    reviewer?: string;
@@ -40,89 +40,89 @@ type Section = {
 
 const sections: Section[] = [
    {
-      id: '1',
-      header: 'Cover page',
-      sectionType: 'Cover page',
-      status: 'inprocess',
+      id: "1",
+      header: "Cover page",
+      sectionType: "Cover page",
+      status: "inprocess",
       target: 18,
       limit: 5,
-      reviewer: 'Eddie Lake',
+      reviewer: "Eddie Lake",
    },
    {
-      id: '2',
-      header: 'Table of contents',
-      sectionType: 'Table of contents',
-      status: 'done',
+      id: "2",
+      header: "Table of contents",
+      sectionType: "Table of contents",
+      status: "done",
       target: 29,
       limit: 24,
-      reviewer: 'Eddie Lake',
+      reviewer: "Eddie Lake",
    },
    {
-      id: '3',
-      header: 'Executive summary',
-      sectionType: 'Narrative',
-      status: 'done',
+      id: "3",
+      header: "Executive summary",
+      sectionType: "Narrative",
+      status: "done",
       target: 10,
       limit: 13,
-      reviewer: 'Eddie Lake',
+      reviewer: "Eddie Lake",
    },
    {
-      id: '4',
-      header: 'Technical approach',
-      sectionType: 'Narrative',
-      status: 'done',
+      id: "4",
+      header: "Technical approach",
+      sectionType: "Narrative",
+      status: "done",
       target: 27,
       limit: 23,
-      reviewer: 'Jamik Tashpulatov',
+      reviewer: "Jamik Tashpulatov",
    },
    {
-      id: '5',
-      header: 'Design',
-      sectionType: 'Narrative',
-      status: 'inprocess',
+      id: "5",
+      header: "Design",
+      sectionType: "Narrative",
+      status: "inprocess",
       target: 2,
       limit: 16,
-      reviewer: 'Jamik Tashpulatov',
+      reviewer: "Jamik Tashpulatov",
    },
    {
-      id: '6',
-      header: 'Capabilities',
-      sectionType: 'Narrative',
-      status: 'inprocess',
+      id: "6",
+      header: "Capabilities",
+      sectionType: "Narrative",
+      status: "inprocess",
       target: 20,
       limit: 8,
-      reviewer: 'Jamik Tashpulatov',
+      reviewer: "Jamik Tashpulatov",
    },
    {
-      id: '7',
-      header: 'Integration with existing systems',
-      sectionType: 'Narrative',
-      status: 'inprocess',
+      id: "7",
+      header: "Integration with existing systems",
+      sectionType: "Narrative",
+      status: "inprocess",
       target: 19,
       limit: 21,
-      reviewer: 'Jamik Tashpulatov',
+      reviewer: "Jamik Tashpulatov",
    },
    {
-      id: '8',
-      header: 'Innovation and Advantages',
-      sectionType: 'Narrative',
-      status: 'done',
+      id: "8",
+      header: "Innovation and Advantages",
+      sectionType: "Narrative",
+      status: "done",
       target: 25,
       limit: 26,
    },
    {
-      id: '9',
+      id: "9",
       header: "Overview of EMR's Innovative Solutions",
-      sectionType: 'Technical content',
-      status: 'done',
+      sectionType: "Technical content",
+      status: "done",
       target: 7,
       limit: 23,
    },
    {
-      id: '10',
-      header: 'Advanced Algorithms and Machine Learning',
-      sectionType: 'Narrative',
-      status: 'done',
+      id: "10",
+      header: "Advanced Algorithms and Machine Learning",
+      sectionType: "Narrative",
+      status: "done",
       target: 30,
       limit: 28,
    },
@@ -182,7 +182,7 @@ export default function DemoTable() {
                      <TableCell className="font-medium">{row.header}</TableCell>
                      <TableCell>{row.sectionType}</TableCell>
                      <TableCell>
-                        {row.status === 'done' ? (
+                        {row.status === "done" ? (
                            <Badge
                               variant="secondary"
                               className="bg-green-500/20 text-green-700"

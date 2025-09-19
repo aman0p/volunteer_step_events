@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -164,7 +164,7 @@ select option:hover {
 
 /* Event background color responsive styling */
 @media (min-width: 768px) {
-   [style*='--event-bg-color'] {
+   [style*="--event-bg-color"] {
       background-color: var(--event-bg-color) !important;
    }
 }

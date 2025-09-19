@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Video, buildSrc } from '@imagekit/next';
-import { useState } from 'react';
-import config from '@/lib/config';
+import { Video, buildSrc } from "@imagekit/next";
+import { useState } from "react";
+import config from "@/lib/config";
 
 interface EventVideoWithPlaceholderProps {
    videoUrl: string;
@@ -13,7 +13,7 @@ interface EventVideoWithPlaceholderProps {
 export default function EventVideoWithPlaceholder({
    videoUrl,
    coverUrl,
-   className = '',
+   className = "",
 }: EventVideoWithPlaceholderProps) {
    const [showPlaceholder, setShowPlaceholder] = useState(true);
    const [videoError, setVideoError] = useState(false);
@@ -21,7 +21,7 @@ export default function EventVideoWithPlaceholder({
    // Generate placeholder video URL using the default event video
    const placeholderVideoUrl = buildSrc({
       urlEndpoint: config.env.imagekit.urlEndpoint,
-      src: '/default/event-video.mp4',
+      src: "/default/event-video.mp4",
       transformation: [
          {
             quality: 10,
@@ -60,7 +60,7 @@ export default function EventVideoWithPlaceholder({
                className="h-full w-full rounded-xl object-cover md:rounded-2xl lg:rounded-3xl"
                poster={buildSrc({
                   urlEndpoint: config.env.imagekit.urlEndpoint,
-                  src: '/default/event-video.mp4/ik-thumbnail.jpg',
+                  src: "/default/event-video.mp4/ik-thumbnail.jpg",
                })}
             />
          </div>
@@ -107,7 +107,7 @@ export default function EventVideoWithPlaceholder({
             onError={handleVideoError}
             style={{
                opacity: showPlaceholder ? 0 : 1,
-               transition: 'opacity 0.3s ease-in-out',
+               transition: "opacity 0.3s ease-in-out",
             }}
          />
       </div>

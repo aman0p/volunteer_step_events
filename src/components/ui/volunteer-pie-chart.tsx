@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Label, Pie, PieChart, Sector } from 'recharts';
-import { PieSectorDataItem } from 'recharts/types/polar/Pie';
+import * as React from "react";
+import { Label, Pie, PieChart, Sector } from "recharts";
+import { PieSectorDataItem } from "recharts/types/polar/Pie";
 
 import {
    Card,
@@ -10,23 +10,23 @@ import {
    CardDescription,
    CardHeader,
    CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
    ChartConfig,
    ChartContainer,
    ChartStyle,
    ChartTooltip,
    ChartTooltipContent,
-} from '@/components/ui/chart';
+} from "@/components/ui/chart";
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
-export const description = 'A volunteer statistics pie chart';
+export const description = "A volunteer statistics pie chart";
 
 interface VolunteerData {
    status: string;
@@ -47,28 +47,28 @@ const getVolunteerData = (
    pending: number,
    rejected: number
 ): VolunteerData[] => [
-   { status: 'approved', count: approved, fill: 'rgb(0, 0, 0)' },
-   { status: 'waitlisted', count: waitlisted, fill: 'rgba(0, 0, 0, 0.8)' },
-   { status: 'pending', count: pending, fill: 'rgba(0, 0, 0, 0.6)' },
-   { status: 'rejected', count: rejected, fill: 'rgba(0, 0, 0, 0.4)' },
+   { status: "approved", count: approved, fill: "rgb(0, 0, 0)" },
+   { status: "waitlisted", count: waitlisted, fill: "rgba(0, 0, 0, 0.8)" },
+   { status: "pending", count: pending, fill: "rgba(0, 0, 0, 0.6)" },
+   { status: "rejected", count: rejected, fill: "rgba(0, 0, 0, 0.4)" },
 ];
 
 const chartConfig = {
    approved: {
-      label: 'Approved',
-      color: 'rgb(0, 0, 0)',
+      label: "Approved",
+      color: "rgb(0, 0, 0)",
    },
    waitlisted: {
-      label: 'Waitlisted',
-      color: 'rgba(0, 0, 0, 0.8)',
+      label: "Waitlisted",
+      color: "rgba(0, 0, 0, 0.8)",
    },
    pending: {
-      label: 'Pending',
-      color: 'rgba(0, 0, 0, 0.6)',
+      label: "Pending",
+      color: "rgba(0, 0, 0, 0.6)",
    },
    rejected: {
-      label: 'Rejected',
-      color: 'rgba(0, 0, 0, 0.4)',
+      label: "Rejected",
+      color: "rgba(0, 0, 0, 0.4)",
    },
 } satisfies ChartConfig;
 
@@ -78,8 +78,8 @@ export function VolunteerPieChart({
    pendingCount,
    rejectedCount,
 }: VolunteerPieChartProps) {
-   const id = 'volunteer-pie-chart';
-   const [activeStatus, setActiveStatus] = React.useState('approved');
+   const id = "volunteer-pie-chart";
+   const [activeStatus, setActiveStatus] = React.useState("approved");
 
    const volunteerData = React.useMemo(
       () =>
@@ -184,7 +184,7 @@ export function VolunteerPieChart({
                   >
                      <Label
                         content={({ viewBox }) => {
-                           if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+                           if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                               return (
                                  <text
                                     x={viewBox.cx}

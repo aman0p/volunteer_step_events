@@ -1,15 +1,15 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
-import { MapPin, Edit, Instagram, Mail } from 'lucide-react';
-import Link from 'next/link';
-import { Image } from '@imagekit/next';
-import config from '@/lib/config';
-import { FaWhatsapp } from 'react-icons/fa';
-import { Video } from '@imagekit/next';
-import EventRolesTable from '@/components/admin/tables/EventRolesTable';
-import { CopyButton } from '@/components/ui';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import { MapPin, Edit, Instagram, Mail } from "lucide-react";
+import Link from "next/link";
+import { Image } from "@imagekit/next";
+import config from "@/lib/config";
+import { FaWhatsapp } from "react-icons/fa";
+import { Video } from "@imagekit/next";
+import EventRolesTable from "@/components/admin/tables/EventRolesTable";
+import { CopyButton } from "@/components/ui";
 
 export default async function EventDetailsPage({
    params,
@@ -19,7 +19,7 @@ export default async function EventDetailsPage({
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    // Check if user has admin role
@@ -28,8 +28,8 @@ export default async function EventDetailsPage({
       select: { role: true },
    });
 
-   if (!user || (user.role !== 'ADMIN' && user.role !== 'ORGANIZER')) {
-      redirect('/');
+   if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
+      redirect("/");
    }
 
    // Fetch event with enrollments, event roles, and quick links
@@ -60,7 +60,7 @@ export default async function EventDetailsPage({
                enrollments: {
                   where: {
                      status: {
-                        in: ['APPROVED', 'PENDING'],
+                        in: ["APPROVED", "PENDING"],
                      },
                   },
                   select: {
@@ -81,7 +81,7 @@ export default async function EventDetailsPage({
    });
 
    if (!event) {
-      redirect('/admin/events');
+      redirect("/admin/events");
    }
 
    // Owner guard: only creator can view
@@ -90,29 +90,29 @@ export default async function EventDetailsPage({
       select: { createdById: true },
    });
    if (!owner || owner.createdById !== session.user.id) {
-      redirect('/admin/events');
+      redirect("/admin/events");
    }
 
    const formatDate = (date: Date) => {
-      return new Intl.DateTimeFormat('en-US', {
-         weekday: 'long',
-         year: 'numeric',
-         month: 'long',
-         day: 'numeric',
-         hour: '2-digit',
-         minute: '2-digit',
+      return new Intl.DateTimeFormat("en-US", {
+         weekday: "long",
+         year: "numeric",
+         month: "long",
+         day: "numeric",
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(date);
    };
 
    const getTimeRange = (startDate: Date, endDate: Date) => {
-      const start = new Intl.DateTimeFormat('en-US', {
-         hour: '2-digit',
-         minute: '2-digit',
+      const start = new Intl.DateTimeFormat("en-US", {
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(startDate);
 
-      const end = new Intl.DateTimeFormat('en-US', {
-         hour: '2-digit',
-         minute: '2-digit',
+      const end = new Intl.DateTimeFormat("en-US", {
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(endDate);
 
       return `${start} - ${end}`;

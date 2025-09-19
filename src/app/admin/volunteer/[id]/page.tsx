@@ -1,8 +1,8 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
-import { Button } from '@/components/ui/button';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import { Button } from "@/components/ui/button";
 import {
    ArrowLeft,
    Mail,
@@ -14,12 +14,12 @@ import {
    Trash2,
    ExternalLink,
    Tag,
-} from 'lucide-react';
-import Link from 'next/link';
-import { Image } from '@imagekit/next';
-import config from '@/lib/config';
-import { Badge } from '@/components/ui/badge';
-import { StatusBadge } from '@/components/ui/StatusBadge';
+} from "lucide-react";
+import Link from "next/link";
+import { Image } from "@imagekit/next";
+import config from "@/lib/config";
+import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import {
    Table,
    TableBody,
@@ -27,7 +27,7 @@ import {
    TableHead,
    TableHeader,
    TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 
 export default async function VolunteerDetailsPage({
    params,
@@ -37,7 +37,7 @@ export default async function VolunteerDetailsPage({
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    // Check if user has admin role
@@ -46,8 +46,8 @@ export default async function VolunteerDetailsPage({
       select: { role: true },
    });
 
-   if (!user || (user.role !== 'ADMIN' && user.role !== 'ORGANIZER')) {
-      redirect('/');
+   if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
+      redirect("/");
    }
 
    // Fetch volunteer with all enrollments and event details
@@ -68,41 +68,41 @@ export default async function VolunteerDetailsPage({
                      coverUrl: true,
                      maxVolunteers: true,
                      enrollments: {
-                        where: { status: 'APPROVED' },
+                        where: { status: "APPROVED" },
                         select: { id: true },
                      },
                   },
                },
             },
-            orderBy: { enrolledAt: 'desc' },
+            orderBy: { enrolledAt: "desc" },
          },
       },
    });
 
    if (!volunteer) {
-      redirect('/admin/volunteer');
+      redirect("/admin/volunteer");
    }
 
    const formatDate = (date: Date) => {
-      return new Intl.DateTimeFormat('en-US', {
-         weekday: 'long',
-         year: 'numeric',
-         month: 'long',
-         day: 'numeric',
-         hour: '2-digit',
-         minute: '2-digit',
+      return new Intl.DateTimeFormat("en-US", {
+         weekday: "long",
+         year: "numeric",
+         month: "long",
+         day: "numeric",
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(date);
    };
 
    const getTimeRange = (startDate: Date, endDate: Date) => {
-      const start = new Intl.DateTimeFormat('en-US', {
-         hour: '2-digit',
-         minute: '2-digit',
+      const start = new Intl.DateTimeFormat("en-US", {
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(startDate);
 
-      const end = new Intl.DateTimeFormat('en-US', {
-         hour: '2-digit',
-         minute: '2-digit',
+      const end = new Intl.DateTimeFormat("en-US", {
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(endDate);
 
       return `${start} - ${end}`;
@@ -110,11 +110,11 @@ export default async function VolunteerDetailsPage({
 
    const getEnrollmentStats = (enrollments: any[]) => {
       const approved = enrollments.filter(
-         (e) => e.status === 'APPROVED'
+         (e) => e.status === "APPROVED"
       ).length;
-      const pending = enrollments.filter((e) => e.status === 'PENDING').length;
+      const pending = enrollments.filter((e) => e.status === "PENDING").length;
       const rejected = enrollments.filter(
-         (e) => e.status === 'REJECTED'
+         (e) => e.status === "REJECTED"
       ).length;
       return { approved, pending, rejected, total: enrollments.length };
    };
@@ -294,7 +294,7 @@ export default async function VolunteerDetailsPage({
                                                 status={enrollment.status}
                                              />
                                              <span className="text-xs text-gray-500">
-                                                Enrolled:{' '}
+                                                Enrolled:{" "}
                                                 {formatDate(
                                                    enrollment.enrolledAt
                                                 )}

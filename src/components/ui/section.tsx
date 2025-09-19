@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 export default function Section({
    children,
@@ -10,7 +10,7 @@ export default function Section({
    return (
       <div
          className={cn(
-            'mx-auto w-full px-3 md:max-w-7xl md:px-5 lg:px-0',
+            "mx-auto w-full px-3 md:max-w-7xl md:px-5 lg:px-0",
             className
          )}
       >

@@ -1,15 +1,15 @@
-import Link from 'next/link';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
-import EventsList from '@/components/admin/EventsList';
+import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import EventsList from "@/components/admin/EventsList";
 
 export default async function EventsPage() {
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    // Check if user has admin or organizer role
@@ -18,8 +18,8 @@ export default async function EventsPage() {
       select: { role: true },
    });
 
-   if (!user || (user.role !== 'ADMIN' && user.role !== 'ORGANIZER')) {
-      redirect('/');
+   if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
+      redirect("/");
    }
 
    const events = await prisma.event.findMany({

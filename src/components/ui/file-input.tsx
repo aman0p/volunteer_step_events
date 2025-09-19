@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { cn } from '@/lib/utils';
-import { Upload } from 'lucide-react';
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { Upload } from "lucide-react";
 
 export interface FileInputProps
-   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
    label?: string;
    accept?: string;
    onFileChange?: (file: File | null) => void;
 }
 
 const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
-   ({ className, label, accept = 'image/*', onFileChange, ...props }, ref) => {
+   ({ className, label, accept = "image/*", onFileChange, ...props }, ref) => {
       const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
          const file = e.target.files?.[0] || null;
          onFileChange?.(file);
@@ -23,7 +23,7 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
                <input
                   type="file"
                   className={cn(
-                     'absolute inset-0 h-full w-full cursor-pointer opacity-0',
+                     "absolute inset-0 h-full w-full cursor-pointer opacity-0",
                      className
                   )}
                   accept={accept}
@@ -40,6 +40,6 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       );
    }
 );
-FileInput.displayName = 'FileInput';
+FileInput.displayName = "FileInput";
 
 export { FileInput };

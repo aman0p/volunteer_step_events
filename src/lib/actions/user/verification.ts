@@ -1,24 +1,24 @@
-'use server';
+"use server";
 
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { prisma } from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 const createVerificationRequestNotification = async (userId: string) => {
    try {
       await prisma.notification.create({
          data: {
             userId,
-            type: 'VERIFICATION_REQUEST',
-            title: 'Verification Request Submitted',
+            type: "VERIFICATION_REQUEST",
+            title: "Verification Request Submitted",
             message:
-               'Your verification request has been submitted and is under review. You will be notified once an admin reviews your request.',
+               "Your verification request has been submitted and is under review. You will be notified once an admin reviews your request.",
          },
       });
    } catch (error) {
       console.error(
-         'Failed to create verification request notification:',
+         "Failed to create verification request notification:",
          error
       );
    }
@@ -28,7 +28,7 @@ export const submitVerificationRequest = async () => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' };
+      return { success: false, message: "Authentication required" };
    }
 
    try {
@@ -36,14 +36,14 @@ export const submitVerificationRequest = async () => {
       const existingRequest = await prisma.verificationRequest.findFirst({
          where: {
             userId: session.user.id,
-            status: 'PENDING',
+            status: "PENDING",
          },
       });
 
       if (existingRequest) {
          return {
             success: false,
-            message: 'You already have a pending verification request',
+            message: "You already have a pending verification request",
          };
       }
 
@@ -54,29 +54,29 @@ export const submitVerificationRequest = async () => {
       });
 
       if (user?.isVerified) {
-         return { success: false, message: 'Your account is already verified' };
+         return { success: false, message: "Your account is already verified" };
       }
 
       // Create verification request
       await prisma.verificationRequest.create({
          data: {
             userId: session.user.id,
-            status: 'PENDING',
+            status: "PENDING",
          },
       });
 
       await createVerificationRequestNotification(session.user.id);
 
-      revalidatePath('/profile');
+      revalidatePath("/profile");
       return {
          success: true,
-         message: 'Verification request submitted successfully',
+         message: "Verification request submitted successfully",
       };
    } catch (error) {
-      console.error('Verification request error:', error);
+      console.error("Verification request error:", error);
       return {
          success: false,
-         message: 'Failed to submit verification request',
+         message: "Failed to submit verification request",
       };
    }
 };
@@ -85,7 +85,7 @@ export const getVerificationStatus = async () => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
-      return { success: false, message: 'Authentication required' };
+      return { success: false, message: "Authentication required" };
    }
 
    try {
@@ -94,14 +94,14 @@ export const getVerificationStatus = async () => {
          select: {
             isVerified: true,
             verificationRequests: {
-               orderBy: { submittedAt: 'desc' },
+               orderBy: { submittedAt: "desc" },
                take: 1,
             },
          },
       });
 
       if (!user) {
-         return { success: false, message: 'User not found' };
+         return { success: false, message: "User not found" };
       }
 
       return {
@@ -110,7 +110,7 @@ export const getVerificationStatus = async () => {
          latestRequest: user.verificationRequests[0] || null,
       };
    } catch (error) {
-      console.error('Get verification status error:', error);
-      return { success: false, message: 'Failed to get verification status' };
+      console.error("Get verification status error:", error);
+      return { success: false, message: "Failed to get verification status" };
    }
 };

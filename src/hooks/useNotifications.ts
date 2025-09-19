@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useState, useTransition } from 'react';
+import { useCallback, useEffect, useState, useTransition } from "react";
 import {
    getMyNotifications,
    markAllMyNotificationsRead,
    markMyNotificationRead,
-} from '@/lib/actions/user/notifications';
-import { deleteMyNotification } from '@/lib/actions/user/notifications';
-import { NotificationType } from '@/types';
+} from "@/lib/actions/user/notifications";
+import { deleteMyNotification } from "@/lib/actions/user/notifications";
+import { NotificationType } from "@/types";
 
 export type NotificationItem = {
    id: string;

@@ -1,14 +1,14 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
-import { Image } from '@imagekit/next';
-import { Badge } from '@/components/ui/badge';
-import VerificationDetailActions from '@/components/admin/VerificationDetailActions';
-import config from '@/lib/config';
-import RejectionReasonInput from '@/components/admin/RejectionReasonInput';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { Image } from "@imagekit/next";
+import { Badge } from "@/components/ui/badge";
+import VerificationDetailActions from "@/components/admin/VerificationDetailActions";
+import config from "@/lib/config";
+import RejectionReasonInput from "@/components/admin/RejectionReasonInput";
 
 export default async function AccountVerificationDetail({
    params,
@@ -18,7 +18,7 @@ export default async function AccountVerificationDetail({
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    // Check if user has admin role
@@ -27,8 +27,8 @@ export default async function AccountVerificationDetail({
       select: { role: true },
    });
 
-   if (!user || user.role !== 'ADMIN') {
-      redirect('/');
+   if (!user || user.role !== "ADMIN") {
+      redirect("/");
    }
 
    // Fetch verification request with user details
@@ -60,17 +60,17 @@ export default async function AccountVerificationDetail({
    });
 
    if (!request) {
-      redirect('/admin/account-verification');
+      redirect("/admin/account-verification");
    }
 
    // Fetch the most recent rejected verification request to get the previous rejection reason
    const previousRejectedRequest = await prisma.verificationRequest.findFirst({
       where: {
          userId: request.user.id,
-         status: 'REJECTED',
+         status: "REJECTED",
          id: { not: (await params).id }, // Exclude current request
       },
-      orderBy: { submittedAt: 'desc' },
+      orderBy: { submittedAt: "desc" },
       include: {
          reviewedBy: {
             select: {
@@ -81,12 +81,12 @@ export default async function AccountVerificationDetail({
    });
 
    const formatDate = (date: Date) => {
-      return new Intl.DateTimeFormat('en-US', {
-         year: 'numeric',
-         month: 'long',
-         day: 'numeric',
-         hour: '2-digit',
-         minute: '2-digit',
+      return new Intl.DateTimeFormat("en-US", {
+         year: "numeric",
+         month: "long",
+         day: "numeric",
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(date);
    };
 
@@ -169,7 +169,7 @@ export default async function AccountVerificationDetail({
                            Government ID Type
                         </label>
                         <p className="text-sm">
-                           {request.user.govIdType.replace('_', ' ')}
+                           {request.user.govIdType.replace("_", " ")}
                         </p>
                      </div>
 
@@ -217,15 +217,15 @@ export default async function AccountVerificationDetail({
                </div>
 
                {/* Rejection Reason Input - Show for both pending and rejected requests */}
-               {(request.status === 'PENDING' ||
-                  request.status === 'REJECTED') && (
+               {(request.status === "PENDING" ||
+                  request.status === "REJECTED") && (
                   <RejectionReasonInput
                      requestId={request.id}
                      currentStatus={request.status}
                      existingReason={
                         request.rejectionReason ||
                         previousRejectedRequest?.rejectionReason ||
-                        ''
+                        ""
                      }
                      reviewedAt={request.reviewedAt}
                      reviewedBy={request.reviewedBy}

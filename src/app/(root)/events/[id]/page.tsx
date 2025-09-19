@@ -1,18 +1,18 @@
-import { authOptions } from '@/auth';
-import { prisma } from '@/lib/prisma';
-import config from '@/lib/config';
-import { Image, Video } from '@imagekit/next';
-import ExpandableText from '@/components/ExpandableText';
-import { getServerSession } from 'next-auth';
-import { redirect, notFound } from 'next/navigation';
-import Section from '@/components/ui/section';
-import { Badge } from '@/components/ui';
-import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, Clock, MapPin, Tag } from 'lucide-react';
-import EventRolesTable from '@/components/admin/tables/EventRolesTable';
-import { Separator } from '@/components/ui/separator';
-import QuickLinks from '@/components/QuickLinks';
-import EnrollButton from '@/components/EnrollButton';
+import { authOptions } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import config from "@/lib/config";
+import { Image, Video } from "@imagekit/next";
+import ExpandableText from "@/components/ExpandableText";
+import { getServerSession } from "next-auth";
+import { redirect, notFound } from "next/navigation";
+import Section from "@/components/ui/section";
+import { Badge } from "@/components/ui";
+import { Card, CardContent } from "@/components/ui/card";
+import { Calendar, Clock, MapPin, Tag } from "lucide-react";
+import EventRolesTable from "@/components/admin/tables/EventRolesTable";
+import { Separator } from "@/components/ui/separator";
+import QuickLinks from "@/components/QuickLinks";
+import EnrollButton from "@/components/EnrollButton";
 
 export default async function EventDetailsPage({
    params,
@@ -23,7 +23,7 @@ export default async function EventDetailsPage({
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    const event = await prisma.event.findUnique({
@@ -50,23 +50,23 @@ export default async function EventDetailsPage({
    }
 
    const approvedCount = await prisma.enrollment.count({
-      where: { eventId: id, status: 'APPROVED' },
+      where: { eventId: id, status: "APPROVED" },
    });
 
    const formatDate = (date: Date) => {
-      return new Intl.DateTimeFormat('en-US', {
-         weekday: 'long',
-         year: 'numeric',
-         month: 'long',
-         day: 'numeric',
-         hour: '2-digit',
-         minute: '2-digit',
+      return new Intl.DateTimeFormat("en-US", {
+         weekday: "long",
+         year: "numeric",
+         month: "long",
+         day: "numeric",
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(date);
    };
 
    const isFull = !!event.maxVolunteers && approvedCount >= event.maxVolunteers;
    const enrollmentStatus = event.enrollments[0]?.status ?? null;
-   const isEnrolled = enrollmentStatus === 'APPROVED';
+   const isEnrolled = enrollmentStatus === "APPROVED";
    const isEventCreator = event.createdById === session.user.id;
 
    return (
@@ -76,7 +76,7 @@ export default async function EventDetailsPage({
             <div className="relative z-10 w-full overflow-hidden rounded-t-xl md:rounded-2xl lg:rounded-3xl">
                <Image
                   urlEndpoint={config.env.imagekit.urlEndpoint}
-                  src={event.coverUrl || '/events.jpg'}
+                  src={event.coverUrl || "/events.jpg"}
                   alt={event.title}
                   width={1500}
                   height={1500}
@@ -104,7 +104,7 @@ export default async function EventDetailsPage({
                         {event.title}
                      </h1>
                      <ExpandableText
-                        text={event.description ?? ''}
+                        text={event.description ?? ""}
                         clampLines={3}
                         className="mt-5"
                      />

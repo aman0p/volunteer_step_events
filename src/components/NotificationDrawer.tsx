@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { NotificationBell } from '@/components/ui/notification';
-import { cn } from '@/lib/utils';
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { NotificationBell } from "@/components/ui/notification";
+import { cn } from "@/lib/utils";
 import {
    EventNotificationCard,
    ProfileVerificationCard,
-} from '@/components/ui/notification-card';
-import { useNotifications } from '@/hooks/useNotifications';
+} from "@/components/ui/notification-card";
+import { useNotifications } from "@/hooks/useNotifications";
 
 export function NotificationDrawer({ className }: { className?: string }) {
    const [open, setOpen] = useState(false);
@@ -40,7 +40,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
    const hasItems = notifications.length > 0;
 
    return (
-      <div className={cn('relative z-50', className)}>
+      <div className={cn("relative z-50", className)}>
          <button onClick={() => setOpen(true)} aria-label="Open notifications">
             <NotificationBell count={unreadCount} />
          </button>
@@ -65,10 +65,10 @@ export function NotificationDrawer({ className }: { className?: string }) {
                <motion.aside
                   key="drawer"
                   className="fixed top-0 right-0 z-50 h-full w-[92%] rounded-l-3xl border-l border-white/15 bg-white/50 shadow-xl backdrop-blur-md sm:w-[460px] dark:bg-neutral-950"
-                  initial={{ x: '100%' }}
+                  initial={{ x: "100%" }}
                   animate={{ x: 0 }}
-                  exit={{ x: '100%' }}
-                  transition={{ type: 'spring', stiffness: 380, damping: 38 }}
+                  exit={{ x: "100%" }}
+                  transition={{ type: "spring", stiffness: 380, damping: 38 }}
                   role="dialog"
                   aria-modal="true"
                >
@@ -81,7 +81,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
                                  onClick={toggleSelectAll}
                                  className="rounded-md bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200"
                               >
-                                 {isAllSelected ? 'Deselect all' : 'Select all'}
+                                 {isAllSelected ? "Deselect all" : "Select all"}
                               </button>
                               {selectedIds.size > 0 && (
                                  <>
@@ -126,10 +126,10 @@ export function NotificationDrawer({ className }: { className?: string }) {
                               <motion.li
                                  key={n.id}
                                  className={cn(
-                                    'relative rounded-md border border-white/15 p-3',
+                                    "relative rounded-md border border-white/15 p-3",
                                     !n.isRead
-                                       ? 'bg-white/50 dark:bg-neutral-900'
-                                       : 'bg-white/15'
+                                       ? "bg-white/50 dark:bg-neutral-900"
+                                       : "bg-white/15"
                                  )}
                                  initial={{
                                     opacity: 0,
@@ -141,7 +141,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
                                  animate={{
                                     opacity: 1,
                                     x: 0,
-                                    height: 'auto',
+                                    height: "auto",
                                     marginTop: 8,
                                     marginBottom: 8,
                                  }}
@@ -153,13 +153,13 @@ export function NotificationDrawer({ className }: { className?: string }) {
                                     marginBottom: 0,
                                  }}
                                  transition={{
-                                    type: 'spring',
+                                    type: "spring",
                                     stiffness: 380,
                                     damping: 36,
                                     opacity: { duration: 0.15 },
                                  }}
                               >
-                                 {n.type.startsWith('VERIFICATION_') ? (
+                                 {n.type.startsWith("VERIFICATION_") ? (
                                     <ProfileVerificationCard
                                        notification={n}
                                        selected={selectedIds.has(n.id)}

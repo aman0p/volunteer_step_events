@@ -1,26 +1,26 @@
-'use server';
+"use server";
 
-import { hash } from 'bcryptjs';
-import { prisma } from '../prisma';
-import { AuthCredentials } from '@/types';
-import { Gender, GovId, Role } from '@/generated/prisma';
-import { compare } from 'bcryptjs';
-import { headers } from 'next/headers';
-import { ratelimit } from '../ratelimit';
-import { redirect } from 'next/navigation';
-import { workflowClient } from '@/lib/workflow';
-import config from '@/lib/config';
+import { hash } from "bcryptjs";
+import { prisma } from "../prisma";
+import { AuthCredentials } from "@/types";
+import { Gender, GovId, Role } from "@/generated/prisma";
+import { compare } from "bcryptjs";
+import { headers } from "next/headers";
+import { ratelimit } from "../ratelimit";
+import { redirect } from "next/navigation";
+import { workflowClient } from "@/lib/workflow";
+import config from "@/lib/config";
 
 export const signInWithCredentials = async (
-   params: Pick<AuthCredentials, 'email' | 'password'>
+   params: Pick<AuthCredentials, "email" | "password">
 ) => {
    try {
       const { email, password } = params;
 
       // ********* Upstash Redis - Rate Limit *********
-      const ip = (await headers()).get('x-forwarded-for') || '127.0.0.1';
+      const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
       const { success } = await ratelimit.limit(ip);
-      if (!success) return redirect('/too-fast');
+      if (!success) return redirect("/too-fast");
 
       // Find user in database
       const user = await prisma.user.findUnique({
@@ -30,7 +30,7 @@ export const signInWithCredentials = async (
       if (!user) {
          return {
             success: false,
-            message: 'User not found',
+            message: "User not found",
          };
       }
 
@@ -40,7 +40,7 @@ export const signInWithCredentials = async (
       if (!isPasswordValid) {
          return {
             success: false,
-            message: 'Invalid password',
+            message: "Invalid password",
          };
       }
 
@@ -48,13 +48,13 @@ export const signInWithCredentials = async (
       // The actual session creation will be handled by NextAuth when the form redirects
       return {
          success: true,
-         message: 'Signin successful',
+         message: "Signin successful",
       };
    } catch (error) {
-      console.log(error, 'Signin error');
+      console.log(error, "Signin error");
       return {
          success: false,
-         message: 'Signin failed',
+         message: "Signin failed",
       };
    }
 };
@@ -63,9 +63,9 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
    const { fullName, email, password, phoneNumber, gender } = params;
 
    // ********* Upstash Redis - Rate Limit *********
-   const ip = (await headers()).get('x-forwarded-for') || '127.0.0.1';
+   const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
    const { success } = await ratelimit.limit(ip);
-   if (!success) return redirect('/too-fast');
+   if (!success) return redirect("/too-fast");
 
    // 1. Check if user already exists
    const existingUser = await prisma.user.findFirst({
@@ -77,7 +77,7 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
    if (existingUser) {
       return {
          success: false,
-         message: 'User already exists',
+         message: "User already exists",
       };
    }
 
@@ -92,11 +92,11 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
             password: hashedPassword,
             phoneNumber: phoneNumber,
             // Defaults for fields to be filled later in profile page
-            profileImage: '',
-            address: '',
+            profileImage: "",
+            address: "",
             gender: (gender as Gender) ?? Gender.MALE,
             govIdType: GovId.AADHAR_CARD,
-            govIdImage: '',
+            govIdImage: "",
             role: Role.USER,
          },
       });
@@ -113,13 +113,13 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
 
       return {
          success: true,
-         message: 'User created successfully',
+         message: "User created successfully",
       };
    } catch (error) {
-      console.log(error, 'Signup error');
+      console.log(error, "Signup error");
       return {
          success: false,
-         message: 'Signup failed',
+         message: "Signup failed",
       };
    }
 };

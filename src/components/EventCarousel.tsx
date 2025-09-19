@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Image } from '@imagekit/next';
-import config from '@/lib/config';
-import { getBackgroundImageUrl } from '@/lib/utils';
-import Link from 'next/link';
+import { useState, useEffect } from "react";
+import { Image } from "@imagekit/next";
+import config from "@/lib/config";
+import { getBackgroundImageUrl } from "@/lib/utils";
+import Link from "next/link";
 import {
    Carousel,
    CarouselContent,
    CarouselItem,
    CarouselNext,
    CarouselPrevious,
-} from './ui/carousel';
-import { ActionButton2 } from './ui/action-button';
-import { Badge } from './ui/badge';
+} from "./ui/carousel";
+import { ActionButton2 } from "./ui/action-button";
+import { Badge } from "./ui/badge";
 
 interface Event {
    id: string;
@@ -49,11 +49,11 @@ export default function EventCarousel({ events }: EventCarouselProps) {
          setCurrentIndex(api.selectedScrollSnap());
       };
 
-      api.on('select', onSelect);
+      api.on("select", onSelect);
       onSelect(); // Set initial state
 
       return () => {
-         api.off('select', onSelect);
+         api.off("select", onSelect);
       };
    }, [api]);
 
@@ -74,7 +74,7 @@ export default function EventCarousel({ events }: EventCarouselProps) {
             <div
                className="absolute inset-0 bg-gradient-to-b bg-cover bg-center opacity-20"
                style={{
-                  backgroundImage: `url('${getBackgroundImageUrl(topEvents[currentIndex]?.coverUrl || '/events.jpg')}')`,
+                  backgroundImage: `url('${getBackgroundImageUrl(topEvents[currentIndex]?.coverUrl || "/events.jpg")}')`,
                }}
             />
             {/* Optional subtle vignette for readability */}
@@ -101,19 +101,19 @@ export default function EventCarousel({ events }: EventCarouselProps) {
                               {/* Date and Time */}
                               <div className="text-foreground mb-2 text-lg font-medium">
                                  {new Date(event.startDate).toLocaleDateString(
-                                    'en-US',
+                                    "en-US",
                                     {
-                                       day: 'numeric',
-                                       month: 'short',
+                                       day: "numeric",
+                                       month: "short",
                                     }
                                  )}
-                                 ,{' '}
+                                 ,{" "}
                                  {new Date(event.startDate)
-                                    .toLocaleTimeString('en-US', {
-                                       hour: 'numeric',
+                                    .toLocaleTimeString("en-US", {
+                                       hour: "numeric",
                                        hour12: true,
                                     })
-                                    .replace(/\s/g, '')
+                                    .replace(/\s/g, "")
                                     .toUpperCase()}
                               </div>
 
@@ -140,13 +140,13 @@ export default function EventCarousel({ events }: EventCarouselProps) {
 
                               {/* Location */}
                               <div className="text-muted-foreground mb-6 text-lg">
-                                 {event.location.split(',')[0]}
+                                 {event.location.split(",")[0]}
                               </div>
 
                               {/* Volunteer Info */}
                               <div className="text-muted-foreground mb-8 text-lg">
-                                 {event.enrollments?.length ?? 0} /{' '}
-                                 {event.maxVolunteers ?? '-'} volunteers
+                                 {event.enrollments?.length ?? 0} /{" "}
+                                 {event.maxVolunteers ?? "-"} volunteers
                               </div>
 
                               {/* Enroll Button */}
@@ -161,7 +161,7 @@ export default function EventCarousel({ events }: EventCarouselProps) {
                            <div className="flex w-fit items-center">
                               <Image
                                  urlEndpoint={config.env.imagekit.urlEndpoint}
-                                 src={event.coverUrl || '/events.jpg'}
+                                 src={event.coverUrl || "/events.jpg"}
                                  alt={event.title}
                                  height={1000}
                                  width={1000}
@@ -194,8 +194,8 @@ export default function EventCarousel({ events }: EventCarouselProps) {
                      key={index}
                      className={`h-2 w-2 rounded-full transition-all duration-300 ${
                         index === currentIndex
-                           ? 'bg-foreground scale-125'
-                           : 'bg-muted-foreground hover:bg-foreground'
+                           ? "bg-foreground scale-125"
+                           : "bg-muted-foreground hover:bg-foreground"
                      }`}
                      onClick={() => {
                         if (api) {

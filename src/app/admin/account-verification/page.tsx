@@ -1,15 +1,15 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
-import { UserCheck } from 'lucide-react';
-import VerificationTable from '@/components/admin/tables/VerificationTable';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import { UserCheck } from "lucide-react";
+import VerificationTable from "@/components/admin/tables/VerificationTable";
 
 export default async function AccountVerification() {
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    // Check if user has admin role
@@ -18,8 +18,8 @@ export default async function AccountVerification() {
       select: { role: true },
    });
 
-   if (!user || user.role !== 'ADMIN') {
-      redirect('/admin');
+   if (!user || user.role !== "ADMIN") {
+      redirect("/admin");
    }
 
    // Fetch all verification requests with proper separation
@@ -36,7 +36,7 @@ export default async function AccountVerification() {
             },
          },
       },
-      orderBy: { submittedAt: 'asc' },
+      orderBy: { submittedAt: "asc" },
    });
 
    // Separate requests: only show the latest request per user

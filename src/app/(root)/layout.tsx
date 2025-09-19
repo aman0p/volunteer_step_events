@@ -1,24 +1,24 @@
-import { authOptions } from '@/auth';
-import { Navbar } from '@/components/Navbar';
-import { getServerSession } from 'next-auth';
-import { Providers } from '@/components/Providers';
-import { prisma } from '@/lib/prisma';
-import ProfileCompletionBanner from '@/components/ProfileCompletionBanner';
-import { Plasma } from '@/components/plasma';
-import { Noto_Sans } from 'next/font/google';
-import { Metadata } from 'next';
-import { ThemeProvider } from 'next-themes';
+import { authOptions } from "@/auth";
+import { Navbar } from "@/components/Navbar";
+import { getServerSession } from "next-auth";
+import { Providers } from "@/components/Providers";
+import { prisma } from "@/lib/prisma";
+import ProfileCompletionBanner from "@/components/ProfileCompletionBanner";
+import { Plasma } from "@/components/plasma";
+import { Noto_Sans } from "next/font/google";
+import { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 
 const notoSans = Noto_Sans({
-   subsets: ['latin'],
-   variable: '--font-noto-sans',
+   subsets: ["latin"],
+   variable: "--font-noto-sans",
 });
 
 export const metadata: Metadata = {
-   title: 'Volunteer Step Events',
-   description: 'Manage your events and volunteers',
+   title: "Volunteer Step Events",
+   description: "Manage your events and volunteers",
    icons: {
-      icon: '/default/logo.svg',
+      icon: "/default/logo.svg",
    },
 };
 
@@ -49,7 +49,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
          }
       } catch (error) {
          // Log error but don't crash the layout
-         console.error('Error updating user lastActiveAt:', error);
+         console.error("Error updating user lastActiveAt:", error);
       }
    }
 

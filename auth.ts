@@ -1,26 +1,26 @@
-import NextAuth from 'next-auth';
-import { compare } from 'bcryptjs';
-import { prisma } from '@/lib/prisma';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import NextAuth from "next-auth";
+import { compare } from "bcryptjs";
+import { prisma } from "@/lib/prisma";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
    session: {
-      strategy: 'jwt' as const,
+      strategy: "jwt" as const,
       maxAge: 60 * 15,
       updateAge: 60 * 5,
    },
    providers: [
       CredentialsProvider({
-         name: 'credentials',
+         name: "credentials",
          credentials: {
-            email: { label: 'Email', type: 'email' },
-            password: { label: 'Password', type: 'password' },
+            email: { label: "Email", type: "email" },
+            password: { label: "Password", type: "password" },
          },
          async authorize(
-            credentials: Record<'email' | 'password', string> | undefined
+            credentials: Record<"email" | "password", string> | undefined
          ) {
             if (!credentials?.email || !credentials?.password) {
-               throw new Error('Missing email or password');
+               throw new Error("Missing email or password");
             }
 
             const user = await prisma.user.findUnique({
@@ -30,7 +30,7 @@ export const authOptions = {
             });
 
             if (!user) {
-               throw new Error('User not found');
+               throw new Error("User not found");
             }
 
             const isPasswordValid = await compare(
@@ -39,7 +39,7 @@ export const authOptions = {
             );
 
             if (!isPasswordValid) {
-               throw new Error('Invalid password');
+               throw new Error("Invalid password");
             }
 
             return {
@@ -52,7 +52,7 @@ export const authOptions = {
       }),
    ],
    pages: {
-      signIn: '/sign-in',
+      signIn: "/sign-in",
    },
    callbacks: {
       async jwt({ token, user }: any) {
@@ -75,7 +75,7 @@ export const authOptions = {
                   }
                } catch (error) {
                   console.error(
-                     'Error fetching user data in JWT callback:',
+                     "Error fetching user data in JWT callback:",
                      error
                   );
                }

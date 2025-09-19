@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
    DefaultValues,
    FieldValues,
@@ -8,9 +8,9 @@ import {
    SubmitHandler,
    useForm,
    UseFormReturn,
-} from 'react-hook-form';
-import { ZodType } from 'zod';
-import { Button } from '@/components/ui/button';
+} from "react-hook-form";
+import { ZodType } from "zod";
+import { Button } from "@/components/ui/button";
 import {
    Form,
    FormControl,
@@ -18,36 +18,36 @@ import {
    FormItem,
    FormLabel,
    FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
    FIELD_NAMES,
    FIELD_TYPES,
    GENDER_OPTIONS,
    GOV_ID_OPTIONS,
-} from '@/constants';
-import FileUpload from '@/components/FileUpload';
-import { toast } from 'sonner';
-import Image from 'next/image';
-import { signIn } from 'next-auth/react';
-import { IoEye, IoEyeOff } from 'react-icons/io5';
+} from "@/constants";
+import FileUpload from "@/components/FileUpload";
+import { toast } from "sonner";
+import Image from "next/image";
+import { signIn } from "next-auth/react";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 
 interface Props<T extends FieldValues> {
    schema: ZodType<T>;
    defaultValues: T;
    onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
-   type: 'SIGN_IN' | 'SIGN_UP';
+   type: "SIGN_IN" | "SIGN_UP";
 }
 
 export function AuthForm<T extends FieldValues>({
@@ -57,7 +57,7 @@ export function AuthForm<T extends FieldValues>({
    onSubmit,
 }: Props<T>) {
    const router = useRouter();
-   const isSignIn = type === 'SIGN_IN';
+   const isSignIn = type === "SIGN_IN";
    const [showPassword, setShowPassword] = useState(false);
 
    const form: UseFormReturn<T> = useForm<T>({
@@ -69,30 +69,30 @@ export function AuthForm<T extends FieldValues>({
       if (isSignIn) {
          // Handle sign-in with NextAuth
          try {
-            const result = await signIn('credentials', {
+            const result = await signIn("credentials", {
                email: data.email,
                password: data.password,
                redirect: false,
             });
 
             if (result?.error) {
-               toast.error('Sign in failed', {
+               toast.error("Sign in failed", {
                   description:
-                     result.error === 'CredentialsSignin'
-                        ? 'Invalid email or password'
+                     result.error === "CredentialsSignin"
+                        ? "Invalid email or password"
                         : result.error,
                });
             } else if (result?.ok) {
-               toast.success('Success', {
-                  description: 'You have successfully signed in.',
+               toast.success("Success", {
+                  description: "You have successfully signed in.",
                });
                // Force a page refresh to ensure the session is properly set
-               window.location.href = '/';
+               window.location.href = "/";
             }
          } catch (error) {
-            console.error('Sign in error:', error);
-            toast.error('Sign in failed', {
-               description: 'An error occurred during sign in.',
+            console.error("Sign in error:", error);
+            toast.error("Sign in failed", {
+               description: "An error occurred during sign in.",
             });
          }
       } else {
@@ -100,14 +100,14 @@ export function AuthForm<T extends FieldValues>({
          const result = await onSubmit(data);
 
          if (result.success) {
-            toast.success('Success', {
-               description: 'You have successfully signed up.',
+            toast.success("Success", {
+               description: "You have successfully signed up.",
             });
             // After successful signup, redirect to sign-in
-            router.push('/sign-in');
+            router.push("/sign-in");
          } else {
-            toast.error('Error signing up', {
-               description: result.error ?? 'An error occurred.',
+            toast.error("Error signing up", {
+               description: result.error ?? "An error occurred.",
             });
          }
       }
@@ -125,7 +125,7 @@ export function AuthForm<T extends FieldValues>({
                   {FIELD_NAMES[fieldName as keyof typeof FIELD_NAMES]}
                </FormLabel>
                <FormControl>
-                  {fieldName === 'govIdImage' ? (
+                  {fieldName === "govIdImage" ? (
                      <FileUpload
                         type="image"
                         accept="image/*"
@@ -135,7 +135,7 @@ export function AuthForm<T extends FieldValues>({
                         onFileChange={field.onChange}
                         value={field.value}
                      />
-                  ) : fieldName === 'profileImage' ? (
+                  ) : fieldName === "profileImage" ? (
                      <FileUpload
                         type="image"
                         accept="image/*"
@@ -145,7 +145,7 @@ export function AuthForm<T extends FieldValues>({
                         onFileChange={field.onChange}
                         value={field.value}
                      />
-                  ) : fieldName === 'gender' ? (
+                  ) : fieldName === "gender" ? (
                      <Select value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger>
                            <SelectValue placeholder="Select gender" />
@@ -161,7 +161,7 @@ export function AuthForm<T extends FieldValues>({
                            ))}
                         </SelectContent>
                      </Select>
-                  ) : fieldName === 'govIdType' ? (
+                  ) : fieldName === "govIdType" ? (
                      <Select value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger>
                            <SelectValue placeholder="Select ID type" />
@@ -177,7 +177,7 @@ export function AuthForm<T extends FieldValues>({
                            ))}
                         </SelectContent>
                      </Select>
-                  ) : fieldName === 'phoneNumber' ? (
+                  ) : fieldName === "phoneNumber" ? (
                      <div className="inline-flex w-full items-center">
                         <span className="bg-muted text-muted-foreground rounded-l-md border px-3 py-2 text-sm select-none">
                            +91
@@ -191,18 +191,18 @@ export function AuthForm<T extends FieldValues>({
                            className="-ml-px rounded-l-none"
                         />
                      </div>
-                  ) : fieldName === 'password' ? (
+                  ) : fieldName === "password" ? (
                      <div className="relative w-full">
                         <Input
                            required
-                           type={showPassword ? 'text' : 'password'}
+                           type={showPassword ? "text" : "password"}
                            {...field}
                            className="pr-10"
                         />
                         <button
                            type="button"
                            aria-label={
-                              showPassword ? 'Hide password' : 'Show password'
+                              showPassword ? "Hide password" : "Show password"
                            }
                            onClick={() => setShowPassword((v) => !v)}
                            className="text-muted-foreground absolute inset-y-0 right-0 flex items-center px-3"
@@ -214,7 +214,7 @@ export function AuthForm<T extends FieldValues>({
                            )}
                         </button>
                      </div>
-                  ) : fieldName === 'email' ? (
+                  ) : fieldName === "email" ? (
                      <Input
                         required
                         type="email"
@@ -240,7 +240,7 @@ export function AuthForm<T extends FieldValues>({
    return (
       <div className="bg-background flex h-full min-h-screen w-full flex-col items-center justify-center">
          <div
-            className={`bg-card mx-4 grid h-fit grid-cols-2 overflow-hidden rounded-3xl border max-md:grid-cols-1 md:w-full ${isSignIn ? 'max-w-4xl' : 'max-w-5xl'}`}
+            className={`bg-card mx-4 grid h-fit grid-cols-2 overflow-hidden rounded-3xl border max-md:grid-cols-1 md:w-full ${isSignIn ? "max-w-4xl" : "max-w-5xl"}`}
          >
             <div className="flex h-full flex-col justify-start gap-7 rounded-lg p-4 md:w-full md:p-8 md:pl-12">
                <div className="flex items-center gap-2">
@@ -256,13 +256,13 @@ export function AuthForm<T extends FieldValues>({
                <div className="">
                   <h1 className="text-2xl font-bold">
                      {isSignIn
-                        ? 'Sign in to your account'
-                        : 'Create your account'}
+                        ? "Sign in to your account"
+                        : "Create your account"}
                   </h1>
                   <p className="text-muted-foreground mt-1 text-sm">
                      {isSignIn
-                        ? 'Please enter your email and password to sign in'
-                        : 'Please complete all fields and upload required documents'}
+                        ? "Please enter your email and password to sign in"
+                        : "Please complete all fields and upload required documents"}
                   </p>
                </div>
 
@@ -283,21 +283,21 @@ export function AuthForm<T extends FieldValues>({
                         <>
                            {Object.keys(defaultValues)
                               .filter(
-                                 (f) => f !== 'phoneNumber' && f !== 'gender'
+                                 (f) => f !== "phoneNumber" && f !== "gender"
                               )
                               .map((fieldName) => renderFormField(fieldName))}
 
                            <div className="grid grid-cols-[1.6fr_1fr] gap-4">
-                              {'phoneNumber' in (defaultValues as any) &&
-                                 renderFormField('phoneNumber')}
-                              {'gender' in (defaultValues as any) &&
-                                 renderFormField('gender')}
+                              {"phoneNumber" in (defaultValues as any) &&
+                                 renderFormField("phoneNumber")}
+                              {"gender" in (defaultValues as any) &&
+                                 renderFormField("gender")}
                            </div>
                         </>
                      )}
 
                      <Button type="submit" className="mt-4 w-full">
-                        {isSignIn ? 'Sign In' : 'Sign Up'}
+                        {isSignIn ? "Sign In" : "Sign Up"}
                      </Button>
                   </form>
                </Form>
@@ -315,14 +315,14 @@ export function AuthForm<T extends FieldValues>({
          </div>
          <p className="text-muted-foreground relative top-7 text-center text-sm">
             {isSignIn
-               ? 'New to Volunteer Step Events? '
-               : 'Already have an account? '}
+               ? "New to Volunteer Step Events? "
+               : "Already have an account? "}
 
             <Link
-               href={isSignIn ? '/sign-up' : '/sign-in'}
+               href={isSignIn ? "/sign-up" : "/sign-in"}
                className="text-blue-600 hover:underline"
             >
-               {isSignIn ? 'Create an account' : 'Sign in'}
+               {isSignIn ? "Create an account" : "Sign in"}
             </Link>
          </p>
       </div>

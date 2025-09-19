@@ -1,15 +1,15 @@
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export type StatusType =
-   | 'PENDING'
-   | 'APPROVED'
-   | 'REJECTED'
-   | 'WAITLISTED'
-   | 'ACTIVE'
-   | 'INACTIVE'
-   | 'COMPLETED'
-   | 'CANCELLED';
+   | "PENDING"
+   | "APPROVED"
+   | "REJECTED"
+   | "WAITLISTED"
+   | "ACTIVE"
+   | "INACTIVE"
+   | "COMPLETED"
+   | "CANCELLED";
 
 interface StatusBadgeProps {
    status: StatusType;
@@ -19,44 +19,44 @@ interface StatusBadgeProps {
 
 const statusConfig = {
    PENDING: {
-      variant: 'secondary' as const,
-      className: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-      icon: '⏳',
+      variant: "secondary" as const,
+      className: "bg-yellow-100 text-yellow-800 border-yellow-200",
+      icon: "⏳",
    },
    APPROVED: {
-      variant: 'default' as const,
-      className: 'bg-green-600 text-white border-green-600',
-      icon: '✓',
+      variant: "default" as const,
+      className: "bg-green-600 text-white border-green-600",
+      icon: "✓",
    },
    REJECTED: {
-      variant: 'destructive' as const,
-      className: 'bg-red-600 text-white border-red-600',
-      icon: '❌',
+      variant: "destructive" as const,
+      className: "bg-red-600 text-white border-red-600",
+      icon: "❌",
    },
    WAITLISTED: {
-      variant: 'secondary' as const,
-      className: 'bg-blue-100 text-blue-800 border-blue-200',
-      icon: '⏸️',
+      variant: "secondary" as const,
+      className: "bg-blue-100 text-blue-800 border-blue-200",
+      icon: "⏸️",
    },
    ACTIVE: {
-      variant: 'default' as const,
-      className: 'bg-blue-600 text-white border-blue-600',
-      icon: '🟢',
+      variant: "default" as const,
+      className: "bg-blue-600 text-white border-blue-600",
+      icon: "🟢",
    },
    INACTIVE: {
-      variant: 'secondary' as const,
-      className: 'bg-gray-100 text-gray-600 border-gray-200',
-      icon: '⚪',
+      variant: "secondary" as const,
+      className: "bg-gray-100 text-gray-600 border-gray-200",
+      icon: "⚪",
    },
    COMPLETED: {
-      variant: 'default' as const,
-      className: 'bg-green-700 text-white border-green-700',
-      icon: '🏁',
+      variant: "default" as const,
+      className: "bg-green-700 text-white border-green-700",
+      icon: "🏁",
    },
    CANCELLED: {
-      variant: 'destructive' as const,
-      className: 'bg-red-700 text-white border-red-700',
-      icon: '🚫',
+      variant: "destructive" as const,
+      className: "bg-red-700 text-white border-red-700",
+      icon: "🚫",
    },
 };
 
@@ -71,7 +71,7 @@ export function StatusBadge({
       <Badge
          variant={config.variant}
          className={cn(
-            'px-2 py-1 text-xs font-medium',
+            "px-2 py-1 text-xs font-medium",
             config.className,
             className
          )}

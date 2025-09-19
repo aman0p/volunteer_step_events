@@ -1,8 +1,8 @@
-import React from 'react';
-import { Lock } from 'lucide-react';
-import Link from 'next/link';
-import { CopyButton } from '@/components/ui';
-import { Skeleton } from '@/components/ui/skeleton';
+import React from "react";
+import { Lock } from "lucide-react";
+import Link from "next/link";
+import { CopyButton } from "@/components/ui";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface QuickLink {
    id: string;
@@ -35,8 +35,8 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
                   <Lock className="h-8 w-8 text-white/80" />
                   <p className="text-sm font-medium">
                      {isEventCreator
-                        ? 'Enroll to access quick links'
-                        : 'Enroll to access quick links'}
+                        ? "Enroll to access quick links"
+                        : "Enroll to access quick links"}
                   </p>
                </div>
             </div>

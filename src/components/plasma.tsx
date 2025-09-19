@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import type React from 'react';
-import { useEffect, useRef } from 'react';
-import { Renderer, Program, Mesh, Triangle } from 'ogl';
-import '@/styles/plasma.css';
+import type React from "react";
+import { useEffect, useRef } from "react";
+import { Renderer, Program, Mesh, Triangle } from "ogl";
+import "@/styles/plasma.css";
 
 interface PlasmaProps {
    color?: string;
    speed?: number;
-   direction?: 'forward' | 'reverse' | 'pingpong';
+   direction?: "forward" | "reverse" | "pingpong";
    scale?: number;
    opacity?: number;
    mouseInteractive?: boolean;
@@ -97,9 +97,9 @@ void main() {
 }`;
 
 export const Plasma: React.FC<PlasmaProps> = ({
-   color = '#ffffff',
+   color = "#ffffff",
    speed = 1,
-   direction = 'forward',
+   direction = "forward",
    scale = 1,
    opacity = 1,
    mouseInteractive = true,
@@ -116,7 +116,7 @@ export const Plasma: React.FC<PlasmaProps> = ({
 
       const useCustomColor = color ? 1.0 : 0.0;
       const customColorRgb = color ? hexToRgb(color) : [1, 1, 1];
-      const directionMultiplier = direction === 'reverse' ? -1.0 : 1.0;
+      const directionMultiplier = direction === "reverse" ? -1.0 : 1.0;
 
       // Lower DPR on mobile/iOS
       const renderer = new Renderer({
@@ -129,9 +129,9 @@ export const Plasma: React.FC<PlasmaProps> = ({
       });
       const gl = renderer.gl;
       const canvas = gl.canvas as HTMLCanvasElement;
-      canvas.style.display = 'block';
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
+      canvas.style.display = "block";
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
       containerRef.current.appendChild(canvas);
 
       const geometry = new Triangle(gl);
@@ -168,7 +168,7 @@ export const Plasma: React.FC<PlasmaProps> = ({
          mouseUniform[1] = mousePos.current.y;
       };
       if (!isIOS && mouseInteractive) {
-         containerRef.current.addEventListener('mousemove', handleMouseMove);
+         containerRef.current.addEventListener("mousemove", handleMouseMove);
       }
 
       // --- Resize handling ---
@@ -194,7 +194,7 @@ export const Plasma: React.FC<PlasmaProps> = ({
          if (!isIOS || delta > 33) {
             // 60fps desktop, ~30fps iOS
             const timeValue = (t - t0) * 0.001;
-            if (direction === 'pingpong') {
+            if (direction === "pingpong") {
                const cycle = Math.sin(timeValue * 0.5) * directionMultiplier;
                (program.uniforms.uDirection as any).value = cycle;
             }
@@ -211,7 +211,7 @@ export const Plasma: React.FC<PlasmaProps> = ({
          ro.disconnect();
          if (!isIOS && mouseInteractive && containerRef.current) {
             containerRef.current.removeEventListener(
-               'mousemove',
+               "mousemove",
                handleMouseMove
             );
          }

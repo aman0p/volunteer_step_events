@@ -3,10 +3,10 @@ import {
    GovId,
    Role,
    VerificationStatus,
-} from './src/generated/prisma';
-import NextAuth from 'next-auth';
+} from "./src/generated/prisma";
+import NextAuth from "next-auth";
 
-declare module 'next-auth' {
+declare module "next-auth" {
    interface Session {
       user: {
          id: string;
@@ -24,7 +24,7 @@ declare module 'next-auth' {
    }
 }
 
-declare module 'next-auth/jwt' {
+declare module "next-auth/jwt" {
    interface JWT {
       id: string;
       email: string;
@@ -91,32 +91,32 @@ interface Event extends EventParams {
 }
 
 export type NotificationType =
-   | 'ENROLLMENT_APPLICATION'
-   | 'ENROLLMENT_APPROVED'
-   | 'ENROLLMENT_REJECTED'
-   | 'ENROLLMENT_WAITLISTED'
-   | 'ENROLLMENT_CANCELLED'
-   | 'ENROLLMENT_SELF_CANCELLED'
-   | 'NEW_EVENT_ADDED'
-   | 'EVENT_UPDATE'
-   | 'EVENT_REMINDER'
-   | 'VERIFICATION_REQUEST'
-   | 'VERIFICATION_APPROVED'
-   | 'VERIFICATION_REJECTED'
-   | 'SYSTEM_MESSAGE';
+   | "ENROLLMENT_APPLICATION"
+   | "ENROLLMENT_APPROVED"
+   | "ENROLLMENT_REJECTED"
+   | "ENROLLMENT_WAITLISTED"
+   | "ENROLLMENT_CANCELLED"
+   | "ENROLLMENT_SELF_CANCELLED"
+   | "NEW_EVENT_ADDED"
+   | "EVENT_UPDATE"
+   | "EVENT_REMINDER"
+   | "VERIFICATION_REQUEST"
+   | "VERIFICATION_APPROVED"
+   | "VERIFICATION_REJECTED"
+   | "SYSTEM_MESSAGE";
 
 export type EnrollmentStatus =
-   | 'PENDING'
-   | 'APPROVED'
-   | 'REJECTED'
-   | 'WAITLISTED'
-   | 'CANCELLED';
+   | "PENDING"
+   | "APPROVED"
+   | "REJECTED"
+   | "WAITLISTED"
+   | "CANCELLED";
 
 export type VerificationStatusType =
-   | 'PENDING'
-   | 'APPROVED'
-   | 'REJECTED'
-   | 'CANCELLED';
+   | "PENDING"
+   | "APPROVED"
+   | "REJECTED"
+   | "CANCELLED";
 
 // New interface for verification requests
 export interface VerificationRequest {

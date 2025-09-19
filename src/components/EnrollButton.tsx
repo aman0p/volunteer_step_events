@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
    requestEnrollment,
    cancelEnrollment,
-} from '@/lib/actions/user/enrollment';
-import { toast } from 'sonner';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
+} from "@/lib/actions/user/enrollment";
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 interface EnrollButtonProps {
    eventId: string;
    isFull: boolean;
    enrollmentStatus?:
-      | 'PENDING'
-      | 'APPROVED'
-      | 'REJECTED'
-      | 'CANCELLED'
-      | 'WAITLISTED'
+      | "PENDING"
+      | "APPROVED"
+      | "REJECTED"
+      | "CANCELLED"
+      | "WAITLISTED"
       | null;
    className?: string;
 }
@@ -31,7 +31,7 @@ export default function EnrollButton({
 }: EnrollButtonProps) {
    const [isEnrolling, setIsEnrolling] = useState(false);
    const [localStatus, setLocalStatus] = useState<
-      'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED' | 'WAITLISTED' | null
+      "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED" | "WAITLISTED" | null
    >(enrollmentStatus ?? null);
    const { data: session, status } = useSession();
 
@@ -43,12 +43,12 @@ export default function EnrollButton({
          const result = await requestEnrollment(eventId);
          if (result.success) {
             toast.success(result.message);
-            setLocalStatus('PENDING');
+            setLocalStatus("PENDING");
          } else {
             toast.error(result.message);
          }
       } catch (error) {
-         toast.error('Failed to send enrollment request');
+         toast.error("Failed to send enrollment request");
       } finally {
          setIsEnrolling(false);
       }
@@ -59,26 +59,26 @@ export default function EnrollButton({
       try {
          const result = await cancelEnrollment(eventId);
          if (result.success) {
-            toast.success(result.message || 'Enrollment request cancelled');
-            if ((result as any).nextStatus === 'REJECTED') {
-               setLocalStatus('REJECTED');
+            toast.success(result.message || "Enrollment request cancelled");
+            if ((result as any).nextStatus === "REJECTED") {
+               setLocalStatus("REJECTED");
             } else {
                // First cancel: show cancelled for 2s then allow re-apply
-               setLocalStatus('CANCELLED');
+               setLocalStatus("CANCELLED");
                setTimeout(() => setLocalStatus(null), 2000);
             }
          } else {
-            toast.error(result.message || 'Failed to cancel request');
+            toast.error(result.message || "Failed to cancel request");
          }
       } catch (error) {
-         toast.error('Failed to cancel request');
+         toast.error("Failed to cancel request");
       } finally {
          setIsEnrolling(false);
       }
    };
 
    // Show loading state while session is loading
-   if (status === 'loading') {
+   if (status === "loading") {
       return (
          <Button disabled className={className}>
             Loading...
@@ -87,7 +87,7 @@ export default function EnrollButton({
    }
 
    // Show different states based on enrollment status
-   if (localStatus === 'APPROVED') {
+   if (localStatus === "APPROVED") {
       return (
          <Button disabled className={className}>
             Enrollment Approved
@@ -95,9 +95,9 @@ export default function EnrollButton({
       );
    }
 
-   if (localStatus === 'PENDING') {
+   if (localStatus === "PENDING") {
       return (
-         <div className={`grid w-full grid-cols-2 gap-2 ${className ?? ''}`}>
+         <div className={`grid w-full grid-cols-2 gap-2 ${className ?? ""}`}>
             <Button disabled variant="default" className="w-full">
                Pending Approval
             </Button>
@@ -108,13 +108,13 @@ export default function EnrollButton({
                className="w-full"
                title="Cancel your enrollment request"
             >
-               {isEnrolling ? 'Cancelling...' : 'Cancel Request'}
+               {isEnrolling ? "Cancelling..." : "Cancel Request"}
             </Button>
          </div>
       );
    }
 
-   if (localStatus === 'REJECTED') {
+   if (localStatus === "REJECTED") {
       return (
          <Button disabled variant="destructive" className={className}>
             Enrollment Rejected
@@ -122,7 +122,7 @@ export default function EnrollButton({
       );
    }
 
-   if (localStatus === 'CANCELLED') {
+   if (localStatus === "CANCELLED") {
       return (
          <Button disabled className={className}>
             Enrollment Cancelled
@@ -130,7 +130,7 @@ export default function EnrollButton({
       );
    }
 
-   if (localStatus === 'WAITLISTED') {
+   if (localStatus === "WAITLISTED") {
       return (
          <Button disabled className={className}>
             Waitlisted
@@ -159,7 +159,7 @@ export default function EnrollButton({
    }
 
    // Check user role and show appropriate button
-   if (session.user.role === 'USER') {
+   if (session.user.role === "USER") {
       return (
          <Link href="/profile">
             <Button
@@ -172,7 +172,7 @@ export default function EnrollButton({
       );
    }
 
-   if (session.user.role === 'ADMIN' || session.user.role === 'ORGANIZER') {
+   if (session.user.role === "ADMIN" || session.user.role === "ORGANIZER") {
       return (
          <Button
             disabled
@@ -185,7 +185,7 @@ export default function EnrollButton({
    }
 
    // Only show enroll button for VOLUNTEER role
-   if (session.user.role === 'VOLUNTEER') {
+   if (session.user.role === "VOLUNTEER") {
       return (
          <Button
             onClick={handleEnroll}
@@ -193,7 +193,7 @@ export default function EnrollButton({
             variant="default"
             className={className}
          >
-            {isEnrolling ? 'Enrolling...' : 'Enroll as Volunteer'}
+            {isEnrolling ? "Enrolling..." : "Enroll as Volunteer"}
          </Button>
       );
    }

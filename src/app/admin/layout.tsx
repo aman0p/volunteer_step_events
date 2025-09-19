@@ -1,18 +1,18 @@
-import { authOptions } from '@/auth';
-import { Providers } from '@/components/Providers';
-import { getServerSession } from 'next-auth';
-import { redirect } from 'next/navigation';
-import { Sidebar } from '@/components/admin/Sidebar';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import Header from '@/components/admin/Header';
-import { prisma } from '@/lib/prisma';
-import { ThemeToggleButton } from '@/components/ThemeToggleButton';
+import { authOptions } from "@/auth";
+import { Providers } from "@/components/Providers";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { Sidebar } from "@/components/admin/Sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import Header from "@/components/admin/Header";
+import { prisma } from "@/lib/prisma";
+import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    // Check if user has admin role - use database role instead of session role
@@ -21,18 +21,18 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
       select: { role: true },
    });
 
-   if (!user || (user.role !== 'ADMIN' && user.role !== 'ORGANIZER')) {
-      redirect('/');
+   if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
+      redirect("/");
    }
 
    // Sidebar badge should reflect current number of pending enrollment requests for this admin
    const enrollmentCount = await prisma.enrollment.count({
-      where: { status: 'PENDING', event: { createdById: session.user.id } },
+      where: { status: "PENDING", event: { createdById: session.user.id } },
    });
 
    // Count pending verification requests
    const verificationCount = await prisma.verificationRequest.count({
-      where: { status: 'PENDING' },
+      where: { status: "PENDING" },
    });
 
    return (

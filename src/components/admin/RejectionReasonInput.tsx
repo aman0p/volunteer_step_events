@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { XCircle, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
-import { rejectVerificationRequest } from '@/lib/actions/admin/verification';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { XCircle, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { rejectVerificationRequest } from "@/lib/actions/admin/verification";
 
 interface RejectionReasonInputProps {
    requestId: string;
@@ -21,27 +21,27 @@ export default function RejectionReasonInput({
    reviewedAt,
    reviewedBy,
 }: RejectionReasonInputProps) {
-   const [rejectionReason, setRejectionReason] = useState(existingReason || '');
+   const [rejectionReason, setRejectionReason] = useState(existingReason || "");
    const [isRejecting, setIsRejecting] = useState(false);
 
    // Update local state when existing reason changes
    useEffect(() => {
-      setRejectionReason(existingReason || '');
+      setRejectionReason(existingReason || "");
    }, [existingReason]);
 
    const formatDate = (date: Date) => {
-      return new Intl.DateTimeFormat('en-US', {
-         year: 'numeric',
-         month: 'long',
-         day: 'numeric',
-         hour: '2-digit',
-         minute: '2-digit',
+      return new Intl.DateTimeFormat("en-US", {
+         year: "numeric",
+         month: "long",
+         day: "numeric",
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(date);
    };
 
    const handleReject = async () => {
-      if (currentStatus !== 'PENDING') {
-         toast.error('Can only reject pending requests');
+      if (currentStatus !== "PENDING") {
+         toast.error("Can only reject pending requests");
          return;
       }
 
@@ -52,16 +52,16 @@ export default function RejectionReasonInput({
             rejectionReason
          );
          if (result.success) {
-            toast.success('Verification request rejected successfully');
+            toast.success("Verification request rejected successfully");
             // Refresh the page to show updated status
             window.location.reload();
          } else {
             toast.error(
-               result.message || 'Failed to reject verification request'
+               result.message || "Failed to reject verification request"
             );
          }
       } catch (error) {
-         toast.error('An error occurred while rejecting the request');
+         toast.error("An error occurred while rejecting the request");
       } finally {
          setIsRejecting(false);
       }
@@ -70,14 +70,14 @@ export default function RejectionReasonInput({
    return (
       <div className="rounded-lg border bg-black/10 p-6">
          <h2 className="mb-4 text-xl font-semibold">
-            {currentStatus === 'PENDING'
-               ? 'Rejection Reason (Optional)'
-               : 'Rejection Reason'}
+            {currentStatus === "PENDING"
+               ? "Rejection Reason (Optional)"
+               : "Rejection Reason"}
          </h2>
          <p className="text-muted-foreground mb-4 text-sm">
-            {currentStatus === 'PENDING'
-               ? 'If you plan to reject this request, you can provide a reason here. This will be visible to the user.'
-               : 'You can modify the rejection reason below. Changes will be saved when you reject the request again.'}
+            {currentStatus === "PENDING"
+               ? "If you plan to reject this request, you can provide a reason here. This will be visible to the user."
+               : "You can modify the rejection reason below. Changes will be saved when you reject the request again."}
          </p>
          <div className="space-y-4">
             <div>
@@ -99,7 +99,7 @@ export default function RejectionReasonInput({
                </div>
             </div>
 
-            {currentStatus === 'PENDING' && (
+            {currentStatus === "PENDING" && (
                <div className="flex items-center gap-3">
                   <Button
                      onClick={handleReject}
@@ -121,12 +121,12 @@ export default function RejectionReasonInput({
                </div>
             )}
 
-            {currentStatus === 'REJECTED' && (
+            {currentStatus === "REJECTED" && (
                <div className="space-y-3">
                   {reviewedAt && reviewedBy && (
                      <div className="border-t pt-3">
                         <p className="text-muted-foreground text-xs">
-                           Rejected on: {formatDate(reviewedAt)} by{' '}
+                           Rejected on: {formatDate(reviewedAt)} by{" "}
                            {reviewedBy.fullName}
                         </p>
                      </div>

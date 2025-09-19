@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
    Table,
    TableBody,
@@ -8,15 +8,15 @@ import {
    TableHead,
    TableHeader,
    TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
    DropdownMenu,
    DropdownMenuContent,
    DropdownMenuItem,
    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
    MoreHorizontal,
    Eye,
@@ -24,15 +24,15 @@ import {
    MapPin,
    ArrowRight,
    GripVertical,
-} from 'lucide-react';
+} from "lucide-react";
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from '@/components/ui/select';
-import Link from 'next/link';
+} from "@/components/ui/select";
+import Link from "next/link";
 
 type EventData = {
    id: string;
@@ -79,40 +79,40 @@ export function UserEventsTable({ events }: UserEventsProps) {
    const getStatusBadge = (status: string) => {
       const statusConfig = {
          NOT_ENROLLED: {
-            label: 'Not Enrolled',
+            label: "Not Enrolled",
             className:
-               'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400',
+               "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400",
          },
          PENDING: {
-            label: 'Pending',
+            label: "Pending",
             className:
-               'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
+               "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400",
          },
          APPROVED: {
-            label: 'Approved',
+            label: "Approved",
             className:
-               'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+               "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400",
          },
          REJECTED: {
-            label: 'Rejected',
+            label: "Rejected",
             className:
-               'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
+               "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400",
          },
          WAITLISTED: {
-            label: 'Waitlisted',
+            label: "Waitlisted",
             className:
-               'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400',
+               "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400",
          },
          CANCELLED: {
-            label: 'Cancelled',
+            label: "Cancelled",
             className:
-               'bg-gray-100 text-gray-600 dark:bg-gray-900/20 dark:text-gray-400',
+               "bg-gray-100 text-gray-600 dark:bg-gray-900/20 dark:text-gray-400",
          },
       };
 
       const config =
          statusConfig[status as keyof typeof statusConfig] ||
-         statusConfig['NOT_ENROLLED'];
+         statusConfig["NOT_ENROLLED"];
 
       return (
          <span
@@ -124,10 +124,10 @@ export function UserEventsTable({ events }: UserEventsProps) {
    };
 
    const formatDate = (date: Date) => {
-      return new Date(date).toLocaleDateString('en-US', {
-         month: 'short',
-         day: '2-digit',
-         year: 'numeric',
+      return new Date(date).toLocaleDateString("en-US", {
+         month: "short",
+         day: "2-digit",
+         year: "numeric",
       });
    };
 
@@ -252,7 +252,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                            <span className="text-muted-foreground text-sm">
                               {event.maxVolunteers
                                  ? `${event.maxVolunteers} volunteers`
-                                 : 'Unlimited'}
+                                 : "Unlimited"}
                            </span>
                         </TableCell>
                         <TableCell className="min-w-[192px]">
@@ -268,7 +268,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                                     View
                                  </Link>
                               </Button>
-                              {event.enrollmentStatus === 'NOT_ENROLLED' && (
+                              {event.enrollmentStatus === "NOT_ENROLLED" && (
                                  <Button
                                     size="sm"
                                     variant="default"
@@ -297,7 +297,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                                        View Event Details
                                     </Link>
                                  </DropdownMenuItem>
-                                 {event.enrollmentStatus === 'NOT_ENROLLED' && (
+                                 {event.enrollmentStatus === "NOT_ENROLLED" && (
                                     <DropdownMenuItem asChild>
                                        <Link href={`/events/${event.id}`}>
                                           <Calendar className="mr-2 h-4 w-4" />

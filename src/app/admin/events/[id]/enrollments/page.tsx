@@ -1,8 +1,8 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
-import EventEnrollmentTable from '@/components/admin/tables/EventEnrollmentTable';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import EventEnrollmentTable from "@/components/admin/tables/EventEnrollmentTable";
 
 export default async function EnrollmentsPage({
    params,
@@ -12,7 +12,7 @@ export default async function EnrollmentsPage({
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    // Check if user has admin role
@@ -21,8 +21,8 @@ export default async function EnrollmentsPage({
       select: { role: true },
    });
 
-   if (!user || (user.role !== 'ADMIN' && user.role !== 'ORGANIZER')) {
-      redirect('/');
+   if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
+      redirect("/");
    }
 
    // Fetch event with enrollments
@@ -56,7 +56,7 @@ export default async function EnrollmentsPage({
    });
 
    if (!event) {
-      redirect('/admin/events');
+      redirect("/admin/events");
    }
 
    // Owner guard: only creator can view
@@ -65,7 +65,7 @@ export default async function EnrollmentsPage({
       select: { createdById: true },
    });
    if (!owner || owner.createdById !== session.user.id) {
-      redirect('/admin/events');
+      redirect("/admin/events");
    }
 
    return (
@@ -83,7 +83,7 @@ export default async function EnrollmentsPage({
             eventLocation={event.location}
             eventStartDate={event.startDate}
             eventEndDate={event.endDate}
-            currentUserRole={user.role as 'ADMIN' | 'ORGANIZER'}
+            currentUserRole={user.role as "ADMIN" | "ORGANIZER"}
          />
       </div>
    );

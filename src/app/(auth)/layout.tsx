@@ -1,6 +1,6 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { redirect } from 'next/navigation';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
 
 export default async function AuthLayout({
    children,
@@ -12,7 +12,7 @@ export default async function AuthLayout({
 
    // If user is already signed in, redirect to home page
    if (session) {
-      redirect('/');
+      redirect("/");
    }
 
    return (

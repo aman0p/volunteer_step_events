@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
    Table,
    TableBody,
@@ -8,31 +8,31 @@ import {
    TableHead,
    TableHeader,
    TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
    DropdownMenu,
    DropdownMenuContent,
    DropdownMenuItem,
    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Eye, GripVertical, ArrowRight } from 'lucide-react';
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal, Eye, GripVertical, ArrowRight } from "lucide-react";
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from '@/components/ui/select';
-import { Image } from '@imagekit/next';
-import Link from 'next/link';
-import config from '@/lib/config';
-import { toast } from 'sonner';
+} from "@/components/ui/select";
+import { Image } from "@imagekit/next";
+import Link from "next/link";
+import config from "@/lib/config";
+import { toast } from "sonner";
 import {
    approveEnrollment,
    rejectEnrollment,
-} from '@/lib/actions/admin/enrollment';
+} from "@/lib/actions/admin/enrollment";
 
 type EventEnrollment = {
    id: string;
@@ -93,7 +93,7 @@ export default function EventEnrollmentTable({
 
    const handleApproveAll = async () => {
       if (selectedRows.length === 0) {
-         toast.error('Please select at least one enrollment');
+         toast.error("Please select at least one enrollment");
          return;
       }
 
@@ -116,9 +116,9 @@ export default function EventEnrollmentTable({
          setSelectedRows([]);
          window.location.reload();
       } catch (error) {
-         console.error('Error approving all:', error);
+         console.error("Error approving all:", error);
          toast.error(
-            'An error occurred while approving all selected enrollments'
+            "An error occurred while approving all selected enrollments"
          );
       } finally {
          setIsBulkApproveProcessing(false);
@@ -127,7 +127,7 @@ export default function EventEnrollmentTable({
 
    const handleRejectAll = async () => {
       if (selectedRows.length === 0) {
-         toast.error('Please select at least one enrollment');
+         toast.error("Please select at least one enrollment");
          return;
       }
 
@@ -150,9 +150,9 @@ export default function EventEnrollmentTable({
          setSelectedRows([]);
          window.location.reload();
       } catch (error) {
-         console.error('Error rejecting all:', error);
+         console.error("Error rejecting all:", error);
          toast.error(
-            'An error occurred while rejecting all selected enrollments'
+            "An error occurred while rejecting all selected enrollments"
          );
       } finally {
          setIsBulkRejectProcessing(false);
@@ -164,15 +164,15 @@ export default function EventEnrollmentTable({
       try {
          const result = await approveEnrollment(id);
          if (result.success) {
-            toast.success(result.message || 'Enrollment approved successfully');
+            toast.success(result.message || "Enrollment approved successfully");
             // Refresh the page to show updated data
             window.location.reload();
          } else {
-            toast.error(result.message || 'Failed to approve enrollment');
+            toast.error(result.message || "Failed to approve enrollment");
          }
       } catch (error) {
-         console.error('Error approving:', error);
-         toast.error('An error occurred while approving the enrollment');
+         console.error("Error approving:", error);
+         toast.error("An error occurred while approving the enrollment");
       } finally {
          setApproveProcessingIds((prev) =>
             prev.filter((procId) => procId !== id)
@@ -185,15 +185,15 @@ export default function EventEnrollmentTable({
       try {
          const result = await rejectEnrollment(id);
          if (result.success) {
-            toast.success(result.message || 'Enrollment rejected successfully');
+            toast.success(result.message || "Enrollment rejected successfully");
             // Refresh the page to show updated data
             window.location.reload();
          } else {
-            toast.error(result.message || 'Failed to reject enrollment');
+            toast.error(result.message || "Failed to reject enrollment");
          }
       } catch (error) {
-         console.error('Error rejecting:', error);
-         toast.error('An error occurred while rejecting the enrollment');
+         console.error("Error rejecting:", error);
+         toast.error("An error occurred while rejecting the enrollment");
       } finally {
          setRejectProcessingIds((prev) =>
             prev.filter((procId) => procId !== id)
@@ -332,9 +332,9 @@ export default function EventEnrollmentTable({
                                           className="text-xs font-medium"
                                        >
                                           {enrollment.user.fullName
-                                             .split(' ')
+                                             .split(" ")
                                              .map((n: string) => n[0])
-                                             .join('')
+                                             .join("")
                                              .toUpperCase()}
                                        </Link>
                                     </div>

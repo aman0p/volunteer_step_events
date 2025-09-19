@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { type SubmitHandler } from 'react-hook-form';
-import { z } from 'zod';
-import { useState } from 'react';
+import { type SubmitHandler } from "react-hook-form";
+import { z } from "zod";
+import { useState } from "react";
 import {
    Form,
    FormControl,
@@ -10,17 +10,17 @@ import {
    FormItem,
    FormLabel,
    FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-import { profileSchema } from '@/lib/validations';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import FileUpload from '@/components/FileUpload';
-import Tag from '@/components/ui/tag';
-import { GOV_ID_OPTIONS } from '@/constants';
-import { UserCheck, Loader2, RefreshCw, XCircle } from 'lucide-react';
-import { useProfile } from '@/hooks/useProfile';
+import { profileSchema } from "@/lib/validations";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import FileUpload from "@/components/FileUpload";
+import Tag from "@/components/ui/tag";
+import { GOV_ID_OPTIONS } from "@/constants";
+import { UserCheck, Loader2, RefreshCw, XCircle } from "lucide-react";
+import { useProfile } from "@/hooks/useProfile";
 
 export default function Profile() {
    const {
@@ -116,13 +116,13 @@ export default function Profile() {
                            }
                            className={`${
                               areAllFieldsFilled()
-                                 ? 'bg-blue-600 hover:bg-blue-700'
-                                 : 'cursor-not-allowed bg-gray-400'
+                                 ? "bg-blue-600 hover:bg-blue-700"
+                                 : "cursor-not-allowed bg-gray-400"
                            }`}
                            title={
                               !areAllFieldsFilled()
-                                 ? 'Please fill all required fields before requesting verification'
-                                 : 'Save profile and request verification'
+                                 ? "Please fill all required fields before requesting verification"
+                                 : "Save profile and request verification"
                            }
                         >
                            {isSubmittingVerification ? (
@@ -150,7 +150,7 @@ export default function Profile() {
                         <div className="flex-1">
                            {rejectionReason ? (
                               <p className="mb-2 text-sm text-red-700 dark:text-red-300">
-                                 <span className="font-medium">Reason:</span>{' '}
+                                 <span className="font-medium">Reason:</span>{" "}
                                  {rejectionReason}
                               </p>
                            ) : (
@@ -174,8 +174,8 @@ export default function Profile() {
                                  className="bg-blue-600 text-white hover:bg-blue-700"
                                  title={
                                     !areAllFieldsFilled()
-                                       ? 'Please fill all required fields before requesting verification'
-                                       : 'Submit new verification request'
+                                       ? "Please fill all required fields before requesting verification"
+                                       : "Submit new verification request"
                                  }
                               >
                                  {isSubmittingVerification ? (
@@ -209,7 +209,7 @@ export default function Profile() {
                   <div className="flex flex-col gap-5">
                      <FormField
                         control={form.control}
-                        name={'fullName'}
+                        name={"fullName"}
                         render={({ field }) => (
                            <FormItem className="flex flex-col gap-1">
                               <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -221,7 +221,7 @@ export default function Profile() {
                                        required
                                        placeholder="Your full name"
                                        {...field}
-                                       value={field.value || ''}
+                                       value={field.value || ""}
                                        className="w-full rounded-md border-0 px-3 py-2 text-sm transition-all duration-200"
                                     />
                                  </div>
@@ -247,7 +247,7 @@ export default function Profile() {
                         </div>
                         <FormField
                            control={form.control}
-                           name={'phoneNumber'}
+                           name={"phoneNumber"}
                            render={({ field }) => (
                               <FormItem className="flex w-full flex-col gap-1">
                                  <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -262,7 +262,7 @@ export default function Profile() {
                                           <Input
                                              placeholder="Your phone number"
                                              {...field}
-                                             value={field.value || ''}
+                                             value={field.value || ""}
                                              className="w-full rounded-none border-0 px-3 py-2 text-sm transition-all duration-200"
                                           />
                                        </div>
@@ -275,7 +275,7 @@ export default function Profile() {
 
                         <FormField
                            control={form.control}
-                           name={'gender'}
+                           name={"gender"}
                            render={({ field }) => (
                               <FormItem className="flex w-full flex-col gap-1">
                                  <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -288,7 +288,7 @@ export default function Profile() {
                                           readOnly
                                           disabled
                                           placeholder="Gender"
-                                          value={field.value || ''}
+                                          value={field.value || ""}
                                           className="w-full rounded-md border-0 bg-black/10 px-3 py-2 text-sm font-medium transition-all duration-200 disabled:opacity-100"
                                        />
                                     </div>
@@ -300,7 +300,7 @@ export default function Profile() {
 
                         <FormField
                            control={form.control}
-                           name={'govIdType'}
+                           name={"govIdType"}
                            render={({ field }) => (
                               <FormItem className="flex w-full flex-col gap-1">
                                  <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -309,7 +309,7 @@ export default function Profile() {
                                  <FormControl>
                                     <div className="w-full rounded-md border border-gray-300">
                                        <select
-                                          value={field.value || ''}
+                                          value={field.value || ""}
                                           onChange={(e) =>
                                              field.onChange(e.target.value)
                                           }
@@ -343,7 +343,7 @@ export default function Profile() {
 
                      <FormField
                         control={form.control}
-                        name={'address'}
+                        name={"address"}
                         render={({ field }) => (
                            <FormItem className="flex flex-col gap-1">
                               <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -354,7 +354,7 @@ export default function Profile() {
                                     <Textarea
                                        placeholder="Your address"
                                        {...field}
-                                       value={field.value || ''}
+                                       value={field.value || ""}
                                        rows={9}
                                        className="w-full rounded-md border-0 bg-transparent px-3 py-2 text-sm transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0"
                                     />
@@ -367,9 +367,9 @@ export default function Profile() {
 
                      <FormField
                         control={form.control}
-                        name={'skills'}
+                        name={"skills"}
                         render={({ field }) => {
-                           const [skillInput, setSkillInput] = useState('');
+                           const [skillInput, setSkillInput] = useState("");
 
                            const addSkill = (text: string) => {
                               const value = text.trim();
@@ -380,7 +380,7 @@ export default function Profile() {
                               if (current.length >= 10) return;
                               if (current.includes(value)) return;
                               field.onChange([...current, value]);
-                              setSkillInput('');
+                              setSkillInput("");
                            };
 
                            const removeSkill = (valueToRemove: string) => {
@@ -395,12 +395,12 @@ export default function Profile() {
                            const handleKeyDown: React.KeyboardEventHandler<
                               HTMLInputElement
                            > = (e) => {
-                              if (e.key === 'Enter' || e.key === ',') {
+                              if (e.key === "Enter" || e.key === ",") {
                                  e.preventDefault();
                                  addSkill(skillInput);
                               } else if (
-                                 e.key === 'Backspace' &&
-                                 skillInput === ''
+                                 e.key === "Backspace" &&
+                                 skillInput === ""
                               ) {
                                  const current = Array.isArray(field.value)
                                     ? field.value
@@ -445,8 +445,8 @@ export default function Profile() {
                                                 ? field.value
                                                 : []
                                              ).length >= 10
-                                                ? 'Maximum 10 skills'
-                                                : 'Type and press Enter'
+                                                ? "Maximum 10 skills"
+                                                : "Type and press Enter"
                                           }
                                           disabled={
                                              (Array.isArray(field.value)
@@ -468,7 +468,7 @@ export default function Profile() {
                   <div className="flex w-full flex-col gap-5 lg:w-[350px]">
                      <FormField
                         control={form.control}
-                        name={'profileImage'}
+                        name={"profileImage"}
                         render={({ field }) => (
                            <FormItem className="flex flex-col gap-1">
                               <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
@@ -499,7 +499,7 @@ export default function Profile() {
 
                      <FormField
                         control={form.control}
-                        name={'govIdImage'}
+                        name={"govIdImage"}
                         render={({ field }) => (
                            <FormItem className="flex flex-col gap-1">
                               <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">

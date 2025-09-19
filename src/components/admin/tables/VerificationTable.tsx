@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
    Table,
    TableBody,
@@ -8,45 +8,45 @@ import {
    TableHead,
    TableHeader,
    TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
    DropdownMenu,
    DropdownMenuContent,
    DropdownMenuItem,
    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
    MoreHorizontal,
    Eye,
    GripVertical,
    Loader2,
    XCircle,
-} from 'lucide-react';
+} from "lucide-react";
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from '@/components/ui/select';
-import { Image } from '@imagekit/next';
-import Link from 'next/link';
-import config from '@/lib/config';
-import { toast } from 'sonner';
+} from "@/components/ui/select";
+import { Image } from "@imagekit/next";
+import Link from "next/link";
+import config from "@/lib/config";
+import { toast } from "sonner";
 import {
    approveVerificationRequest,
    rejectVerificationRequest,
-} from '@/lib/actions/admin/verification';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { createPortal } from 'react-dom';
-import { PiSpinner, PiX } from 'react-icons/pi';
+} from "@/lib/actions/admin/verification";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { createPortal } from "react-dom";
+import { PiSpinner, PiX } from "react-icons/pi";
 
 type VerificationRequest = {
    id: string;
-   status: 'PENDING' | 'APPROVED' | 'REJECTED';
+   status: "PENDING" | "APPROVED" | "REJECTED";
    user: {
       id: string;
       fullName: string;
@@ -76,10 +76,10 @@ export default function VerificationTable({
    const [isBulkApproveProcessing, setIsBulkApproveProcessing] =
       useState(false);
    const [isBulkRejectProcessing, setIsBulkRejectProcessing] = useState(false);
-   const [rejectionReason, setRejectionReason] = useState('');
+   const [rejectionReason, setRejectionReason] = useState("");
    const [showRejectionModal, setShowRejectionModal] = useState(false);
    const [rejectionType, setRejectionType] = useState<
-      'bulk' | 'individual' | null
+      "bulk" | "individual" | null
    >(null);
    const [individualRejectId, setIndividualRejectId] = useState<string | null>(
       null
@@ -87,10 +87,10 @@ export default function VerificationTable({
 
    // Filter to only show pending and rejected requests (exclude approved)
    const filteredRequests = verificationRequests.filter(
-      (req) => req.status !== 'APPROVED'
+      (req) => req.status !== "APPROVED"
    );
    const pendingRequests = filteredRequests.filter(
-      (req) => req.status === 'PENDING'
+      (req) => req.status === "PENDING"
    );
    const paginatedData = filteredRequests.slice(
       (page - 1) * rowsPerPage,
@@ -110,7 +110,7 @@ export default function VerificationTable({
    const handleSelectRow = (id: string, checked: boolean) => {
       // Only allow selecting pending requests
       const request = filteredRequests.find((req) => req.id === id);
-      if (request && request.status !== 'PENDING') {
+      if (request && request.status !== "PENDING") {
          return;
       }
 
@@ -123,7 +123,7 @@ export default function VerificationTable({
 
    const handleApproveAll = async () => {
       if (selectedRows.length === 0) {
-         toast.error('Please select at least one verification request');
+         toast.error("Please select at least one verification request");
          return;
       }
 
@@ -144,8 +144,8 @@ export default function VerificationTable({
          setSelectedRows([]);
          window.location.reload(); // reload once after all are done
       } catch (error) {
-         console.error('Error approving all:', error);
-         toast.error('An error occurred while approving all selected requests');
+         console.error("Error approving all:", error);
+         toast.error("An error occurred while approving all selected requests");
       } finally {
          setIsBulkApproveProcessing(false);
       }
@@ -153,11 +153,11 @@ export default function VerificationTable({
 
    const handleRejectAll = async () => {
       if (selectedRows.length === 0) {
-         toast.error('Please select at least one verification request');
+         toast.error("Please select at least one verification request");
          return;
       }
 
-      setRejectionType('bulk');
+      setRejectionType("bulk");
       setShowRejectionModal(true);
    };
 
@@ -177,12 +177,12 @@ export default function VerificationTable({
             `Successfully processed ${selectedRows.length} verification request(s)`
          );
          setSelectedRows([]);
-         setRejectionReason('');
+         setRejectionReason("");
          setShowRejectionModal(false);
          window.location.reload(); // reload once after all are done
       } catch (error) {
-         console.error('Error rejecting all:', error);
-         toast.error('An error occurred while rejecting all selected requests');
+         console.error("Error rejecting all:", error);
+         toast.error("An error occurred while rejecting all selected requests");
       } finally {
          setIsBulkRejectProcessing(false);
       }
@@ -194,17 +194,17 @@ export default function VerificationTable({
          const result = await approveVerificationRequest(id);
          if (result.success) {
             toast.success(
-               result.message || 'Verification request approved successfully'
+               result.message || "Verification request approved successfully"
             );
             window.location.reload();
          } else {
             toast.error(
-               result.message || 'Failed to approve verification request'
+               result.message || "Failed to approve verification request"
             );
          }
       } catch (error) {
-         console.error('Error approving:', error);
-         toast.error('An error occurred while approving the request');
+         console.error("Error approving:", error);
+         toast.error("An error occurred while approving the request");
       } finally {
          setApproveProcessingIds((prev) =>
             prev.filter((procId) => procId !== id)
@@ -218,17 +218,17 @@ export default function VerificationTable({
          const result = await rejectVerificationRequest(id);
          if (result.success) {
             toast.success(
-               result.message || 'Verification request rejected successfully'
+               result.message || "Verification request rejected successfully"
             );
             window.location.reload();
          } else {
             toast.error(
-               result.message || 'Failed to reject verification request'
+               result.message || "Failed to reject verification request"
             );
          }
       } catch (error) {
-         console.error('Error rejecting:', error);
-         toast.error('An error occurred while rejecting the request');
+         console.error("Error rejecting:", error);
+         toast.error("An error occurred while rejecting the request");
       } finally {
          setRejectProcessingIds((prev) =>
             prev.filter((procId) => procId !== id)
@@ -237,7 +237,7 @@ export default function VerificationTable({
    };
 
    const handleRejectWithReason = async (id: string) => {
-      setRejectionType('individual');
+      setRejectionType("individual");
       setIndividualRejectId(id);
       setShowRejectionModal(true);
    };
@@ -253,20 +253,20 @@ export default function VerificationTable({
          );
          if (result.success) {
             toast.success(
-               result.message || 'Verification request rejected successfully'
+               result.message || "Verification request rejected successfully"
             );
-            setRejectionReason('');
+            setRejectionReason("");
             setShowRejectionModal(false);
             setIndividualRejectId(null);
             window.location.reload();
          } else {
             toast.error(
-               result.message || 'Failed to reject verification request'
+               result.message || "Failed to reject verification request"
             );
          }
       } catch (error) {
-         console.error('Error rejecting:', error);
-         toast.error('An error occurred while rejecting the request');
+         console.error("Error rejecting:", error);
+         toast.error("An error occurred while rejecting the request");
       } finally {
          setRejectProcessingIds((prev) =>
             prev.filter((procId) => procId !== individualRejectId)
@@ -276,18 +276,18 @@ export default function VerificationTable({
 
    const handleCancelRejection = () => {
       setShowRejectionModal(false);
-      setRejectionReason('');
+      setRejectionReason("");
       setRejectionType(null);
       setIndividualRejectId(null);
    };
 
    const formatDate = (date: Date) => {
-      return new Intl.DateTimeFormat('en-US', {
-         year: 'numeric',
-         month: 'short',
-         day: 'numeric',
-         hour: '2-digit',
-         minute: '2-digit',
+      return new Intl.DateTimeFormat("en-US", {
+         year: "numeric",
+         month: "short",
+         day: "numeric",
+         hour: "2-digit",
+         minute: "2-digit",
       }).format(date);
    };
 
@@ -384,7 +384,7 @@ export default function VerificationTable({
                               onCheckedChange={(checked) =>
                                  handleSelectRow(request.id, checked as boolean)
                               }
-                              disabled={request.status !== 'PENDING'}
+                              disabled={request.status !== "PENDING"}
                            />
                         </TableCell>
                         <TableCell className="min-w-[192px]">
@@ -411,9 +411,9 @@ export default function VerificationTable({
                                           className="text-xs font-medium"
                                        >
                                           {request.user.fullName
-                                             .split(' ')
+                                             .split(" ")
                                              .map((n: string) => n[0])
-                                             .join('')
+                                             .join("")
                                              .toUpperCase()}
                                        </Link>
                                     </div>
@@ -442,9 +442,9 @@ export default function VerificationTable({
                         <TableCell className="min-w-[96px]">
                            <span
                               className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                                 request.status === 'PENDING'
-                                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
-                                    : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                                 request.status === "PENDING"
+                                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400"
+                                    : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
                               }`}
                            >
                               {request.status}
@@ -454,7 +454,7 @@ export default function VerificationTable({
                            {formatDate(request.submittedAt)}
                         </TableCell>
                         <TableCell className="min-w-[192px]">
-                           {request.status === 'PENDING' ? (
+                           {request.status === "PENDING" ? (
                               <div className="flex items-center gap-2">
                                  <Button
                                     size="sm"
@@ -511,7 +511,7 @@ export default function VerificationTable({
                                        View Details
                                     </Link>
                                  </DropdownMenuItem>
-                                 {request.status === 'PENDING' && (
+                                 {request.status === "PENDING" && (
                                     <DropdownMenuItem
                                        onClick={() =>
                                           handleRejectWithReason(request.id)
@@ -600,9 +600,9 @@ export default function VerificationTable({
                         onClick={handleCancelRejection}
                      />
                      <h1 className="text-center text-2xl font-bold text-white/80">
-                        {rejectionType === 'bulk'
+                        {rejectionType === "bulk"
                            ? `Reject ${selectedRows.length} Verification Request(s)`
-                           : 'Reject Verification Request'}
+                           : "Reject Verification Request"}
                      </h1>
 
                      <p className="text-center text-sm font-light tracking-wide text-white/80 md:text-base">
@@ -634,7 +634,7 @@ export default function VerificationTable({
                      <form
                         onSubmit={(e) => {
                            e.preventDefault();
-                           rejectionType === 'bulk'
+                           rejectionType === "bulk"
                               ? executeBulkReject()
                               : executeIndividualReject();
                         }}

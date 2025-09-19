@@ -1,9 +1,9 @@
-import { serve } from '@upstash/workflow/nextjs';
-import { prisma } from '@/lib/prisma';
-import { sendEmail } from '@/lib/workflow';
-import { corsOptionsResponse } from '@/lib/utils';
+import { serve } from "@upstash/workflow/nextjs";
+import { prisma } from "@/lib/prisma";
+import { sendEmail } from "@/lib/workflow";
+import { corsOptionsResponse } from "@/lib/utils";
 
-type UserState = 'non-active' | 'active';
+type UserState = "non-active" | "active";
 
 type InitialData = {
    email: string;
@@ -19,7 +19,7 @@ const getUserState = async (email: string): Promise<UserState> => {
       where: { email },
    });
 
-   if (!user) return 'non-active';
+   if (!user) return "non-active";
 
    const lastActivityDate = new Date(user?.lastActiveAt!);
    const now = new Date();
@@ -29,50 +29,50 @@ const getUserState = async (email: string): Promise<UserState> => {
       timeDifference > THREE_DAYS_IN_MS &&
       timeDifference <= THIRTY_DAYS_IN_MS
    ) {
-      return 'non-active';
+      return "non-active";
    }
 
-   return 'active';
+   return "active";
 };
 
 export const { POST } = serve<InitialData>(async (context) => {
    const { email, fullName } = context.requestPayload;
 
    // Welcome Email
-   await context.run('new-signup', async () => {
+   await context.run("new-signup", async () => {
       await sendEmail({
          email,
-         subject: 'Welcome to the platform',
+         subject: "Welcome to the platform",
          message: `Welcome ${fullName}!`,
       });
    });
 
-   await context.sleep('wait-for-3-days', 60 * 60 * 24 * 3);
+   await context.sleep("wait-for-3-days", 60 * 60 * 24 * 3);
 
    while (true) {
-      const state = await context.run('check-user-state', async () => {
+      const state = await context.run("check-user-state", async () => {
          return await getUserState(email);
       });
 
-      if (state === 'non-active') {
-         await context.run('send-email-non-active', async () => {
+      if (state === "non-active") {
+         await context.run("send-email-non-active", async () => {
             await sendEmail({
                email,
-               subject: 'Are you still there?',
+               subject: "Are you still there?",
                message: `Hey ${fullName}, we miss you!`,
             });
          });
-      } else if (state === 'active') {
-         await context.run('send-email-active', async () => {
+      } else if (state === "active") {
+         await context.run("send-email-active", async () => {
             await sendEmail({
                email,
-               subject: 'Welcome back!',
+               subject: "Welcome back!",
                message: `Welcome back ${fullName}!`,
             });
          });
       }
 
-      await context.sleep('wait-for-1-month', 60 * 60 * 24 * 30);
+      await context.sleep("wait-for-1-month", 60 * 60 * 24 * 30);
    }
 });
 

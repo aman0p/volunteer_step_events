@@ -1,4 +1,4 @@
-import { Session } from 'next-auth';
+import { Session } from "next-auth";
 
 const Header = ({ session }: { session: Session }) => {
    return (
@@ -6,7 +6,7 @@ const Header = ({ session }: { session: Session }) => {
          <div className="flex flex-col">
             <h2 className="text-lg font-bold md:text-xl lg:text-2xl">
                {/* Welcome back,  */}
-               {session?.user?.name || 'Admin'}
+               {session?.user?.name || "Admin"}
             </h2>
             <p className="text-xs text-slate-500 md:text-sm">
                Monitor your events and volunteers here

@@ -1,22 +1,22 @@
-'use server';
+"use server";
 
-import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
+import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
 import {
    broadcastNewEventNotification,
    notifyEnrolledVolunteersOnEventUpdate,
    notifyEnrolledVolunteersOnEventDeletion,
-} from '@/lib/actions/admin/notifications';
-import type { Prisma } from '@/generated/prisma';
-import type { EventParams } from '@/types';
-import { revalidatePath } from 'next/cache';
+} from "@/lib/actions/admin/notifications";
+import type { Prisma } from "@/generated/prisma";
+import type { EventParams } from "@/types";
+import { revalidatePath } from "next/cache";
 
 export const createEvent = async (params: EventParams) => {
    try {
       const session = await getServerSession(authOptions);
       if (!session?.user?.id) {
-         return { success: false, message: 'Authentication required' };
+         return { success: false, message: "Authentication required" };
       }
 
       // Validate event roles if provided
@@ -27,7 +27,7 @@ export const createEvent = async (params: EventParams) => {
          );
          const uniqueNames = new Set(roleNames);
          if (uniqueNames.size !== roleNames.length) {
-            return { success: false, message: 'Role names must be unique' };
+            return { success: false, message: "Role names must be unique" };
          }
 
          // Validate individual role fields
@@ -35,25 +35,25 @@ export const createEvent = async (params: EventParams) => {
             if (!role.name.trim()) {
                return {
                   success: false,
-                  message: 'Role name is required for all roles',
+                  message: "Role name is required for all roles",
                };
             }
             if (!role.description.trim() || role.description.length < 3) {
                return {
                   success: false,
-                  message: 'Role description must be at least 3 characters',
+                  message: "Role description must be at least 3 characters",
                };
             }
             if (role.payout < 0 || role.payout > 1000000) {
                return {
                   success: false,
-                  message: 'Payout must be between ₹0 and ₹10,00,000',
+                  message: "Payout must be between ₹0 and ₹10,00,000",
                };
             }
             if (role.maxCount < 1 || role.maxCount > 100) {
                return {
                   success: false,
-                  message: 'Max volunteers must be between 1 and 100',
+                  message: "Max volunteers must be between 1 and 100",
                };
             }
          }
@@ -110,7 +110,7 @@ export const createEvent = async (params: EventParams) => {
       await broadcastNewEventNotification(newEvent.id);
 
       // Ensure the admin events page shows the newly created event
-      revalidatePath('/admin/events');
+      revalidatePath("/admin/events");
 
       return {
          success: true,
@@ -121,7 +121,7 @@ export const createEvent = async (params: EventParams) => {
 
       return {
          success: false,
-         message: 'An error occurred while creating the event',
+         message: "An error occurred while creating the event",
       };
    }
 };
@@ -130,7 +130,7 @@ export const updateEvent = async (id: string, params: EventParams) => {
    try {
       const session = await getServerSession(authOptions);
       if (!session?.user?.id) {
-         return { success: false, message: 'Authentication required' };
+         return { success: false, message: "Authentication required" };
       }
 
       // Ensure owner is updating their own event
@@ -139,12 +139,12 @@ export const updateEvent = async (id: string, params: EventParams) => {
          select: { createdById: true },
       });
       if (!event) {
-         return { success: false, message: 'Event not found' };
+         return { success: false, message: "Event not found" };
       }
       if (event.createdById !== session.user.id) {
          return {
             success: false,
-            message: 'You can only update your own events',
+            message: "You can only update your own events",
          };
       }
 
@@ -157,7 +157,7 @@ export const updateEvent = async (id: string, params: EventParams) => {
             );
             const uniqueNames = new Set(roleNames);
             if (uniqueNames.size !== roleNames.length) {
-               return { success: false, message: 'Role names must be unique' };
+               return { success: false, message: "Role names must be unique" };
             }
 
             // Validate individual role fields
@@ -165,25 +165,25 @@ export const updateEvent = async (id: string, params: EventParams) => {
                if (!role.name.trim()) {
                   return {
                      success: false,
-                     message: 'Role name is required for all roles',
+                     message: "Role name is required for all roles",
                   };
                }
                if (!role.description.trim() || role.description.length < 10) {
                   return {
                      success: false,
-                     message: 'Role description must be at least 10 characters',
+                     message: "Role description must be at least 10 characters",
                   };
                }
                if (role.payout < 0 || role.payout > 100000) {
                   return {
                      success: false,
-                     message: 'Payout must be between ₹0 and ₹1,00,000',
+                     message: "Payout must be between ₹0 and ₹1,00,000",
                   };
                }
                if (role.maxCount < 1 || role.maxCount > 100) {
                   return {
                      success: false,
-                     message: 'Max volunteers must be between 1 and 100',
+                     message: "Max volunteers must be between 1 and 100",
                   };
                }
             }
@@ -256,7 +256,7 @@ export const updateEvent = async (id: string, params: EventParams) => {
       await notifyEnrolledVolunteersOnEventUpdate(id);
 
       // Ensure lists and detail pages refresh
-      revalidatePath('/admin/events');
+      revalidatePath("/admin/events");
       revalidatePath(`/admin/events/${id}`);
 
       return {
@@ -268,7 +268,7 @@ export const updateEvent = async (id: string, params: EventParams) => {
 
       return {
          success: false,
-         message: 'An error occurred while updating the event',
+         message: "An error occurred while updating the event",
       };
    }
 };
@@ -277,7 +277,7 @@ export const deleteEvent = async (eventId: string) => {
    try {
       const session = await getServerSession(authOptions);
       if (!session?.user?.id) {
-         return { success: false, message: 'Authentication required' };
+         return { success: false, message: "Authentication required" };
       }
       // Get event details before deletion for notification
       const event = await prisma.event.findUnique({
@@ -288,14 +288,14 @@ export const deleteEvent = async (eventId: string) => {
       if (!event) {
          return {
             success: false,
-            message: 'Event not found',
+            message: "Event not found",
          };
       }
 
       if (event.createdById !== session.user.id) {
          return {
             success: false,
-            message: 'You can only delete your own events',
+            message: "You can only delete your own events",
          };
       }
 
@@ -311,18 +311,18 @@ export const deleteEvent = async (eventId: string) => {
       });
 
       // Ensure lists refresh
-      revalidatePath('/admin/events');
+      revalidatePath("/admin/events");
 
       return {
          success: true,
-         message: 'Event deleted successfully',
+         message: "Event deleted successfully",
       };
    } catch (error) {
       console.log(error);
 
       return {
          success: false,
-         message: 'An error occurred while deleting the event',
+         message: "An error occurred while deleting the event",
       };
    }
 };

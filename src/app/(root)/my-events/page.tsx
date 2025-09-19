@@ -1,14 +1,14 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
-import { UserEventsTable } from '@/components/UserEventsTable';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import { UserEventsTable } from "@/components/UserEventsTable";
 
 export default async function VolunteerEventsPage() {
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    // Check if user has volunteer role - use database role instead of session role
@@ -17,8 +17,8 @@ export default async function VolunteerEventsPage() {
       select: { role: true },
    });
 
-   if (!user || user.role !== 'VOLUNTEER') {
-      redirect('/profile');
+   if (!user || user.role !== "VOLUNTEER") {
+      redirect("/profile");
    }
 
    // Get only enrolled events for the current user
@@ -27,7 +27,7 @@ export default async function VolunteerEventsPage() {
          enrollments: {
             some: {
                userId: session.user.id,
-               status: { in: ['APPROVED', 'PENDING', 'WAITLISTED'] },
+               status: { in: ["APPROVED", "PENDING", "WAITLISTED"] },
             },
          },
       },
@@ -37,7 +37,7 @@ export default async function VolunteerEventsPage() {
             select: { status: true },
          },
       },
-      orderBy: { startDate: 'asc' },
+      orderBy: { startDate: "asc" },
    });
 
    // Transform data to include enrollment status
@@ -52,7 +52,7 @@ export default async function VolunteerEventsPage() {
       enrollmentStatus:
          event.enrollments.length > 0
             ? event.enrollments[0].status
-            : 'NOT_ENROLLED',
+            : "NOT_ENROLLED",
    }));
 
    return (
@@ -68,7 +68,7 @@ export default async function VolunteerEventsPage() {
             </div>
             <div className="flex text-sm text-gray-600">
                {eventsData.length} enrolled event
-               {eventsData.length !== 1 ? 's' : ''}
+               {eventsData.length !== 1 ? "s" : ""}
             </div>
          </div>
 

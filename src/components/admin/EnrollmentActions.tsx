@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
    approveEnrollment,
    rejectEnrollment,
-} from '@/lib/actions/admin/enrollment';
-import { toast } from 'sonner';
+} from "@/lib/actions/admin/enrollment";
+import { toast } from "sonner";
 
 interface EnrollmentActionsProps {
    enrollmentId: string;
@@ -28,11 +28,11 @@ export default function EnrollmentActions({
          if (result.success) {
             toast.success(`Enrollment for ${userName} approved!`);
          } else {
-            toast.error(result.message || 'Failed to approve enrollment.');
+            toast.error(result.message || "Failed to approve enrollment.");
          }
       } catch (error) {
-         console.error('Error approving enrollment:', error);
-         toast.error('An unexpected error occurred during approval.');
+         console.error("Error approving enrollment:", error);
+         toast.error("An unexpected error occurred during approval.");
       } finally {
          setIsLoading(false);
       }
@@ -45,11 +45,11 @@ export default function EnrollmentActions({
          if (result.success) {
             toast.success(`Enrollment for ${userName} rejected.`);
          } else {
-            toast.error(result.message || 'Failed to reject enrollment.');
+            toast.error(result.message || "Failed to reject enrollment.");
          }
       } catch (error) {
-         console.error('Error rejecting enrollment:', error);
-         toast.error('An unexpected error occurred during rejection.');
+         console.error("Error rejecting enrollment:", error);
+         toast.error("An unexpected error occurred during rejection.");
       } finally {
          setIsLoading(false);
       }
@@ -62,14 +62,14 @@ export default function EnrollmentActions({
             disabled={isLoading}
             className="bg-green-500 text-white hover:bg-green-600"
          >
-            {isLoading ? 'Approving...' : 'Approve'}
+            {isLoading ? "Approving..." : "Approve"}
          </Button>
          <Button
             onClick={handleReject}
             disabled={isLoading}
             variant="destructive"
          >
-            {isLoading ? 'Rejecting...' : 'Reject'}
+            {isLoading ? "Rejecting..." : "Reject"}
          </Button>
       </div>
    );

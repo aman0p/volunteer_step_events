@@ -1,16 +1,16 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
-import EventEnrollmentTable from '@/components/admin/tables/EnrollmentTable';
-import { Download, Filter } from 'lucide-react';
-import { Button } from '@/components/ui';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import EventEnrollmentTable from "@/components/admin/tables/EnrollmentTable";
+import { Download, Filter } from "lucide-react";
+import { Button } from "@/components/ui";
 
 export default async function EnrollmentsPage() {
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    // Check if user has admin role - use database role instead of session role
@@ -19,13 +19,13 @@ export default async function EnrollmentsPage() {
       select: { role: true },
    });
 
-   if (!user || (user.role !== 'ADMIN' && user.role !== 'ORGANIZER')) {
-      redirect('/');
+   if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
+      redirect("/");
    }
 
    // Get pending enrollments only for events created by current admin
    const pendingEnrollments = await prisma.enrollment.findMany({
-      where: { status: 'PENDING', event: { createdById: session.user.id } },
+      where: { status: "PENDING", event: { createdById: session.user.id } },
       include: {
          event: {
             select: {
@@ -45,7 +45,7 @@ export default async function EnrollmentsPage() {
             },
          },
       },
-      orderBy: { enrolledAt: 'desc' },
+      orderBy: { enrolledAt: "desc" },
    });
 
    return (
@@ -60,7 +60,7 @@ export default async function EnrollmentsPage() {
                </p>
             </div>
             <div className="mt-3 flex items-center gap-5 text-sm text-gray-600 md:mt-0">
-               Pending request{pendingEnrollments.length !== 1 ? 's' : ''} ({' '}
+               Pending request{pendingEnrollments.length !== 1 ? "s" : ""} ({" "}
                {pendingEnrollments.length} )
             </div>
          </div>

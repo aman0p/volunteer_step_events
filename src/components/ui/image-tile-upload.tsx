@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useRef, useState } from 'react';
-import FileUpload from '@/components/FileUpload';
-import { cn } from '@/lib/utils';
-import useMultiFileUpload from '@/hooks/useMultiFileUpload';
-import Image from 'next/image';
+import React, { useRef, useState } from "react";
+import FileUpload from "@/components/FileUpload";
+import { cn } from "@/lib/utils";
+import useMultiFileUpload from "@/hooks/useMultiFileUpload";
+import Image from "next/image";
 
 type Props = {
    value?: string;
@@ -14,7 +14,7 @@ type Props = {
    add?: boolean; // if true, shows the + tile; otherwise shows the image tile
    multiple?: boolean; // allow multiple selection at once when add is true
    placeholder?: string; // optional placeholder to mirror cover wording
-   mediaType?: 'image' | 'video' | 'both'; // what type of media to accept
+   mediaType?: "image" | "video" | "both"; // what type of media to accept
 };
 
 export default function ImageTileUpload({
@@ -25,7 +25,7 @@ export default function ImageTileUpload({
    add,
    multiple,
    placeholder,
-   mediaType = 'image',
+   mediaType = "image",
 }: Props) {
    // Add tile
    if (add) {
@@ -39,7 +39,7 @@ export default function ImageTileUpload({
 
       if (multiple) {
          return (
-            <div className={cn('flex flex-wrap items-start gap-3', className)}>
+            <div className={cn("flex flex-wrap items-start gap-3", className)}>
                {pending.map((item) => (
                   <div
                      key={item.id}
@@ -73,7 +73,7 @@ export default function ImageTileUpload({
                         className="relative z-10 object-contain"
                      />
                      <span className="text-sm">
-                        {placeholder ?? 'Upload event media'}
+                        {placeholder ?? "Upload event media"}
                      </span>
                   </div>
                </button>
@@ -81,11 +81,11 @@ export default function ImageTileUpload({
                   ref={inputRef}
                   type="file"
                   accept={
-                     mediaType === 'both'
-                        ? 'image/*,video/*'
-                        : mediaType === 'video'
-                          ? 'video/*'
-                          : 'image/*'
+                     mediaType === "both"
+                        ? "image/*,video/*"
+                        : mediaType === "video"
+                          ? "video/*"
+                          : "image/*"
                   }
                   multiple
                   className="hidden"
@@ -93,7 +93,7 @@ export default function ImageTileUpload({
                      const files = e.target.files;
                      if (files && files.length > 0) {
                         startUploads(files);
-                        e.currentTarget.value = ''; // reset to allow reselecting same files
+                        e.currentTarget.value = ""; // reset to allow reselecting same files
                      }
                   }}
                />
@@ -107,21 +107,21 @@ export default function ImageTileUpload({
          <div className="w-[310px] md:w-[217px]">
             <FileUpload
                key={nonce}
-               type={mediaType === 'video' ? 'video' : 'image'}
+               type={mediaType === "video" ? "video" : "image"}
                accept={
-                  mediaType === 'both'
-                     ? 'image/*,video/*'
-                     : mediaType === 'video'
-                       ? 'video/*'
-                       : 'image/*'
+                  mediaType === "both"
+                     ? "image/*,video/*"
+                     : mediaType === "video"
+                       ? "video/*"
+                       : "image/*"
                }
                placeholder={
                   placeholder ??
-                  (mediaType === 'both'
-                     ? 'Add media'
-                     : mediaType === 'video'
-                       ? 'Add video'
-                       : 'Add image')
+                  (mediaType === "both"
+                     ? "Add media"
+                     : mediaType === "video"
+                       ? "Add video"
+                       : "Add image")
                }
                folder={folder}
                variant="dark"
@@ -129,7 +129,7 @@ export default function ImageTileUpload({
                   onChange(p);
                   setNonce((n) => n + 1);
                }}
-               className={cn('aspect-video w-[310px] md:w-[217px]')}
+               className={cn("aspect-video w-[310px] md:w-[217px]")}
             />
          </div>
       );
@@ -137,31 +137,31 @@ export default function ImageTileUpload({
 
    // Media tile with change on click - auto-detect type for "both"
    const detectMediaType = (filePath: string) => {
-      if (mediaType === 'both') {
-         const extension = filePath.split('.').pop()?.toLowerCase();
-         return ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', 'mkv'].includes(
-            extension || ''
+      if (mediaType === "both") {
+         const extension = filePath.split(".").pop()?.toLowerCase();
+         return ["mp4", "avi", "mov", "wmv", "flv", "webm", "mkv"].includes(
+            extension || ""
          )
-            ? 'video'
-            : 'image';
+            ? "video"
+            : "image";
       }
-      return mediaType === 'video' ? 'video' : 'image';
+      return mediaType === "video" ? "video" : "image";
    };
 
    return (
-      <div className={cn('w-[310px] md:w-[217px]', className)}>
+      <div className={cn("w-[310px] md:w-[217px]", className)}>
          <FileUpload
-            type={detectMediaType(value || '')}
+            type={detectMediaType(value || "")}
             accept={
-               mediaType === 'both'
-                  ? 'image/*,video/*'
-                  : mediaType === 'video'
-                    ? 'video/*'
-                    : 'image/*'
+               mediaType === "both"
+                  ? "image/*,video/*"
+                  : mediaType === "video"
+                    ? "video/*"
+                    : "image/*"
             }
             placeholder={
                placeholder ??
-               (mediaType === 'video' ? 'Change video' : 'Change image')
+               (mediaType === "video" ? "Change video" : "Change image")
             }
             folder={folder}
             variant="dark"

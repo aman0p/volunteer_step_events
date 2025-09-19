@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Search, X, Mail, Phone, Shield, Users, UserCheck } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Image } from '@imagekit/next';
-import config from '@/lib/config';
-import Link from 'next/link';
+import { useState, useEffect } from "react";
+import { Search, X, Mail, Phone, Shield, Users, UserCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Image } from "@imagekit/next";
+import config from "@/lib/config";
+import Link from "next/link";
 
 interface Volunteer {
    id: string;
@@ -40,13 +40,13 @@ interface VolunteerSearchProps {
 
 export default function VolunteerSearch({
    onVolunteerSelect,
-   placeholder = 'Search users by name...',
-   className = '',
+   placeholder = "Search users by name...",
+   className = "",
    eventId,
    includeAdmins = true, // Default to true to include admins
    showToggle = true, // Show toggle by default
 }: VolunteerSearchProps) {
-   const [query, setQuery] = useState('');
+   const [query, setQuery] = useState("");
    const [results, setResults] = useState<Volunteer[]>([]);
    const [isLoading, setIsLoading] = useState(false);
    const [showResults, setShowResults] = useState(false);
@@ -62,7 +62,7 @@ export default function VolunteerSearch({
 
          setIsLoading(true);
          try {
-            const searchUrl = `/api/admin/volunteer/search?q=${encodeURIComponent(query)}${eventId ? `&eventId=${eventId}` : ''}${includeAdminsState ? '&includeAdmins=true' : ''}`;
+            const searchUrl = `/api/admin/volunteer/search?q=${encodeURIComponent(query)}${eventId ? `&eventId=${eventId}` : ""}${includeAdminsState ? "&includeAdmins=true" : ""}`;
 
             const response = await fetch(searchUrl);
 
@@ -73,13 +73,13 @@ export default function VolunteerSearch({
                setShowResults(true);
             } else {
                console.error(
-                  'Search response not ok:',
+                  "Search response not ok:",
                   response.status,
                   response.statusText
                );
             }
          } catch (error) {
-            console.error('Search error:', error);
+            console.error("Search error:", error);
             setResults([]);
          } finally {
             setIsLoading(false);
@@ -99,20 +99,20 @@ export default function VolunteerSearch({
    };
 
    const clearSearch = () => {
-      setQuery('');
+      setQuery("");
       setResults([]);
       setShowResults(false);
    };
 
    const getStatusBadge = (status: string) => {
       switch (status) {
-         case 'PENDING':
+         case "PENDING":
             return (
                <Badge variant="secondary" className="text-xs">
                   Pending
                </Badge>
             );
-         case 'APPROVED':
+         case "APPROVED":
             return (
                <Badge
                   variant="default"
@@ -121,7 +121,7 @@ export default function VolunteerSearch({
                   Approved
                </Badge>
             );
-         case 'REJECTED':
+         case "REJECTED":
             return (
                <Badge variant="destructive" className="text-xs">
                   Rejected
@@ -138,7 +138,7 @@ export default function VolunteerSearch({
 
    const getRoleBadge = (role: string) => {
       switch (role) {
-         case 'ADMIN':
+         case "ADMIN":
             return (
                <Badge
                   variant="destructive"
@@ -147,7 +147,7 @@ export default function VolunteerSearch({
                   Admin
                </Badge>
             );
-         case 'ORGANIZER':
+         case "ORGANIZER":
             return (
                <Badge
                   variant="default"
@@ -156,7 +156,7 @@ export default function VolunteerSearch({
                   Organizer
                </Badge>
             );
-         case 'VOLUNTEER':
+         case "VOLUNTEER":
             return (
                <Badge
                   variant="secondary"
@@ -165,7 +165,7 @@ export default function VolunteerSearch({
                   Volunteer
                </Badge>
             );
-         case 'USER':
+         case "USER":
             return (
                <Badge variant="outline" className="text-xs">
                   User
@@ -251,8 +251,8 @@ export default function VolunteerSearch({
                ) : results.length === 0 ? (
                   <div className="p-4 text-center text-gray-500">
                      {query.trim().length >= 2
-                        ? 'No users found'
-                        : 'Type at least 2 characters to search'}
+                        ? "No users found"
+                        : "Type at least 2 characters to search"}
                   </div>
                ) : (
                   <div className="py-2">
@@ -285,9 +285,9 @@ export default function VolunteerSearch({
                                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200">
                                        <span className="text-lg">
                                           {volunteer.fullName
-                                             .split(' ')
+                                             .split(" ")
                                              .map((n: string) => n[0])
-                                             .join('')
+                                             .join("")
                                              .toUpperCase()}
                                        </span>
                                     </div>
@@ -301,10 +301,10 @@ export default function VolunteerSearch({
                                        {volunteer.fullName}
                                     </h4>
                                     {getRoleBadge(volunteer.role)}
-                                    {volunteer.role === 'ADMIN' && (
+                                    {volunteer.role === "ADMIN" && (
                                        <Shield className="h-4 w-4 text-red-600" />
                                     )}
-                                    {volunteer.role === 'ORGANIZER' && (
+                                    {volunteer.role === "ORGANIZER" && (
                                        <UserCheck className="h-4 w-4 text-blue-600" />
                                     )}
                                  </div>
@@ -347,7 +347,7 @@ export default function VolunteerSearch({
                                                 variant="outline"
                                                 className="text-xs"
                                              >
-                                                +{volunteer.skills.length - 3}{' '}
+                                                +{volunteer.skills.length - 3}{" "}
                                                 more
                                              </Badge>
                                           )}

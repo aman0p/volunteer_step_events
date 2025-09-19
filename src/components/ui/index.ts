@@ -1,9 +1,9 @@
 // Export all UI components
-export { Badge } from './badge';
-export { Button } from './button';
-export { Input } from './input';
-export { Label } from './label';
-export { Textarea } from './textarea';
+export { Badge } from "./badge";
+export { Button } from "./button";
+export { Input } from "./input";
+export { Label } from "./label";
+export { Textarea } from "./textarea";
 export {
    Form,
    FormControl,
@@ -12,11 +12,11 @@ export {
    FormItem,
    FormLabel,
    FormMessage,
-} from './form';
-export { FileInput } from './file-input';
-export { MultiSelect } from './multi-select';
-export { Tag } from './tag';
-export { default as CopyButton } from './copy-button';
+} from "./form";
+export { FileInput } from "./file-input";
+export { MultiSelect } from "./multi-select";
+export { Tag } from "./tag";
+export { default as CopyButton } from "./copy-button";
 
 // Export StatusBadge components
 export {
@@ -29,4 +29,4 @@ export {
    CompletedBadge,
    CancelledBadge,
    type StatusType,
-} from './StatusBadge';
+} from "./StatusBadge";

@@ -1,14 +1,14 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/auth';
-import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
-import VolunteerMgmtTable from '@/components/admin/tables/VolunteerMgmtTable';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import VolunteerMgmtTable from "@/components/admin/tables/VolunteerMgmtTable";
 
 export default async function VolunteerPage() {
    const session = await getServerSession(authOptions);
 
    if (!session) {
-      redirect('/sign-in');
+      redirect("/sign-in");
    }
 
    // Check if user has admin role
@@ -17,14 +17,14 @@ export default async function VolunteerPage() {
       select: { role: true },
    });
 
-   if (!user || (user.role !== 'ADMIN' && user.role !== 'ORGANIZER')) {
-      redirect('/');
+   if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
+      redirect("/");
    }
 
    // Fetch all volunteers with their enrollments and event details
    const volunteers = await prisma.user.findMany({
       where: {
-         OR: [{ role: 'USER' }, { role: 'VOLUNTEER' }, { role: 'ADMIN' }],
+         OR: [{ role: "USER" }, { role: "VOLUNTEER" }, { role: "ADMIN" }],
       },
       include: {
          enrollments: {
@@ -40,10 +40,10 @@ export default async function VolunteerPage() {
                   },
                },
             },
-            orderBy: { enrolledAt: 'desc' },
+            orderBy: { enrolledAt: "desc" },
          },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
    });
 
    return (

@@ -1,7 +1,7 @@
-import config from '@/lib/config';
+import config from "@/lib/config";
 
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
    return twMerge(clsx(inputs));
@@ -10,12 +10,12 @@ export function cn(...inputs: ClassValue[]) {
 // CORS utility function for consistent headers across API routes
 export function getCorsHeaders() {
    return {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
-      'Access-Control-Allow-Headers':
-         'Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, X-Requested-With',
-      'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Max-Age': '86400',
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+      "Access-Control-Allow-Headers":
+         "Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, X-Requested-With",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Max-Age": "86400",
    };
 }
 
@@ -29,20 +29,20 @@ export function corsOptionsResponse() {
 
 export const getInitials = (name: string): string =>
    name
-      .split(' ')
+      .split(" ")
       .map((part) => part[0])
-      .join('')
+      .join("")
       .toUpperCase()
       .slice(0, 2);
 
 export const getBackgroundImageUrl = (url: string | undefined): string => {
-   if (!url) return '/events.jpg';
+   if (!url) return "/events.jpg";
 
    // If already absolute, return as-is
    if (/^https?:\/\//i.test(url)) return url;
 
    // For relative URLs, prefix with ImageKit endpoint
-   const endpoint = config.env.imagekit.urlEndpoint?.replace(/\/$/, '') || '';
-   const path = url.startsWith('/') ? url : `/${url}`;
+   const endpoint = config.env.imagekit.urlEndpoint?.replace(/\/$/, "") || "";
+   const path = url.startsWith("/") ? url : `/${url}`;
    return `${endpoint}${path}`;
 };
