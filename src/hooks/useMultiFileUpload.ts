@@ -59,12 +59,14 @@ export function useMultiFileUpload(
 
                onFileDone(res.filePath ?? "");
                setPending((p) => p.filter((it) => it.id !== id));
-            } catch (err: any) {
+            } catch (err) {
                setPending((p) => p.filter((it) => it.id !== id));
                const mediaTypeText = mediaType === "both" ? "media" : mediaType;
+               const errorMessage =
+                  err instanceof Error ? err.message : "Please try again.";
                toast.error(
                   `${mediaTypeText.charAt(0).toUpperCase() + mediaTypeText.slice(1)} upload failed`,
-                  { description: err?.message ?? "Please try again." }
+                  { description: errorMessage }
                );
             }
          })

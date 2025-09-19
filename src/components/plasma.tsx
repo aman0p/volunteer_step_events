@@ -157,10 +157,14 @@ export const Plasma: React.FC<PlasmaProps> = ({
 
       const mesh = new Mesh(gl, { geometry, program });
 
+      // Capture the container ref at the beginning of the effect
+      const currentContainer = containerRef.current;
+      if (!currentContainer) return;
+
       // --- Mouse interaction (skip on iOS) ---
       const handleMouseMove = (e: MouseEvent) => {
          if (isIOS || !mouseInteractive) return;
-         const rect = containerRef.current!.getBoundingClientRect();
+         const rect = currentContainer.getBoundingClientRect();
          mousePos.current.x = e.clientX - rect.left;
          mousePos.current.y = e.clientY - rect.top;
          const mouseUniform = program.uniforms.uMouse.value as Float32Array;
@@ -168,12 +172,12 @@ export const Plasma: React.FC<PlasmaProps> = ({
          mouseUniform[1] = mousePos.current.y;
       };
       if (!isIOS && mouseInteractive) {
-         containerRef.current.addEventListener("mousemove", handleMouseMove);
+         currentContainer.addEventListener("mousemove", handleMouseMove);
       }
 
       // --- Resize handling ---
       const setSize = () => {
-         const rect = containerRef.current!.getBoundingClientRect();
+         const rect = currentContainer.getBoundingClientRect();
          const width = Math.max(1, Math.floor(rect.width));
          const height = Math.max(1, Math.floor(rect.height));
          renderer.setSize(width, height);
@@ -182,7 +186,7 @@ export const Plasma: React.FC<PlasmaProps> = ({
          res[1] = gl.drawingBufferHeight;
       };
       const ro = new ResizeObserver(setSize);
-      ro.observe(containerRef.current);
+      ro.observe(currentContainer);
       setSize();
 
       // --- Animation loop ---
@@ -196,9 +200,9 @@ export const Plasma: React.FC<PlasmaProps> = ({
             const timeValue = (t - t0) * 0.001;
             if (direction === "pingpong") {
                const cycle = Math.sin(timeValue * 0.5) * directionMultiplier;
-               (program.uniforms.uDirection as any).value = cycle;
+               (program.uniforms.uDirection as { value: number }).value = cycle;
             }
-            (program.uniforms.iTime as any).value = timeValue;
+            (program.uniforms.iTime as { value: number }).value = timeValue;
             renderer.render({ scene: mesh });
             lastTime = t;
          }
@@ -209,14 +213,11 @@ export const Plasma: React.FC<PlasmaProps> = ({
       return () => {
          cancelAnimationFrame(raf);
          ro.disconnect();
-         if (!isIOS && mouseInteractive && containerRef.current) {
-            containerRef.current.removeEventListener(
-               "mousemove",
-               handleMouseMove
-            );
+         if (!isIOS && mouseInteractive && currentContainer) {
+            currentContainer.removeEventListener("mousemove", handleMouseMove);
          }
          try {
-            containerRef.current?.removeChild(canvas);
+            currentContainer?.removeChild(canvas);
          } catch {}
       };
    }, [color, speed, direction, scale, opacity, mouseInteractive]);

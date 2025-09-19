@@ -1,15 +1,14 @@
 "use server";
 
-import { hash } from "bcryptjs";
 import { prisma } from "../prisma";
 import { AuthCredentials } from "@/types";
-import { Gender, GovId, Role } from "@/generated/prisma";
-import { compare } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 import { headers } from "next/headers";
 import { ratelimit } from "../ratelimit";
 import { redirect } from "next/navigation";
 import { workflowClient } from "@/lib/workflow";
 import config from "@/lib/config";
+import { GovId, Role } from "@/generated/prisma";
 
 export const signInWithCredentials = async (
    params: Pick<AuthCredentials, "email" | "password">
@@ -51,7 +50,7 @@ export const signInWithCredentials = async (
          message: "Signin successful",
       };
    } catch (error) {
-      console.log(error, "Signin error");
+      console.error("Signin error:", error);
       return {
          success: false,
          message: "Signin failed",
@@ -60,47 +59,74 @@ export const signInWithCredentials = async (
 };
 
 export const signUpWithCredentials = async (params: AuthCredentials) => {
-   const { fullName, email, password, phoneNumber, gender } = params;
+   const {
+      fullName,
+      email,
+      password,
+      phoneNumber,
+      gender,
+      address,
+      govIdType,
+      govIdImage,
+      profileImage,
+   } = params;
 
    // ********* Upstash Redis - Rate Limit *********
    const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
    const { success } = await ratelimit.limit(ip);
    if (!success) return redirect("/too-fast");
 
-   // 1. Check if user already exists
-   const existingUser = await prisma.user.findFirst({
+   // 1. Check if user already exists by email
+   const existingUserByEmail = await prisma.user.findFirst({
       where: {
          email: email,
       },
    });
 
-   if (existingUser) {
+   if (existingUserByEmail) {
       return {
          success: false,
-         message: "User already exists",
+         error: "User with this email already exists",
       };
    }
 
-   // 2. Hash password
-   const hashedPassword = await hash(password, 10);
+   // 2. Check if user already exists by phone number
+   const existingUserByPhone = await prisma.user.findFirst({
+      where: {
+         phoneNumber: phoneNumber,
+      },
+   });
+
+   if (existingUserByPhone) {
+      return {
+         success: false,
+         error: "User with this phone number already exists",
+      };
+   }
 
    try {
-      const newUser = await prisma.user.create({
+      // Hash the password
+      const hashedPassword = await hash(password, 12);
+
+      // Create user in database
+      await prisma.user.create({
          data: {
             fullName,
             email,
             password: hashedPassword,
-            phoneNumber: phoneNumber,
-            // Defaults for fields to be filled later in profile page
-            profileImage: "",
-            address: "",
-            gender: (gender as Gender) ?? Gender.MALE,
-            govIdType: GovId.AADHAR_CARD,
-            govIdImage: "",
+            phoneNumber,
+            gender,
+            address: address || "",
+            govIdType: govIdType || GovId.AADHAR_CARD,
+            govIdImage: govIdImage || "",
+            profileImage: profileImage || "",
+            skills: [], // Initialize with empty skills array
             role: Role.USER,
+            isVerified: false,
          },
       });
 
+      // Trigger workflow for email notifications
       await workflowClient.trigger({
          url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
          body: {
@@ -109,17 +135,19 @@ export const signUpWithCredentials = async (params: AuthCredentials) => {
          },
       });
 
-      // await signInWithCredentials({email, password})
-
       return {
          success: true,
          message: "User created successfully",
       };
    } catch (error) {
-      console.log(error, "Signup error");
+      console.error("Signup error:", error);
+      console.error("Error details:", {
+         message: error instanceof Error ? error.message : "Unknown error",
+         stack: error instanceof Error ? error.stack : undefined,
+      });
       return {
          success: false,
-         message: "Signup failed",
+         error: error instanceof Error ? error.message : "Signup failed",
       };
    }
 };

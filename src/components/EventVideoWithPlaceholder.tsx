@@ -6,14 +6,12 @@ import config from "@/lib/config";
 
 interface EventVideoWithPlaceholderProps {
    videoUrl: string;
-   coverUrl?: string | null;
    className?: string;
 }
 
 export default function EventVideoWithPlaceholder({
    videoUrl,
-   coverUrl,
-   className = "",
+   className,
 }: EventVideoWithPlaceholderProps) {
    const [showPlaceholder, setShowPlaceholder] = useState(true);
    const [videoError, setVideoError] = useState(false);

@@ -27,16 +27,17 @@ export default function ImageTileUpload({
    placeholder,
    mediaType = "image",
 }: Props) {
+   // Move all hooks to the top level to avoid conditional hook calls
+   const { pending, startUploads } = useMultiFileUpload(
+      folder,
+      (filePath) => onChange(filePath),
+      mediaType
+   );
+   const inputRef = useRef<HTMLInputElement>(null);
+   const [nonce, setNonce] = useState(0);
+
    // Add tile
    if (add) {
-      // When multiple is enabled, handle uploads here to spawn per-file progress tiles
-      const { pending, startUploads } = useMultiFileUpload(
-         folder,
-         (filePath) => onChange(filePath),
-         mediaType
-      );
-      const inputRef = useRef<HTMLInputElement>(null);
-
       if (multiple) {
          return (
             <div className={cn("flex flex-wrap items-start gap-3", className)}>
@@ -102,7 +103,6 @@ export default function ImageTileUpload({
       }
 
       // Single add: delegate to FileUpload so its built-in progress is used
-      const [nonce, setNonce] = useState(0);
       return (
          <div className="w-[310px] md:w-[217px]">
             <FileUpload

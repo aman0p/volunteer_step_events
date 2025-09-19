@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { getCorsHeaders, corsOptionsResponse } from "@/lib/utils";
+import { Prisma } from "@/generated/prisma";
 
 export async function GET(request: NextRequest) {
    try {
@@ -51,36 +52,39 @@ export async function GET(request: NextRequest) {
       const searchTerm = query.trim();
 
       // Build the where clause for roles
-      let roleFilter: any = {
-         OR: [{ role: "USER" }, { role: "VOLUNTEER" }],
-      };
+      const roleConditions: Prisma.UserWhereInput[] = [
+         { role: "USER" },
+         { role: "VOLUNTEER" },
+      ];
 
       // Include admins if requested and user has permission
       if (includeAdmins && user.role === "ADMIN") {
-         roleFilter.OR.push({ role: "ADMIN" });
-         roleFilter.OR.push({ role: "ORGANIZER" });
+         roleConditions.push({ role: "ADMIN" });
+         roleConditions.push({ role: "ORGANIZER" });
       } else if (includeAdmins && user.role === "ORGANIZER") {
          // Organizers can see other organizers but not admins
-         roleFilter.OR.push({ role: "ORGANIZER" });
+         roleConditions.push({ role: "ORGANIZER" });
       }
 
-      // Build the complete where clause
-      let whereClause: any = {
-         AND: [
-            roleFilter,
-            {
-               OR: [
-                  { fullName: { contains: searchTerm, mode: "insensitive" } },
-                  { email: { contains: searchTerm, mode: "insensitive" } },
-                  // Note: skills search removed as hasSome doesn't work well with partial strings
-               ],
-            },
-         ],
+      const roleFilter: Prisma.UserWhereInput = {
+         OR: roleConditions,
       };
+
+      // Build the complete where clause
+      const andConditions: Prisma.UserWhereInput[] = [
+         roleFilter,
+         {
+            OR: [
+               { fullName: { contains: searchTerm, mode: "insensitive" } },
+               { email: { contains: searchTerm, mode: "insensitive" } },
+               // Note: skills search removed as hasSome doesn't work well with partial strings
+            ],
+         },
+      ];
 
       // If eventId is provided, filter volunteer who are enrolled in that specific event
       if (eventId) {
-         whereClause.AND.push({
+         andConditions.push({
             enrollments: {
                some: {
                   eventId: eventId,
@@ -88,6 +92,10 @@ export async function GET(request: NextRequest) {
             },
          });
       }
+
+      const whereClause: Prisma.UserWhereInput = {
+         AND: andConditions,
+      };
 
       // Search volunteer by name, email, or skills
       const volunteer = await prisma.user.findMany({

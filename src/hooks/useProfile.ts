@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useForm, type UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -53,7 +53,7 @@ export function useProfile() {
    };
 
    // Function to update form completion status
-   const updateFormCompletionStatus = () => {
+   const updateFormCompletionStatus = useCallback(() => {
       const values = form.getValues();
       setFormCompletionStatus({
          fullName: values.fullName.trim() !== "",
@@ -64,7 +64,7 @@ export function useProfile() {
          govIdType: !!values.govIdType,
          govIdImage: values.govIdImage.trim() !== "",
       });
-   };
+   }, [form]);
 
    // Function to get missing fields for better error messages
    const getMissingFields = () => {
@@ -80,12 +80,9 @@ export function useProfile() {
    };
 
    // Function to fetch verification status
-   const fetchVerificationStatus = async () => {
+   const fetchVerificationStatus = useCallback(async () => {
       const result = await getVerificationStatus();
       if (result.success) {
-         const wasVerified = isVerified;
-         const wasPending = hasPendingRequest;
-
          setIsVerified(result.isVerified ?? false);
          setHasPendingRequest(result.latestRequest?.status === "PENDING");
          setHasRejectedRequest(result.latestRequest?.status === "REJECTED");
@@ -93,7 +90,7 @@ export function useProfile() {
 
          // No need for toast notifications here - sidebar notifications will handle this
       }
-   };
+   }, []);
 
    // Function to refresh verification status
    const refreshVerificationStatus = async () => {
@@ -102,6 +99,7 @@ export function useProfile() {
          await fetchVerificationStatus();
          toast.success("Verification status refreshed");
       } catch (error) {
+         console.error("Error refreshing verification status:", error);
          toast.error("Failed to refresh verification status");
       } finally {
          setIsRefreshingVerification(false);
@@ -143,6 +141,7 @@ export function useProfile() {
             );
          }
       } catch (error) {
+         console.error("Error submitting verification request:", error);
          toast.error("An error occurred while submitting the request");
       } finally {
          setIsSubmittingVerification(false);
@@ -155,6 +154,7 @@ export function useProfile() {
       if (result.success) {
          toast.success("Profile updated successfully");
       } else {
+         console.error("Error updating profile:", result.message);
          toast.error(result.message);
       }
    };
@@ -177,7 +177,7 @@ export function useProfile() {
                govIdType: result.data.govIdType ?? undefined,
                govIdImage: result.data.govIdImage ?? "",
             });
-            setRole((result.data as any).role ?? "");
+            setRole((result.data as { role: string }).role ?? "");
 
             // Update form completion status after form is loaded
             setTimeout(() => updateFormCompletionStatus(), 100);
@@ -198,7 +198,13 @@ export function useProfile() {
          isMounted = false;
          clearInterval(intervalId);
       };
-   }, [form, isVerified, hasPendingRequest]);
+   }, [
+      form,
+      isVerified,
+      hasPendingRequest,
+      fetchVerificationStatus,
+      updateFormCompletionStatus,
+   ]);
 
    // Watch form changes to update completion status
    useEffect(() => {
@@ -206,7 +212,7 @@ export function useProfile() {
          updateFormCompletionStatus();
       });
       return () => subscription.unsubscribe();
-   }, [form]);
+   }, [form, updateFormCompletionStatus]);
 
    // Refresh verification status when component becomes visible (e.g., user navigates back)
    useEffect(() => {
@@ -223,7 +229,7 @@ export function useProfile() {
             handleVisibilityChange
          );
       };
-   }, [isVerified, hasPendingRequest]);
+   }, [isVerified, hasPendingRequest, fetchVerificationStatus]);
 
    return {
       form,

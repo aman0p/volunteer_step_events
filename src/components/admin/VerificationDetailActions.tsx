@@ -31,11 +31,16 @@ export default function VerificationDetailActions({
             // Refresh the page to show updated status
             window.location.reload();
          } else {
+            console.error(
+               "Failed to approve verification request:",
+               result.message
+            );
             toast.error(
                result.message || "Failed to approve verification request"
             );
          }
       } catch (error) {
+         console.error("Error approving verification request:", error);
          toast.error("An error occurred while approving the request");
       } finally {
          setIsApproving(false);

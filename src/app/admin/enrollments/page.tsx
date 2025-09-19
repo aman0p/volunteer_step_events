@@ -3,8 +3,6 @@ import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import EventEnrollmentTable from "@/components/admin/tables/EnrollmentTable";
-import { Download, Filter } from "lucide-react";
-import { Button } from "@/components/ui";
 
 export default async function EnrollmentsPage() {
    const session = await getServerSession(authOptions);

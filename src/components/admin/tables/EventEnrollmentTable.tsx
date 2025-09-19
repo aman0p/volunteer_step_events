@@ -29,6 +29,8 @@ import {
    MapPin,
    User,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Status } from "@/generated/prisma";
 
 type Enrollment = {
    id: string;
@@ -60,7 +62,6 @@ interface EventEnrollmentTableProps {
    eventLocation: string;
    eventStartDate: Date;
    eventEndDate: Date;
-   currentUserRole: "ADMIN" | "ORGANIZER";
 }
 
 export default function EventEnrollmentTable({
@@ -69,12 +70,11 @@ export default function EventEnrollmentTable({
    eventLocation,
    eventStartDate,
    eventEndDate,
-   currentUserRole,
 }: EventEnrollmentTableProps) {
    const [page, setPage] = useState(1);
    const [rowsPerPage, setRowsPerPage] = useState(10);
    const [statusFilter, setStatusFilter] = useState<string>("ALL");
-
+   const router = useRouter();
    const formatDate = (date: Date) => {
       return new Intl.DateTimeFormat("en-US", {
          year: "numeric",
@@ -142,11 +142,13 @@ export default function EventEnrollmentTable({
 
    const statusCounts = {
       ALL: enrollments.length,
-      APPROVED: enrollments.filter((e) => e.status === "APPROVED").length,
-      PENDING: enrollments.filter((e) => e.status === "PENDING").length,
-      REJECTED: enrollments.filter((e) => e.status === "REJECTED").length,
-      WAITLISTED: enrollments.filter((e) => e.status === "WAITLISTED").length,
-      CANCELLED: enrollments.filter((e) => e.status === "CANCELLED").length,
+      APPROVED: enrollments.filter((e) => e.status === Status.APPROVED).length,
+      PENDING: enrollments.filter((e) => e.status === Status.PENDING).length,
+      REJECTED: enrollments.filter((e) => e.status === Status.REJECTED).length,
+      WAITLISTED: enrollments.filter((e) => e.status === Status.WAITLISTED)
+         .length,
+      CANCELLED: enrollments.filter((e) => e.status === Status.CANCELLED)
+         .length,
    };
 
    return (
@@ -406,10 +408,15 @@ export default function EventEnrollmentTable({
                                  variant="outline"
                                  size="sm"
                                  className="w-full"
+                                 onClick={() => {
+                                    router.push(
+                                       `/admin/volunteer/${enrollment.user.id}`
+                                    );
+                                 }}
                               >
                                  View Profile
                               </Button>
-                              {enrollment.status === "PENDING" && (
+                              {enrollment.status === Status.PENDING && (
                                  <Button
                                     variant="default"
                                     size="sm"

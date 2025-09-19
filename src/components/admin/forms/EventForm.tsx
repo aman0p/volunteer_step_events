@@ -27,8 +27,8 @@ import ImageTileUpload from "@/components/ui/image-tile-upload";
 import { toast } from "sonner";
 import Tag from "@/components/ui/tag";
 import { createEvent, updateEvent } from "@/lib/actions/admin/events";
-import { EventParams } from "@/types";
 import { Trash2, Plus } from "lucide-react";
+import { EventParams } from "@/types";
 
 interface Props {
    type?: "create" | "update";
@@ -63,6 +63,7 @@ interface Props {
 const EventForm = ({ type, ...event }: Props) => {
    const router = useRouter();
    const isUpdate = type === "update" && !!event.id;
+   const [categoryInput, setCategoryInput] = useState("");
 
    const form = useForm({
       resolver: zodResolver(eventSchema),
@@ -337,9 +338,6 @@ const EventForm = ({ type, ...event }: Props) => {
                            control={form.control}
                            name={"category"}
                            render={({ field }) => {
-                              const [categoryInput, setCategoryInput] =
-                                 useState("");
-
                               const addCategory = (text: string) => {
                                  const value = text.trim();
                                  if (!value) return;
@@ -465,8 +463,8 @@ const EventForm = ({ type, ...event }: Props) => {
                               <div className="rounded-lg border-2 border-dashed border-gray-300 py-8 text-center text-sm text-gray-500">
                                  <p>No volunteer roles defined yet</p>
                                  <p>
-                                    Click "Add Role" to define volunteer
-                                    positions and payouts
+                                    Click &quot;Add Role&quot; to define
+                                    volunteer positions and payouts
                                  </p>
                               </div>
                            )}
@@ -687,8 +685,8 @@ const EventForm = ({ type, ...event }: Props) => {
                               <div className="rounded-lg border-2 border-dashed border-gray-300 py-8 text-center text-sm text-gray-500">
                                  <p>No quick links defined yet</p>
                                  <p>
-                                    Click "Add Link" to define helpful links for
-                                    enrolled volunteers
+                                    Click &quot;Add Link&quot; to define helpful
+                                    links for enrolled volunteers
                                  </p>
                               </div>
                            )}
@@ -879,7 +877,7 @@ const EventForm = ({ type, ...event }: Props) => {
                            <FormField
                               control={form.control}
                               name={"maxVolunteers"}
-                              render={({ field }) => (
+                              render={() => (
                                  <FormItem className="flex flex-col gap-1">
                                     <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
                                        Max Volunteers (Auto-calculated)

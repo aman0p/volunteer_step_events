@@ -1,13 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition, useRef } from "react";
 import {
    getMyNotifications,
    markAllMyNotificationsRead,
    markMyNotificationRead,
 } from "@/lib/actions/user/notifications";
 import { deleteMyNotification } from "@/lib/actions/user/notifications";
-import { NotificationType } from "@/types";
+import { NotificationType } from "@/generated/prisma";
 
 export type NotificationItem = {
    id: string;
@@ -31,20 +31,92 @@ export function useNotifications() {
    const [notifications, setNotifications] = useState<NotificationItem[]>([]);
    const [unreadCount, setUnreadCount] = useState(0);
    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+   const [isInitialized, setIsInitialized] = useState(false);
+   const lastFetchTime = useRef<number>(0);
+   const FETCH_COOLDOWN = 5000; // 5 seconds cooldown between fetches
+   const CACHE_DURATION = 30000; // 30 seconds cache duration
 
-   const loadNotifications = useCallback(() => {
-      startTransition(async () => {
-         const res = (await getMyNotifications()) as FetchResult;
-         if (res.success) {
-            setNotifications(res.data.notifications);
-            setUnreadCount(res.data.unreadCount);
+   const loadNotifications = useCallback(
+      (force = false) => {
+         const now = Date.now();
+
+         // Check if we have cached data that's still fresh
+         if (
+            !force &&
+            isInitialized &&
+            now - lastFetchTime.current < CACHE_DURATION
+         ) {
+            return;
          }
-      });
-   }, []);
 
+         // Prevent too frequent requests unless forced
+         if (!force && now - lastFetchTime.current < FETCH_COOLDOWN) {
+            return;
+         }
+
+         startTransition(async () => {
+            try {
+               const res = (await getMyNotifications()) as FetchResult;
+               if (res.success) {
+                  setNotifications(res.data.notifications);
+                  setUnreadCount(res.data.unreadCount);
+                  lastFetchTime.current = now;
+                  setIsInitialized(true);
+
+                  // Cache the data in localStorage for browser refresh
+                  try {
+                     localStorage.setItem(
+                        "notifications_cache",
+                        JSON.stringify({
+                           notifications: res.data.notifications,
+                           unreadCount: res.data.unreadCount,
+                           timestamp: now,
+                        })
+                     );
+                  } catch {
+                     // Ignore localStorage errors
+                  }
+               }
+            } catch (error) {
+               console.error("Failed to load notifications:", error);
+            }
+         });
+      },
+      [isInitialized]
+   );
+
+   // Load notifications on mount, first try cache, then fetch if needed
    useEffect(() => {
-      loadNotifications();
-   }, []);
+      if (!isInitialized) {
+         // Try to load from cache first
+         try {
+            const cached = localStorage.getItem("notifications_cache");
+            if (cached) {
+               const {
+                  notifications: cachedNotifications,
+                  unreadCount: cachedUnreadCount,
+                  timestamp,
+               } = JSON.parse(cached);
+               const now = Date.now();
+
+               // If cache is still fresh (less than 5 minutes old), use it
+               if (now - timestamp < 300000) {
+                  // 5 minutes
+                  setNotifications(cachedNotifications);
+                  setUnreadCount(cachedUnreadCount);
+                  lastFetchTime.current = timestamp;
+                  setIsInitialized(true);
+                  return;
+               }
+            }
+         } catch {
+            // Ignore cache errors and proceed to fetch
+         }
+
+         // If no cache or cache is stale, fetch fresh data
+         loadNotifications(true);
+      }
+   }, [isInitialized, loadNotifications]);
 
    const handleMarkAll = useCallback(() => {
       startTransition(async () => {
@@ -98,7 +170,7 @@ export function useNotifications() {
       notifications.length > 0 && selectedIds.size === notifications.length;
 
    const toggleSelectAll = useCallback(() => {
-      setSelectedIds((prev) => {
+      setSelectedIds(() => {
          if (isAllSelected) return new Set();
          return new Set(notifications.map((n) => n.id));
       });
@@ -139,6 +211,11 @@ export function useNotifications() {
       });
    }, [notifications, selectedIds]);
 
+   // Force refresh function for manual refresh
+   const refreshNotifications = useCallback(() => {
+      loadNotifications(true);
+   }, [loadNotifications]);
+
    return {
       // state
       isPending,
@@ -146,8 +223,9 @@ export function useNotifications() {
       unreadCount,
       selectedIds,
       isAllSelected,
+      isInitialized,
       // actions
-      loadNotifications,
+      loadNotifications: refreshNotifications, // Expose refresh function
       handleMarkAll,
       handleMarkOne,
       handleDelete,

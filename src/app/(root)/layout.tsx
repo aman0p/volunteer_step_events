@@ -4,15 +4,8 @@ import { getServerSession } from "next-auth";
 import { Providers } from "@/components/Providers";
 import { prisma } from "@/lib/prisma";
 import ProfileCompletionBanner from "@/components/ProfileCompletionBanner";
-import { Plasma } from "@/components/plasma";
-import { Noto_Sans } from "next/font/google";
 import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-
-const notoSans = Noto_Sans({
-   subsets: ["latin"],
-   variable: "--font-noto-sans",
-});
 
 export const metadata: Metadata = {
    title: "Volunteer Step Events",
@@ -25,32 +18,33 @@ export const metadata: Metadata = {
 const Layout = async ({ children }: { children: React.ReactNode }) => {
    const session = await getServerSession(authOptions);
 
-   // Update lastActiveAt once per day for authenticated users
+   // Update lastActiveAt once per day for authenticated users (moved to background)
    if (session?.user?.id) {
-      try {
-         const user = await prisma.user.findUnique({
-            where: { id: session.user.id },
-            select: { lastActiveAt: true },
-         });
+      // Run this asynchronously without blocking the page render
+      setImmediate(async () => {
+         try {
+            const user = await prisma.user.findUnique({
+               where: { id: session.user.id },
+               select: { lastActiveAt: true },
+            });
 
-         // Only proceed if user exists
-         if (user) {
-            const today = new Date().toISOString().slice(0, 10);
-            const lastActiveDate = user.lastActiveAt
-               ? new Date(user.lastActiveAt).toISOString().slice(0, 10)
-               : null;
+            if (user) {
+               const today = new Date().toISOString().slice(0, 10);
+               const lastActiveDate = user.lastActiveAt
+                  ? new Date(user.lastActiveAt).toISOString().slice(0, 10)
+                  : null;
 
-            if (lastActiveDate !== today) {
-               await prisma.user.update({
-                  where: { id: session.user.id },
-                  data: { lastActiveAt: new Date() },
-               });
+               if (lastActiveDate !== today) {
+                  await prisma.user.update({
+                     where: { id: session.user.id },
+                     data: { lastActiveAt: new Date() },
+                  });
+               }
             }
+         } catch (error) {
+            console.error("Error updating user lastActiveAt:", error);
          }
-      } catch (error) {
-         // Log error but don't crash the layout
-         console.error("Error updating user lastActiveAt:", error);
-      }
+      });
    }
 
    return (
@@ -60,7 +54,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
          enableSystem
          disableTransitionOnChange
       >
-         <Providers session={session}>
+         <Providers session={session || undefined}>
             {/* <div className="fixed inset-0 z-0">
         <Plasma
           color="#9AE600"

@@ -35,7 +35,12 @@ export function NotificationCount({
    return (
       <>
          {count > 0 && (
-            <span className="text-xxs bg-destructive flex h-4 w-fit items-center justify-center rounded-full px-[5px] font-bold text-white">
+            <span
+               className={cn(
+                  "text-xxs bg-destructive flex h-4 w-fit items-center justify-center rounded-full px-[5px] font-bold text-white",
+                  className
+               )}
+            >
                <span className="text-xxs">{displayCount}</span>
             </span>
          )}

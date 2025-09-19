@@ -9,6 +9,7 @@ import {
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { Role, Status } from "@/generated/prisma";
 
 interface EnrollButtonProps {
    eventId: string;
@@ -48,6 +49,7 @@ export default function EnrollButton({
             toast.error(result.message);
          }
       } catch (error) {
+         console.error("Error sending enrollment request:", error);
          toast.error("Failed to send enrollment request");
       } finally {
          setIsEnrolling(false);
@@ -60,7 +62,7 @@ export default function EnrollButton({
          const result = await cancelEnrollment(eventId);
          if (result.success) {
             toast.success(result.message || "Enrollment request cancelled");
-            if ((result as any).nextStatus === "REJECTED") {
+            if ((result as { nextStatus: Status }).nextStatus === "REJECTED") {
                setLocalStatus("REJECTED");
             } else {
                // First cancel: show cancelled for 2s then allow re-apply
@@ -71,6 +73,7 @@ export default function EnrollButton({
             toast.error(result.message || "Failed to cancel request");
          }
       } catch (error) {
+         console.error("Error canceling enrollment request:", error);
          toast.error("Failed to cancel request");
       } finally {
          setIsEnrolling(false);
@@ -159,7 +162,7 @@ export default function EnrollButton({
    }
 
    // Check user role and show appropriate button
-   if (session.user.role === "USER") {
+   if (session.user.role === Role.USER) {
       return (
          <Link href="/profile">
             <Button

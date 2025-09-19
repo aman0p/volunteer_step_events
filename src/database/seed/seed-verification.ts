@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient, VerificationStatus } from "@/generated/prisma";
 import bcrypt from "bcryptjs";
 import { Gender, GovId, Role } from "@/generated/prisma";
 
@@ -181,7 +181,7 @@ export async function seedVerification() {
                password: hashedPassword,
                profileImage: userProfileImage,
                govIdImage: userGovIdImage,
-               role: "USER" as Role,
+               role: Role.USER,
                isVerified: false,
             },
          });
@@ -189,10 +189,10 @@ export async function seedVerification() {
          console.log(`✅ Created user: ${user.fullName} (${user.email})`);
 
          // Create verification request
-         const verificationRequest = await prisma.verificationRequest.create({
+         await prisma.verificationRequest.create({
             data: {
                userId: user.id,
-               status: "PENDING",
+               status: VerificationStatus.PENDING,
                submittedAt: new Date(),
             },
          });
@@ -209,7 +209,7 @@ export async function seedVerification() {
       const totalVerificationRequests =
          await prisma.verificationRequest.count();
       const pendingRequests = await prisma.verificationRequest.count({
-         where: { status: "PENDING" },
+         where: { status: VerificationStatus.PENDING },
       });
 
       console.log("\n📈 Database Summary:");

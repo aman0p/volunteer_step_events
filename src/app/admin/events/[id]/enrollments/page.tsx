@@ -73,7 +73,7 @@ export default async function EnrollmentsPage({
          <div>
             <h1 className="text-3xl font-bold">Event Enrollments</h1>
             <p className="text-muted-foreground mt-2">
-               Manage volunteer enrollments for "{event.title}"
+               Manage volunteer enrollments for &quot;{event.title}&quot;
             </p>
          </div>
 
@@ -83,7 +83,6 @@ export default async function EnrollmentsPage({
             eventLocation={event.location}
             eventStartDate={event.startDate}
             eventEndDate={event.endDate}
-            currentUserRole={user.role as "ADMIN" | "ORGANIZER"}
          />
       </div>
    );

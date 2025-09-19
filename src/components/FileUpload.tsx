@@ -25,18 +25,18 @@ const getImageKitConfig = () => {
 };
 
 // Legacy authenticator kept for backward compatibility, now unused internally
-const authenticator = async () => {
-   const response = await fetch(`${config.env.apiEndpoint}/api/imagekit-auth`);
-   if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-         `Request failed with status ${response.status}: ${errorText}`
-      );
-   }
-   const data = await response.json();
-   const { token, expire, signature, publicKey } = data;
-   return { token, expire, signature, publicKey };
-};
+// const authenticator = async () => {
+//    const response = await fetch(`${config.env.apiEndpoint}/api/imagekit-auth`);
+//    if (!response.ok) {
+//       const errorText = await response.text();
+//       throw new Error(
+//          `Request failed with status ${response.status}: ${errorText}`
+//       );
+//    }
+//    const data = await response.json();
+//    const { token, expire, signature, publicKey } = data;
+//    return { token, expire, signature, publicKey };
+// };
 
 interface FileUploadProps {
    type: "image" | "video";
@@ -98,8 +98,8 @@ const FileUpload = ({
       text: variant === "dark" ? "text-light-100" : "text-dark-400",
    };
 
-   const onError = (error: any) => {
-      console.log(error);
+   const onError = (error: Error) => {
+      console.error("File upload error:", error);
       setIsUploading(false);
       setProgress(0);
 
@@ -108,7 +108,11 @@ const FileUpload = ({
       });
    };
 
-   const onSuccess = (res: any) => {
+   const onSuccess = (res: { filePath?: string }) => {
+      if (!res.filePath) {
+         console.error("Upload succeeded but no filePath returned");
+         return;
+      }
       setFile({ filePath: res.filePath });
       onFileChange(res.filePath);
       setIsUploading(false);

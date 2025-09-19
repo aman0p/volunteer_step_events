@@ -1,5 +1,4 @@
-import { PrismaClient } from "@/generated/prisma";
-import { Status } from "@/generated/prisma";
+import { PrismaClient, Status, Role, Event } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
@@ -11,7 +10,7 @@ export async function seedEnrollments() {
       const users = await prisma.user.findMany({
          where: {
             role: {
-               in: ["USER", "VOLUNTEER"],
+               in: [Role.USER, Role.VOLUNTEER],
             },
          },
          select: {
@@ -25,12 +24,7 @@ export async function seedEnrollments() {
       }
 
       // Get all events
-      const events = await prisma.event.findMany({
-         select: {
-            id: true,
-            maxVolunteers: true,
-         },
-      });
+      const events = await prisma.event.findMany();
 
       if (events.length === 0) {
          console.log("❌ No events found. Please run event seeding first.");
@@ -45,10 +39,10 @@ export async function seedEnrollments() {
 
       const enrollments = [];
       const statuses: Status[] = [
-         "PENDING",
-         "APPROVED",
-         "REJECTED",
-         "WAITLISTED",
+         Status.PENDING,
+         Status.APPROVED,
+         Status.REJECTED,
+         Status.WAITLISTED,
       ];
 
       // Create random enrollments
@@ -98,7 +92,7 @@ export async function seedEnrollments() {
          const approvedCount = await prisma.enrollment.count({
             where: {
                eventId: event.id,
-               status: "APPROVED",
+               status: Status.APPROVED,
             },
          });
 
@@ -117,7 +111,7 @@ export async function seedEnrollments() {
    }
 }
 
-function getRandomEvents(events: any[], count: number) {
+function getRandomEvents(events: Event[], count: number) {
    const shuffled = [...events].sort(() => 0.5 - Math.random());
    return shuffled.slice(0, count);
 }
@@ -125,11 +119,11 @@ function getRandomEvents(events: any[], count: number) {
 function getRandomStatus(statuses: Status[]): Status {
    // Weight the statuses - prioritize PENDING for admin review
    const weights: Record<Status, number> = {
-      PENDING: 0.7, // 70% - Most enrollments should be pending for admin review
-      APPROVED: 0.2, // 20% - Some already approved
-      REJECTED: 0.08, // 8% - Few rejections
-      WAITLISTED: 0.02, // 2% - Very few waitlisted
-      CANCELLED: 0, // 0% - No cancelled enrollments in seeding
+      [Status.PENDING]: 0.7, // 70% - Most enrollments should be pending for admin review
+      [Status.APPROVED]: 0.2, // 20% - Some already approved
+      [Status.REJECTED]: 0.08, // 8% - Few rejections
+      [Status.WAITLISTED]: 0.02, // 2% - Very few waitlisted
+      [Status.CANCELLED]: 0, // 0% - No cancelled enrollments in seeding
    };
 
    const random = Math.random();
@@ -142,7 +136,7 @@ function getRandomStatus(statuses: Status[]): Status {
       }
    }
 
-   return "PENDING"; // fallback
+   return Status.PENDING; // fallback
 }
 
 function getRandomDate(): Date {

@@ -8,8 +8,8 @@ type Params = {
    type: "image" | "video";
    folder: string;
    onProgress: (percent: number) => void;
-   onSuccess: (res: any) => void;
-   onError: (err: any) => void;
+   onSuccess: (res: { filePath?: string }) => void;
+   onError: (err: Error) => void;
 };
 
 export function useSingleFileUpload({

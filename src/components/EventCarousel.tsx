@@ -7,6 +7,7 @@ import { getBackgroundImageUrl } from "@/lib/utils";
 import Link from "next/link";
 import {
    Carousel,
+   CarouselApi,
    CarouselContent,
    CarouselItem,
    CarouselNext,
@@ -14,30 +15,15 @@ import {
 } from "./ui/carousel";
 import { ActionButton2 } from "./ui/action-button";
 import { Badge } from "./ui/badge";
-
-interface Event {
-   id: string;
-   title: string;
-   description: string;
-   location: string;
-   startDate: string | Date;
-   endDate: string | Date;
-   dressCode: string;
-   category: string[];
-   coverUrl: string;
-   videoUrl?: string;
-   eventImages: string[];
-   maxVolunteers?: number;
-   enrollments?: { id: string }[];
-}
+import { EventWithEnrollments } from "@/types";
 
 interface EventCarouselProps {
-   events: Event[];
+   events: EventWithEnrollments[];
 }
 
 export default function EventCarousel({ events }: EventCarouselProps) {
    const [currentIndex, setCurrentIndex] = useState(0);
-   const [api, setApi] = useState<any>(null);
+   const [api, setApi] = useState<CarouselApi | null>(null);
 
    // Limit to top 5 events
    const topEvents = events.slice(0, 5);
@@ -85,14 +71,7 @@ export default function EventCarousel({ events }: EventCarouselProps) {
             setApi={setApi}
          >
             <CarouselContent className="flex h-full items-center justify-center">
-               {topEvents.map((event, index) => {
-                  const start = new Date(event.startDate);
-                  const diffMs = start.getTime() - Date.now();
-                  const daysRemaining = Math.max(
-                     0,
-                     Math.ceil(diffMs / (1000 * 60 * 60 * 24))
-                  );
-
+               {topEvents.map((event: EventWithEnrollments, index: number) => {
                   return (
                      <CarouselItem key={event.id} className="h-full">
                         <div className="flex h-full scale-90 flex-col justify-between md:scale-100 md:flex-row md:gap-5 lg:gap-10">
@@ -189,7 +168,7 @@ export default function EventCarousel({ events }: EventCarouselProps) {
          {/* Pagination Dots */}
          {topEvents.length > 1 && (
             <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
-               {topEvents.map((_, index) => (
+               {topEvents.map((_: EventWithEnrollments, index: number) => (
                   <button
                      key={index}
                      className={`h-2 w-2 rounded-full transition-all duration-300 ${

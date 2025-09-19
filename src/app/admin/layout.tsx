@@ -4,9 +4,8 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/admin/Sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import Header from "@/components/admin/Header";
 import { prisma } from "@/lib/prisma";
-import { ThemeToggleButton } from "@/components/ThemeToggleButton";
+import { requireAdmin } from "@/lib/utils/role-check";
 
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
    const session = await getServerSession(authOptions);
@@ -15,13 +14,9 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
       redirect("/sign-in");
    }
 
-   // Check if user has admin role - use database role instead of session role
-   const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { role: true },
-   });
-
-   if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
+   // Check if user has admin role using cached role check
+   const adminCheck = await requireAdmin();
+   if (!adminCheck) {
       redirect("/");
    }
 

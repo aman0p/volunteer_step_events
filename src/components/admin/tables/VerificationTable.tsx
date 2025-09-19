@@ -17,13 +17,7 @@ import {
    DropdownMenuItem,
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-   MoreHorizontal,
-   Eye,
-   GripVertical,
-   Loader2,
-   XCircle,
-} from "lucide-react";
+import { MoreHorizontal, Eye, GripVertical, XCircle } from "lucide-react";
 import {
    Select,
    SelectContent,
@@ -634,9 +628,11 @@ export default function VerificationTable({
                      <form
                         onSubmit={(e) => {
                            e.preventDefault();
-                           rejectionType === "bulk"
-                              ? executeBulkReject()
-                              : executeIndividualReject();
+                           if (rejectionType === "bulk") {
+                              executeBulkReject();
+                           } else {
+                              executeIndividualReject();
+                           }
                         }}
                         className="grid w-full grid-cols-2 gap-2"
                      >

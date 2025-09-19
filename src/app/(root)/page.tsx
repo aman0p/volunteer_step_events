@@ -2,9 +2,9 @@ import { prisma } from "@/lib/prisma";
 import EventCarousel from "@/components/EventCarousel";
 import EventCard from "@/components/user/EventCard";
 import Section from "@/components/ui/section";
-
+import { EventWithEnrollments } from "@/types";
 export default async function HomePage() {
-   const events = await prisma.event.findMany({
+   const events: EventWithEnrollments[] = await prisma.event.findMany({
       orderBy: [{ startDate: "asc" }, { createdAt: "desc" }],
       include: {
          enrollments: {
@@ -12,12 +12,13 @@ export default async function HomePage() {
             select: { id: true },
          },
       },
+      take: 20, // Limit to 20 events for better performance
    });
 
    return (
       <div className="mx-auto w-full space-y-20">
          {/* Event Carousel */}
-         <EventCarousel events={events as any} />
+         <EventCarousel events={events} />
 
          {/* Upcoming Events */}
          <Section>
@@ -26,7 +27,7 @@ export default async function HomePage() {
             </h1>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
                {events.map((event) => (
-                  <EventCard key={event.id} event={event as any} />
+                  <EventCard key={event.id} event={event} />
                ))}
             </div>
          </Section>

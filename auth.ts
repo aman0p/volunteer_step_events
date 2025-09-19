@@ -1,13 +1,16 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import { compare } from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { JWT } from "next-auth/jwt";
+import { Session } from "next-auth";
+import { Role } from "@/generated/prisma";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
    session: {
       strategy: "jwt" as const,
-      maxAge: 60 * 15,
-      updateAge: 60 * 5,
+      maxAge: 60 * 60 * 24, // 24 hours instead of 15 minutes
+      updateAge: 60 * 60 * 12, // 12 hours instead of 5 minutes
    },
    providers: [
       CredentialsProvider({
@@ -55,23 +58,34 @@ export const authOptions = {
       signIn: "/sign-in",
    },
    callbacks: {
-      async jwt({ token, user }: any) {
+      async jwt({
+         token,
+         user,
+      }: {
+         token: JWT;
+         user?: { id: string; email: string; name: string; role: Role };
+      }) {
          if (user) {
             token.id = user.id;
             token.email = user.email;
             token.name = user.name;
-            token.role = user.role;
+            token.role = user.role as Role;
+            token.lastFetch = Date.now();
          } else {
-            // If no user object (token refresh), fetch latest user data from database
-            if (token.id) {
+            // Only fetch from database if token is older than 1 hour
+            const lastFetch = token.lastFetch || 0;
+            const oneHour = 60 * 60 * 1000;
+
+            if (token.id && Date.now() - (lastFetch as number) > oneHour) {
                try {
                   const dbUser = await prisma.user.findUnique({
                      where: { id: token.id as string },
                      select: { role: true, fullName: true },
                   });
                   if (dbUser) {
-                     token.role = dbUser.role;
+                     token.role = dbUser.role as Role;
                      token.name = dbUser.fullName;
+                     token.lastFetch = Date.now();
                   }
                } catch (error) {
                   console.error(
@@ -83,12 +97,12 @@ export const authOptions = {
          }
          return token;
       },
-      async session({ session, token }: any) {
+      async session({ session, token }: { session: Session; token: JWT }) {
          if (session.user) {
             session.user.id = token.id as string;
             session.user.email = token.email as string;
             session.user.name = token.name as string;
-            session.user.role = token.role as string;
+            session.user.role = token.role as Role;
          }
          return session;
       },

@@ -18,6 +18,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
       unreadCount,
       selectedIds,
       isAllSelected,
+      isInitialized,
       loadNotifications,
       handleMarkOne,
       handleDelete,
@@ -27,15 +28,12 @@ export function NotificationDrawer({ className }: { className?: string }) {
       handleBulkDelete,
    } = useNotifications();
 
+   // Only load notifications when drawer opens and not already initialized
    useEffect(() => {
-      loadNotifications();
-   }, []);
-
-   useEffect(() => {
-      if (open) {
+      if (open && !isInitialized) {
          loadNotifications();
       }
-   }, [open, loadNotifications]);
+   }, [open, isInitialized, loadNotifications]);
 
    const hasItems = notifications.length > 0;
 
@@ -75,6 +73,14 @@ export function NotificationDrawer({ className }: { className?: string }) {
                   <div className="flex items-center justify-between border-b border-white/15 px-4 py-2 pt-5.5">
                      <h2 className="text-lg font-semibold">Notifications</h2>
                      <div className="flex items-center gap-2">
+                        <button
+                           onClick={() => loadNotifications()}
+                           disabled={isPending}
+                           className="rounded-md bg-gray-100 px-2 py-1 text-xs hover:bg-gray-200 disabled:opacity-50"
+                           title="Refresh notifications"
+                        >
+                           {isPending ? "..." : "↻"}
+                        </button>
                         {hasItems && (
                            <>
                               <button

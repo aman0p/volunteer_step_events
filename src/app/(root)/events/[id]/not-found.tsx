@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Home, Search, Calendar, List } from "lucide-react";
+import { Search, Calendar, List } from "lucide-react";
 
 export default function EventNotFound() {
    return (
@@ -25,8 +25,8 @@ export default function EventNotFound() {
                      Event Not Found
                   </h2>
                   <p className="leading-relaxed opacity-50">
-                     Sorry, the event you're looking for doesn't exist or may
-                     have been removed.
+                     Sorry, the event you&apos;re looking for doesn&apos;t exist
+                     or may have been removed.
                   </p>
                </div>
 

@@ -119,7 +119,7 @@ export const notifyUserOnEnrollmentStatusChange = async (params: {
          APPROVED: NotificationType.ENROLLMENT_APPROVED,
          REJECTED: NotificationType.ENROLLMENT_REJECTED,
          WAITLISTED: NotificationType.ENROLLMENT_WAITLISTED,
-         CANCELLED: NotificationType.ENROLLMENT_CANCELLED,
+         CANCELLED: NotificationType.ENROLLMENT_SELF_CANCELLED,
          PENDING: NotificationType.ENROLLMENT_APPLICATION,
       } as const;
 

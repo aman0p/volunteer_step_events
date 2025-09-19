@@ -3,6 +3,8 @@ import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { UserEventsTable } from "@/components/UserEventsTable";
+import { requireVolunteer } from "@/lib/utils/role-check";
+import { Status } from "@/generated/prisma";
 
 export default async function VolunteerEventsPage() {
    const session = await getServerSession(authOptions);
@@ -11,13 +13,9 @@ export default async function VolunteerEventsPage() {
       redirect("/sign-in");
    }
 
-   // Check if user has volunteer role - use database role instead of session role
-   const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { role: true },
-   });
-
-   if (!user || user.role !== "VOLUNTEER") {
+   // Check if user has volunteer role using cached role check
+   const volunteerCheck = await requireVolunteer();
+   if (!volunteerCheck) {
       redirect("/profile");
    }
 
@@ -27,7 +25,9 @@ export default async function VolunteerEventsPage() {
          enrollments: {
             some: {
                userId: session.user.id,
-               status: { in: ["APPROVED", "PENDING", "WAITLISTED"] },
+               status: {
+                  in: [Status.APPROVED, Status.PENDING, Status.WAITLISTED],
+               },
             },
          },
       },
@@ -75,7 +75,9 @@ export default async function VolunteerEventsPage() {
          {eventsData.length === 0 ? (
             <div className="py-12 text-center text-gray-500">
                <p className="text-lg">No enrolled events</p>
-               <p className="text-sm">You haven't enrolled in any events yet</p>
+               <p className="text-sm">
+                  You haven&apos;t enrolled in any events yet
+               </p>
             </div>
          ) : (
             <UserEventsTable events={eventsData} />

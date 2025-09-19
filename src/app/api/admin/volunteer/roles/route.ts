@@ -2,10 +2,8 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { NotificationType } from "@/generated/prisma";
+import { NotificationType, Role } from "@/generated/prisma";
 import { getCorsHeaders, corsOptionsResponse } from "@/lib/utils";
-
-type Role = "USER" | "VOLUNTEER" | "ORGANIZER" | "ADMIN";
 
 export async function POST(request: Request) {
    try {

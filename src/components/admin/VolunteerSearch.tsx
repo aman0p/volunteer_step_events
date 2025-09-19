@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, X, Mail, Phone, Shield, Users, UserCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search, X, Mail, Phone } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Image } from "@imagekit/next";
 import config from "@/lib/config";
 import Link from "next/link";
+import { Status, Role } from "@/generated/prisma";
 
 interface Volunteer {
    id: string;
@@ -21,7 +21,7 @@ interface Volunteer {
    createdAt: Date;
    enrollments: {
       id: string;
-      status: string;
+      status: Status;
       event: {
          id: string;
          title: string;
@@ -35,7 +35,6 @@ interface VolunteerSearchProps {
    className?: string;
    eventId?: string; // Add eventId to filter volunteers by specific event
    includeAdmins?: boolean; // New prop to control whether to include admins
-   showToggle?: boolean; // Show toggle for admin inclusion
 }
 
 export default function VolunteerSearch({
@@ -44,13 +43,12 @@ export default function VolunteerSearch({
    className = "",
    eventId,
    includeAdmins = true, // Default to true to include admins
-   showToggle = true, // Show toggle by default
 }: VolunteerSearchProps) {
    const [query, setQuery] = useState("");
    const [results, setResults] = useState<Volunteer[]>([]);
    const [isLoading, setIsLoading] = useState(false);
    const [showResults, setShowResults] = useState(false);
-   const [includeAdminsState, setIncludeAdminsState] = useState(includeAdmins);
+   const [includeAdminsState] = useState(includeAdmins);
 
    useEffect(() => {
       const searchVolunteers = async () => {
@@ -104,41 +102,9 @@ export default function VolunteerSearch({
       setShowResults(false);
    };
 
-   const getStatusBadge = (status: string) => {
-      switch (status) {
-         case "PENDING":
-            return (
-               <Badge variant="secondary" className="text-xs">
-                  Pending
-               </Badge>
-            );
-         case "APPROVED":
-            return (
-               <Badge
-                  variant="default"
-                  className="bg-green-600 text-xs text-white"
-               >
-                  Approved
-               </Badge>
-            );
-         case "REJECTED":
-            return (
-               <Badge variant="destructive" className="text-xs">
-                  Rejected
-               </Badge>
-            );
-         default:
-            return (
-               <Badge variant="outline" className="text-xs">
-                  {status}
-               </Badge>
-            );
-      }
-   };
-
-   const getRoleBadge = (role: string) => {
+   const getRoleBadge = (role: Role) => {
       switch (role) {
-         case "ADMIN":
+         case Role.ADMIN:
             return (
                <Badge
                   variant="destructive"
@@ -147,7 +113,7 @@ export default function VolunteerSearch({
                   Admin
                </Badge>
             );
-         case "ORGANIZER":
+         case Role.ORGANIZER:
             return (
                <Badge
                   variant="default"
@@ -156,7 +122,7 @@ export default function VolunteerSearch({
                   Organizer
                </Badge>
             );
-         case "VOLUNTEER":
+         case Role.VOLUNTEER:
             return (
                <Badge
                   variant="secondary"
@@ -165,7 +131,7 @@ export default function VolunteerSearch({
                   Volunteer
                </Badge>
             );
-         case "USER":
+         case Role.USER:
             return (
                <Badge variant="outline" className="text-xs">
                   User
@@ -177,15 +143,6 @@ export default function VolunteerSearch({
                   {role}
                </Badge>
             );
-      }
-   };
-
-   const toggleAdminInclusion = () => {
-      setIncludeAdminsState(!includeAdminsState);
-      // Clear results when toggling to trigger new search
-      if (query.trim().length >= 2) {
-         setResults([]);
-         setShowResults(false);
       }
    };
 
@@ -300,13 +257,14 @@ export default function VolunteerSearch({
                                     <h4 className="truncate font-medium text-gray-900">
                                        {volunteer.fullName}
                                     </h4>
-                                    {getRoleBadge(volunteer.role)}
-                                    {volunteer.role === "ADMIN" && (
+                                    {getRoleBadge(volunteer.role as Role)}
+                                    {/* {getRoleBadge(volunteer.role as Role)}
+                                    {volunteer.role === Role.ADMIN && (
                                        <Shield className="h-4 w-4 text-red-600" />
                                     )}
-                                    {volunteer.role === "ORGANIZER" && (
+                                    {volunteer.role === Role.ORGANIZER && (
                                        <UserCheck className="h-4 w-4 text-blue-600" />
-                                    )}
+                                    )} */}
                                  </div>
 
                                  <div className="mt-1 flex items-center gap-4 text-sm text-gray-600">

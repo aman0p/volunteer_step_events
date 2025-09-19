@@ -2,17 +2,18 @@
 
 import { Image } from "@imagekit/next";
 import { Button } from "./ui/button";
-import { Event } from "@/types";
 import config from "@/lib/config";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
 import { requestEnrollment } from "@/lib/actions/user/enrollment";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Event } from "@/types";
+import { Enrollment } from "@/generated/prisma";
 import { useSession } from "next-auth/react";
 
 interface EventOverviewProps {
-   latestEvents?: (Event & { enrollments?: any[] })[];
+   latestEvents?: (Event & { enrollments?: Enrollment[] })[];
    userId?: string;
 }
 
@@ -38,6 +39,7 @@ export default function EventOverview({
             toast.error(result.message);
          }
       } catch (error) {
+         console.error("Error sending enrollment request:", error);
          toast.error("Failed to send enrollment request");
       } finally {
          setIsEnrolling(false);
@@ -110,7 +112,7 @@ export default function EventOverview({
       // User is a volunteer, check enrollment status
       if (events[0]?.enrollments) {
          const userEnrollment = events[0].enrollments.find(
-            (e: any) => e.userId === userId
+            (e: Enrollment) => e.userId === userId
          );
          const isEnrolled = userEnrollment?.status === "APPROVED";
          const isPending = userEnrollment?.status === "PENDING";
@@ -271,6 +273,7 @@ export default function EventOverview({
                      className="flex w-60 cursor-pointer flex-col gap-1 rounded-lg border p-2 backdrop-blur-sm"
                   >
                      <Image
+                        urlEndpoint={config.env.imagekit.urlEndpoint}
                         src={event.coverUrl || "/events.jpg"}
                         alt={event.title}
                         width={1500}

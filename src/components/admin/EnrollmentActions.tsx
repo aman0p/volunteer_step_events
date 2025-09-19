@@ -11,13 +11,11 @@ import { toast } from "sonner";
 interface EnrollmentActionsProps {
    enrollmentId: string;
    userName: string;
-   eventId: string;
 }
 
 export default function EnrollmentActions({
    enrollmentId,
    userName,
-   eventId,
 }: EnrollmentActionsProps) {
    const [isLoading, setIsLoading] = useState(false);
 

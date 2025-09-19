@@ -8,7 +8,7 @@ import { redirect, notFound } from "next/navigation";
 import Section from "@/components/ui/section";
 import { Badge } from "@/components/ui";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, Clock, MapPin, Tag } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
 import EventRolesTable from "@/components/admin/tables/EventRolesTable";
 import { Separator } from "@/components/ui/separator";
 import QuickLinks from "@/components/QuickLinks";
@@ -26,32 +26,33 @@ export default async function EventDetailsPage({
       redirect("/sign-in");
    }
 
-   const event = await prisma.event.findUnique({
-      where: { id },
-      include: {
-         enrollments: {
-            where: { userId: session.user.id },
-            select: { status: true },
-            take: 1,
-         },
-         eventRoles: {
-            include: {
-               enrollments: {
-                  select: { id: true },
+   const [event, approvedCount] = await Promise.all([
+      prisma.event.findUnique({
+         where: { id },
+         include: {
+            enrollments: {
+               where: { userId: session.user.id },
+               select: { status: true },
+               take: 1,
+            },
+            eventRoles: {
+               include: {
+                  enrollments: {
+                     select: { id: true },
+                  },
                },
             },
+            quickLinks: true,
          },
-         quickLinks: true,
-      },
-   });
+      }),
+      prisma.enrollment.count({
+         where: { eventId: id, status: "APPROVED" },
+      }),
+   ]);
 
    if (!event) {
       notFound();
    }
-
-   const approvedCount = await prisma.enrollment.count({
-      where: { eventId: id, status: "APPROVED" },
-   });
 
    const formatDate = (date: Date) => {
       return new Intl.DateTimeFormat("en-US", {
@@ -91,6 +92,7 @@ export default async function EventDetailsPage({
                      <div className="flex items-center gap-2">
                         {event.category.map((category) => (
                            <Badge
+                              key={category}
                               variant="secondary"
                               className="bg-background/20 text-foreground border-0 backdrop-blur-md"
                            >

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function AdminNotFound() {
    return (
       <div className="flex min-h-[calc(100vh-80px)] flex-col items-center justify-center">
@@ -10,22 +12,23 @@ export default function AdminNotFound() {
             </div>
 
             <p className="max-w-md text-gray-600">
-               The page you're looking for doesn't exist in the admin dashboard.
+               The page you&apos;re looking for doesn&apos;t exist in the admin
+               dashboard.
             </p>
 
             <div className="flex justify-center gap-4">
-               <a
+               <Link
                   href="/admin"
                   className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700"
                >
                   Go to Dashboard
-               </a>
-               <a
+               </Link>
+               <Link
                   href="/"
                   className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50"
                >
                   Go Home
-               </a>
+               </Link>
             </div>
          </div>
       </div>

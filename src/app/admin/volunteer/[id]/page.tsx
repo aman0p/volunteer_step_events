@@ -3,18 +3,7 @@ import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
-import {
-   ArrowLeft,
-   Mail,
-   Phone,
-   MapPin,
-   Calendar,
-   Users,
-   Edit,
-   Trash2,
-   ExternalLink,
-   Tag,
-} from "lucide-react";
+import { ArrowLeft, Users, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Image } from "@imagekit/next";
 import config from "@/lib/config";
@@ -28,6 +17,8 @@ import {
    TableHeader,
    TableRow,
 } from "@/components/ui/table";
+import { EnrollmentWithEvent } from "@/types";
+import { Status } from "@/generated/prisma";
 
 export default async function VolunteerDetailsPage({
    params,
@@ -94,27 +85,29 @@ export default async function VolunteerDetailsPage({
       }).format(date);
    };
 
-   const getTimeRange = (startDate: Date, endDate: Date) => {
-      const start = new Intl.DateTimeFormat("en-US", {
-         hour: "2-digit",
-         minute: "2-digit",
-      }).format(startDate);
+   // const getTimeRange = (startDate: Date, endDate: Date) => {
+   //    const start = new Intl.DateTimeFormat("en-US", {
+   //       hour: "2-digit",
+   //       minute: "2-digit",
+   //    }).format(startDate);
 
-      const end = new Intl.DateTimeFormat("en-US", {
-         hour: "2-digit",
-         minute: "2-digit",
-      }).format(endDate);
+   //    const end = new Intl.DateTimeFormat("en-US", {
+   //       hour: "2-digit",
+   //       minute: "2-digit",
+   //    }).format(endDate);
 
-      return `${start} - ${end}`;
-   };
+   //    return `${start} - ${end}`;
+   // };
 
-   const getEnrollmentStats = (enrollments: any[]) => {
+   const getEnrollmentStats = (enrollments: EnrollmentWithEvent[]) => {
       const approved = enrollments.filter(
-         (e) => e.status === "APPROVED"
+         (e) => e.status === Status.APPROVED
       ).length;
-      const pending = enrollments.filter((e) => e.status === "PENDING").length;
+      const pending = enrollments.filter(
+         (e) => e.status === Status.PENDING
+      ).length;
       const rejected = enrollments.filter(
-         (e) => e.status === "REJECTED"
+         (e) => e.status === Status.REJECTED
       ).length;
       return { approved, pending, rejected, total: enrollments.length };
    };
@@ -266,7 +259,8 @@ export default async function VolunteerDetailsPage({
                            No events yet
                         </h3>
                         <p className="text-gray-500">
-                           This volunteer hasn't enrolled in any events yet.
+                           This volunteer hasn&apos;t enrolled in any events
+                           yet.
                         </p>
                      </div>
                   ) : (
@@ -291,7 +285,9 @@ export default async function VolunteerDetailsPage({
                                           </h3>
                                           <div className="mt-1 flex items-center gap-2">
                                              <StatusBadge
-                                                status={enrollment.status}
+                                                status={
+                                                   enrollment.status as Status
+                                                }
                                              />
                                              <span className="text-xs text-gray-500">
                                                 Enrolled:{" "}

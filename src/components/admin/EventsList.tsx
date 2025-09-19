@@ -1,9 +1,10 @@
 "use client";
 
-import EventCard from "@/components/user/EventCard";
+import EventCard from "@/components/admin/EventCard";
+import { Event } from "@/generated/prisma";
 
 interface EventsListProps {
-   events: any[];
+   events: Event[];
 }
 
 export default function EventsList({ events }: EventsListProps) {
@@ -11,11 +12,11 @@ export default function EventsList({ events }: EventsListProps) {
       <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-5 lg:grid-cols-4">
          {events
             ?.sort(
-               (a: any, b: any) =>
+               (a: Event, b: Event) =>
                   new Date(b.startDate).getTime() -
                   new Date(a.startDate).getTime()
             )
-            .map((event: any) => (
+            .map((event: Event) => (
                <EventCard key={event.id} event={event} />
             ))}
       </div>

@@ -23,6 +23,8 @@ import config from "@/lib/config";
 import { Badge } from "@/components/ui/badge";
 import VolunteerSearch from "@/components/admin/VolunteerSearch";
 import { GripVertical, Mail, Phone } from "lucide-react";
+import { Status } from "@/generated/prisma";
+import { EnrollmentWithEvent } from "@/types";
 
 type Volunteer = {
    id: string;
@@ -35,7 +37,7 @@ type Volunteer = {
    createdAt: Date;
    enrollments: Array<{
       id: string;
-      status: string;
+      status: Status;
       enrolledAt: Date;
       event: {
          id: string;
@@ -83,23 +85,15 @@ export default function VolunteerMgmtTable({
    );
    const totalPages = Math.ceil(volunteers.length / rowsPerPage);
 
-   const formatDate = (date: Date) => {
-      return new Intl.DateTimeFormat("en-US", {
-         year: "numeric",
-         month: "short",
-         day: "numeric",
-         hour: "2-digit",
-         minute: "2-digit",
-      }).format(date);
-   };
-
-   const getEnrollmentStats = (enrollments: any[]) => {
+   const getEnrollmentStats = (enrollments: EnrollmentWithEvent[]) => {
       const approved = enrollments.filter(
-         (e) => e.status === "APPROVED"
+         (e) => e.status === Status.APPROVED
       ).length;
-      const pending = enrollments.filter((e) => e.status === "PENDING").length;
+      const pending = enrollments.filter(
+         (e) => e.status === Status.PENDING
+      ).length;
       const rejected = enrollments.filter(
-         (e) => e.status === "REJECTED"
+         (e) => e.status === Status.REJECTED
       ).length;
       return { approved, pending, rejected, total: enrollments.length };
    };
@@ -137,21 +131,6 @@ export default function VolunteerMgmtTable({
       } catch (err) {
          console.error("Error saving roles", err);
          setIsSaving(false);
-      }
-   };
-
-   const getRoleBadgeVariant = (role: string) => {
-      switch (role) {
-         case "ADMIN":
-            return "destructive";
-         case "ORGANIZER":
-            return "default";
-         case "VOLUNTEER":
-            return "secondary";
-         case "USER":
-            return "outline";
-         default:
-            return "outline";
       }
    };
 

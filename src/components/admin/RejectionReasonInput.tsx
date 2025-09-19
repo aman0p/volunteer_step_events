@@ -56,11 +56,16 @@ export default function RejectionReasonInput({
             // Refresh the page to show updated status
             window.location.reload();
          } else {
+            console.error(
+               "Failed to reject verification request:",
+               result.message
+            );
             toast.error(
                result.message || "Failed to reject verification request"
             );
          }
       } catch (error) {
+         console.error("Reject verification error:", error);
          toast.error("An error occurred while rejecting the request");
       } finally {
          setIsRejecting(false);

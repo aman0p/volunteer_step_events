@@ -7,9 +7,8 @@ import {
    Path,
    SubmitHandler,
    useForm,
-   UseFormReturn,
 } from "react-hook-form";
-import { ZodType } from "zod";
+import { ZodSchema } from "zod";
 import { Button } from "@/components/ui/button";
 import {
    Form,
@@ -44,7 +43,7 @@ import { signIn } from "next-auth/react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
 interface Props<T extends FieldValues> {
-   schema: ZodType<T>;
+   schema: ZodSchema<T>;
    defaultValues: T;
    onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
    type: "SIGN_IN" | "SIGN_UP";
@@ -60,8 +59,9 @@ export function AuthForm<T extends FieldValues>({
    const isSignIn = type === "SIGN_IN";
    const [showPassword, setShowPassword] = useState(false);
 
-   const form: UseFormReturn<T> = useForm<T>({
-      resolver: zodResolver(schema as any),
+   const form = useForm({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      resolver: zodResolver(schema as any) as any,
       defaultValues: defaultValues as DefaultValues<T>,
    });
 
@@ -288,9 +288,9 @@ export function AuthForm<T extends FieldValues>({
                               .map((fieldName) => renderFormField(fieldName))}
 
                            <div className="grid grid-cols-[1.6fr_1fr] gap-4">
-                              {"phoneNumber" in (defaultValues as any) &&
+                              {"phoneNumber" in defaultValues &&
                                  renderFormField("phoneNumber")}
-                              {"gender" in (defaultValues as any) &&
+                              {"gender" in defaultValues &&
                                  renderFormField("gender")}
                            </div>
                         </>

@@ -32,7 +32,7 @@ export const requestEnrollment = async (eventId: string) => {
       if (existing) {
          if (
             existing.status === "CANCELLED" &&
-            (existing as any).cancellationCount === 1
+            (existing as { cancellationCount: number }).cancellationCount === 1
          ) {
             // Allow one-time reapply by flipping back to PENDING on the same record
             await prisma.enrollment.update({
@@ -125,7 +125,8 @@ export const cancelEnrollment = async (eventId: string) => {
          return { success: false, message: "Enrollment not found" };
       }
 
-      const currentCount = (existing as any).cancellationCount ?? 0;
+      const currentCount =
+         (existing as { cancellationCount: number }).cancellationCount ?? 0;
       const nextCount = currentCount + 1;
       const nextStatus = nextCount >= 2 ? Status.REJECTED : Status.CANCELLED;
 
@@ -134,7 +135,16 @@ export const cancelEnrollment = async (eventId: string) => {
          data: {
             status: nextStatus,
             cancelledAt: new Date(),
-            cancellationCount: nextCount as any,
+            cancellationCount: nextCount,
+         },
+      });
+
+      await prisma.enrollment.update({
+         where: { id: existing.id },
+         data: {
+            status: Status.CANCELLED,
+            cancelledAt: new Date(),
+            cancellationCount: nextCount,
          },
       });
 

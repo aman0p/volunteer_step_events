@@ -24,8 +24,8 @@ export default function NotFound() {
                         Event Not Found
                      </h2>
                      <p className="leading-relaxed opacity-50">
-                        Sorry, the event you're looking for doesn't exist or may
-                        have been removed.
+                        Sorry, the event you&apos;re looking for doesn&apos;t
+                        exist or may have been removed.
                      </p>
                   </div>
 

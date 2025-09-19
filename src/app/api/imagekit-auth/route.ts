@@ -4,7 +4,8 @@ import { getCorsHeaders, corsOptionsResponse } from "@/lib/utils";
 
 const {
    env: {
-      imagekit: { publicKey, privateKey, urlEndpoint },
+      // imagekit: { publicKey, privateKey, urlEndpoint },
+      imagekit: { publicKey, privateKey },
    },
 } = config;
 

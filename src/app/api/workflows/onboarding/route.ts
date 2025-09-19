@@ -21,7 +21,7 @@ const getUserState = async (email: string): Promise<UserState> => {
 
    if (!user) return "non-active";
 
-   const lastActivityDate = new Date(user?.lastActiveAt!);
+   const lastActivityDate = new Date(user.lastActiveAt);
    const now = new Date();
    const timeDifference = now.getTime() - lastActivityDate.getTime();
 

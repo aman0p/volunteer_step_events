@@ -87,6 +87,7 @@ export const approveEnrollment = async (enrollmentId: string) => {
 
       return { success: true, message: "Enrollment approved" };
    } catch (error) {
+      console.error("Error approving enrollment:", error);
       return { success: false, message: "Failed to approve enrollment" };
    }
 };
@@ -144,6 +145,7 @@ export const rejectEnrollment = async (enrollmentId: string) => {
 
       return { success: true, message: "Enrollment rejected" };
    } catch (error) {
+      console.error("Error rejecting enrollment:", error);
       return { success: false, message: "Failed to reject enrollment" };
    }
 };
@@ -185,6 +187,7 @@ export const getEventEnrollments = async (eventId: string) => {
 
       return { success: true, data: enrollments };
    } catch (error) {
+      console.error("Error fetching enrollments:", error);
       return { success: false, message: "Failed to fetch enrollments" };
    }
 };

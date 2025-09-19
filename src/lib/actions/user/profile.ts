@@ -7,9 +7,7 @@ import { authOptions } from "@/auth";
 import { profileSchema } from "@/lib/validations";
 
 export const updateCurrentUserProfile = async (formData: unknown) => {
-   const session = (await getServerSession(
-      authOptions as any
-   )) as Session | null;
+   const session = (await getServerSession(authOptions)) as Session | null;
    if (!session?.user?.id) {
       return { success: false, message: "Unauthorized" };
    }
@@ -55,9 +53,7 @@ export const updateCurrentUserProfile = async (formData: unknown) => {
 };
 
 export const getCurrentUserProfile = async () => {
-   const session = (await getServerSession(
-      authOptions as any
-   )) as Session | null;
+   const session = (await getServerSession(authOptions)) as Session | null;
    if (!session?.user?.id) {
       return { success: false, message: "Unauthorized", data: null } as const;
    }

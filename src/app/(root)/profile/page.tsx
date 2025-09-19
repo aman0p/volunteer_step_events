@@ -23,6 +23,8 @@ import { UserCheck, Loader2, RefreshCw, XCircle } from "lucide-react";
 import { useProfile } from "@/hooks/useProfile";
 
 export default function Profile() {
+   const [skillInput, setSkillInput] = useState("");
+
    const {
       form,
       role,
@@ -369,8 +371,6 @@ export default function Profile() {
                         control={form.control}
                         name={"skills"}
                         render={({ field }) => {
-                           const [skillInput, setSkillInput] = useState("");
-
                            const addSkill = (text: string) => {
                               const value = text.trim();
                               if (!value) return;
