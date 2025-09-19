@@ -1,50 +1,86 @@
-import { authOptions } from "@/auth";
-import { Navbar } from "@/components/Navbar";
-import { getServerSession } from "next-auth";
-import { Providers } from "@/components/Providers";
-import { prisma } from "@/lib/prisma";
-import ProfileCompletionBanner from "@/components/ProfileCompletionBanner";
+import { authOptions } from '@/auth';
+import { Navbar } from '@/components/Navbar';
+import { getServerSession } from 'next-auth';
+import { Providers } from '@/components/Providers';
+import { prisma } from '@/lib/prisma';
+import ProfileCompletionBanner from '@/components/ProfileCompletionBanner';
+import { Plasma } from '@/components/plasma';
+import { Noto_Sans } from 'next/font/google';
+import { Metadata } from 'next';
+import { ThemeProvider } from 'next-themes';
+
+const notoSans = Noto_Sans({
+   subsets: ['latin'],
+   variable: '--font-noto-sans',
+});
+
+export const metadata: Metadata = {
+   title: 'Volunteer Step Events',
+   description: 'Manage your events and volunteers',
+   icons: {
+      icon: '/default/logo.svg',
+   },
+};
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const session = await getServerSession(authOptions);
+   const session = await getServerSession(authOptions);
 
-  // Update lastActiveAt once per day for authenticated users
-  if (session?.user?.id) {
-    try {
-      const user = await prisma.user.findUnique({
-        where: { id: session.user.id },
-        select: { lastActiveAt: true },
-      });
-
-      // Only proceed if user exists
-      if (user) {
-        const today = new Date().toISOString().slice(0, 10);
-        const lastActiveDate = user.lastActiveAt
-          ? new Date(user.lastActiveAt).toISOString().slice(0, 10)
-          : null;
-
-        if (lastActiveDate !== today) {
-          await prisma.user.update({
+   // Update lastActiveAt once per day for authenticated users
+   if (session?.user?.id) {
+      try {
+         const user = await prisma.user.findUnique({
             where: { id: session.user.id },
-            data: { lastActiveAt: new Date() },
-          });
-        }
-      }
-    } catch (error) {
-      // Log error but don't crash the layout
-      console.error('Error updating user lastActiveAt:', error);
-    }
-  }
+            select: { lastActiveAt: true },
+         });
 
-  return (
-    <Providers session={session}>
-      <div className="flex flex-col items-center justify-center w-full mx-auto h-full">
-        {session && <ProfileCompletionBanner className="w-full sticky top-0" />}
-        <Navbar session={session} />
-        <div className="mt-10 px-3 md:px-0 w-full md:w-4xl lg:w-6xl">{children}</div>
-      </div>
-    </Providers>
-  );
-}
+         // Only proceed if user exists
+         if (user) {
+            const today = new Date().toISOString().slice(0, 10);
+            const lastActiveDate = user.lastActiveAt
+               ? new Date(user.lastActiveAt).toISOString().slice(0, 10)
+               : null;
+
+            if (lastActiveDate !== today) {
+               await prisma.user.update({
+                  where: { id: session.user.id },
+                  data: { lastActiveAt: new Date() },
+               });
+            }
+         }
+      } catch (error) {
+         // Log error but don't crash the layout
+         console.error('Error updating user lastActiveAt:', error);
+      }
+   }
+
+   return (
+      <ThemeProvider
+         attribute="class"
+         defaultTheme="system"
+         enableSystem
+         disableTransitionOnChange
+      >
+         <Providers session={session}>
+            {/* <div className="fixed inset-0 z-0">
+        <Plasma
+          color="#9AE600"
+          speed={0.8}
+          direction="forward"
+          scale={1.5}
+          opacity={0.6}
+          mouseInteractive={true}
+        />
+      </div> */}
+            <div className="font-noto-sans mx-auto flex h-full w-full flex-col items-center justify-center">
+               {session && (
+                  <ProfileCompletionBanner className="sticky top-0 w-full" />
+               )}
+               <Navbar session={session} />
+               <div className="w-full">{children}</div>
+            </div>
+         </Providers>
+      </ThemeProvider>
+   );
+};
 
 export default Layout;

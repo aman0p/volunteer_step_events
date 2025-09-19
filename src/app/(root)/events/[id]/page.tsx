@@ -1,301 +1,201 @@
-import React from "react";
-import { notFound } from "next/navigation";
-import { authOptions } from "@/auth";
-import { getServerSession } from "next-auth";
-import { prisma } from "@/lib/prisma";
-import { Calendar, MailIcon, MapPin } from "lucide-react";
-import Link from "next/link";
-import { Image } from "@imagekit/next";
-import config from "@/lib/config";
-import EnrollButton from "@/components/EnrollButton";
-import { FaInstagram, FaWhatsapp } from "react-icons/fa";
-import { Video } from "@imagekit/next";
-import { Badge } from "@/components/ui/badge";
-import EventRolesTable from "@/components/admin/tables/EventRolesTable";
-import { CopyButton } from "@/components/ui";
-import QuickLinks from "@/components/QuickLinks";
+import { authOptions } from '@/auth';
+import { prisma } from '@/lib/prisma';
+import config from '@/lib/config';
+import { Image, Video } from '@imagekit/next';
+import ExpandableText from '@/components/ExpandableText';
+import { getServerSession } from 'next-auth';
+import { redirect, notFound } from 'next/navigation';
+import Section from '@/components/ui/section';
+import { Badge } from '@/components/ui';
+import { Card, CardContent } from '@/components/ui/card';
+import { Calendar, Clock, MapPin, Tag } from 'lucide-react';
+import EventRolesTable from '@/components/admin/tables/EventRolesTable';
+import { Separator } from '@/components/ui/separator';
+import QuickLinks from '@/components/QuickLinks';
+import EnrollButton from '@/components/EnrollButton';
 
-const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const id = (await params).id;
-  const session = await getServerSession(authOptions);
+export default async function EventDetailsPage({
+   params,
+}: {
+   params: { id: string };
+}) {
+   const id = (await params).id;
+   const session = await getServerSession(authOptions);
 
-  // Fetch data based on id
-  const event = await prisma.event.findUnique({
-    where: { id },
-    include: {
-      enrollments: {
-        include: {
-          user: true
-        }
-      },
-      eventRoles: {
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          payout: true,
-          maxCount: true,
-          enrollments: {
-            where: {
-              status: {
-                in: ['APPROVED', 'PENDING']
-              }
+   if (!session) {
+      redirect('/sign-in');
+   }
+
+   const event = await prisma.event.findUnique({
+      where: { id },
+      include: {
+         enrollments: {
+            where: { userId: session.user.id },
+            select: { status: true },
+            take: 1,
+         },
+         eventRoles: {
+            include: {
+               enrollments: {
+                  select: { id: true },
+               },
             },
-            select: {
-              id: true
-            }
-          }
-        }
+         },
+         quickLinks: true,
       },
-      quickLinks: {
-        where: {
-          isActive: true
-        },
-        select: {
-          id: true,
-          title: true,
-          url: true
-        }
-      },
-      createdBy: {
-        select: {
-          id: true
-        }
-      }
-    }
-  });
+   });
 
-  if (!event) notFound();
+   if (!event) {
+      notFound();
+   }
 
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(date);
-  };
+   const approvedCount = await prisma.enrollment.count({
+      where: { eventId: id, status: 'APPROVED' },
+   });
 
-  const getTimeRange = (startDate: Date, endDate: Date) => {
-    const start = new Intl.DateTimeFormat('en-US', {
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(startDate);
+   const formatDate = (date: Date) => {
+      return new Intl.DateTimeFormat('en-US', {
+         weekday: 'long',
+         year: 'numeric',
+         month: 'long',
+         day: 'numeric',
+         hour: '2-digit',
+         minute: '2-digit',
+      }).format(date);
+   };
 
-    const end = new Intl.DateTimeFormat('en-US', {
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(endDate);
+   const isFull = !!event.maxVolunteers && approvedCount >= event.maxVolunteers;
+   const enrollmentStatus = event.enrollments[0]?.status ?? null;
+   const isEnrolled = enrollmentStatus === 'APPROVED';
+   const isEventCreator = event.createdById === session.user.id;
 
-    return `${start} - ${end}`;
-  };
-
-  const enrolledVolunteers = event.enrollments.filter((e: any) => e.status === 'APPROVED').length;
-  const availableSlots = event.maxVolunteers ? event.maxVolunteers - enrolledVolunteers : 'Unlimited';
-
-
-  return (
-    <div className="w-full space-y-2 md:space-y-5 md:px-2 lg:px-0 md:w-4xl lg:w-6xl mx-auto h-full rounded-xl md:rounded-2xl lg:rounded-3xl">
-
-      {/* main content */}
-      <div
-        className="grid p-3 grid-cols-1 md:grid-cols-[2fr_1fr] w-full rounded-xl md:rounded-2xl lg:rounded-3xl h-full md:p-7 gap-10 bg-black/10"
-
-      >
-        <div className="flex flex-col gap-3 md:gap-7 justify-end order-2 md:order-1">
-
-          {/* title */}
-          <div className="flex flex-col gap-1 md:gap-2 order-1 md:order-1">
-
-            {/* category badges */}
-            <div className="flex flex-wrap gap-1 md:gap-2">
-              {event.category.map((cat, index) => (
-                <Badge key={index} variant="secondary" className="bg-black/70 text-white">
-                  <span className="text-xxs md:text-xs font-semibold">{cat}</span>
-                </Badge>
-              ))}
-            </div>
-
-            {/* title */}
-            <h1 className="text-xl md:text-2xl lg:text-4xl font-bold">{event.title}</h1>
-
-          </div>
-
-          <div className="flex md:items-center md:justify-between flex-col md:flex-row gap-5 order-3 md:order-2">
-            {/* Enroll button */}
-            <EnrollButton
-              eventId={event.id}
-              isFull={availableSlots === 0}
-              className="w-full md:w-fit rounded-xl md:rounded-full"
-              enrollmentStatus={event.enrollments.find((e: any) => e.userId === session?.user?.id)?.status}
-            />
-            <div className="hidden md:flex items-center w-fit">
-
-              {event.enrollments
-                .filter((e: any) => e.user.profileImage) // Only show users with profile images
-                .sort(() => Math.random() - 0.5)
-                .slice(0, 3)
-                .map((e: any) => (
-                  <Image
-                    key={e.id}
-                    urlEndpoint={config.env.imagekit.urlEndpoint}
-                    src={e.user.profileImage}
-                    alt="volunteer image"
-                    width={100}
-                    height={100}
-                    className="rounded-full size-11 border-3 aspect-square object-cover -ml-3 m-2"
-                  />
-                ))}
-              <div className="ml-4 text-[13px] flex flex-col items-start mt-1.5">
-                <span className="font-bold">{event.enrollments.length.toString().padStart(2, '0')} / {event.maxVolunteers}</span>
-                <span className="relative bottom-0.5">Volunteers</span>
-              </div>
-            </div>
-          </div>
-
-          {/* date and location */}
-          <div className="border w-full md:w-fit flex flex-col rounded-2xl gap-[1px] overflow-hidden order-2 md:order-3">
-            <div className="flex gap-2 md:gap-5 items-center text-white bg-black/70 justify-start px-5 py-3 w-md">
-              <Calendar className="size-3.5 md:size-4 mb-0.5" />
-              <p className="text-xs md:text-sm text-medium md:font-semibold tracking-wide">{formatDate(event.startDate)}</p>
-            </div>
-            <div className="flex gap-2 md:gap-5 items-center text-white bg-black/70 justify-start px-5 py-3 w-md">
-              <MapPin className="size-3.5 md:size-4 mb-0.5" />
-              <p className="text-xs md:text-sm text-medium md:font-semibold tracking-wide">{event.location}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* cover image */}
-        <div className="order-1 md:order-2">
-          {event.coverUrl && event.coverUrl.trim() !== "" ? (
-            <Image
-              urlEndpoint={config.env.imagekit.urlEndpoint}
-              src={event.coverUrl}
-              alt={event.title}
-              width={500}
-              height={500}
-              className="w-fit h-fit object-cover rounded-xl md:rounded-2xl lg:rounded-3xl aspect-video md:aspect-square object-top"
-            />
-          ) : (
-            <div className="w-full h-full bg-black/10 rounded-lg"></div>
-          )}
-        </div>
-
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-2 md:gap-5">
-
-        <div className="flex flex-col gap-2 md:gap-5">
-
-          {event.eventImages && event.eventImages.length > 0 && <div className="grid grid-cols-2 gap-2 md:gap-5 w-full order-2">
-            {event.eventImages && event.eventImages.map((img, index) => (
-              <Image
-                key={index}
-                urlEndpoint={config.env.imagekit.urlEndpoint}
-                src={img}
-                alt="event image"
-                width={1000}
-                height={1000}
-                className="w-full aspect-video object-cover rounded-xl md:rounded-2xl lg:rounded-3xl object-top"
-              />
-            ))}
-          </div>
-          }
-
-          {/* Description */}
-          <div className="h-fit w-full order-1 flex flex-col gap-3 md:gap-5 p-3 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
-            <h1 className="text-base md:text-xl font-bold">Description</h1>
-            <p className="text-xs md:text-sm tracking-wide leading-5.5 line-clamp-4 md:line-clamp-none">{event.description}</p>
-          </div>
-
-          {/* Event Roles */}
-          {event.eventRoles && event.eventRoles.length > 0 && (
-            <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-3 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
-              <h1 className="text-base md:text-xl font-bold">Volunteer Roles & Payouts</h1>
-              <EventRolesTable eventRoles={event.eventRoles} />
-            </div>
-          )}
-
-          {/* Event Video */}
-
-        </div>
-
-        <div className="flex flex-col gap-2 md:gap-5">
-
-          {/* Event Category
-          <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-5 md:p-7  rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
-            <h1 className="text-base md:text-xl font-bold">Event Category</h1>
-            <div className="flex flex-wrap gap-2">
-              {event.category.map((cat, index) => (
-                <Badge key={index} variant="secondary" className="bg-black/70 text-white">
-                  <span className="text-xxs md:text-xs font-semibold">{cat}</span>
-                </Badge>
-              ))}
-            </div>
-          </div> */}
-
-          
-          {/* Event Video */}
-          {event.videoUrl && event.videoUrl.trim() !== "" && (
-            <div className="w-full h-fit">
-              {event.videoUrl && event.videoUrl.trim() !== "" && (
-                <Video
+   return (
+      <div className="h-full w-full space-y-0">
+         {/* Event Cover and Details */}
+         <Section className="grid h-full w-full grid-cols-1 gap-0 px-3 py-1.5 md:gap-5 md:p-3 lg:max-h-full lg:max-w-full lg:grid-cols-[2fr_1.4fr] lg:px-5">
+            <div className="relative z-10 w-full overflow-hidden rounded-t-xl md:rounded-2xl lg:rounded-3xl">
+               <Image
                   urlEndpoint={config.env.imagekit.urlEndpoint}
-                  src={event.videoUrl}
-                  alt="event video"
-                  controls
-                  className="w-full object-cover rounded-xl md:rounded-2xl lg:rounded-3xl aspect-video bg-black/10"
-                  poster={event.coverUrl || undefined}
-                />
-              )}
+                  src={event.coverUrl || '/events.jpg'}
+                  alt={event.title}
+                  width={1500}
+                  height={1500}
+                  className="h-[40vh] w-full bg-black/10 object-cover object-center md:h-[30vh] lg:h-full"
+               />
             </div>
-          )}
 
+            <div className="h-full w-full space-y-10 rounded-b-xl bg-white/10 px-3 py-5 backdrop-blur-xl md:rounded-2xl md:p-5 lg:rounded-3xl">
+               {/* event details */}
+               <div className="flex h-full w-full flex-col justify-between space-y-2 md:gap-5 lg:gap-10">
+                  <div className="space-y-5">
+                     <div className="flex items-center gap-2">
+                        {event.category.map((category) => (
+                           <Badge
+                              variant="secondary"
+                              className="bg-background/20 text-foreground border-0 backdrop-blur-md"
+                           >
+                              <span className="text-xxs md:text-xs">
+                                 {category}
+                              </span>
+                           </Badge>
+                        ))}
+                     </div>
+                     <h1 className="text-xl font-bold md:text-2xl lg:text-3xl">
+                        {event.title}
+                     </h1>
+                     <ExpandableText
+                        text={event.description ?? ''}
+                        clampLines={3}
+                        className="mt-5"
+                     />
+                  </div>
 
-          {/* Event Details */}
-          <div className="h-fit w-full flex flex-col gap-3 md:gap-5 p-3 md:p-7  rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/10">
-            <h1 className="text-base md:text-xl font-bold">Event Details</h1>
-            <div className="flex flex-col gap-3 overflow-hidden text-xs md:text-sm">
-              <p className="space-x-1">
-                <span className="font-bold">Start Date:</span>
-                <span>{formatDate(event.startDate)}</span>
-              </p>
-              <p className="space-x-1">
-                <span className="font-bold">End Date:</span>
-                <span>{formatDate(event.endDate)}</span>
-              </p>
-              <p className="space-x-1">
-                <span className="font-bold">Duration:</span>
-                <span>{getTimeRange(event.startDate, event.endDate)}</span>
-              </p>
-              <p className="space-x-1">
-                <span className="font-bold">Available Slots:</span>
-                <span>{availableSlots}</span>
-              </p>
-              <p className="space-x-1">
-                <span className="font-bold">Dress Code:</span>
-                <span>{event.dressCode}</span>
-              </p>
+                  <div className="space-y-2">
+                     <Card className="w-full gap-3 rounded-2xl py-3">
+                        <CardContent className="flex items-center justify-start gap-2 px-5 md:gap-5">
+                           <Calendar className="mb-0.5 size-3.5 md:size-4" />
+                           <p className="text-xs font-medium tracking-wide md:text-sm md:font-semibold">
+                              {formatDate(event.startDate)}
+                           </p>
+                        </CardContent>
+                        <Separator />
+                        <CardContent className="flex items-center justify-start gap-2 px-5 md:gap-5">
+                           <MapPin className="mb-0.5 size-3.5 md:size-4" />
+                           <p className="line-clamp-1 text-xs font-medium tracking-wide md:text-sm md:font-semibold">
+                              {event.location}
+                           </p>
+                        </CardContent>
+                     </Card>
+
+                     <EnrollButton
+                        eventId={event.id}
+                        isFull={isFull}
+                        enrollmentStatus={enrollmentStatus}
+                        className="w-full rounded-lg"
+                     />
+                  </div>
+               </div>
+
+               {/* event roles and quick links */}
             </div>
-          </div>
+         </Section>
 
-          {/* Quick Links */}
-          <QuickLinks 
-            quickLinks={event.quickLinks || []}
-            isEnrolled={event.enrollments.some((e: any) => 
-              e.userId === session?.user?.id && 
-              e.status === 'APPROVED'
+         {/* Event Roles and Quick Links */}
+         <Section className="grid h-full w-full grid-cols-1 gap-3 px-3 py-1.5 md:gap-5 md:p-3 lg:max-w-full lg:grid-cols-[2fr_1.4fr] lg:px-5">
+            <div className="h-full w-full space-y-15 rounded-xl bg-white/10 px-3 py-5 backdrop-blur-xl md:rounded-2xl md:p-5 lg:rounded-3xl">
+               {event.eventRoles && event.eventRoles.length > 0 && (
+                  <div className="space-y-5">
+                     <h2 className="text-xl font-bold md:text-2xl">
+                        Event Roles
+                     </h2>
+                     <EventRolesTable eventRoles={event.eventRoles ?? []} />
+                  </div>
+               )}
+            </div>
+
+            <QuickLinks
+               quickLinks={event.quickLinks ?? []}
+               isEnrolled={isEnrolled}
+               isEventCreator={isEventCreator}
+            />
+         </Section>
+
+         {/* Enrollment Details & */}
+         <Section className="grid h-full w-full grid-cols-1 gap-3 px-3 py-1.5 md:gap-5 md:p-3 lg:max-w-full lg:grid-cols-[2fr_1.4fr] lg:px-5">
+            <div className="h-full w-full space-y-15 overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl">
+               {event.eventImages && event.eventImages.length > 0 && (
+                  <div className="order-2 grid w-full grid-cols-3 gap-2 md:grid-cols-4 md:gap-5">
+                     {event.eventImages &&
+                        event.eventImages.map((img, index) => (
+                           <Image
+                              key={index}
+                              urlEndpoint={config.env.imagekit.urlEndpoint}
+                              src={img}
+                              alt="event image"
+                              width={1000}
+                              height={1000}
+                              className="z-10 aspect-square w-full rounded-xl object-cover object-top md:aspect-auto md:h-[17rem] md:rounded-2xl lg:rounded-3xl"
+                           />
+                        ))}
+                  </div>
+               )}
+            </div>
+
+            {/* video */}
+            {event.videoUrl && (
+               <div className="z-10 aspect-video h-fit w-full overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl">
+                  <Video
+                     src={event.videoUrl}
+                     urlEndpoint={config.env.imagekit.urlEndpoint}
+                     alt="event video"
+                     controls
+                     preload="none"
+                     className="aspect-video h-full w-full overflow-hidden rounded-xl bg-black/1 object-cover md:rounded-2xl lg:rounded-3xl dark:bg-white/5"
+                     poster={event.coverUrl ?? undefined}
+                  />
+               </div>
             )}
-            isEventCreator={event.createdBy?.id === session?.user?.id}
-          />
-        </div>
+         </Section>
       </div>
-    </div >
-  );
-
-};
-
-export default Page;
+   );
+}

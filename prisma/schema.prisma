@@ -64,10 +64,10 @@ model User {
 
 model EventRole {
   id          String   @id @default(uuid())
-  name        String   // e.g., "Event Coordinator", "Registration Helper", "Security"
-  description String   // Description of what this role entails
-  payout      Float    // Amount in currency (e.g., 500.00 for $500)
-  maxCount    Int      // Maximum number of volunteers needed for this role
+  name        String   
+  description String   
+  payout      Float    
+  maxCount    Int      
   event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId     String
   enrollments Enrollment[]

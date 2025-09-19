@@ -1,55 +1,70 @@
-import { authOptions } from "@/auth";
-import { Providers } from "@/components/Providers";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { Sidebar } from "@/components/admin/Sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import Header from "@/components/admin/Header";
-import { prisma } from "@/lib/prisma";
+import { authOptions } from '@/auth';
+import { Providers } from '@/components/Providers';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import { Sidebar } from '@/components/admin/Sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import Header from '@/components/admin/Header';
+import { prisma } from '@/lib/prisma';
+import { ThemeToggleButton } from '@/components/ThemeToggleButton';
 
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
-    const session = await getServerSession(authOptions);
+   const session = await getServerSession(authOptions);
 
-    if (!session) {
-        redirect("/sign-in");
-    }
+   if (!session) {
+      redirect('/sign-in');
+   }
 
-    // Check if user has admin role - use database role instead of session role
-    const user = await prisma.user.findUnique({
-        where: { id: session.user.id },
-        select: { role: true }
-    });
+   // Check if user has admin role - use database role instead of session role
+   const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { role: true },
+   });
 
-    if (!user || (user.role !== "ADMIN" && user.role !== "ORGANIZER")) {
-        redirect("/");
-    }
+   if (!user || (user.role !== 'ADMIN' && user.role !== 'ORGANIZER')) {
+      redirect('/');
+   }
 
-    // Sidebar badge should reflect current number of pending enrollment requests for this admin
-    const enrollmentCount = await prisma.enrollment.count({ where: { status: "PENDING", event: { createdById: session.user.id } } });
-    
-    // Count pending verification requests
-    const verificationCount = await prisma.verificationRequest.count({ where: { status: "PENDING" } });
+   // Sidebar badge should reflect current number of pending enrollment requests for this admin
+   const enrollmentCount = await prisma.enrollment.count({
+      where: { status: 'PENDING', event: { createdById: session.user.id } },
+   });
 
-    return (
-        <Providers session={session}>
-            <SidebarProvider>
-                <main className="flex min-h-screen w-full">
-                    <Sidebar session={session} enrollmentCount={enrollmentCount} verificationCount={verificationCount} />
-                    <div className="flex-1 flex flex-col h-screen overflow-hidden">
-                    {/* <div className="border-b">
+   // Count pending verification requests
+   const verificationCount = await prisma.verificationRequest.count({
+      where: { status: 'PENDING' },
+   });
+
+   return (
+      <Providers session={session}>
+         <SidebarProvider>
+            <main className="flex min-h-screen w-full">
+               <Sidebar
+                  session={session}
+                  enrollmentCount={enrollmentCount}
+                  verificationCount={verificationCount}
+               />
+               <div className="flex h-screen flex-1 flex-col overflow-hidden">
+                  {/* <div className="border-b">
                         <Header session={session} />
                     </div> */}
-                        <div className="flex items-center gap-2 p-2 border-b">
-                            <SidebarTrigger />
-                        </div>
-                        <div className="w-full p-4 md:p-7 md:pr-13 flex-1 overflow-y-auto">
-                            {children}
-                        </div>
-                    </div>
-                </main>
-            </SidebarProvider>
-        </Providers>
-    );
-}
+                  <div className="flex items-center gap-2 border-b p-2">
+                     <SidebarTrigger />
+
+                     {/* <ThemeToggleButton
+                  variant="circle-blur"
+                  start="top-right"
+                  className="scale-95 md:scale-115"
+                /> */}
+                  </div>
+                  <div className="w-full flex-1 overflow-y-auto p-4 md:p-7 md:pr-13">
+                     {children}
+                  </div>
+               </div>
+            </main>
+         </SidebarProvider>
+      </Providers>
+   );
+};
 
 export default AdminLayout;

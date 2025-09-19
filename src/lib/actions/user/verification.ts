@@ -1,103 +1,116 @@
-"use server";
+'use server';
 
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/auth";
-import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/auth';
+import { prisma } from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 
 const createVerificationRequestNotification = async (userId: string) => {
-  try {
-    await prisma.notification.create({
-      data: {
-        userId,
-        type: "VERIFICATION_REQUEST",
-        title: "Verification Request Submitted",
-        message: "Your verification request has been submitted and is under review. You will be notified once an admin reviews your request.",
-      },
-    });
-  } catch (error) {
-    console.error("Failed to create verification request notification:", error);
-  }
+   try {
+      await prisma.notification.create({
+         data: {
+            userId,
+            type: 'VERIFICATION_REQUEST',
+            title: 'Verification Request Submitted',
+            message:
+               'Your verification request has been submitted and is under review. You will be notified once an admin reviews your request.',
+         },
+      });
+   } catch (error) {
+      console.error(
+         'Failed to create verification request notification:',
+         error
+      );
+   }
 };
 
 export const submitVerificationRequest = async () => {
-  const session = await getServerSession(authOptions);
-  
-  if (!session?.user?.id) {
-    return { success: false, message: "Authentication required" };
-  }
+   const session = await getServerSession(authOptions);
 
-  try {
-    // Check if user already has a pending verification request
-    const existingRequest = await prisma.verificationRequest.findFirst({
-      where: {
-        userId: session.user.id,
-        status: "PENDING"
+   if (!session?.user?.id) {
+      return { success: false, message: 'Authentication required' };
+   }
+
+   try {
+      // Check if user already has a pending verification request
+      const existingRequest = await prisma.verificationRequest.findFirst({
+         where: {
+            userId: session.user.id,
+            status: 'PENDING',
+         },
+      });
+
+      if (existingRequest) {
+         return {
+            success: false,
+            message: 'You already have a pending verification request',
+         };
       }
-    });
 
-    if (existingRequest) {
-      return { success: false, message: "You already have a pending verification request" };
-    }
+      // Check if user is already verified
+      const user = await prisma.user.findUnique({
+         where: { id: session.user.id },
+         select: { isVerified: true },
+      });
 
-    // Check if user is already verified
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isVerified: true }
-    });
-
-    if (user?.isVerified) {
-      return { success: false, message: "Your account is already verified" };
-    }
-
-    // Create verification request
-    await prisma.verificationRequest.create({
-      data: {
-        userId: session.user.id,
-        status: "PENDING"
+      if (user?.isVerified) {
+         return { success: false, message: 'Your account is already verified' };
       }
-    });
 
-    await createVerificationRequestNotification(session.user.id);
+      // Create verification request
+      await prisma.verificationRequest.create({
+         data: {
+            userId: session.user.id,
+            status: 'PENDING',
+         },
+      });
 
-    revalidatePath("/profile");
-    return { success: true, message: "Verification request submitted successfully" };
-  } catch (error) {
-    console.error("Verification request error:", error);
-    return { success: false, message: "Failed to submit verification request" };
-  }
+      await createVerificationRequestNotification(session.user.id);
+
+      revalidatePath('/profile');
+      return {
+         success: true,
+         message: 'Verification request submitted successfully',
+      };
+   } catch (error) {
+      console.error('Verification request error:', error);
+      return {
+         success: false,
+         message: 'Failed to submit verification request',
+      };
+   }
 };
 
 export const getVerificationStatus = async () => {
-  const session = await getServerSession(authOptions);
-  
-  if (!session?.user?.id) {
-    return { success: false, message: "Authentication required" };
-  }
+   const session = await getServerSession(authOptions);
 
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { 
-        isVerified: true,
-        verificationRequests: {
-          orderBy: { submittedAt: 'desc' },
-          take: 1
-        }
+   if (!session?.user?.id) {
+      return { success: false, message: 'Authentication required' };
+   }
+
+   try {
+      const user = await prisma.user.findUnique({
+         where: { id: session.user.id },
+         select: {
+            isVerified: true,
+            verificationRequests: {
+               orderBy: { submittedAt: 'desc' },
+               take: 1,
+            },
+         },
+      });
+
+      if (!user) {
+         return { success: false, message: 'User not found' };
       }
-    });
 
-    if (!user) {
-      return { success: false, message: "User not found" };
-    }
-
-    return {
-      success: true,
-      isVerified: user.isVerified,
-      latestRequest: user.verificationRequests[0] || null
-    };
-  } catch (error) {
-    console.error("Get verification status error:", error);
-    return { success: false, message: "Failed to get verification status" };
-  }
+      return {
+         success: true,
+         isVerified: user.isVerified,
+         latestRequest: user.verificationRequests[0] || null,
+      };
+   } catch (error) {
+      console.error('Get verification status error:', error);
+      return { success: false, message: 'Failed to get verification status' };
+   }
 };

@@ -1,4 +1,5 @@
 # Volunteer Step Events
+
 Volunteer Management App with Admin panel
 
 ## Features
@@ -10,7 +11,6 @@ Volunteer Management App with Admin panel
 - Role-based access control
 - Reporting and analytics
 
-
 ## cmd to generate prisma client explicitly for neon
 
 ```bash
@@ -18,6 +18,7 @@ pnpm dotenv -e .env -- prisma migrate deploy
 ```
 
 ## cmd to reset the local postgres database
+
 ```bash
 npx dotenv -e .env.local -- npx prisma migrate reset
 ```
@@ -50,6 +51,7 @@ pnpm db:seed:events
 ```
 
 **Note**: Make sure your local Docker database is running before seeding:
+
 ```bash
 docker-compose up -d
 ```
@@ -59,6 +61,7 @@ docker-compose up -d
 The application uses [ImageKit](https://imagekit.io/) for optimized image delivery and management. Event images are served from ImageKit CDN for better performance.
 
 ### Environment Variables
+
 ```bash
 NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/praveenlodhiofficial
 NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY=your_public_key
@@ -66,6 +69,7 @@ IMAGEKIT_PRIVATE_KEY=your_private_key
 ```
 
 ### Image URLs
+
 - **Events Base URL**: `https://ik.imagekit.io/praveenlodhiofficial/events/covers/`
 - **Events Video URL**: `https://ik.imagekit.io/praveenlodhiofficial/events/videos/`
 - **Users Base URL**: `https://ik.imagekit.io/praveenlodhiofficial/users/`
@@ -75,6 +79,7 @@ IMAGEKIT_PRIVATE_KEY=your_private_key
 - **Sample Govt ID Image**: [Government ID](https://ik.imagekit.io/praveenlodhiofficial/users/gov-id/govt-id_hTp9DNNv8.webp?updatedAt=1756423306534)
 
 ### Benefits
+
 - **CDN Delivery**: Global content delivery network
 - **Image Optimization**: Automatic format conversion and compression
 - **Responsive Images**: Automatic resizing for different devices
@@ -84,10 +89,6 @@ IMAGEKIT_PRIVATE_KEY=your_private_key
 
 1. Rate limit is not working as expected
 2. Change the email from `` to the actual professional email
-
-
-
-
 
 update changes
 

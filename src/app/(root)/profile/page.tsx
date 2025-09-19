@@ -1,425 +1,552 @@
-"use client";
+'use client';
 
-import { type SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import { useState } from "react";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { type SubmitHandler } from 'react-hook-form';
+import { z } from 'zod';
+import { useState } from 'react';
+import {
+   Form,
+   FormControl,
+   FormField,
+   FormItem,
+   FormLabel,
+   FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 
-import { profileSchema } from "@/lib/validations";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import FileUpload from "@/components/FileUpload";
-import Tag from "@/components/ui/tag";
-import { GOV_ID_OPTIONS } from "@/constants";
-import { UserCheck, Loader2, RefreshCw, XCircle } from "lucide-react";
-import { useProfile } from "@/hooks/useProfile";
+import { profileSchema } from '@/lib/validations';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import FileUpload from '@/components/FileUpload';
+import Tag from '@/components/ui/tag';
+import { GOV_ID_OPTIONS } from '@/constants';
+import { UserCheck, Loader2, RefreshCw, XCircle } from 'lucide-react';
+import { useProfile } from '@/hooks/useProfile';
 
 export default function Profile() {
-  const {
-    form,
-    role,
-    isVerified,
-    hasPendingRequest,
-    isSubmittingVerification,
-    isRefreshingVerification,
-    areAllFieldsFilled,
-    refreshVerificationStatus,
-    handleSubmitVerification,
-    onSubmit,
-    hasRejectedRequest,
-    rejectionReason,
-  } = useProfile();
+   const {
+      form,
+      role,
+      isVerified,
+      hasPendingRequest,
+      isSubmittingVerification,
+      isRefreshingVerification,
+      areAllFieldsFilled,
+      refreshVerificationStatus,
+      handleSubmitVerification,
+      onSubmit,
+      hasRejectedRequest,
+      rejectionReason,
+   } = useProfile();
 
-  const handleFormSubmit: SubmitHandler<z.infer<typeof profileSchema>> = async (values) => {
-    await onSubmit(values);
-  };
+   const handleFormSubmit: SubmitHandler<
+      z.infer<typeof profileSchema>
+   > = async (values) => {
+      await onSubmit(values);
+   };
 
-  return (
-    <div className="w-full overflow-hidden">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col gap-5 bg-transparent">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">Update Profile</h2>
-            <div className="flex items-center gap-2">
-              {isVerified ? (
-                <Button disabled className="bg-green-600 hover:bg-green-700">
-                  <UserCheck className="mr-2 h-4 w-4" />
-                  Verified
-                </Button>
-              ) : hasPendingRequest ? (
-                <div className="flex items-center gap-2">
-                  <Button disabled variant="outline">
-                    <UserCheck className="mr-2 h-4 w-4" />
-                    Verification Pending
-                  </Button>
-                  <Button
-                    onClick={refreshVerificationStatus}
-                    disabled={isRefreshingVerification}
-                    variant="outline"
-                    size="sm"
-                    title="Refresh verification status"
-                  >
-                    {isRefreshingVerification ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <RefreshCw className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              ) : hasRejectedRequest ? (
-                <div className="flex items-center gap-2">
-                  <Button disabled variant="outline" className="border-red-300 text-red-600">
-                    <XCircle className="mr-2 h-4 w-4" />
-                    Verification Rejected
-                  </Button>
-                  <Button
-                    onClick={refreshVerificationStatus}
-                    disabled={isRefreshingVerification}
-                    variant="outline"
-                    size="sm"
-                    title="Refresh verification status"
-                  >
-                    {isRefreshingVerification ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <RefreshCw className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              ) : (
-                <Button
-                  onClick={handleSubmitVerification}
-                  disabled={isSubmittingVerification || !areAllFieldsFilled()}
-                  className={`${
-                    areAllFieldsFilled() 
-                      ? "bg-blue-600 hover:bg-blue-700" 
-                      : "bg-gray-400 cursor-not-allowed"
-                  }`}
-                  title={
-                    !areAllFieldsFilled() 
-                      ? "Please fill all required fields before requesting verification" 
-                      : "Save profile and request verification"
-                  }
-                >
-                  {isSubmittingVerification ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <UserCheck className="mr-2 h-4 w-4" />
-                  )}
-                  Request Verification
-                </Button>
-              )}
-              <Button type="submit" className="w-fit bg-black text-white hidden md:block">Save Changes</Button>
-            </div>
-          </div>
-
-          {/* Rejection Reason Display */}
-          {hasRejectedRequest && (
-            <div className="mt-4 p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <div className="flex items-start gap-3">
-                <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
-                <div className="flex-1">
-                  {rejectionReason ? (
-                    <p className="text-sm text-red-700 dark:text-red-300 mb-2">
-                      <span className="font-medium">Reason:</span> {rejectionReason}
-                    </p>
-                  ) : (
-                    <p className="text-sm text-red-700 dark:text-red-300 mb-2">
-                      No specific reason was provided for the rejection.
-                    </p>
-                  )}
-                  <p className="text-xs text-red-600 dark:text-red-400 mb-3">
-                    You can update your profile and submit a new verification request.
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <Button
-                      onClick={handleSubmitVerification}
-                      disabled={isSubmittingVerification || !areAllFieldsFilled()}
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                      title={
-                        !areAllFieldsFilled() 
-                          ? "Please fill all required fields before requesting verification" 
-                          : "Submit new verification request"
-                      }
-                    >
-                      {isSubmittingVerification ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        <UserCheck className="mr-2 h-4 w-4" />
-                      )}
-                      Apply for Verification Again
-                    </Button>
-                    <Button
-                      onClick={refreshVerificationStatus}
-                      disabled={isRefreshingVerification}
-                      variant="outline"
-                      size="sm"
-                      title="Refresh verification status"
-                    >
-                      {isRefreshingVerification ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <RefreshCw className="h-4 w-4" />
-                      )}
-                      Refresh Status
-                    </Button>
+   return (
+      <div className="w-full overflow-hidden">
+         <Form {...form}>
+            <form
+               onSubmit={form.handleSubmit(handleFormSubmit)}
+               className="flex flex-col gap-5 bg-transparent"
+            >
+               <div className="flex items-center justify-between gap-2">
+                  <h2 className="text-xl font-bold md:text-2xl lg:text-3xl">
+                     Update Profile
+                  </h2>
+                  <div className="flex items-center gap-2">
+                     {isVerified ? (
+                        <Button
+                           disabled
+                           className="bg-green-600 hover:bg-green-700"
+                        >
+                           <UserCheck className="mr-2 h-4 w-4" />
+                           Verified
+                        </Button>
+                     ) : hasPendingRequest ? (
+                        <div className="flex items-center gap-2">
+                           <Button disabled variant="outline">
+                              <UserCheck className="mr-2 h-4 w-4" />
+                              Verification Pending
+                           </Button>
+                           <Button
+                              onClick={refreshVerificationStatus}
+                              disabled={isRefreshingVerification}
+                              variant="outline"
+                              size="sm"
+                              title="Refresh verification status"
+                           >
+                              {isRefreshingVerification ? (
+                                 <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                 <RefreshCw className="h-4 w-4" />
+                              )}
+                           </Button>
+                        </div>
+                     ) : hasRejectedRequest ? (
+                        <div className="flex items-center gap-2">
+                           <Button
+                              disabled
+                              variant="outline"
+                              className="border-red-300 text-red-600"
+                           >
+                              <XCircle className="mr-2 h-4 w-4" />
+                              Verification Rejected
+                           </Button>
+                           <Button
+                              onClick={refreshVerificationStatus}
+                              disabled={isRefreshingVerification}
+                              variant="outline"
+                              size="sm"
+                              title="Refresh verification status"
+                           >
+                              {isRefreshingVerification ? (
+                                 <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                 <RefreshCw className="h-4 w-4" />
+                              )}
+                           </Button>
+                        </div>
+                     ) : (
+                        <Button
+                           onClick={handleSubmitVerification}
+                           disabled={
+                              isSubmittingVerification || !areAllFieldsFilled()
+                           }
+                           className={`${
+                              areAllFieldsFilled()
+                                 ? 'bg-blue-600 hover:bg-blue-700'
+                                 : 'cursor-not-allowed bg-gray-400'
+                           }`}
+                           title={
+                              !areAllFieldsFilled()
+                                 ? 'Please fill all required fields before requesting verification'
+                                 : 'Save profile and request verification'
+                           }
+                        >
+                           {isSubmittingVerification ? (
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                           ) : (
+                              <UserCheck className="mr-2 h-4 w-4" />
+                           )}
+                           Request Verification
+                        </Button>
+                     )}
+                     <Button
+                        type="submit"
+                        className="hidden w-fit bg-black text-white md:block"
+                     >
+                        Save Changes
+                     </Button>
                   </div>
-                </div>
-              </div>
-            </div>
-          )}
+               </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-5 lg:gap-10 w-full">
-            <div className="flex flex-col gap-5">
-              <FormField
-                control={form.control}
-                name={"fullName"}
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-1">
-                    <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Full Name</FormLabel>
-                    <FormControl>
-                      <div className="w-full border border-gray-300 rounded-md">
-                        <Input required placeholder="Your full name" {...field} value={field.value || ""} className="w-full px-3 py-2 text-sm rounded-md transition-all duration-200 border-0" />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr_1fr_1.5fr] gap-5 w-full">
-                <div className="flex flex-col gap-1 w-full">
-                  <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Role</FormLabel>
-                  <div className="w-full border border-gray-300 rounded-md">
-                    <Input value={role} readOnly disabled className="w-full bg-black/10 font-medium px-3 py-2 text-sm rounded-md transition-all duration-200 border-0 disabled:opacity-100" />
+               {/* Rejection Reason Display */}
+               {hasRejectedRequest && (
+                  <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950/20">
+                     <div className="flex items-start gap-3">
+                        <XCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600 dark:text-red-400" />
+                        <div className="flex-1">
+                           {rejectionReason ? (
+                              <p className="mb-2 text-sm text-red-700 dark:text-red-300">
+                                 <span className="font-medium">Reason:</span>{' '}
+                                 {rejectionReason}
+                              </p>
+                           ) : (
+                              <p className="mb-2 text-sm text-red-700 dark:text-red-300">
+                                 No specific reason was provided for the
+                                 rejection.
+                              </p>
+                           )}
+                           <p className="mb-3 text-xs text-red-600 dark:text-red-400">
+                              You can update your profile and submit a new
+                              verification request.
+                           </p>
+                           <div className="flex items-center gap-3">
+                              <Button
+                                 onClick={handleSubmitVerification}
+                                 disabled={
+                                    isSubmittingVerification ||
+                                    !areAllFieldsFilled()
+                                 }
+                                 size="sm"
+                                 className="bg-blue-600 text-white hover:bg-blue-700"
+                                 title={
+                                    !areAllFieldsFilled()
+                                       ? 'Please fill all required fields before requesting verification'
+                                       : 'Submit new verification request'
+                                 }
+                              >
+                                 {isSubmittingVerification ? (
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                 ) : (
+                                    <UserCheck className="mr-2 h-4 w-4" />
+                                 )}
+                                 Apply for Verification Again
+                              </Button>
+                              <Button
+                                 onClick={refreshVerificationStatus}
+                                 disabled={isRefreshingVerification}
+                                 variant="outline"
+                                 size="sm"
+                                 title="Refresh verification status"
+                              >
+                                 {isRefreshingVerification ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                 ) : (
+                                    <RefreshCw className="h-4 w-4" />
+                                 )}
+                                 Refresh Status
+                              </Button>
+                           </div>
+                        </div>
+                     </div>
                   </div>
-                </div>
-                <FormField
-                  control={form.control}
-                  name={"phoneNumber"}
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-1 w-full">
-                      <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Phone Number</FormLabel>
-                      <FormControl>
-                        <div className="w-full border border-gray-300 rounded-md">
-                          <div className="flex items-center w-full">
-                            <span className="px-3 py-2 text-sm text-gray-700 bg-gray-50 select-none border-r border-gray-200">+91</span>
-                            <Input placeholder="Your phone number" {...field} value={field.value || ""} className="w-full px-3 py-2 text-sm transition-all duration-200 border-0 rounded-none" />
-                          </div>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+               )}
 
-                <FormField
-                  control={form.control}
-                  name={"gender"}
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-1 w-full">
-                      <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Gender</FormLabel>
-                      <FormControl>
-                        <div className="w-full border border-gray-300 rounded-md">
-                          <Input
-                            {...field}
-                            readOnly
-                            disabled
-                            placeholder="Gender"
-                            value={field.value || ""}
-                            className="w-full bg-black/10 font-medium px-3 py-2 text-sm rounded-md transition-all duration-200 border-0 disabled:opacity-100"
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+               <div className="grid w-full grid-cols-1 gap-5 lg:grid-cols-[2fr_1fr] lg:gap-10">
+                  <div className="flex flex-col gap-5">
+                     <FormField
+                        control={form.control}
+                        name={'fullName'}
+                        render={({ field }) => (
+                           <FormItem className="flex flex-col gap-1">
+                              <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
+                                 Full Name
+                              </FormLabel>
+                              <FormControl>
+                                 <div className="w-full rounded-md border border-gray-300">
+                                    <Input
+                                       required
+                                       placeholder="Your full name"
+                                       {...field}
+                                       value={field.value || ''}
+                                       className="w-full rounded-md border-0 px-3 py-2 text-sm transition-all duration-200"
+                                    />
+                                 </div>
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
 
-                <FormField
-                  control={form.control}
-                  name={"govIdType"}
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-1 w-full">
-                      <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Government ID Type</FormLabel>
-                      <FormControl>
-                        <div className="w-full border border-gray-300 rounded-md">
-                          <select
-                            value={field.value || ""}
-                            onChange={(e) => field.onChange(e.target.value)}
-                            disabled={!!field.value}
-                            className="w-full bg-black/10 font-medium px-3 py-2 text-sm rounded-md transition-all duration-200 border-0 disabled:opacity-100"
-                          >
-                            <option value="" disabled>
-                              Select ID Type
-                            </option>
-                            {GOV_ID_OPTIONS.map((opt) => (
-                              <option key={opt.value} value={opt.value}>
-                                {opt.label}
-                              </option>
-                            ))}
-                          </select>
+                     <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-[1fr_1.5fr_1fr_1.5fr]">
+                        <div className="flex w-full flex-col gap-1">
+                           <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
+                              Role
+                           </FormLabel>
+                           <div className="w-full rounded-md border border-gray-300">
+                              <Input
+                                 value={role}
+                                 readOnly
+                                 disabled
+                                 className="w-full rounded-md border-0 bg-black/10 px-3 py-2 text-sm font-medium transition-all duration-200 disabled:opacity-100"
+                              />
+                           </div>
                         </div>
-                      </FormControl>
-                      {/* {field.value && (
+                        <FormField
+                           control={form.control}
+                           name={'phoneNumber'}
+                           render={({ field }) => (
+                              <FormItem className="flex w-full flex-col gap-1">
+                                 <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
+                                    Phone Number
+                                 </FormLabel>
+                                 <FormControl>
+                                    <div className="w-full rounded-md border border-gray-300">
+                                       <div className="flex w-full items-center">
+                                          <span className="border-r border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700 select-none">
+                                             +91
+                                          </span>
+                                          <Input
+                                             placeholder="Your phone number"
+                                             {...field}
+                                             value={field.value || ''}
+                                             className="w-full rounded-none border-0 px-3 py-2 text-sm transition-all duration-200"
+                                          />
+                                       </div>
+                                    </div>
+                                 </FormControl>
+                                 <FormMessage />
+                              </FormItem>
+                           )}
+                        />
+
+                        <FormField
+                           control={form.control}
+                           name={'gender'}
+                           render={({ field }) => (
+                              <FormItem className="flex w-full flex-col gap-1">
+                                 <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
+                                    Gender
+                                 </FormLabel>
+                                 <FormControl>
+                                    <div className="w-full rounded-md border border-gray-300">
+                                       <Input
+                                          {...field}
+                                          readOnly
+                                          disabled
+                                          placeholder="Gender"
+                                          value={field.value || ''}
+                                          className="w-full rounded-md border-0 bg-black/10 px-3 py-2 text-sm font-medium transition-all duration-200 disabled:opacity-100"
+                                       />
+                                    </div>
+                                 </FormControl>
+                                 <FormMessage />
+                              </FormItem>
+                           )}
+                        />
+
+                        <FormField
+                           control={form.control}
+                           name={'govIdType'}
+                           render={({ field }) => (
+                              <FormItem className="flex w-full flex-col gap-1">
+                                 <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
+                                    Government ID Type
+                                 </FormLabel>
+                                 <FormControl>
+                                    <div className="w-full rounded-md border border-gray-300">
+                                       <select
+                                          value={field.value || ''}
+                                          onChange={(e) =>
+                                             field.onChange(e.target.value)
+                                          }
+                                          disabled={!!field.value}
+                                          className="w-full rounded-md border-0 bg-black/10 px-3 py-2 text-sm font-medium transition-all duration-200 disabled:opacity-100"
+                                       >
+                                          <option value="" disabled>
+                                             Select ID Type
+                                          </option>
+                                          {GOV_ID_OPTIONS.map((opt) => (
+                                             <option
+                                                key={opt.value}
+                                                value={opt.value}
+                                             >
+                                                {opt.label}
+                                             </option>
+                                          ))}
+                                       </select>
+                                    </div>
+                                 </FormControl>
+                                 {/* {field.value && (
                         <p className="text-xs text-gray-500 mt-1">
                           Government ID type cannot be changed once selected. Contact support if you need to update it.
                         </p>
                       )} */}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                                 <FormMessage />
+                              </FormItem>
+                           )}
+                        />
+                     </div>
 
-              <FormField
-                control={form.control}
-                name={"address"}
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-1">
-                    <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Address</FormLabel>
-                    <FormControl>
-                      <div className="w-full border border-gray-300 rounded-md">
-                        <Textarea placeholder="Your address" {...field} value={field.value || ""} rows={9} className="w-full px-3 py-2 text-sm rounded-md bg-transparent transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0 border-0" />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                     <FormField
+                        control={form.control}
+                        name={'address'}
+                        render={({ field }) => (
+                           <FormItem className="flex flex-col gap-1">
+                              <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
+                                 Address
+                              </FormLabel>
+                              <FormControl>
+                                 <div className="w-full rounded-md border border-gray-300">
+                                    <Textarea
+                                       placeholder="Your address"
+                                       {...field}
+                                       value={field.value || ''}
+                                       rows={9}
+                                       className="w-full rounded-md border-0 bg-transparent px-3 py-2 text-sm transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0"
+                                    />
+                                 </div>
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
 
-              <FormField
-                control={form.control}
-                name={"skills"}
-                render={({ field }) => {
-                  const [skillInput, setSkillInput] = useState("");
+                     <FormField
+                        control={form.control}
+                        name={'skills'}
+                        render={({ field }) => {
+                           const [skillInput, setSkillInput] = useState('');
 
-                  const addSkill = (text: string) => {
-                    const value = text.trim();
-                    if (!value) return;
-                    const current = Array.isArray(field.value) ? field.value : [];
-                    if (current.length >= 10) return;
-                    if (current.includes(value)) return;
-                    field.onChange([...current, value]);
-                    setSkillInput("");
-                  };
+                           const addSkill = (text: string) => {
+                              const value = text.trim();
+                              if (!value) return;
+                              const current = Array.isArray(field.value)
+                                 ? field.value
+                                 : [];
+                              if (current.length >= 10) return;
+                              if (current.includes(value)) return;
+                              field.onChange([...current, value]);
+                              setSkillInput('');
+                           };
 
-                  const removeSkill = (valueToRemove: string) => {
-                    const current = Array.isArray(field.value) ? field.value : [];
-                    field.onChange(current.filter((c) => c !== valueToRemove));
-                  };
+                           const removeSkill = (valueToRemove: string) => {
+                              const current = Array.isArray(field.value)
+                                 ? field.value
+                                 : [];
+                              field.onChange(
+                                 current.filter((c) => c !== valueToRemove)
+                              );
+                           };
 
-                  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
-                    if (e.key === "Enter" || e.key === ",") {
-                      e.preventDefault();
-                      addSkill(skillInput);
-                    } else if (e.key === "Backspace" && skillInput === "") {
-                      const current = Array.isArray(field.value) ? field.value : [];
-                      if (current.length > 0) {
-                        removeSkill(current[current.length - 1]);
-                      }
-                    }
-                  };
+                           const handleKeyDown: React.KeyboardEventHandler<
+                              HTMLInputElement
+                           > = (e) => {
+                              if (e.key === 'Enter' || e.key === ',') {
+                                 e.preventDefault();
+                                 addSkill(skillInput);
+                              } else if (
+                                 e.key === 'Backspace' &&
+                                 skillInput === ''
+                              ) {
+                                 const current = Array.isArray(field.value)
+                                    ? field.value
+                                    : [];
+                                 if (current.length > 0) {
+                                    removeSkill(current[current.length - 1]);
+                                 }
+                              }
+                           };
 
-                  return (
-                    <FormItem className="flex flex-col gap-1 w-full">
-                      <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Skills (press Enter to add, max 10)</FormLabel>
-                      <FormControl>
-                        <div className="w-full h-10 px-2 items-center justify-center text-sm  flex gap-2 flex-wrap border border-gray-300 rounded-md">
-                          {(Array.isArray(field.value) ? field.value : []).length > 0 && (Array.isArray(field.value) ? field.value : []).map((skill) => (
-                            <Tag key={skill} label={skill} onRemove={() => removeSkill(skill)} />
-                          ))}
-                          <input
-                            value={skillInput}
-                            onChange={(e) => setSkillInput(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder={(Array.isArray(field.value) ? field.value : []).length >= 10 ? "Maximum 10 skills" : "Type and press Enter"}
-                            disabled={(Array.isArray(field.value) ? field.value : []).length >= 10}
-                            className="flex-1 min-w-[160px] bg-transparent outline-none text-sm placeholder:text-gray-500 placeholder:pl-1"
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
+                           return (
+                              <FormItem className="flex w-full flex-col gap-1">
+                                 <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
+                                    Skills (press Enter to add, max 10)
+                                 </FormLabel>
+                                 <FormControl>
+                                    <div className="flex h-10 w-full flex-wrap items-center justify-center gap-2 rounded-md border border-gray-300 px-2 text-sm">
+                                       {(Array.isArray(field.value)
+                                          ? field.value
+                                          : []
+                                       ).length > 0 &&
+                                          (Array.isArray(field.value)
+                                             ? field.value
+                                             : []
+                                          ).map((skill) => (
+                                             <Tag
+                                                key={skill}
+                                                label={skill}
+                                                onRemove={() =>
+                                                   removeSkill(skill)
+                                                }
+                                             />
+                                          ))}
+                                       <input
+                                          value={skillInput}
+                                          onChange={(e) =>
+                                             setSkillInput(e.target.value)
+                                          }
+                                          onKeyDown={handleKeyDown}
+                                          placeholder={
+                                             (Array.isArray(field.value)
+                                                ? field.value
+                                                : []
+                                             ).length >= 10
+                                                ? 'Maximum 10 skills'
+                                                : 'Type and press Enter'
+                                          }
+                                          disabled={
+                                             (Array.isArray(field.value)
+                                                ? field.value
+                                                : []
+                                             ).length >= 10
+                                          }
+                                          className="min-w-[160px] flex-1 bg-transparent text-sm outline-none placeholder:pl-1 placeholder:text-gray-500"
+                                       />
+                                    </div>
+                                 </FormControl>
+                                 <FormMessage />
+                              </FormItem>
+                           );
+                        }}
+                     />
+                  </div>
 
-            <div className="flex flex-col gap-5 w-full lg:w-[350px]">
-              <FormField
-                control={form.control}
-                name={"profileImage"}
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-1">
-                    <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Profile Image</FormLabel>
-                    <div>
-                      <FormControl>
-                        <div className="h-fit w-full rounded-md border-gray-400 border-dashed">
-                          <FileUpload
-                            type="image"
-                            accept="image/*"
-                            placeholder="Upload profile image"
-                            folder="users/profile"
-                            variant="dark"
-                            onFileChange={field.onChange}
-                            value={field.value}
-                            objectFit="cover"
-                            aspectRatio="16:9"
-                            className="w-full h-full border-0 rounded-md aspect-video overflow-hidden object-top"
-                          />
-                        </div>
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  <div className="flex w-full flex-col gap-5 lg:w-[350px]">
+                     <FormField
+                        control={form.control}
+                        name={'profileImage'}
+                        render={({ field }) => (
+                           <FormItem className="flex flex-col gap-1">
+                              <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
+                                 Profile Image
+                              </FormLabel>
+                              <div>
+                                 <FormControl>
+                                    <div className="h-fit w-full rounded-md border-dashed border-gray-400">
+                                       <FileUpload
+                                          type="image"
+                                          accept="image/*"
+                                          placeholder="Upload profile image"
+                                          folder="users/profile"
+                                          variant="dark"
+                                          onFileChange={field.onChange}
+                                          value={field.value}
+                                          objectFit="cover"
+                                          aspectRatio="16:9"
+                                          className="aspect-video h-full w-full overflow-hidden rounded-md border-0 object-top"
+                                       />
+                                    </div>
+                                 </FormControl>
+                              </div>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
 
-              <FormField
-                control={form.control}
-                name={"govIdImage"}
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-1">
-                    <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">Government ID Image</FormLabel>
-                    <div>
-                      <FormControl>
-                        <div className="h-fit w-full rounded-md border-gray-400 border-dashed">
-                          <FileUpload
-                            type="image"
-                            accept="image/*"
-                            placeholder="Upload government ID image"
-                            folder="users/gov-id"
-                            variant="dark"
-                            onFileChange={field.onChange}
-                            value={field.value}
-                            objectFit="cover"
-                            aspectRatio="4:3"
-                            className="w-full h-full border-0 rounded-md aspect-video overflow-hidden"
-                            disabled={!!field.value}
-                          />
-                        </div>
-                      </FormControl>
-                    </div>
-                    {field.value && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        Government ID type and image cannot be changed once uploaded. Contact support if you need to update it.
-                      </p>
-                    )}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-        </form>
+                     <FormField
+                        control={form.control}
+                        name={'govIdImage'}
+                        render={({ field }) => (
+                           <FormItem className="flex flex-col gap-1">
+                              <FormLabel className="ml-0.5 block text-xs font-medium text-gray-700 capitalize">
+                                 Government ID Image
+                              </FormLabel>
+                              <div>
+                                 <FormControl>
+                                    <div className="h-fit w-full rounded-md border-dashed border-gray-400">
+                                       <FileUpload
+                                          type="image"
+                                          accept="image/*"
+                                          placeholder="Upload government ID image"
+                                          folder="users/gov-id"
+                                          variant="dark"
+                                          onFileChange={field.onChange}
+                                          value={field.value}
+                                          objectFit="cover"
+                                          aspectRatio="4:3"
+                                          className="aspect-video h-full w-full overflow-hidden rounded-md border-0"
+                                          disabled={!!field.value}
+                                       />
+                                    </div>
+                                 </FormControl>
+                              </div>
+                              {field.value && (
+                                 <p className="mt-1 text-xs text-gray-500">
+                                    Government ID type and image cannot be
+                                    changed once uploaded. Contact support if
+                                    you need to update it.
+                                 </p>
+                              )}
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
+                  </div>
+               </div>
+            </form>
 
-
-
-        <Button type="submit" onClick={form.handleSubmit(handleFormSubmit)} className="w-full mt-5 bg-black text-white block md:hidden">Save Changes</Button>
-      </Form>
-    </div>
-  );
+            <Button
+               type="submit"
+               onClick={form.handleSubmit(handleFormSubmit)}
+               className="mt-5 block w-full bg-black text-white md:hidden"
+            >
+               Save Changes
+            </Button>
+         </Form>
+      </div>
+   );
 }

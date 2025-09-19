@@ -1,285 +1,330 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
-    DefaultValues,
-    FieldValues,
-    Path,
-    SubmitHandler,
-    useForm,
-    UseFormReturn,
-} from "react-hook-form";
-import { ZodType } from "zod";
-import { Button } from "@/components/ui/button";
+   DefaultValues,
+   FieldValues,
+   Path,
+   SubmitHandler,
+   useForm,
+   UseFormReturn,
+} from 'react-hook-form';
+import { ZodType } from 'zod';
+import { Button } from '@/components/ui/button';
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+   Form,
+   FormControl,
+   FormField,
+   FormItem,
+   FormLabel,
+   FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+   Select,
+   SelectContent,
+   SelectItem,
+   SelectTrigger,
+   SelectValue,
+} from '@/components/ui/select';
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { FIELD_NAMES, FIELD_TYPES, GENDER_OPTIONS, GOV_ID_OPTIONS } from "@/constants";
-import FileUpload from "@/components/FileUpload";
-import { toast } from "sonner";
-import Image from "next/image";
-import { signIn } from "next-auth/react";
-import { IoEye, IoEyeOff } from "react-icons/io5";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import {
+   FIELD_NAMES,
+   FIELD_TYPES,
+   GENDER_OPTIONS,
+   GOV_ID_OPTIONS,
+} from '@/constants';
+import FileUpload from '@/components/FileUpload';
+import { toast } from 'sonner';
+import Image from 'next/image';
+import { signIn } from 'next-auth/react';
+import { IoEye, IoEyeOff } from 'react-icons/io5';
 
 interface Props<T extends FieldValues> {
-    schema: ZodType<T>;
-    defaultValues: T;
-    onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
-    type: "SIGN_IN" | "SIGN_UP";
+   schema: ZodType<T>;
+   defaultValues: T;
+   onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
+   type: 'SIGN_IN' | 'SIGN_UP';
 }
 
-export function AuthForm<T extends FieldValues>({ type, schema, defaultValues, onSubmit }: Props<T>) {
+export function AuthForm<T extends FieldValues>({
+   type,
+   schema,
+   defaultValues,
+   onSubmit,
+}: Props<T>) {
+   const router = useRouter();
+   const isSignIn = type === 'SIGN_IN';
+   const [showPassword, setShowPassword] = useState(false);
 
-    const router = useRouter();
-    const isSignIn = type === "SIGN_IN";
-    const [showPassword, setShowPassword] = useState(false);
+   const form: UseFormReturn<T> = useForm<T>({
+      resolver: zodResolver(schema as any),
+      defaultValues: defaultValues as DefaultValues<T>,
+   });
 
-    const form: UseFormReturn<T> = useForm<T>({
-        resolver: zodResolver(schema as any),
-        defaultValues: defaultValues as DefaultValues<T>,
-    });
+   const handleSubmit: SubmitHandler<T> = async (data) => {
+      if (isSignIn) {
+         // Handle sign-in with NextAuth
+         try {
+            const result = await signIn('credentials', {
+               email: data.email,
+               password: data.password,
+               redirect: false,
+            });
 
-    const handleSubmit: SubmitHandler<T> = async (data) => {
-        if (isSignIn) {
-            // Handle sign-in with NextAuth
-            try {
-                const result = await signIn("credentials", {
-                    email: data.email,
-                    password: data.password,
-                    redirect: false,
-                });
-
-                if (result?.error) {
-                    toast.error("Sign in failed", {
-                        description: result.error === "CredentialsSignin" ? "Invalid email or password" : result.error,
-                    });
-                } else if (result?.ok) {
-                    toast.success("Success", {
-                        description: "You have successfully signed in.",
-                    });
-                    // Force a page refresh to ensure the session is properly set
-                    window.location.href = "/";
-                }
-            } catch (error) {
-                console.error("Sign in error:", error);
-                toast.error("Sign in failed", {
-                    description: "An error occurred during sign in.",
-                });
+            if (result?.error) {
+               toast.error('Sign in failed', {
+                  description:
+                     result.error === 'CredentialsSignin'
+                        ? 'Invalid email or password'
+                        : result.error,
+               });
+            } else if (result?.ok) {
+               toast.success('Success', {
+                  description: 'You have successfully signed in.',
+               });
+               // Force a page refresh to ensure the session is properly set
+               window.location.href = '/';
             }
-        } else {
-            // Handle sign-up with server action
-            const result = await onSubmit(data);
+         } catch (error) {
+            console.error('Sign in error:', error);
+            toast.error('Sign in failed', {
+               description: 'An error occurred during sign in.',
+            });
+         }
+      } else {
+         // Handle sign-up with server action
+         const result = await onSubmit(data);
 
-            if (result.success) {
-                toast.success("Success", {
-                    description: "You have successfully signed up.",
-                });
-                // After successful signup, redirect to sign-in
-                router.push("/sign-in");
-            } else {
-                toast.error("Error signing up", {
-                    description: result.error ?? "An error occurred.",
-                });
-            }
-        }
-    };
+         if (result.success) {
+            toast.success('Success', {
+               description: 'You have successfully signed up.',
+            });
+            // After successful signup, redirect to sign-in
+            router.push('/sign-in');
+         } else {
+            toast.error('Error signing up', {
+               description: result.error ?? 'An error occurred.',
+            });
+         }
+      }
+   };
 
-    // Helper to render a single field consistently
-    const renderFormField = (fieldName: string) => (
-        <FormField
-            key={fieldName}
-            control={form.control}
-            name={fieldName as Path<T>}
-            render={({ field }) => (
-                <FormItem className="flex flex-col gap-1">
-                    <FormLabel className="capitalize text-xs font-medium text-gray-700 block ml-0.5">
-                        {FIELD_NAMES[fieldName as keyof typeof FIELD_NAMES]}
-                    </FormLabel>
-                    <FormControl>
-                        {fieldName === "govIdImage" ? (
-                            <FileUpload
-                                type="image"
-                                accept="image/*"
-                                placeholder="Upload your Govt. ID"
-                                folder="ids"
-                                variant="dark"
-                                onFileChange={field.onChange}
-                                value={field.value}
-                            />
-                        ) : fieldName === "profileImage" ? (
-                            <FileUpload
-                                type="image"
-                                accept="image/*"
-                                placeholder="Upload your Profile Image"
-                                folder="profile"
-                                variant="dark"
-                                onFileChange={field.onChange}
-                                value={field.value}
-                            />
-                        ) : fieldName === "gender" ? (
-                            <select
-                                value={field.value}
-                                onChange={field.onChange}
-                                className="w-full px-4 py-2 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
-                            >
-                                <option value="">Select gender</option>
-                                {GENDER_OPTIONS.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        ) : fieldName === "govIdType" ? (
-                            <select
-                                value={field.value}
-                                onChange={field.onChange}
-                                className="w-full px-4 py-2 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
-                            >
-                                <option value="">Select ID type</option>
-                                {GOV_ID_OPTIONS.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        ) : fieldName === "phoneNumber" ? (
-                            <div className="flex items-center w-full">
-                                <span className="px-3 py-2 text-sm text-gray-700 border border-gray-200 rounded-l-md bg-gray-50 select-none">+91</span>
-                                <Input
-                                    type="tel"
-                                    value={field.value as string}
-                                    onChange={field.onChange}
-                                    name="phone"
-                                    required
-                                    // placeholder="Enter 10-digit mobile number"
-                                    className="w-full px-4 py-2 text-sm border border-gray-200 rounded-md rounded-l-none -ml-px bg-white shadow-xs transition-all duration-200 focus:outline-none"
-                                />
-                            </div>
-                        ) : fieldName === "password" ? (
-                            <div className="relative w-full">
-                                <Input
-                                    required
-                                    type={showPassword ? "text" : "password"}
-                                    {...field}
-                                    className="w-full pr-10 px-4 py-2 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
-                                />
-                                <button
-                                    type="button"
-                                    aria-label={showPassword ? "Hide password" : "Show password"}
-                                    onClick={() => setShowPassword((v) => !v)}
-                                    className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500"
-                                >
-                                    {showPassword ? (
-                                        <IoEye className="h-5 w-5 text-gray-700" />
-                                    ) : (
-                                        <IoEyeOff className="h-5 w-5" />
-                                    )}
-                                </button>
-                            </div>
-                        ) : fieldName === "email" ? (
-                            <Input
-                                required
-                                type="email"
-                                {...field}
-                                className="w-full px-4 py-2 text-sm lowercase border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
-                            />
-                        ) : (
-                            <Input
-                                required
-                                type={
-                                    FIELD_TYPES[fieldName as keyof typeof FIELD_TYPES]
-                                }
-                                {...field}
-                                className="w-full px-4 py-2 text-sm border border-gray-200 rounded-md bg-white shadow-xs transition-all duration-200 focus:outline-none"
-                            />
-                        )}
-                    </FormControl>
-                    <FormMessage />
-                </FormItem>
-            )}
-        />
-    );
-
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen h-full w-full bg-black/5">
-            <div className={`grid max-md:grid-cols-1 grid-cols-2 overflow-hidden rounded-3xl mx-4 md:w-full h-fit border bg-white border-gray-200 ${isSignIn ? 'max-w-4xl' : 'max-w-5xl'}`}>
-                <div className="flex flex-col gap-7 justify-start h-full p-4 md:w-full md:p-8 md:pl-12 rounded-lg">
-                    <div className="flex gap-2 items-center">
-                        <Image src="/default/logo.svg" alt="logo" width={30} height={30} className="invert" />
-                        <h1 className="font-bold text-xl">Volunteer Step Events</h1>
-                    </div>
-                    <div className="">
-                        <h1 className="text-2xl font-bold">
-                            {isSignIn ? "Sign in to your account" : "Create your account"}
-                        </h1>
-                        <p className="text-sm text-gray-600 mt-1">
-                            {isSignIn
-                                ? "Please enter your email and password to sign in"
-                                : "Please complete all fields and upload required documents"}
-                        </p>
-                    </div>
-
-                    <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(handleSubmit)}
-                            className="flex flex-col gap-4"
+   // Helper to render a single field consistently
+   const renderFormField = (fieldName: string) => (
+      <FormField
+         key={fieldName}
+         control={form.control}
+         name={fieldName as Path<T>}
+         render={({ field }) => (
+            <FormItem>
+               <FormLabel>
+                  {FIELD_NAMES[fieldName as keyof typeof FIELD_NAMES]}
+               </FormLabel>
+               <FormControl>
+                  {fieldName === 'govIdImage' ? (
+                     <FileUpload
+                        type="image"
+                        accept="image/*"
+                        placeholder="Upload your Govt. ID"
+                        folder="ids"
+                        variant="dark"
+                        onFileChange={field.onChange}
+                        value={field.value}
+                     />
+                  ) : fieldName === 'profileImage' ? (
+                     <FileUpload
+                        type="image"
+                        accept="image/*"
+                        placeholder="Upload your Profile Image"
+                        folder="profile"
+                        variant="dark"
+                        onFileChange={field.onChange}
+                        value={field.value}
+                     />
+                  ) : fieldName === 'gender' ? (
+                     <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger>
+                           <SelectValue placeholder="Select gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                           {GENDER_OPTIONS.map((option) => (
+                              <SelectItem
+                                 key={option.value}
+                                 value={option.value}
+                              >
+                                 {option.label}
+                              </SelectItem>
+                           ))}
+                        </SelectContent>
+                     </Select>
+                  ) : fieldName === 'govIdType' ? (
+                     <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger>
+                           <SelectValue placeholder="Select ID type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                           {GOV_ID_OPTIONS.map((option) => (
+                              <SelectItem
+                                 key={option.value}
+                                 value={option.value}
+                              >
+                                 {option.label}
+                              </SelectItem>
+                           ))}
+                        </SelectContent>
+                     </Select>
+                  ) : fieldName === 'phoneNumber' ? (
+                     <div className="inline-flex w-full items-center">
+                        <span className="bg-muted text-muted-foreground rounded-l-md border px-3 py-2 text-sm select-none">
+                           +91
+                        </span>
+                        <Input
+                           type="tel"
+                           value={field.value as string}
+                           onChange={field.onChange}
+                           name="phone"
+                           required
+                           className="-ml-px rounded-l-none"
+                        />
+                     </div>
+                  ) : fieldName === 'password' ? (
+                     <div className="relative w-full">
+                        <Input
+                           required
+                           type={showPassword ? 'text' : 'password'}
+                           {...field}
+                           className="pr-10"
+                        />
+                        <button
+                           type="button"
+                           aria-label={
+                              showPassword ? 'Hide password' : 'Show password'
+                           }
+                           onClick={() => setShowPassword((v) => !v)}
+                           className="text-muted-foreground absolute inset-y-0 right-0 flex items-center px-3"
                         >
-                            {isSignIn ? (
-                                // Default rendering for sign-in
-                                <>
-                                    {Object.keys(defaultValues).map((fieldName) => renderFormField(fieldName))}
-                                </>
-                            ) : (
-                                // Custom layout for sign-up: phoneNumber and gender on one row
-                                <>
-                                    {Object.keys(defaultValues)
-                                        .filter((f) => f !== "phoneNumber" && f !== "gender")
-                                        .map((fieldName) => renderFormField(fieldName))}
+                           {showPassword ? (
+                              <IoEye className="h-5 w-5" />
+                           ) : (
+                              <IoEyeOff className="h-5 w-5" />
+                           )}
+                        </button>
+                     </div>
+                  ) : fieldName === 'email' ? (
+                     <Input
+                        required
+                        type="email"
+                        {...field}
+                        className="lowercase"
+                     />
+                  ) : (
+                     <Input
+                        required
+                        type={
+                           FIELD_TYPES[fieldName as keyof typeof FIELD_TYPES]
+                        }
+                        {...field}
+                     />
+                  )}
+               </FormControl>
+               <FormMessage />
+            </FormItem>
+         )}
+      />
+   );
 
-                                    <div className="grid grid-cols-[1.6fr_1fr] gap-4">
-                                        {"phoneNumber" in (defaultValues as any) && renderFormField("phoneNumber")}
-                                        {"gender" in (defaultValues as any) && renderFormField("gender")}
-                                    </div>
-                                </>
-                            )}
+   return (
+      <div className="bg-background flex h-full min-h-screen w-full flex-col items-center justify-center">
+         <div
+            className={`bg-card mx-4 grid h-fit grid-cols-2 overflow-hidden rounded-3xl border max-md:grid-cols-1 md:w-full ${isSignIn ? 'max-w-4xl' : 'max-w-5xl'}`}
+         >
+            <div className="flex h-full flex-col justify-start gap-7 rounded-lg p-4 md:w-full md:p-8 md:pl-12">
+               <div className="flex items-center gap-2">
+                  <Image
+                     src="/default/logo.svg"
+                     alt="logo"
+                     width={30}
+                     height={30}
+                     className="invert-100 dark:invert-0"
+                  />
+                  <h1 className="text-xl font-bold">Volunteer Step Events</h1>
+               </div>
+               <div className="">
+                  <h1 className="text-2xl font-bold">
+                     {isSignIn
+                        ? 'Sign in to your account'
+                        : 'Create your account'}
+                  </h1>
+                  <p className="text-muted-foreground mt-1 text-sm">
+                     {isSignIn
+                        ? 'Please enter your email and password to sign in'
+                        : 'Please complete all fields and upload required documents'}
+                  </p>
+               </div>
 
-                            <Button type="submit" className="w-full mt-4">
-                                {isSignIn ? "Sign In" : "Sign Up"}
-                            </Button>
-                        </form>
-                    </Form>
-                </div>
+               <Form {...form}>
+                  <form
+                     onSubmit={form.handleSubmit(handleSubmit)}
+                     className="flex flex-col gap-4"
+                  >
+                     {isSignIn ? (
+                        // Default rendering for sign-in
+                        <>
+                           {Object.keys(defaultValues).map((fieldName) =>
+                              renderFormField(fieldName)
+                           )}
+                        </>
+                     ) : (
+                        // Custom layout for sign-up: phoneNumber and gender on one row
+                        <>
+                           {Object.keys(defaultValues)
+                              .filter(
+                                 (f) => f !== 'phoneNumber' && f !== 'gender'
+                              )
+                              .map((fieldName) => renderFormField(fieldName))}
 
-                <div className="w-full h-full  bg-black/20">
-                <Image 
-                    src="/default/corporate-event-organizer.jpg"
-                    alt="auth image"
-                    width={1000}
-                    height={1000}
-                    className="w-full h-full object-cover contrast-110 saturate-80"
-                />
-                </div>
+                           <div className="grid grid-cols-[1.6fr_1fr] gap-4">
+                              {'phoneNumber' in (defaultValues as any) &&
+                                 renderFormField('phoneNumber')}
+                              {'gender' in (defaultValues as any) &&
+                                 renderFormField('gender')}
+                           </div>
+                        </>
+                     )}
+
+                     <Button type="submit" className="mt-4 w-full">
+                        {isSignIn ? 'Sign In' : 'Sign Up'}
+                     </Button>
+                  </form>
+               </Form>
             </div>
-            <p className="relative top-7 text-center text-sm text-gray-600">
-                {isSignIn ? "New to Volunteer Step Events? " : "Already have an account? "}
 
-                <Link
-                    href={isSignIn ? "/sign-up" : "/sign-in"}
-                    className="text-blue-600 hover:underline"
-                >
-                    {isSignIn ? "Create an account" : "Sign in"}
-                </Link>
-            </p>
-        </div>
-    )
+            <div className="bg-muted h-full w-full">
+               <Image
+                  src="/default/corporate-event-organizer.jpg"
+                  alt="auth image"
+                  width={1000}
+                  height={1000}
+                  className="h-full w-full object-cover contrast-110 saturate-80"
+               />
+            </div>
+         </div>
+         <p className="text-muted-foreground relative top-7 text-center text-sm">
+            {isSignIn
+               ? 'New to Volunteer Step Events? '
+               : 'Already have an account? '}
+
+            <Link
+               href={isSignIn ? '/sign-up' : '/sign-in'}
+               className="text-blue-600 hover:underline"
+            >
+               {isSignIn ? 'Create an account' : 'Sign in'}
+            </Link>
+         </p>
+      </div>
+   );
 }

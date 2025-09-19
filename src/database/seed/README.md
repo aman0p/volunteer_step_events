@@ -24,6 +24,7 @@ This directory contains scripts to populate your database with sample data for d
 ### Master Seeding Script
 
 **`pnpm db:seed:all`** - Runs all seeding scripts in the correct order
+
 1. Seeds users and verification requests
 2. Seeds events
 3. Seeds enrollments
@@ -31,11 +32,13 @@ This directory contains scripts to populate your database with sample data for d
 ## Usage
 
 ### Run All Seeds (Recommended)
+
 ```bash
 pnpm db:seed:all
 ```
 
 ### Run Individual Seeds
+
 ```bash
 # Seed users and verification requests
 pnpm db:seed:verification
@@ -48,6 +51,7 @@ pnpm db:seed:enrollments
 ```
 
 ### Prerequisites
+
 - Database must be set up and migrated
 - Prisma client must be generated (`pnpm db:generate`)
 - Environment variables must be configured
@@ -55,23 +59,26 @@ pnpm db:seed:enrollments
 ## Data Structure
 
 ### Users
+
 - 25 sample users with realistic Indian names and locations
 - Various skills and backgrounds
 - All users start unverified with pending verification requests
 
 ### Events
+
 - 20+ sample events across different categories
 - Realistic locations, dates, and descriptions
 - ImageKit URLs for covers and videos
 - Volunteer capacity limits
 
 ### Enrollments
+
 - Random enrollment of users in events
 - Weighted status distribution:
-  - 40% PENDING
-  - 40% APPROVED
-  - 15% REJECTED
-  - 5% WAITLISTED
+   - 40% PENDING
+   - 40% APPROVED
+   - 15% REJECTED
+   - 5% WAITLISTED
 - Enrollment dates within the last 30 days
 
 ## Notes
@@ -85,6 +92,7 @@ pnpm db:seed:enrollments
 ## Customization
 
 You can modify the seed data by editing the respective seed files:
+
 - `seed-verification.ts` - User profiles and verification data
 - `seed-events.ts` - Event details and configurations
 - `seed-enrollments.ts` - Enrollment patterns and status distribution

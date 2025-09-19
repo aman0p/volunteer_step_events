@@ -1,10 +1,10 @@
-"use client";
-import EventForm from "@/components/admin/forms/EventForm";
+'use client';
+import EventForm from '@/components/admin/forms/EventForm';
 
 export default function CreateEventPage() {
-  return (
-    <div className="w-full">
-        <EventForm />
-    </div>
-  );
+   return (
+      <div className="w-full">
+         <EventForm />
+      </div>
+   );
 }

@@ -45,12 +45,12 @@
 //       hour: '2-digit',
 //       minute: '2-digit'
 //     }).format(startDate);
-    
+
 //     const end = new Intl.DateTimeFormat('en-US', {
 //       hour: '2-digit',
 //       minute: '2-digit'
 //     }).format(endDate);
-    
+
 //     return `${start} - ${end}`;
 //   };
 
@@ -120,8 +120,8 @@
 //               {/* Action Buttons */}
 //               <div className="flex flex-col sm:flex-row gap-3">
 //                 {session?.user?.id ? (
-//                   <EnrollButton 
-//                     eventId={id} 
+//                   <EnrollButton
+//                     eventId={id}
 //                     isFull={event.maxVolunteers ? enrolledVolunteers >= event.maxVolunteers : false}
 //                     enrollmentStatus={(() => {
 //                       const userEnrollment = event.enrollments.find((e: any) => e.userId === session.user.id);
@@ -238,7 +238,7 @@
 //                     <p className="font-medium text-gray-900">{event.location}</p>
 //                   </div>
 //                 </div>
-                
+
 //                 <div className="flex items-center gap-3">
 //                   <Tag className="w-5 h-5 text-gray-400" />
 //                   <div>
@@ -246,7 +246,7 @@
 //                     <p className="font-medium text-gray-900">{event.category.join(", ")}</p>
 //                   </div>
 //                 </div>
-                
+
 //                 <div className="flex items-center gap-3">
 //                   <Shirt className="w-5 h-5 text-gray-400" />
 //                   <div>
@@ -254,7 +254,7 @@
 //                     <p className="font-medium text-gray-900">{event.dressCode}</p>
 //                   </div>
 //                 </div>
-                
+
 //                 <div className="flex items-center gap-3">
 //                   <Users className="w-5 h-5 text-gray-400" />
 //                   <div>

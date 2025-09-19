@@ -35,6 +35,7 @@ npx tsx src/database/seed-verification.ts
 ## What gets created
 
 ### Users (15 total)
+
 - **Priya Sharma** - Event Planning, Communication, Leadership
 - **Rajesh Kumar** - Logistics, Team Management, Problem Solving
 - **Anjali Patel** - Marketing, Social Media, Creativity
@@ -52,6 +53,7 @@ npx tsx src/database/seed-verification.ts
 - **Nisha Rao** - Nutrition, Cooking, Health Education
 
 ### User Details
+
 - **Password**: `password123` (hashed with bcrypt)
 - **Profile Image**: `/default/profile.webp`
 - **Government ID Image**: `/default/govt-id.webp`
@@ -59,6 +61,7 @@ npx tsx src/database/seed-verification.ts
 - **Verification Status**: `false` (unverified)
 
 ### Verification Requests
+
 - **Status**: `PENDING`
 - **Submitted At**: Current timestamp
 - **Reviewed By**: `null` (not yet reviewed)
@@ -66,6 +69,7 @@ npx tsx src/database/seed-verification.ts
 ## Default Images Used
 
 The script uses these default images from your `/public/default/` folder:
+
 - `profile.webp` - Default profile picture for all users
 - `govt-id.webp` - Default government ID image for all users
 
@@ -112,6 +116,7 @@ pnpm db:seed:verification
 ## Customization
 
 You can modify the script to:
+
 - Change the number of users
 - Modify user details and skills
 - Use different default images
@@ -121,6 +126,7 @@ You can modify the script to:
 ## Support
 
 If you encounter any issues, check:
+
 1. Database connection and migrations
 2. Prisma client generation
 3. File paths and permissions

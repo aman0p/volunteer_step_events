@@ -1,89 +1,146 @@
-import React from "react";
-import { Lock } from "lucide-react";
-import Link from "next/link";
-import { CopyButton } from "@/components/ui";
+import React from 'react';
+import { Lock } from 'lucide-react';
+import Link from 'next/link';
+import { CopyButton } from '@/components/ui';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface QuickLink {
-  id: string;
-  title: string;
-  url: string;
+   id: string;
+   title: string;
+   url: string;
 }
 
 interface QuickLinksProps {
-  quickLinks: QuickLink[];
-  isEnrolled: boolean;
-  isEventCreator: boolean;
+   quickLinks: QuickLink[];
+   isEnrolled: boolean;
+   isEventCreator: boolean;
 }
 
-const QuickLinks: React.FC<QuickLinksProps> = ({ quickLinks, isEnrolled, isEventCreator }) => {
-  // Check if user can access quick links (either enrolled or is event creator)
-  const canAccessQuickLinks = isEnrolled || isEventCreator;
-  
-  return (
-    <div className="h-fit mb-5 w-full flex flex-col gap-3 md:gap-5 p-3 md:p-7 rounded-xl md:rounded-2xl lg:rounded-3xl bg-black/5 relative">
-      <h1 className="text-base md:text-xl font-bold">Quick Links</h1>
-      
-      {/* Lock overlay for non-enrolled users and non-creators */}
-      {!canAccessQuickLinks && (
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm rounded-xl md:rounded-2xl lg:rounded-3xl flex items-center justify-center z-10">
-          <div className="flex flex-col items-center gap-2 text-white">
-            <Lock className="w-8 h-8 text-white/80" />
-            <p className="text-sm font-medium">
-              {isEventCreator ? "Enroll to access quick links" : "Enroll to access quick links"}
-            </p>
-          </div>
-        </div>
-      )}
-      
-      {/* Quick Links Content - Only render actual data for approved users or event creators */}
-      {canAccessQuickLinks ? (
-        // Show actual quick links for approved users
-        quickLinks && quickLinks.length > 0 ? (
-          <div className="flex flex-col gap-3 overflow-hidden text-xs md:text-sm">
-            {quickLinks.map((link) => (
-              <div key={link.id} className="flex items-center md:gap-4 hover:bg-black/5 p-2 rounded-lg transition-colors">
-                <div className="flex flex-col min-w-0 flex-1">
-                  <p className="font-medium text-black/80 truncate flex items-center">
-                    {link.title}
-                    <CopyButton 
-                      text={link.url}
-                      size="sm"
-                      variant="ghost"
-                      className="scale-90 ml-1"
-                    />
+const QuickLinks: React.FC<QuickLinksProps> = ({
+   quickLinks,
+   isEnrolled,
+   isEventCreator,
+}) => {
+   // Check if user can access quick links (either enrolled or is event creator)
+   const canAccessQuickLinks = isEnrolled || isEventCreator;
+
+   return (
+      <div className="relative flex h-full w-full flex-col gap-5 rounded-xl bg-white/10 px-3 py-5 backdrop-blur-xl md:rounded-2xl md:p-5 lg:rounded-3xl">
+         <h2 className="text-xl font-bold md:text-2xl">Quick Links</h2>
+
+         {/* Lock overlay for non-enrolled users and non-creators */}
+         {!canAccessQuickLinks && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-black/40 backdrop-blur-sm md:rounded-2xl lg:rounded-3xl">
+               <div className="flex flex-col items-center gap-2 text-white">
+                  <Lock className="h-8 w-8 text-white/80" />
+                  <p className="text-sm font-medium">
+                     {isEventCreator
+                        ? 'Enroll to access quick links'
+                        : 'Enroll to access quick links'}
                   </p>
-                  <Link 
-                    href={link.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="text-black/60 truncate max-w-xs text-xs">
-                    {link.url}
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-4 text-black/50">
-            <p className="text-sm">No quick links available</p>
-            <p className="text-xs">Check back later for helpful resources</p>
-          </div>
-        )
-      ) : (
-        // Show placeholder content for non-enrolled users (no actual data)
-        <div className="flex flex-col gap-3 overflow-hidden text-xs md:text-sm">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="flex items-center md:gap-4 p-2 rounded-lg">
-              <div className="flex flex-col min-w-0 flex-1">
-                <div className="h-4 bg-black/20 rounded w-3/4 mb-2"></div>
-                <div className="h-3 bg-black/10 rounded w-1/2"></div>
-              </div>
+               </div>
             </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+         )}
+
+         {/* Quick Links Content - Only render actual data for approved users or event creators */}
+         {canAccessQuickLinks ? (
+            // Show actual quick links for approved users
+            quickLinks && quickLinks.length > 0 ? (
+               <div className="flex flex-col gap-2">
+                  {quickLinks.map((link, index) => (
+                     <div
+                        key={link.id}
+                        className="group bg-card group relative flex items-start gap-4 rounded-xl border border-white/10 p-4 transition-all duration-200 hover:border-white/20 hover:bg-white/5 hover:shadow-lg hover:shadow-white/5"
+                     >
+                        {/* Link number indicator */}
+                        <div className="bg-muted text-muted-foreground flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold">
+                           {index + 1}
+                        </div>
+
+                        <div className="flex min-w-0 flex-1 flex-col space-y-2">
+                           <div className="flex items-center justify-between">
+                              <p className="text-base font-semibold text-white/95 transition-colors group-hover:text-white">
+                                 {link.title}
+                              </p>
+                              <CopyButton
+                                 text={link.url}
+                                 size="sm"
+                                 variant="ghost"
+                                 className="opacity-0 transition-opacity duration-200 group-hover:opacity-100 hover:bg-white/10"
+                              />
+                           </div>
+
+                           <Link
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-muted-foreground group/link flex items-center gap-2 text-sm transition-colors duration-200 group-hover:text-lime-400"
+                           >
+                              <span className="truncate">{link.url}</span>
+                              <svg
+                                 className="h-3 w-3 opacity-0 transition-opacity duration-200 group-hover/link:opacity-100"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24"
+                              >
+                                 <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                 />
+                              </svg>
+                           </Link>
+                        </div>
+                     </div>
+                  ))}
+               </div>
+            ) : (
+               <div className="py-8 text-center text-white/50">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/5">
+                     <svg
+                        className="h-8 w-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                     >
+                        <path
+                           strokeLinecap="round"
+                           strokeLinejoin="round"
+                           strokeWidth={1.5}
+                           d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                        />
+                     </svg>
+                  </div>
+                  <p className="mb-1 text-sm font-medium">
+                     No quick links available
+                  </p>
+                  <p className="text-xs">
+                     Check back later for helpful resources
+                  </p>
+               </div>
+            )
+         ) : (
+            // Show placeholder content for non-enrolled users (no actual data)
+            <div className="flex flex-col gap-2">
+               {[1, 2, 3].map((i) => (
+                  <div
+                     key={i}
+                     className="flex items-start gap-4 rounded-xl border border-white/10 p-4"
+                  >
+                     <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/10">
+                        <Skeleton className="h-4 w-4 bg-white/20" />
+                     </div>
+                     <div className="flex min-w-0 flex-1 flex-col space-y-2">
+                        <Skeleton className="h-5 w-3/4 bg-white/20" />
+                        <Skeleton className="h-4 w-1/2 bg-white/10" />
+                     </div>
+                  </div>
+               ))}
+            </div>
+         )}
+      </div>
+   );
 };
 
 export default QuickLinks;

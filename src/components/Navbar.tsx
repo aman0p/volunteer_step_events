@@ -1,181 +1,219 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import { Menu } from "lucide-react";
-import { PiSignOutBold } from "react-icons/pi";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { Session } from "next-auth";
-import { getInitials } from "@/lib/utils";
-import { signOut } from "next-auth/react";
-import { toast } from "sonner";
-import { useState } from "react";
-import { NotificationDrawer } from "./NotificationDrawer";
+import Link from 'next/link';
+import Image from 'next/image';
+import { Menu, LogOut } from 'lucide-react';
+import { Avatar, AvatarFallback } from './ui/avatar';
+import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { Session } from 'next-auth';
+import { getInitials } from '@/lib/utils';
+import { signOut } from 'next-auth/react';
+import { toast } from 'sonner';
+import { useState } from 'react';
+import { NotificationDrawer } from './NotificationDrawer';
+import { ThemeToggleButton } from './ThemeToggleButton';
 
 export function Navbar({ session }: { session: Session | null }) {
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const handleLogout = async () => {
-    // Show confirmation dialog
-    const confirmed = window.confirm("Are you sure you want to sign out?");
+   const handleLogout = async () => {
+      const confirmed = window.confirm('Are you sure you want to sign out?');
+      if (!confirmed) return;
 
-    if (!confirmed) {
-      return;
-    }
+      setIsLoggingOut(true);
+      try {
+         await signOut({ redirect: true, callbackUrl: '/sign-in' });
+         toast.success('Logged out successfully');
+      } catch (error) {
+         console.error('Logout error:', error);
+         toast.error('Failed to logout');
+         setIsLoggingOut(false);
+      }
+   };
 
-    setIsLoggingOut(true);
+   const NavLink = ({
+      href,
+      children,
+      className = '',
+   }: {
+      href: string;
+      children: React.ReactNode;
+      className?: string;
+   }) => (
+      <Link
+         href={href}
+         className={`hover:bg-accent rounded-md px-3 py-2 transition-colors ${className}`}
+      >
+         {children}
+      </Link>
+   );
 
-    try {
-      await signOut({
-        redirect: true,
-        callbackUrl: "/sign-in"
-      });
-      toast.success("Logged out successfully");
-    } catch (error) {
-      console.error("Logout error:", error);
-      toast.error("Failed to logout");
-      setIsLoggingOut(false);
-    }
-  };
-
-  return (
-    <header className="z-10 flex items-center justify-between w-full max-w-6xl mx-auto px-3 mt-5">
-      {/* Left: Hamburger on small screens; hidden on md+ */}
-      <div className="flex items-center gap-1 md:gap-2">
-        <Sheet>
-          <SheetTrigger className="md:hidden inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-100" aria-label="Open menu">
-            <Menu className="h-5 w-5 md:h-6 md:w-6" />
-          </SheetTrigger>
-          <SheetContent side="left" className="p-0">
-
-            {/* Logo */}
+   const MobileNav = () => (
+      <Sheet>
+         <SheetTrigger
+            className="hover:bg-accent rounded-md p-2 md:hidden"
+            aria-label="Open menu"
+         >
+            <Menu className="h-5 w-5" />
+         </SheetTrigger>
+         <SheetContent side="left" className="p-0">
             <div className="flex items-center gap-2 border-b p-4">
-              <Image
-                src="/default/logo.svg"
-                alt="logo"
-                width={30}
-                height={30}
-                className="w-6 h-6 md:w-8 md:h-8 invert"
-              />
-              <span className="text-lg font-bold">Volunteer Step Events</span>
+               <Image
+                  src="/default/logo.svg"
+                  alt="logo"
+                  width={24}
+                  height={24}
+                  className="invert"
+               />
+               <span className="font-bold">Volunteer Step Events</span>
             </div>
 
-            {/* Nav */}
-            <nav className="flex flex-col p-2 text-sm">
-              {/* Conditional navigation based on authentication */}
-              {session ? (
-                <>
-                  {/* Home */}
-                  <Link href="/" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Home</Link>
+            <nav className="space-y-2 p-4">
+               {session ? (
+                  <>
+                     <NavLink href="/">Home</NavLink>
+                     {session.user.role === 'VOLUNTEER' && (
+                        <NavLink href="/my-events">My Events</NavLink>
+                     )}
+                     <NavLink href="/profile">Profile</NavLink>
+                     {(session.user.role === 'ADMIN' ||
+                        session.user.role === 'ORGANIZER') && (
+                        <NavLink
+                           href="/admin"
+                           className="text-foreground font-medium"
+                        >
+                           Admin Panel
+                        </NavLink>
+                     )}
 
-                  {/* Events - only for volunteer users */}
-                  {session.user.role === "VOLUNTEER" && (
-                    <Link href="/my-events" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">My Events</Link>
-                  )}
-
-                  {/* Profile */}
-                  <Link href="/profile" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Profile</Link>
-
-                  {/* Admin Panel - only for admin and organizer users */}
-                  {(session.user.role === "ADMIN" || session.user.role === "ORGANIZER") && (
-                    <Link href="/admin" className="text-base rounded-md px-3 py-2 hover:bg-gray-100 text-blue-600 font-medium">Admin Panel</Link>
-                  )}
-
-                  {/* Sign out */}
-                  <button
-                    onClick={handleLogout}
-                    disabled={isLoggingOut}
-                    className="mt-2 inline-flex items-center gap-2 rounded-md px-3 py-2 text-left hover:bg-gray-100 disabled:opacity-50"
-                  >
-                    <PiSignOutBold className="w-5 h-5" />
-                    <span>{isLoggingOut ? "Signing out..." : "Sign out"}</span>
-                  </button>
-                </>
-              ) : (
-                <>
-                  {/* Sign in */}
-                  <Link href="/sign-in" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Sign In</Link>
-
-                  {/* Sign up */}
-                  <Link href="/sign-up" className="text-base rounded-md px-3 py-2 hover:bg-gray-100">Sign Up</Link>
-                </>
-              )}
+                     <button
+                        onClick={handleLogout}
+                        disabled={isLoggingOut}
+                        className="hover:bg-accent flex w-full items-center gap-2 rounded-md px-3 py-2 disabled:opacity-50"
+                     >
+                        <LogOut className="h-4 w-4" />
+                        {isLoggingOut ? 'Signing out...' : 'Sign out'}
+                     </button>
+                  </>
+               ) : (
+                  <>
+                     <NavLink href="/sign-in">Sign In</NavLink>
+                     <NavLink
+                        href="/sign-up"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90"
+                     >
+                        Sign Up
+                     </NavLink>
+                  </>
+               )}
             </nav>
-          </SheetContent>
-        </Sheet>
+         </SheetContent>
+      </Sheet>
+   );
 
-        {/* Center: Logo + Title */}
-        <Link href="/" className="gap-2 flex items-center w-fit">
-          <Image
-            src="/default/logo.svg"
-            alt="logo"
-            width={30}
-            height={30}
-            className="w-6 h-6 md:w-8 md:h-8 invert"
-          />
-          <h1 className="font-bold text-base md:text-xl">Volunteer Step Events</h1>
-        </Link>
-      </div>
+   return (
+      <header className="bg-background sticky top-0 z-50 w-full border-b">
+         <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="flex h-16 w-full items-center justify-between">
+               {/* Left: Mobile menu + Logo */}
+               <div className="flex items-center gap-4">
+                  <MobileNav />
 
-      {/* Right: Profile + desktop nav/actions */}
-      <div className="flex items-center justify-center gap-4 md:gap-8 w-fit text-sm">
-        {/* Desktop nav visible only on md+; on mobile these live in the sidebar */}
-        {session && (
-          <>
-            <Link href="/" className="hidden md:block">Home</Link>
-            {/* Events - only for volunteer users */}
-            {session.user.role === "VOLUNTEER" && (
-              <Link href="/my-events" className="hidden md:block">My Events</Link>
-            )}
-            {/* Admin Panel - only for admin and organizer users */}
-            {(session.user.role === "ADMIN" || session.user.role === "ORGANIZER") && (
-              <Link href="/admin" className="hidden md:block text-blue-600 font-medium">Admin Panel</Link>
-            )}
-          </>
-        )}
+                  <Link href="/" className="flex items-center gap-2">
+                     <Image
+                        src="/default/logo.svg"
+                        alt="logo"
+                        width={32}
+                        height={32}
+                        className="invert-100 dark:invert-0"
+                     />
+                     <h1 className="text-lg font-bold sm:text-xl">
+                        Volunteer Step Events
+                     </h1>
+                  </Link>
+               </div>
 
-        {/* Conditional right side based on authentication */}
-        {session ? (
-          <>
-            {/* Notifications (desktop) */}
-            <NotificationDrawer />
+               {/* Right: Desktop nav + User actions */}
+               <div className="flex items-center gap-4">
+                  {/* Desktop Navigation */}
+                  {session && (
+                     <nav className="hidden items-center gap-1 md:flex">
+                        <NavLink href="/">Home</NavLink>
+                        {session.user.role === 'VOLUNTEER' && (
+                           <NavLink href="/my-events">My Events</NavLink>
+                        )}
+                        {(session.user.role === 'ADMIN' ||
+                           session.user.role === 'ORGANIZER') && (
+                           <NavLink
+                              href="/admin"
+                              className="text-foreground font-medium"
+                           >
+                              Admin Panel
+                           </NavLink>
+                        )}
+                     </nav>
+                  )}
 
-            <Link href="/profile" aria-label="Profile">
-              <Avatar className="w-7 h-7 md:w-7 md:h-7 mb-1 md:mb-0.5">
-                {/* <AvatarImage src={session?.user?.image || ""} /> */}
-                <AvatarFallback >
-                  {getInitials(session?.user?.name || "V")}
-                </AvatarFallback>
-              </Avatar>
-            </Link>
+                  {/* User Actions */}
+                  {session ? (
+                     <div className="flex items-center gap-6">
+                        <NotificationDrawer />
 
-            <button
-              onClick={handleLogout}
-              disabled={isLoggingOut}
-              className="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              title="Sign out"
-            >
-              <PiSignOutBold className="w-5 h-5" />
-              <span className="hidden md:block">
-                {isLoggingOut ? "Signing out..." : "Sign out"}
-              </span>
-            </button>
-          </>
-        ) : (
-          <>
-            {/* Sign in */}
-            <Link href="/sign-in" className="hidden md:inline-flex items-center gap-2 py-2 rounded-md transition-colors duration-200">
-              Sign In
-            </Link>
+                        <ThemeToggleButton
+                           variant="circle-blur"
+                           start="top-right"
+                           className="scale-95 md:scale-115"
+                        />
 
-            {/* Sign up */}
-            <Link href="/sign-up" className="hidden md:inline-flex items-center gap-2 px-7 py-2 rounded-md bg-black text-white hover:bg-black/90 transition-colors duration-200">
-              Sign Up
-            </Link>
-          </>
-        )}
-      </div>
-    </header>
-  )
+                        <Link
+                           href="/profile"
+                           className="transition-opacity hover:opacity-80"
+                        >
+                           <Avatar className="h-8 w-8">
+                              <AvatarFallback className="text-sm">
+                                 {getInitials(session.user.name || 'V')}
+                              </AvatarFallback>
+                           </Avatar>
+                        </Link>
+
+                        <button
+                           onClick={handleLogout}
+                           disabled={isLoggingOut}
+                           className="hover:bg-accent hidden items-center gap-2 rounded-md px-3 py-2 disabled:opacity-50 md:flex"
+                           title="Sign out"
+                        >
+                           <LogOut className="h-4 w-4" />
+                           <span className="text-sm">
+                              {isLoggingOut ? 'Signing out...' : 'Sign out'}
+                           </span>
+                        </button>
+                     </div>
+                  ) : (
+                     <div className="hidden items-center gap-3 md:flex">
+                        <ThemeToggleButton
+                           variant="circle-blur"
+                           start="top-right"
+                           className="scale-95 md:scale-115"
+                        />
+
+                        <Link
+                           href="/sign-in"
+                           className="hover:bg-accent rounded-md px-3 py-2 transition-colors"
+                        >
+                           Sign In
+                        </Link>
+
+                        <Link
+                           href="/sign-up"
+                           className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 transition-colors"
+                        >
+                           Sign Up
+                        </Link>
+                     </div>
+                  )}
+               </div>
+            </div>
+         </div>
+      </header>
+   );
 }

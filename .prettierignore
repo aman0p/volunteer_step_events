@@ -1,0 +1,12 @@
+public/registry
+public/registry/**
+node_modules/**
+.next/**
+.husky/**
+.vscode/**
+.git/**
+.gitignore
+.prettierignore
+.prettierrc
+.prettierignore
+**/*.mdx

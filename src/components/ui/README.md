@@ -17,100 +17,100 @@ This project now uses **Sonner** directly for all toast notifications instead of
 ### Basic Toast
 
 ```tsx
-import { toast } from "sonner"
+import { toast } from 'sonner';
 
 // Simple toast
-toast("Success! Your action was completed successfully.")
+toast('Success! Your action was completed successfully.');
 
 // Success toast
-toast.success("Success! Your action was completed successfully.")
+toast.success('Success! Your action was completed successfully.');
 
 // Error toast
-toast.error("Error! Something went wrong.")
+toast.error('Error! Something went wrong.');
 
 // Info toast
-toast.info("Info: Here's some information")
+toast.info("Info: Here's some information");
 
 // Warning toast
-toast.warning("Warning: Please be careful")
+toast.warning('Warning: Please be careful');
 
 // Destructive toast
-toast.error("Error: Critical error occurred")
+toast.error('Error: Critical error occurred');
 ```
 
 ### Toast with Description
 
 ```tsx
-import { toast } from "sonner"
+import { toast } from 'sonner';
 
-toast.success("File uploaded", {
-  description: "Your file has been uploaded successfully"
-})
+toast.success('File uploaded', {
+   description: 'Your file has been uploaded successfully',
+});
 
-toast.error("Upload failed", {
-  description: "Please check your connection and try again"
-})
+toast.error('Upload failed', {
+   description: 'Please check your connection and try again',
+});
 ```
 
 ### Toast with Actions
 
 ```tsx
-import { toast } from "sonner"
+import { toast } from 'sonner';
 
-toast("File uploaded", {
-  description: "Your file has been uploaded successfully",
-  action: {
-    label: "View",
-    onClick: () => {
-      // Handle action click
-      console.log("View file clicked")
-    }
-  }
-})
+toast('File uploaded', {
+   description: 'Your file has been uploaded successfully',
+   action: {
+      label: 'View',
+      onClick: () => {
+         // Handle action click
+         console.log('View file clicked');
+      },
+   },
+});
 ```
 
 ### Promise Toast
 
 ```tsx
-import { toast } from "sonner"
+import { toast } from 'sonner';
 
 const uploadFile = async (file: File) => {
-  // Simulate file upload
-  await new Promise(resolve => setTimeout(resolve, 2000))
-  return { success: true }
-}
+   // Simulate file upload
+   await new Promise((resolve) => setTimeout(resolve, 2000));
+   return { success: true };
+};
 
 toast.promise(uploadFile(file), {
-  loading: "Uploading file...",
-  success: "File uploaded successfully!",
-  error: "Failed to upload file"
-})
+   loading: 'Uploading file...',
+   success: 'File uploaded successfully!',
+   error: 'Failed to upload file',
+});
 ```
 
 ### Dismiss Toasts
 
 ```tsx
-import { toast } from "sonner"
+import { toast } from 'sonner';
 
 // Dismiss specific toast
-toast.dismiss("toast-id")
+toast.dismiss('toast-id');
 
 // Dismiss all toasts
-toast.dismiss()
+toast.dismiss();
 ```
 
 ### Custom Duration
 
 ```tsx
-import { toast } from "sonner"
+import { toast } from 'sonner';
 
-toast.success("Quick message", {
-  duration: 2000 // 2 seconds
-})
+toast.success('Quick message', {
+   duration: 2000, // 2 seconds
+});
 
-toast.info("Long message", {
-  duration: 10000 // 10 seconds
-})
+toast.info('Long message', {
+   duration: 10000, // 10 seconds
+});
 ```
 
 ## Toast Variants
@@ -132,15 +132,15 @@ The system has been simplified to use Sonner directly:
 ```tsx
 // Old way (no longer works)
 toast({
-  title: "Hello",
-  description: "World",
-  variant: "destructive"
-})
+   title: 'Hello',
+   description: 'World',
+   variant: 'destructive',
+});
 
 // New way (Sonner direct)
-toast.error("Hello", {
-  description: "World"
-})
+toast.error('Hello', {
+   description: 'World',
+});
 ```
 
 ## Benefits of Direct Sonner Usage
@@ -157,6 +157,7 @@ toast.error("Hello", {
 ## Examples in This Project
 
 Check these files for real usage examples:
+
 - `src/components/FileUpload.tsx` - File upload success/error toasts
 - `src/components/AuthForm.tsx` - Authentication success/error toasts
 
