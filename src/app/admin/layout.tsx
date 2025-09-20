@@ -45,12 +45,6 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
                     </div> */}
                   <div className="flex items-center gap-2 border-b p-2">
                      <SidebarTrigger />
-
-                     {/* <ThemeToggleButton
-                  variant="circle-blur"
-                  start="top-right"
-                  className="scale-95 md:scale-115"
-                /> */}
                   </div>
                   <div className="w-full flex-1 overflow-y-auto p-4 md:p-7 md:pr-13">
                      {children}

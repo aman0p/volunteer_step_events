@@ -347,7 +347,7 @@ export default function EventEnrollmentTable({
                               </div>
                            </Link>
                         </TableCell>
-                        <TableCell className="min-w-[200px] font-mono text-sm">
+                        <TableCell className="min-w-[200px] text-sm">
                            <div
                               className="truncate"
                               title={enrollment.user.email}
@@ -355,7 +355,7 @@ export default function EventEnrollmentTable({
                               {enrollment.user.email}
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[120px] font-mono text-sm">
+                        <TableCell className="min-w-[120px] text-sm">
                            <div
                               className="truncate"
                               title={enrollment.user.phoneNumber}

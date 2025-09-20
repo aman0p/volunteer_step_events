@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Image } from "@imagekit/next";
 import config from "@/lib/config";
+import { MapPin } from "lucide-react";
 
 interface EventCardProps {
    event: {
@@ -24,9 +25,9 @@ export default function EventCard({ event }: EventCardProps) {
    return (
       <Link
          href={`/events/${event.id}`}
-         className="group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl transition-shadow duration-300 hover:shadow-lg"
+         className="group relative overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl bg-muted-foreground/5 backdrop-blur-xl shadow-background/50 hover:shadow-xl shadow-sm duration-300"
       >
-         <div className="relative h-[30rem] w-full">
+         <div className="relative h-[12rem] md:h-[18rem] lg:h-[30rem] w-full">
             <Image
                urlEndpoint={config.env.imagekit.urlEndpoint}
                src={event.coverUrl || "/events.jpg"}
@@ -39,38 +40,37 @@ export default function EventCard({ event }: EventCardProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
             {/* Event Info Overlay */}
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-0 md:top-4 right-1 md:right-4">
                <Badge
                   variant="secondary"
-                  className="bg-background/20 text-foreground border-0 backdrop-blur-md"
+                  className="bg-background/20 text-background border-0 backdrop-blur-md"
                >
-                  <span className="text-xs">
+                  <span className="text-xs font-light">
                      {event.enrollments?.length ?? 0} /{" "}
                      {event.maxVolunteers ?? "-"} volunteers
                   </span>
                </Badge>
             </div>
 
-            <div className="absolute right-4 bottom-4 left-4">
-               <h2 className="text-foreground mb-1 line-clamp-2 text-sm font-semibold">
+            <div className="absolute flex flex-col bottom-0 w-full bg-foreground/50 px-2.5 py-1.5 md:py-3 md:px-5">
+               <h2 className="order-2 md:order-1 text-background mb-1 line-clamp-1 md:line-clamp-2 text-xs md:text-sm">
                   {event.title}
                </h2>
-               <div className="text-foreground/90 flex items-center justify-between text-xs">
-                  <span>{new Date(event.startDate).toLocaleDateString()}</span>
+               <div className="order-1 md:order-2 text-background/90 flex flex-col md:flex-row md:items-center justify-between text-xs font-light">
+                  <span className="hidden md:block">{new Date(event.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                   <span>{daysRemaining} days left</span>
                </div>
             </div>
          </div>
 
          {/* Card Content */}
-         <div className="bg-transparent p-5 backdrop-blur-2xl">
-            <div className="text-muted-foreground mb-2 flex items-center gap-1 text-xs font-bold md:text-sm">
-               <span className="line-clamp-1">
-                  {event.location.split(",")[0]}
-               </span>
+         <div className="bg-transparent p-2 md:p-5 backdrop-blur-2xl">
+            <div className="text-foreground md:mb-2 flex items-center gap-1 text-xs font-bold md:text-sm">
+                  <MapPin className="size-3.5 md:size-4" />
+                  <span className="line-clamp-1">{event.location.split(",")[0]}</span>
             </div>
             {Array.isArray(event.category) && (
-               <div className="flex flex-wrap gap-1">
+               <div className="flex-wrap gap-1 md:gap-2 hidden md:flex">
                   {event.category.slice(0, 2).map((cat: string) => (
                      <Badge
                         key={cat}

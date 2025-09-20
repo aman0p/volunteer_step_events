@@ -304,7 +304,7 @@ export default function EventEnrollmentTable({
                               <div className="flex items-center gap-2 text-sm">
                                  <Mail className="text-muted-foreground h-3 w-3 flex-shrink-0" />
                                  <span
-                                    className="truncate font-mono text-sm"
+                                    className="truncate text-sm"
                                     title={enrollment.user.email}
                                  >
                                     {enrollment.user.email}
@@ -313,7 +313,7 @@ export default function EventEnrollmentTable({
                               <div className="flex items-center gap-2 text-sm">
                                  <Phone className="text-muted-foreground h-3 w-3 flex-shrink-0" />
                                  <span
-                                    className="truncate font-mono text-sm"
+                                    className="truncate text-sm"
                                     title={enrollment.user.phoneNumber}
                                  >
                                     {enrollment.user.phoneNumber}

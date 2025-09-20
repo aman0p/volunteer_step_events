@@ -2,9 +2,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { UserEventsTable } from "@/components/UserEventsTable";
+import { UserEventsTable } from "@/components/user/UserEventsTable";
 import { requireVolunteer } from "@/lib/utils/role-check";
 import { Status } from "@/generated/prisma";
+import Section from "@/components/ui/section";
 
 export default async function VolunteerEventsPage() {
    const session = await getServerSession(authOptions);
@@ -56,24 +57,24 @@ export default async function VolunteerEventsPage() {
    }));
 
    return (
-      <div className="space-y-6 px-2">
+      <Section className="space-y-6 px-2">
          <div className="flex items-center justify-between">
             <div>
                <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
                   My Enrolled Events
                </h1>
-               <p className="text-muted-foreground text-sm md:text-base">
+               <p className="text-muted-background font-light text-sm md:text-base">
                   View your enrolled events and their status
                </p>
             </div>
-            <div className="flex text-sm text-gray-600">
+            <div className="flex text-sm text-muted-background font-light md:text-base">
                {eventsData.length} enrolled event
                {eventsData.length !== 1 ? "s" : ""}
             </div>
          </div>
 
          {eventsData.length === 0 ? (
-            <div className="py-12 text-center text-gray-500">
+            <div className="py-12 text-center text-muted-background font-light md:text-base">
                <p className="text-lg">No enrolled events</p>
                <p className="text-sm">
                   You haven&apos;t enrolled in any events yet
@@ -82,6 +83,6 @@ export default async function VolunteerEventsPage() {
          ) : (
             <UserEventsTable events={eventsData} />
          )}
-      </div>
+      </Section>
    );
 }

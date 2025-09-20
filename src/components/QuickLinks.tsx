@@ -25,21 +25,17 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
    const canAccessQuickLinks = isEnrolled || isEventCreator;
 
    return (
-      <div className="relative flex h-full w-full flex-col gap-5 rounded-xl bg-white/10 px-3 py-5 backdrop-blur-xl md:rounded-2xl md:p-5 lg:rounded-3xl">
+      <div className="relative h-full w-full space-y-5 rounded-xl bg-white/10 px-3 py-5 backdrop-blur-2xl md:rounded-2xl md:p-5 lg:rounded-3xl shadow-foreground/20 hover:shadow-xl shadow-2xl transition-all duration-300">
          <h2 className="text-xl font-bold md:text-2xl">Quick Links</h2>
 
          {/* Lock overlay for non-enrolled users and non-creators */}
          {!canAccessQuickLinks && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-black/40 backdrop-blur-sm md:rounded-2xl lg:rounded-3xl">
-               <div className="flex flex-col items-center gap-2 text-white">
-                  <Lock className="h-8 w-8 text-white/80" />
-                  <p className="text-sm font-medium">
-                     {isEventCreator
-                        ? "Enroll to access quick links"
-                        : "Enroll to access quick links"}
-                  </p>
+            <div 
+            className="relative group bg-background/10 text-background group flex items-start gap-4 rounded-xl p-4 transition-all duration-200 hover:border-white/20 hover:bg-white/5 hover:shadow-lg hover:shadow-white/5"
+            
+            >
+               <Lock className="absolute top-10 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-foreground" />
                </div>
-            </div>
          )}
 
          {/* Quick Links Content - Only render actual data for approved users or event creators */}
@@ -50,23 +46,23 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
                   {quickLinks.map((link, index) => (
                      <div
                         key={link.id}
-                        className="group bg-card group relative flex items-start gap-4 rounded-xl border border-white/10 p-4 transition-all duration-200 hover:border-white/20 hover:bg-white/5 hover:shadow-lg hover:shadow-white/5"
+                        className="group border text-background group relative flex items-start gap-4 rounded-xl p-4 transition-all duration-200 hover:bg-foreground/5 hover:shadow-lg hover:shadow-white/5"
                      >
                         {/* Link number indicator */}
-                        <div className="bg-muted text-muted-foreground flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold">
+                        <div className="bg-background/30 text-foreground flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold">
                            {index + 1}
                         </div>
 
                         <div className="flex min-w-0 flex-1 flex-col space-y-2">
                            <div className="flex items-center justify-between">
-                              <p className="text-base font-semibold text-white/95 transition-colors group-hover:text-white">
+                              <p className="text-base font-semibold text-foreground transition-colors group-hover:text-foreground/80">
                                  {link.title}
                               </p>
                               <CopyButton
                                  text={link.url}
                                  size="sm"
                                  variant="ghost"
-                                 className="opacity-0 transition-opacity duration-200 group-hover:opacity-100 hover:bg-white/10"
+                                 className="transition-opacity duration-200 bg-background/30 text-foreground "
                               />
                            </div>
 
@@ -74,11 +70,11 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
                               href={link.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-muted-foreground group/link flex items-center gap-2 text-sm transition-colors duration-200 group-hover:text-lime-400"
+                              className="text-muted-foreground group/link flex items-center gap-2 text-sm transition-colors duration-200 group-hover:text-green-600"
                            >
                               <span className="truncate">{link.url}</span>
                               <svg
-                                 className="h-3 w-3 opacity-0 transition-opacity duration-200 group-hover/link:opacity-100"
+                                 className="h-3 w-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                                  fill="none"
                                  stroke="currentColor"
                                  viewBox="0 0 24 24"

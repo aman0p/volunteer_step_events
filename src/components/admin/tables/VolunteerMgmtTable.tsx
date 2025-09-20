@@ -240,7 +240,7 @@ export default function VolunteerMgmtTable({
                                  <div className="flex items-center gap-2 text-sm">
                                     <Mail className="text-muted-foreground h-3 w-3 flex-shrink-0" />
                                     <span
-                                       className="truncate font-mono"
+                                       className="truncate"
                                        title={volunteer.email}
                                     >
                                        {volunteer.email}
@@ -249,7 +249,7 @@ export default function VolunteerMgmtTable({
                                  <div className="flex items-center gap-2 text-sm">
                                     <Phone className="text-muted-foreground h-3 w-3 flex-shrink-0" />
                                     <span
-                                       className="truncate font-mono"
+                                       className="truncate"
                                        title={volunteer.phoneNumber}
                                     >
                                        {volunteer.phoneNumber}

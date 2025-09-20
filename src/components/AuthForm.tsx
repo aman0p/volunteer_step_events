@@ -178,8 +178,8 @@ export function AuthForm<T extends FieldValues>({
                         </SelectContent>
                      </Select>
                   ) : fieldName === "phoneNumber" ? (
-                     <div className="inline-flex w-full items-center">
-                        <span className="bg-muted text-muted-foreground rounded-l-md border px-3 py-2 text-sm select-none">
+                     <div className="inline-flex w-full items-center rounded-md overflow-hidden">
+                                          <span className="border-r bg-zinc-900 px-3 py-2 text-sm text-background select-none">
                            +91
                         </span>
                         <Input
@@ -188,7 +188,7 @@ export function AuthForm<T extends FieldValues>({
                            onChange={field.onChange}
                            name="phone"
                            required
-                           className="-ml-px rounded-l-none"
+                           className="-ml-px rounded-l-none border-l-0"
                         />
                      </div>
                   ) : fieldName === "password" ? (
@@ -240,7 +240,16 @@ export function AuthForm<T extends FieldValues>({
    return (
       <div className="bg-background flex h-full min-h-screen w-full flex-col items-center justify-center">
          <div
-            className={`bg-card mx-4 grid h-fit grid-cols-2 overflow-hidden rounded-3xl border max-md:grid-cols-1 md:w-full ${isSignIn ? "max-w-4xl" : "max-w-5xl"}`}
+            className="absolute inset-0 opacity-80"
+            style={{
+               backgroundImage: "url('/default/gradient-background.svg')",
+               backgroundSize: "cover",
+               backgroundPosition: "center",
+               backgroundRepeat: "no-repeat",
+            }}
+         />
+         <div
+            className={`bg-card/5 shadow-foreground/20 mx-4 grid h-fit grid-cols-2 overflow-hidden rounded-3xl shadow-lg border border-background/30 backdrop-blur-2xl max-md:grid-cols-1 md:w-full ${isSignIn ? "max-w-4xl" : "max-w-5xl"}`}
          >
             <div className="flex h-full flex-col justify-start gap-7 rounded-lg p-4 md:w-full md:p-8 md:pl-12">
                <div className="flex items-center gap-2">
@@ -287,7 +296,7 @@ export function AuthForm<T extends FieldValues>({
                               )
                               .map((fieldName) => renderFormField(fieldName))}
 
-                           <div className="grid grid-cols-[1.6fr_1fr] gap-4">
+                           <div className="grid grid-cols-[1fr_auto] gap-4">
                               {"phoneNumber" in defaultValues &&
                                  renderFormField("phoneNumber")}
                               {"gender" in defaultValues &&
@@ -303,7 +312,7 @@ export function AuthForm<T extends FieldValues>({
                </Form>
             </div>
 
-            <div className="bg-muted h-full w-full">
+            <div className="hidden md:block bg-muted h-full w-full">
                <Image
                   src="/default/corporate-event-organizer.jpg"
                   alt="auth image"
@@ -313,14 +322,14 @@ export function AuthForm<T extends FieldValues>({
                />
             </div>
          </div>
-         <p className="text-muted-foreground relative top-7 text-center text-sm">
+         <p className="text-foreground relative top-7 text-center text-sm backdrop-blur-2xl">
             {isSignIn
                ? "New to Volunteer Step Events? "
                : "Already have an account? "}
 
             <Link
                href={isSignIn ? "/sign-up" : "/sign-in"}
-               className="text-blue-600 hover:underline"
+               className="ml-2 font-medium text-blue-600 hover:underline"
             >
                {isSignIn ? "Create an account" : "Sign in"}
             </Link>

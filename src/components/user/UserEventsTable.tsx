@@ -123,12 +123,22 @@ export function UserEventsTable({ events }: UserEventsProps) {
       );
    };
 
-   const formatDate = (date: Date) => {
-      return new Date(date).toLocaleDateString("en-US", {
-         month: "short",
-         day: "2-digit",
-         year: "numeric",
-      });
+   const formatDateRange = (startDate: Date, endDate: Date) => {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      
+      const startMonth = start.toLocaleDateString("en-US", { month: "short" });
+      const startDay = start.getDate();
+      const endDay = end.getDate();
+      
+      // If same month, show "Sept 12-14" format
+      if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+         return `${startMonth} ${startDay}-${endDay}`;
+      }
+      
+      // If different months, show "Sept 12 - Oct 3" format
+      const endMonth = end.toLocaleDateString("en-US", { month: "short" });
+      return `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
    };
 
    return (
@@ -136,7 +146,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
          {/* Top section */}
          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-               <span className="text-muted-foreground text-sm">
+               <span className="text-muted-background font-medium text-sm md:text-base">
                   {selectedRows.length} of {events.length} selected
                </span>
             </div>
@@ -153,12 +163,12 @@ export function UserEventsTable({ events }: UserEventsProps) {
          </div>
 
          {/* Table */}
-         <div className="rounded-md border">
+         <div className="rounded-md border backdrop-blur-2xl overflow-hidden">
             <Table className="min-w-[900px]">
-               <TableHeader className="border-b border-black bg-black/10">
+               <TableHeader className="border-b border-black bg-black/20 pointer-events-none">
                   <TableRow>
-                     <TableHead className="w-10 min-w-[40px]"></TableHead>
-                     <TableHead className="w-10 min-w-[40px]">
+                     <TableHead className="w-10 min-w-[40px] text-center"></TableHead>
+                     <TableHead className="w-10 min-w-[40px] text-center">
                         <Checkbox
                            checked={
                               selectedRows.length === paginatedData.length &&
@@ -167,39 +177,36 @@ export function UserEventsTable({ events }: UserEventsProps) {
                            onCheckedChange={handleSelectAll}
                         />
                      </TableHead>
-                     <TableHead className="w-48 min-w-[192px]">
+                     <TableHead className="w-48 min-w-[192px] text-center">
                         Event Name
                      </TableHead>
-                     <TableHead className="w-32 min-w-[128px]">
+                     <TableHead className="w-32 min-w-[128px] text-center">
                         Enrollment Status
                      </TableHead>
-                     <TableHead className="w-32 min-w-[128px]">
-                        Start Date
+                     <TableHead className="w-40 min-w-[160px] text-center">
+                        Date
                      </TableHead>
-                     <TableHead className="w-32 min-w-[128px]">
-                        End Date
-                     </TableHead>
-                     <TableHead className="w-40 min-w-[160px]">
+                     <TableHead className="w-40 min-w-[160px] text-center">
                         Location
                      </TableHead>
-                     <TableHead className="w-32 min-w-[128px]">
+                     <TableHead className="w-32 min-w-[128px] text-center">
                         Max Volunteers
                      </TableHead>
-                     <TableHead className="w-48 min-w-[192px]">
+                     <TableHead className="w-48 min-w-[192px] text-center">
                         Actions
                      </TableHead>
-                     <TableHead className="w-10 min-w-[40px]"></TableHead>
+                     <TableHead className="w-10 min-w-[40px] text-center"></TableHead>
                   </TableRow>
                </TableHeader>
                <TableBody>
                   {paginatedData.map((event) => (
                      <TableRow key={event.id} className="hover:bg-muted/50">
-                        <TableCell className="w-10 min-w-[40px]">
+                        <TableCell className="w-10 min-w-[40px] text-center">
                            <div className="flex cursor-grab items-center justify-center active:cursor-grabbing">
                               <GripVertical className="h-4 w-4 text-gray-400" />
                            </div>
                         </TableCell>
-                        <TableCell className="w-10 min-w-[40px]">
+                        <TableCell className="w-10 min-w-[40px] text-center">
                            <Checkbox
                               checked={selectedRows.includes(event.id)}
                               onCheckedChange={(checked) =>
@@ -207,10 +214,10 @@ export function UserEventsTable({ events }: UserEventsProps) {
                               }
                            />
                         </TableCell>
-                        <TableCell className="min-w-[192px]">
+                        <TableCell className="min-w-[192px] text-center">
                            <Link
                               href={`/events/${event.id}`}
-                              className="group flex items-center space-x-2"
+                              className="group flex items-center justify-center space-x-2"
                            >
                               <div className="font-medium text-blue-600 hover:text-blue-700">
                                  {event.title}
@@ -218,27 +225,19 @@ export function UserEventsTable({ events }: UserEventsProps) {
                               <ArrowRight className="relative -top-2 -left-1 h-3 w-3 rotate-[-45deg] text-blue-600 transition-all duration-150 group-hover:-top-2.5 group-hover:-left-0.5 hover:text-blue-700" />
                            </Link>
                         </TableCell>
-                        <TableCell className="min-w-[128px]">
+                        <TableCell className="min-w-[128px] text-center">
                            {getStatusBadge(event.enrollmentStatus)}
                         </TableCell>
-                        <TableCell className="min-w-[128px]">
-                           <div className="flex items-center gap-2">
+                        <TableCell className="min-w-[160px] text-center">
+                           <div className="flex items-center justify-center gap-2">
                               <Calendar className="h-4 w-4 text-gray-500" />
-                              <span className="font-mono text-sm">
-                                 {formatDate(event.startDate)}
+                              <span className=" text-sm">
+                                 {formatDateRange(event.startDate, event.endDate)}
                               </span>
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[128px]">
-                           <div className="flex items-center gap-2">
-                              <Calendar className="h-4 w-4 text-gray-500" />
-                              <span className="font-mono text-sm">
-                                 {formatDate(event.endDate)}
-                              </span>
-                           </div>
-                        </TableCell>
-                        <TableCell className="min-w-[160px]">
-                           <div className="flex items-center gap-2">
+                        <TableCell className="min-w-[160px] text-center">
+                           <div className="flex items-center justify-center gap-2">
                               <MapPin className="h-4 w-4 text-gray-500" />
                               <span
                                  className="truncate text-sm"
@@ -248,15 +247,15 @@ export function UserEventsTable({ events }: UserEventsProps) {
                               </span>
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[128px]">
-                           <span className="text-muted-foreground text-sm">
+                        <TableCell className="min-w-[128px] text-center">
+                           <span className="text-muted-background font-medium text-sm">
                               {event.maxVolunteers
                                  ? `${event.maxVolunteers} volunteers`
                                  : "Unlimited"}
                            </span>
                         </TableCell>
-                        <TableCell className="min-w-[192px]">
-                           <div className="flex items-center gap-2">
+                        <TableCell className="min-w-[192px] text-center">
+                           <div className="flex items-center justify-center gap-2">
                               <Button
                                  size="sm"
                                  variant="outline"
@@ -283,7 +282,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                               )}
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[40px]">
+                        <TableCell className="min-w-[40px] text-center">
                            <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                  <Button variant="ghost" size="icon">
@@ -316,15 +315,15 @@ export function UserEventsTable({ events }: UserEventsProps) {
 
          {/* Pagination */}
          <div className="flex items-center justify-between py-2">
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-background font-medium text-sm md:text-base">
                {selectedRows.length} of {events.length} row(s) selected
             </p>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-muted-background font-medium text-sm md:text-base">
                <Select
                   value={rowsPerPage.toString()}
                   onValueChange={(value) => setRowsPerPage(parseInt(value))}
                >
-                  <SelectTrigger className="w-[100px]">
+                  <SelectTrigger className="w-[100px] backdrop-blur-2xl text-black font-bold text-sm border-2">
                      <SelectValue placeholder="Rows per page" />
                   </SelectTrigger>
                   <SelectContent>
@@ -333,11 +332,12 @@ export function UserEventsTable({ events }: UserEventsProps) {
                      <SelectItem value="50">50</SelectItem>
                   </SelectContent>
                </Select>
-               <span className="text-sm">
+               <span className="text-sm md:text-base">
                   Page {page} of {totalPages}
                </span>
-               <div className="flex gap-1">
+               <div className="flex gap-1 backdrop-blur-2xl">
                   <Button
+                  className="aspect-square text-muted-background font-bold text-sm md:text-lg"
                      variant="outline"
                      size="sm"
                      onClick={() => setPage(1)}
@@ -346,6 +346,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                      «
                   </Button>
                   <Button
+                  className="aspect-square text-muted-background font-bold text-sm md:text-lg"
                      variant="outline"
                      size="sm"
                      onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -354,6 +355,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                      ‹
                   </Button>
                   <Button
+                  className="aspect-square text-muted-background font-bold text-sm md:text-lg"
                      variant="outline"
                      size="sm"
                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
@@ -362,6 +364,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                      ›
                   </Button>
                   <Button
+                  className="aspect-square text-muted-background font-bold text-sm md:text-lg"
                      variant="outline"
                      size="sm"
                      onClick={() => setPage(totalPages)}

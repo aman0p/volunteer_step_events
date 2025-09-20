@@ -11,7 +11,6 @@ import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { NotificationDrawer } from "./NotificationDrawer";
-import { ThemeToggleButton } from "./ThemeToggleButton";
 
 export function Navbar({ session }: { session: Session | null }) {
    const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -42,7 +41,7 @@ export function Navbar({ session }: { session: Session | null }) {
    }) => (
       <Link
          href={href}
-         className={`hover:bg-accent rounded-md px-3 py-2 transition-colors ${className}`}
+         className={`hover:font-bold rounded-md px-3 py-2 transition-colors ${className}`}
       >
          {children}
       </Link>
@@ -80,7 +79,7 @@ export function Navbar({ session }: { session: Session | null }) {
                         session.user.role === "ORGANIZER") && (
                         <NavLink
                            href="/admin"
-                           className="text-foreground font-medium"
+                           className="text-blue-600 font-medium"
                         >
                            Admin Panel
                         </NavLink>
@@ -112,19 +111,19 @@ export function Navbar({ session }: { session: Session | null }) {
    );
 
    return (
-      <header className="bg-background sticky top-0 z-50 w-full border-b">
-         <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 w-full items-center justify-between">
+      <header className="bg-background/30 backdrop-blur-2xl sticky top-2 z-50 w-full shadow-2xl shadow-foreground/30">
+         <div className="w-full px-2 sm:px-6 lg:px-8">
+            <div className="flex h-12 md:h-14 w-full items-center justify-between">
                {/* Left: Mobile menu + Logo */}
-               <div className="flex items-center gap-4">
+               <div className="flex items-center md:gap-4">
                   <MobileNav />
 
-                  <Link href="/" className="flex items-center gap-2">
+                  <Link href="/" className="flex items-center gap-1 md:gap-2">
                      <Image
                         src="/default/logo.svg"
                         alt="logo"
-                        width={32}
-                        height={32}
+                        width={22}
+                        height={22}
                         className="invert-100 dark:invert-0"
                      />
                      <h1 className="text-lg font-bold sm:text-xl">
@@ -146,7 +145,7 @@ export function Navbar({ session }: { session: Session | null }) {
                            session.user.role === "ORGANIZER") && (
                            <NavLink
                               href="/admin"
-                              className="text-foreground font-medium"
+                              className="text-blue-600 font-medium"
                            >
                               Admin Panel
                            </NavLink>
@@ -156,14 +155,8 @@ export function Navbar({ session }: { session: Session | null }) {
 
                   {/* User Actions */}
                   {session ? (
-                     <div className="flex items-center gap-6">
+                     <div className="flex items-center gap-6 scale-85 md:scale-100">
                         <NotificationDrawer />
-
-                        <ThemeToggleButton
-                           variant="circle-blur"
-                           start="top-right"
-                           className="scale-95 md:scale-115"
-                        />
 
                         <Link
                            href="/profile"
@@ -190,12 +183,6 @@ export function Navbar({ session }: { session: Session | null }) {
                      </div>
                   ) : (
                      <div className="hidden items-center gap-3 md:flex">
-                        <ThemeToggleButton
-                           variant="circle-blur"
-                           start="top-right"
-                           className="scale-95 md:scale-115"
-                        />
-
                         <Link
                            href="/sign-in"
                            className="hover:bg-accent rounded-md px-3 py-2 transition-colors"

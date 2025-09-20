@@ -52,12 +52,12 @@ export default function EventRolesTable({
    }
 
    return (
-      <Card className={`w-full overflow-hidden ${className || ""}`}>
+      <Card className={`w-full backdrop-blur-2xl bg-transparent overflow-hidden ${className || ""}`}>
          <CardContent className="p-0">
             <div className="overflow-x-auto">
                <Table className="min-w-[700px]">
                   <TableHeader>
-                     <TableRow className="bg-muted hover:bg-muted">
+                     <TableRow className="border-y  bg-black/15 pointer-events-none">
                         <TableHead className="min-w-[80px] text-center font-semibold">
                            Actions
                         </TableHead>
@@ -129,7 +129,7 @@ export default function EventRolesTable({
                                  )}
                               </div>
                            </TableCell>
-                           <TableCell className="h-24 min-w-[120px] p-4 text-center font-mono">
+                           <TableCell className="h-24 min-w-[120px] p-4 text-center">
                               {role.payout.toLocaleString("en-IN")}
                            </TableCell>
                         </TableRow>

@@ -76,7 +76,7 @@ export function useSingleFileUpload({
          });
          onSuccess(response);
       } catch (err) {
-         onError(err);
+         onError(err as Error);
       } finally {
          setIsUploading(false);
       }

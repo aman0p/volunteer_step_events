@@ -5,7 +5,6 @@ import { Providers } from "@/components/Providers";
 import { prisma } from "@/lib/prisma";
 import ProfileCompletionBanner from "@/components/ProfileCompletionBanner";
 import { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
    title: "Volunteer Step Events",
@@ -48,23 +47,8 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
    }
 
    return (
-      <ThemeProvider
-         attribute="class"
-         defaultTheme="system"
-         enableSystem
-         disableTransitionOnChange
-      >
          <Providers session={session || undefined}>
-            {/* <div className="fixed inset-0 z-0">
-        <Plasma
-          color="#9AE600"
-          speed={0.8}
-          direction="forward"
-          scale={1.5}
-          opacity={0.6}
-          mouseInteractive={true}
-        />
-      </div> */}
+            <div className="fixed inset-0 z-[-1] bg-[url('/default/gradient-background.svg')] bg-cover bg-center opacity-80" />
             <div className="font-noto-sans mx-auto flex h-full w-full flex-col items-center justify-center">
                {session && (
                   <ProfileCompletionBanner className="sticky top-0 w-full" />
@@ -73,7 +57,6 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
                <div className="w-full">{children}</div>
             </div>
          </Providers>
-      </ThemeProvider>
    );
 };
 

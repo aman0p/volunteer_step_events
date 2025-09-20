@@ -73,21 +73,21 @@ export default async function EventDetailsPage({
    return (
       <div className="h-full w-full space-y-0">
          {/* Event Cover and Details */}
-         <Section className="grid h-full w-full grid-cols-1 gap-0 px-3 py-1.5 md:gap-5 md:p-3 lg:max-h-full lg:max-w-full lg:grid-cols-[2fr_1.4fr] lg:px-5">
-            <div className="relative z-10 w-full overflow-hidden rounded-t-xl md:rounded-2xl lg:rounded-3xl">
+         <Section className="grid h-full w-full grid-cols-1 gap-0 px-3 py-1.5 md:gap-5 md:p-3 lg:max-h-full lg:max-w-full lg:grid-cols-[2fr_1.4fr] lg:pb-0">
+            <div className="mt-4 md:mt-0 relative z-10 w-full overflow-hidden rounded-t-xl md:rounded-2xl lg:rounded-3xl">
                <Image
                   urlEndpoint={config.env.imagekit.urlEndpoint}
                   src={event.coverUrl || "/events.jpg"}
                   alt={event.title}
                   width={1500}
                   height={1500}
-                  className="h-[40vh] w-full bg-black/10 object-cover object-center md:h-[30vh] lg:h-full"
+                  className="h-[25vh] w-full bg-black/10 object-cover object-center md:h-[30vh] lg:h-full"
                />
             </div>
 
             <div className="h-full w-full space-y-10 rounded-b-xl bg-white/10 px-3 py-5 backdrop-blur-xl md:rounded-2xl md:p-5 lg:rounded-3xl">
                {/* event details */}
-               <div className="flex h-full w-full flex-col justify-between space-y-2 md:gap-5 lg:gap-10">
+               <div className="flex h-full w-full flex-col justify-between space-y-2 gap-3 md:gap-5 lg:gap-10">
                   <div className="space-y-5">
                      <div className="flex items-center gap-2">
                         {event.category.map((category) => (
@@ -113,7 +113,7 @@ export default async function EventDetailsPage({
                   </div>
 
                   <div className="space-y-2">
-                     <Card className="w-full gap-3 rounded-2xl py-3">
+                     <Card className="border-0 bg-foreground/80 text-background w-full gap-3 rounded-xl lg:rounded-2xl py-3">
                         <CardContent className="flex items-center justify-start gap-2 px-5 md:gap-5">
                            <Calendar className="mb-0.5 size-3.5 md:size-4" />
                            <p className="text-xs font-medium tracking-wide md:text-sm md:font-semibold">
@@ -137,14 +137,12 @@ export default async function EventDetailsPage({
                      />
                   </div>
                </div>
-
-               {/* event roles and quick links */}
             </div>
          </Section>
 
          {/* Event Roles and Quick Links */}
-         <Section className="grid h-full w-full grid-cols-1 gap-3 px-3 py-1.5 md:gap-5 md:p-3 lg:max-w-full lg:grid-cols-[2fr_1.4fr] lg:px-5">
-            <div className="h-full w-full space-y-15 rounded-xl bg-white/10 px-3 py-5 backdrop-blur-xl md:rounded-2xl md:p-5 lg:rounded-3xl">
+         <Section className="grid h-full w-full grid-cols-1 gap-3 px-3 py-1.5 md:gap-5 md:p-3 lg:max-w-full lg:grid-cols-[2fr_1.4fr] lg:pb-5">
+            <div className="h-full w-full space-y-15 rounded-xl bg-white/10 px-3 py-5 backdrop-blur-2xl md:rounded-2xl md:p-5 lg:rounded-3xl shadow-foreground/20 hover:shadow-xl shadow-2xl transition-all duration-300">
                {event.eventRoles && event.eventRoles.length > 0 && (
                   <div className="space-y-5">
                      <h2 className="text-xl font-bold md:text-2xl">
@@ -163,10 +161,10 @@ export default async function EventDetailsPage({
          </Section>
 
          {/* Enrollment Details & */}
-         <Section className="grid h-full w-full grid-cols-1 gap-3 px-3 py-1.5 md:gap-5 md:p-3 lg:max-w-full lg:grid-cols-[2fr_1.4fr] lg:px-5">
-            <div className="h-full w-full space-y-15 overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl">
+         <Section className="grid h-full w-full grid-cols-1 gap-3 px-3 py-1.5 md:gap-5 md:p-3 lg:max-w-full lg:grid-cols-[2fr_1.4fr] lg:px-10 lg:py-5">
+            <div className="order-2 md:order-1 h-full w-full overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl">
                {event.eventImages && event.eventImages.length > 0 && (
-                  <div className="order-2 grid w-full grid-cols-3 gap-2 md:grid-cols-4 md:gap-5">
+                  <div className="grid w-full grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5">
                      {event.eventImages &&
                         event.eventImages.map((img, index) => (
                            <Image
@@ -176,7 +174,7 @@ export default async function EventDetailsPage({
                               alt="event image"
                               width={1000}
                               height={1000}
-                              className="z-10 aspect-square w-full rounded-xl object-cover object-top md:aspect-auto md:h-[17rem] md:rounded-2xl lg:rounded-3xl"
+                              className="z-10 aspect-square w-full rounded-xl object-cover object-top md:aspect-video md:rounded-2xl lg:rounded-3xl"
                            />
                         ))}
                   </div>
@@ -185,14 +183,14 @@ export default async function EventDetailsPage({
 
             {/* video */}
             {event.videoUrl && (
-               <div className="z-10 aspect-video h-fit w-full overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl">
+               <div className="order-1 md:order-2 z-10 aspect-video h-fit w-full rounded-xl bg-white/10 backdrop-blur-2xl md:rounded-2xl lg:rounded-3xl shadow-foreground/20 hover:shadow-xl shadow-2xl transition-all duration-300">
                   <Video
                      src={event.videoUrl}
                      urlEndpoint={config.env.imagekit.urlEndpoint}
                      alt="event video"
                      controls
                      preload="none"
-                     className="aspect-video h-full w-full overflow-hidden rounded-xl bg-black/1 object-cover md:rounded-2xl lg:rounded-3xl dark:bg-white/5"
+                     className="aspect-video h-full w-full overflow-hidden rounded-xl object-cover md:rounded-2xl lg:rounded-3xl"
                      poster={event.coverUrl ?? undefined}
                   />
                </div>

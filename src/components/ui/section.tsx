@@ -10,7 +10,7 @@ export default function Section({
    return (
       <div
          className={cn(
-            "mx-auto w-full px-3 md:max-w-7xl md:px-5 lg:px-0",
+            "mx-auto w-full p-3 md:p-5 lg:px-10 lg:py-10",
             className
          )}
       >

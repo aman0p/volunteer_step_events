@@ -420,12 +420,12 @@ export default function VerificationTable({
                               </div>
                            </Link>
                         </TableCell>
-                        <TableCell className="min-w-[120px] font-mono text-sm">
+                        <TableCell className="min-w-[120px] text-sm">
                            <div className="truncate" title={request.user.email}>
                               {request.user.email}
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[120px] font-mono text-sm">
+                        <TableCell className="min-w-[120px] text-sm">
                            <div
                               className="truncate"
                               title={request.user.phoneNumber}
