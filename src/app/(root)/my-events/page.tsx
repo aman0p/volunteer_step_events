@@ -63,18 +63,18 @@ export default async function VolunteerEventsPage() {
                <h1 className="text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
                   My Enrolled Events
                </h1>
-               <p className="text-muted-background font-light text-sm md:text-base">
+               <p className="text-muted-background text-sm font-light md:text-base">
                   View your enrolled events and their status
                </p>
             </div>
-            <div className="flex text-sm text-muted-background font-light md:text-base">
+            <div className="text-muted-background flex text-sm font-light md:text-base">
                {eventsData.length} enrolled event
                {eventsData.length !== 1 ? "s" : ""}
             </div>
          </div>
 
          {eventsData.length === 0 ? (
-            <div className="py-12 text-center text-muted-background font-light md:text-base">
+            <div className="text-muted-background py-12 text-center font-light md:text-base">
                <p className="text-lg">No enrolled events</p>
                <p className="text-sm">
                   You haven&apos;t enrolled in any events yet

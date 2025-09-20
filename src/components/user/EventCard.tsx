@@ -25,9 +25,9 @@ export default function EventCard({ event }: EventCardProps) {
    return (
       <Link
          href={`/events/${event.id}`}
-         className="group relative overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl bg-muted-foreground/5 backdrop-blur-xl shadow-background/50 hover:shadow-xl shadow-sm duration-300"
+         className="group bg-muted-foreground/5 shadow-background/50 relative overflow-hidden rounded-xl shadow-sm backdrop-blur-xl duration-300 hover:shadow-xl md:rounded-2xl lg:rounded-3xl"
       >
-         <div className="relative h-[12rem] md:h-[18rem] lg:h-[30rem] w-full">
+         <div className="relative h-[12rem] w-full md:h-[18rem] lg:h-[30rem]">
             <Image
                urlEndpoint={config.env.imagekit.urlEndpoint}
                src={event.coverUrl || "/events.jpg"}
@@ -40,7 +40,7 @@ export default function EventCard({ event }: EventCardProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
             {/* Event Info Overlay */}
-            <div className="absolute top-0 md:top-4 right-1 md:right-4">
+            <div className="absolute top-0 right-1 md:top-4 md:right-4">
                <Badge
                   variant="secondary"
                   className="bg-background/20 text-background border-0 backdrop-blur-md"
@@ -52,25 +52,33 @@ export default function EventCard({ event }: EventCardProps) {
                </Badge>
             </div>
 
-            <div className="absolute flex flex-col bottom-0 w-full bg-foreground/50 px-2.5 py-1.5 md:py-3 md:px-5">
-               <h2 className="order-2 md:order-1 text-background mb-1 line-clamp-1 md:line-clamp-2 text-xs md:text-sm">
+            <div className="bg-foreground/50 absolute bottom-0 flex w-full flex-col px-2.5 py-1.5 md:px-5 md:py-3">
+               <h2 className="text-background order-2 mb-1 line-clamp-1 text-xs md:order-1 md:line-clamp-2 md:text-sm">
                   {event.title}
                </h2>
-               <div className="order-1 md:order-2 text-background/90 flex flex-col md:flex-row md:items-center justify-between text-xs font-light">
-                  <span className="hidden md:block">{new Date(event.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+               <div className="text-background/90 order-1 flex flex-col justify-between text-xs font-light md:order-2 md:flex-row md:items-center">
+                  <span className="hidden md:block">
+                     {new Date(event.startDate).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                     })}
+                  </span>
                   <span>{daysRemaining} days left</span>
                </div>
             </div>
          </div>
 
          {/* Card Content */}
-         <div className="bg-transparent p-2 md:p-5 backdrop-blur-2xl">
-            <div className="text-foreground md:mb-2 flex items-center gap-1 text-xs font-bold md:text-sm">
-                  <MapPin className="size-3.5 md:size-4" />
-                  <span className="line-clamp-1">{event.location.split(",")[0]}</span>
+         <div className="bg-transparent p-2 backdrop-blur-2xl md:p-5">
+            <div className="text-foreground flex items-center gap-1 text-xs font-bold md:mb-2 md:text-sm">
+               <MapPin className="size-3.5 md:size-4" />
+               <span className="line-clamp-1">
+                  {event.location.split(",")[0]}
+               </span>
             </div>
             {Array.isArray(event.category) && (
-               <div className="flex-wrap gap-1 md:gap-2 hidden md:flex">
+               <div className="hidden flex-wrap gap-1 md:flex md:gap-2">
                   {event.category.slice(0, 2).map((cat: string) => (
                      <Badge
                         key={cat}

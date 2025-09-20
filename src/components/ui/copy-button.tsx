@@ -37,7 +37,8 @@ export default function CopyButton({
    const variantClasses = {
       default: "bg-gray-100 hover:bg-gray-200 text-foreground",
       ghost: "bg-transparent hover:transparent text-foreground",
-      outline: "bg-white border border-gray-300 hover:bg-gray-50 text-foreground",
+      outline:
+         "bg-white border border-gray-300 hover:bg-gray-50 text-foreground",
    };
 
    const iconSize = {

@@ -25,7 +25,7 @@ export default async function HomePage() {
             <h1 className="mb-2 text-xl font-bold uppercase md:mb-6 md:text-3xl lg:text-4xl">
                Upcoming Events
             </h1>
-            <div className="grid gap-4 grid-cols-2 md:gap-10 md:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-10">
                {events.map((event) => (
                   <EventCard key={event.id} event={event} />
                ))}

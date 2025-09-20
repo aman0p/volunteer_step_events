@@ -219,9 +219,7 @@ export default async function VolunteerDetailsPage({
                         <label className="text-muted-foreground text-sm font-medium">
                            Volunteer ID
                         </label>
-                        <p className="text-sm">
-                           {volunteer.id}
-                        </p>
+                        <p className="text-sm">{volunteer.id}</p>
                      </div>
                   </div>
 

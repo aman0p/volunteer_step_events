@@ -47,16 +47,16 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
    }
 
    return (
-         <Providers session={session || undefined}>
-            <div className="fixed inset-0 z-[-1] bg-[url('/default/gradient-background.svg')] bg-cover bg-center opacity-80" />
-            <div className="font-noto-sans mx-auto flex h-full w-full flex-col items-center justify-center">
-               {session && (
-                  <ProfileCompletionBanner className="sticky top-0 w-full" />
-               )}
-               <Navbar session={session} />
-               <div className="w-full">{children}</div>
-            </div>
-         </Providers>
+      <Providers session={session || undefined}>
+         <div className="fixed inset-0 z-[-1] bg-[url('/default/gradient-background.svg')] bg-cover bg-center opacity-80" />
+         <div className="font-noto-sans mx-auto flex h-full w-full flex-col items-center justify-center">
+            {session && (
+               <ProfileCompletionBanner className="sticky top-0 w-full" />
+            )}
+            <Navbar session={session} />
+            <div className="w-full">{children}</div>
+         </div>
+      </Providers>
    );
 };
 

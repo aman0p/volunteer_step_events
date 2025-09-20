@@ -52,12 +52,14 @@ export default function EventRolesTable({
    }
 
    return (
-      <Card className={`w-full backdrop-blur-2xl bg-transparent overflow-hidden ${className || ""}`}>
+      <Card
+         className={`w-full overflow-hidden bg-transparent backdrop-blur-2xl ${className || ""}`}
+      >
          <CardContent className="p-0">
             <div className="overflow-x-auto">
                <Table className="min-w-[700px]">
                   <TableHeader>
-                     <TableRow className="border-y  bg-black/15 pointer-events-none">
+                     <TableRow className="pointer-events-none border-y bg-black/15">
                         <TableHead className="min-w-[80px] text-center font-semibold">
                            Actions
                         </TableHead>

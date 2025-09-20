@@ -55,14 +55,12 @@ export default function Profile() {
                className="flex flex-col gap-5 bg-transparent"
             >
                <div className="flex items-center justify-between gap-2">
-                  <h2 className="text-xl uppercase font-bold md:text-2xl lg:text-3xl">
+                  <h2 className="text-xl font-bold uppercase md:text-2xl lg:text-3xl">
                      Update Profile
                   </h2>
                   <div className="flex items-center gap-2">
                      {isVerified ? (
-                        <Button
-                           className="bg-green-600 pointer-events-none"
-                        >
+                        <Button className="pointer-events-none bg-green-600">
                            <UserCheck className="mr-2 h-4 w-4" />
                            Verified
                         </Button>
@@ -214,11 +212,11 @@ export default function Profile() {
                         name={"fullName"}
                         render={({ field }) => (
                            <FormItem className="flex flex-col gap-1">
-                              <FormLabel className="ml-0.5 block text-xs font-medium text-muted-background capitalize">
+                              <FormLabel className="text-muted-background ml-0.5 block text-xs font-medium capitalize">
                                  Full Name
                               </FormLabel>
                               <FormControl>
-                                 <div className="w-full rounded-md bg-white/50 border-2 border-white border-dashed">
+                                 <div className="w-full rounded-md border-2 border-dashed border-white bg-white/50">
                                     <Input
                                        required
                                        placeholder="Your full name"
@@ -235,10 +233,10 @@ export default function Profile() {
 
                      <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-[1fr_1.5fr_1fr_1.5fr]">
                         <div className="flex w-full flex-col gap-1">
-                           <FormLabel className="ml-0.5 block text-xs font-medium text-muted-background capitalize">
+                           <FormLabel className="text-muted-background ml-0.5 block text-xs font-medium capitalize">
                               Role
                            </FormLabel>
-                           <div className="w-full rounded-md bg-white/50 border-2 border-white overflow-hidden border-dashed">
+                           <div className="w-full overflow-hidden rounded-md border-2 border-dashed border-white bg-white/50">
                               <Input
                                  value={role}
                                  readOnly
@@ -252,13 +250,13 @@ export default function Profile() {
                            name={"phoneNumber"}
                            render={({ field }) => (
                               <FormItem className="flex w-full flex-col gap-1">
-                                 <FormLabel className="ml-0.5 block text-xs font-medium text-muted-background capitalize">
+                                 <FormLabel className="text-muted-background ml-0.5 block text-xs font-medium capitalize">
                                     Phone Number
                                  </FormLabel>
                                  <FormControl>
-                                    <div className="w-full rounded-md bg-white/50 border-2 border-white overflow-hidden border-dashed">
+                                    <div className="w-full overflow-hidden rounded-md border-2 border-dashed border-white bg-white/50">
                                        <div className="flex w-full items-center">
-                                          <span className="border-r bg-zinc-900 px-3 py-2 text-sm text-background select-none">
+                                          <span className="text-background border-r bg-zinc-900 px-3 py-2 text-sm select-none">
                                              +91
                                           </span>
                                           <Input
@@ -280,11 +278,11 @@ export default function Profile() {
                            name={"gender"}
                            render={({ field }) => (
                               <FormItem className="flex w-full flex-col gap-1">
-                                 <FormLabel className="ml-0.5 block text-xs font-medium text-muted-background capitalize">
+                                 <FormLabel className="text-muted-background ml-0.5 block text-xs font-medium capitalize">
                                     Gender
                                  </FormLabel>
                                  <FormControl>
-                                    <div className="w-full rounded-md bg-white/50 border-2 border-white overflow-hidden border-dashed">
+                                    <div className="w-full overflow-hidden rounded-md border-2 border-dashed border-white bg-white/50">
                                        <Input
                                           {...field}
                                           readOnly
@@ -305,11 +303,11 @@ export default function Profile() {
                            name={"govIdType"}
                            render={({ field }) => (
                               <FormItem className="flex w-full flex-col gap-1">
-                                 <FormLabel className="ml-0.5 block text-xs font-medium text-muted-background capitalize">
+                                 <FormLabel className="text-muted-background ml-0.5 block text-xs font-medium capitalize">
                                     Government ID Type
                                  </FormLabel>
                                  <FormControl>
-                                    <div className="w-full rounded-md bg-white/50 border-2 border-white overflow-hidden border-dashed">
+                                    <div className="w-full overflow-hidden rounded-md border-2 border-dashed border-white bg-white/50">
                                        <select
                                           value={field.value || ""}
                                           onChange={(e) =>
@@ -348,11 +346,11 @@ export default function Profile() {
                         name={"address"}
                         render={({ field }) => (
                            <FormItem className="flex flex-col gap-1">
-                              <FormLabel className="ml-0.5 block text-xs font-medium text-muted-background capitalize">
+                              <FormLabel className="text-muted-background ml-0.5 block text-xs font-medium capitalize">
                                  Address
                               </FormLabel>
                               <FormControl>
-                                 <div className="w-full rounded-md bg-white/50 border-2 border-white overflow-hidden border-dashed">
+                                 <div className="w-full overflow-hidden rounded-md border-2 border-dashed border-white bg-white/50">
                                     <Textarea
                                        placeholder="Your address"
                                        {...field}
@@ -413,11 +411,11 @@ export default function Profile() {
 
                            return (
                               <FormItem className="flex w-full flex-col gap-1">
-                                 <FormLabel className="ml-0.5 block text-xs font-medium text-muted-background capitalize">
+                                 <FormLabel className="text-muted-background ml-0.5 block text-xs font-medium capitalize">
                                     Skills (press Enter to add, max 10)
                                  </FormLabel>
                                  <FormControl>
-                                    <div className="flex h-10 w-full flex-wrap items-center justify-center gap-2 rounded-md bg-white/50 border-2 border-white overflow-hidden border-dashed px-2 text-sm">
+                                    <div className="flex h-10 w-full flex-wrap items-center justify-center gap-2 overflow-hidden rounded-md border-2 border-dashed border-white bg-white/50 px-2 text-sm">
                                        {(Array.isArray(field.value)
                                           ? field.value
                                           : []
@@ -465,13 +463,13 @@ export default function Profile() {
                      />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-5 lg:w-[380px]">
+                  <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:w-[380px] lg:grid-cols-1">
                      <FormField
                         control={form.control}
                         name={"profileImage"}
                         render={({ field }) => (
                            <FormItem className="flex flex-col gap-1">
-                              <FormLabel className="ml-0.5 block text-xs font-medium text-muted-background capitalize">
+                              <FormLabel className="text-muted-background ml-0.5 block text-xs font-medium capitalize">
                                  Profile Image
                               </FormLabel>
                               <div>
@@ -486,7 +484,7 @@ export default function Profile() {
                                           onFileChange={field.onChange}
                                           value={field.value}
                                           objectFit="cover"
-                                          className="aspect-video h-full w-full overflow-hidden rounded-md object-top bg-white/50 border-2 border-white border-dashed"
+                                          className="aspect-video h-full w-full overflow-hidden rounded-md border-2 border-dashed border-white bg-white/50 object-top"
                                        />
                                     </div>
                                  </FormControl>
@@ -501,7 +499,7 @@ export default function Profile() {
                         name={"govIdImage"}
                         render={({ field }) => (
                            <FormItem className="flex flex-col gap-1">
-                              <FormLabel className="ml-0.5 block text-xs font-medium text-muted-background capitalize">
+                              <FormLabel className="text-muted-background ml-0.5 block text-xs font-medium capitalize">
                                  Government ID Image
                               </FormLabel>
                               <div>
@@ -516,7 +514,7 @@ export default function Profile() {
                                           onFileChange={field.onChange}
                                           value={field.value}
                                           objectFit="cover"
-                                          className="aspect-video bg-white/50 border-2 border-white border-dashed h-full w-full overflow-hidden rounded-md"
+                                          className="aspect-video h-full w-full overflow-hidden rounded-md border-2 border-dashed border-white bg-white/50"
                                           disabled={!!field.value}
                                        />
                                     </div>

@@ -178,8 +178,8 @@ export function AuthForm<T extends FieldValues>({
                         </SelectContent>
                      </Select>
                   ) : fieldName === "phoneNumber" ? (
-                     <div className="inline-flex w-full items-center rounded-md overflow-hidden">
-                                          <span className="border-r bg-zinc-900 px-3 py-2 text-sm text-background select-none">
+                     <div className="inline-flex w-full items-center overflow-hidden rounded-md">
+                        <span className="text-background border-r bg-zinc-900 px-3 py-2 text-sm select-none">
                            +91
                         </span>
                         <Input
@@ -249,7 +249,7 @@ export function AuthForm<T extends FieldValues>({
             }}
          />
          <div
-            className={`bg-card/5 shadow-foreground/20 mx-4 grid h-fit grid-cols-2 overflow-hidden rounded-3xl shadow-lg border border-background/30 backdrop-blur-2xl max-md:grid-cols-1 md:w-full ${isSignIn ? "max-w-4xl" : "max-w-5xl"}`}
+            className={`bg-card/5 shadow-foreground/20 border-background/30 mx-4 grid h-fit grid-cols-2 overflow-hidden rounded-3xl border shadow-lg backdrop-blur-2xl max-md:grid-cols-1 md:w-full ${isSignIn ? "max-w-4xl" : "max-w-5xl"}`}
          >
             <div className="flex h-full flex-col justify-start gap-7 rounded-lg p-4 md:w-full md:p-8 md:pl-12">
                <div className="flex items-center gap-2">
@@ -312,7 +312,7 @@ export function AuthForm<T extends FieldValues>({
                </Form>
             </div>
 
-            <div className="hidden md:block bg-muted h-full w-full">
+            <div className="bg-muted hidden h-full w-full md:block">
                <Image
                   src="/default/corporate-event-organizer.jpg"
                   alt="auth image"

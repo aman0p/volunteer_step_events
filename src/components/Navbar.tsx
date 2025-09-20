@@ -41,7 +41,7 @@ export function Navbar({ session }: { session: Session | null }) {
    }) => (
       <Link
          href={href}
-         className={`hover:font-bold rounded-md px-3 py-2 transition-colors ${className}`}
+         className={`rounded-md px-3 py-2 transition-colors hover:font-bold ${className}`}
       >
          {children}
       </Link>
@@ -79,7 +79,7 @@ export function Navbar({ session }: { session: Session | null }) {
                         session.user.role === "ORGANIZER") && (
                         <NavLink
                            href="/admin"
-                           className="text-blue-600 font-medium"
+                           className="font-medium text-blue-600"
                         >
                            Admin Panel
                         </NavLink>
@@ -111,9 +111,9 @@ export function Navbar({ session }: { session: Session | null }) {
    );
 
    return (
-      <header className="bg-background/30 backdrop-blur-2xl sticky top-2 z-50 w-full shadow-2xl shadow-foreground/30">
+      <header className="bg-background/30 shadow-foreground/30 sticky top-2 z-50 w-full shadow-2xl backdrop-blur-2xl">
          <div className="w-full px-2 sm:px-6 lg:px-8">
-            <div className="flex h-12 md:h-14 w-full items-center justify-between">
+            <div className="flex h-12 w-full items-center justify-between md:h-14">
                {/* Left: Mobile menu + Logo */}
                <div className="flex items-center md:gap-4">
                   <MobileNav />
@@ -145,7 +145,7 @@ export function Navbar({ session }: { session: Session | null }) {
                            session.user.role === "ORGANIZER") && (
                            <NavLink
                               href="/admin"
-                              className="text-blue-600 font-medium"
+                              className="font-medium text-blue-600"
                            >
                               Admin Panel
                            </NavLink>
@@ -155,7 +155,7 @@ export function Navbar({ session }: { session: Session | null }) {
 
                   {/* User Actions */}
                   {session ? (
-                     <div className="flex items-center gap-6 scale-85 md:scale-100">
+                     <div className="flex scale-85 items-center gap-6 md:scale-100">
                         <NotificationDrawer />
 
                         <Link

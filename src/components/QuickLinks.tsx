@@ -25,17 +25,14 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
    const canAccessQuickLinks = isEnrolled || isEventCreator;
 
    return (
-      <div className="relative h-full w-full space-y-5 rounded-xl bg-white/10 px-3 py-5 backdrop-blur-2xl md:rounded-2xl md:p-5 lg:rounded-3xl shadow-foreground/20 hover:shadow-xl shadow-2xl transition-all duration-300">
+      <div className="shadow-foreground/20 relative h-full w-full space-y-5 rounded-xl bg-white/10 px-3 py-5 shadow-2xl backdrop-blur-2xl transition-all duration-300 hover:shadow-xl md:rounded-2xl md:p-5 lg:rounded-3xl">
          <h2 className="text-xl font-bold md:text-2xl">Quick Links</h2>
 
          {/* Lock overlay for non-enrolled users and non-creators */}
          {!canAccessQuickLinks && (
-            <div 
-            className="relative group bg-background/10 text-background group flex items-start gap-4 rounded-xl p-4 transition-all duration-200 hover:border-white/20 hover:bg-white/5 hover:shadow-lg hover:shadow-white/5"
-            
-            >
-               <Lock className="absolute top-10 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-foreground" />
-               </div>
+            <div className="group bg-background/10 text-background group relative flex items-start gap-4 rounded-xl p-4 transition-all duration-200 hover:border-white/20 hover:bg-white/5 hover:shadow-lg hover:shadow-white/5">
+               <Lock className="text-foreground absolute top-10 left-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2" />
+            </div>
          )}
 
          {/* Quick Links Content - Only render actual data for approved users or event creators */}
@@ -46,7 +43,7 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
                   {quickLinks.map((link, index) => (
                      <div
                         key={link.id}
-                        className="group border text-background group relative flex items-start gap-4 rounded-xl p-4 transition-all duration-200 hover:bg-foreground/5 hover:shadow-lg hover:shadow-white/5"
+                        className="group text-background group hover:bg-foreground/5 relative flex items-start gap-4 rounded-xl border p-4 transition-all duration-200 hover:shadow-lg hover:shadow-white/5"
                      >
                         {/* Link number indicator */}
                         <div className="bg-background/30 text-foreground flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold">
@@ -55,14 +52,14 @@ const QuickLinks: React.FC<QuickLinksProps> = ({
 
                         <div className="flex min-w-0 flex-1 flex-col space-y-2">
                            <div className="flex items-center justify-between">
-                              <p className="text-base font-semibold text-foreground transition-colors group-hover:text-foreground/80">
+                              <p className="text-foreground group-hover:text-foreground/80 text-base font-semibold transition-colors">
                                  {link.title}
                               </p>
                               <CopyButton
                                  text={link.url}
                                  size="sm"
                                  variant="ghost"
-                                 className="transition-opacity duration-200 bg-background/30 text-foreground "
+                                 className="bg-background/30 text-foreground transition-opacity duration-200"
                               />
                            </div>
 

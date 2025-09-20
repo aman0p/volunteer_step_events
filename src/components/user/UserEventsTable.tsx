@@ -126,16 +126,19 @@ export function UserEventsTable({ events }: UserEventsProps) {
    const formatDateRange = (startDate: Date, endDate: Date) => {
       const start = new Date(startDate);
       const end = new Date(endDate);
-      
+
       const startMonth = start.toLocaleDateString("en-US", { month: "short" });
       const startDay = start.getDate();
       const endDay = end.getDate();
-      
+
       // If same month, show "Sept 12-14" format
-      if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+      if (
+         start.getMonth() === end.getMonth() &&
+         start.getFullYear() === end.getFullYear()
+      ) {
          return `${startMonth} ${startDay}-${endDay}`;
       }
-      
+
       // If different months, show "Sept 12 - Oct 3" format
       const endMonth = end.toLocaleDateString("en-US", { month: "short" });
       return `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
@@ -146,7 +149,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
          {/* Top section */}
          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-               <span className="text-muted-background font-medium text-sm md:text-base">
+               <span className="text-muted-background text-sm font-medium md:text-base">
                   {selectedRows.length} of {events.length} selected
                </span>
             </div>
@@ -163,9 +166,9 @@ export function UserEventsTable({ events }: UserEventsProps) {
          </div>
 
          {/* Table */}
-         <div className="rounded-md border backdrop-blur-2xl overflow-hidden">
+         <div className="overflow-hidden rounded-md border backdrop-blur-2xl">
             <Table className="min-w-[900px]">
-               <TableHeader className="border-b border-black bg-black/20 pointer-events-none">
+               <TableHeader className="pointer-events-none border-b border-black bg-black/20">
                   <TableRow>
                      <TableHead className="w-10 min-w-[40px] text-center"></TableHead>
                      <TableHead className="w-10 min-w-[40px] text-center">
@@ -231,8 +234,11 @@ export function UserEventsTable({ events }: UserEventsProps) {
                         <TableCell className="min-w-[160px] text-center">
                            <div className="flex items-center justify-center gap-2">
                               <Calendar className="h-4 w-4 text-gray-500" />
-                              <span className=" text-sm">
-                                 {formatDateRange(event.startDate, event.endDate)}
+                              <span className="text-sm">
+                                 {formatDateRange(
+                                    event.startDate,
+                                    event.endDate
+                                 )}
                               </span>
                            </div>
                         </TableCell>
@@ -248,7 +254,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                            </div>
                         </TableCell>
                         <TableCell className="min-w-[128px] text-center">
-                           <span className="text-muted-background font-medium text-sm">
+                           <span className="text-muted-background text-sm font-medium">
                               {event.maxVolunteers
                                  ? `${event.maxVolunteers} volunteers`
                                  : "Unlimited"}
@@ -315,15 +321,15 @@ export function UserEventsTable({ events }: UserEventsProps) {
 
          {/* Pagination */}
          <div className="flex items-center justify-between py-2">
-            <p className="text-muted-background font-medium text-sm md:text-base">
+            <p className="text-muted-background text-sm font-medium md:text-base">
                {selectedRows.length} of {events.length} row(s) selected
             </p>
-            <div className="flex items-center gap-2 text-muted-background font-medium text-sm md:text-base">
+            <div className="text-muted-background flex items-center gap-2 text-sm font-medium md:text-base">
                <Select
                   value={rowsPerPage.toString()}
                   onValueChange={(value) => setRowsPerPage(parseInt(value))}
                >
-                  <SelectTrigger className="w-[100px] backdrop-blur-2xl text-black font-bold text-sm border-2">
+                  <SelectTrigger className="w-[100px] border-2 text-sm font-bold text-black backdrop-blur-2xl">
                      <SelectValue placeholder="Rows per page" />
                   </SelectTrigger>
                   <SelectContent>
@@ -337,7 +343,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                </span>
                <div className="flex gap-1 backdrop-blur-2xl">
                   <Button
-                  className="aspect-square text-muted-background font-bold text-sm md:text-lg"
+                     className="text-muted-background aspect-square text-sm font-bold md:text-lg"
                      variant="outline"
                      size="sm"
                      onClick={() => setPage(1)}
@@ -346,7 +352,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                      «
                   </Button>
                   <Button
-                  className="aspect-square text-muted-background font-bold text-sm md:text-lg"
+                     className="text-muted-background aspect-square text-sm font-bold md:text-lg"
                      variant="outline"
                      size="sm"
                      onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -355,7 +361,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                      ‹
                   </Button>
                   <Button
-                  className="aspect-square text-muted-background font-bold text-sm md:text-lg"
+                     className="text-muted-background aspect-square text-sm font-bold md:text-lg"
                      variant="outline"
                      size="sm"
                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
@@ -364,7 +370,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                      ›
                   </Button>
                   <Button
-                  className="aspect-square text-muted-background font-bold text-sm md:text-lg"
+                     className="text-muted-background aspect-square text-sm font-bold md:text-lg"
                      variant="outline"
                      size="sm"
                      onClick={() => setPage(totalPages)}
