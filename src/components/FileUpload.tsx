@@ -25,26 +25,11 @@ const getImageKitConfig = () => {
    }
 };
 
-// Legacy authenticator kept for backward compatibility, now unused internally
-// const authenticator = async () => {
-//    const response = await fetch(`${config.env.apiEndpoint}/api/imagekit-auth`);
-//    if (!response.ok) {
-//       const errorText = await response.text();
-//       throw new Error(
-//          `Request failed with status ${response.status}: ${errorText}`
-//       );
-//    }
-//    const data = await response.json();
-//    const { token, expire, signature, publicKey } = data;
-//    return { token, expire, signature, publicKey };
-// };
-
 interface FileUploadProps {
    type: "image" | "video";
    accept: string;
    placeholder: string;
    folder: string;
-   variant: "dark" | "light";
    onFileChange: (filePath: string) => void;
    value?: string;
    className?: string;
@@ -61,7 +46,6 @@ const FileUpload = ({
    accept,
    placeholder,
    folder,
-   variant,
    onFileChange,
    value,
    className,
@@ -87,17 +71,11 @@ const FileUpload = ({
    // Get ImageKit config
    const { urlEndpoint } = getImageKitConfig();
 
-   const styles = {
-      button:
-         variant === "dark"
-            ? "bg-dark-300"
-            : "bg-light-600 border-gray-100 border",
-      placeholder:
-         variant === "dark"
-            ? "text-light-100 text-sm"
-            : "text-slate-500 text-sm",
-      text: variant === "dark" ? "text-light-100" : "text-dark-400",
-   };
+   // const styles = {
+   //    button: "bg-light-600 border-gray-100 border",
+   //    placeholder: "text-foreground text-sm",
+   //    text: "text-dark-400",
+   // };
 
    const onError = (error: Error) => {
       console.error("File upload error:", error);
@@ -184,10 +162,7 @@ const FileUpload = ({
          {!file.filePath ? (
             <Button
                className={cn(
-                  "relative flex min-h-9 w-full items-center justify-center gap-1.5 overflow-hidden rounded-md border border-gray-200 bg-white text-sm shadow-xs transition-all duration-200 focus:outline-none",
-                  styles.button,
-                  className
-               )}
+                  "relative flex min-h-9 w-full items-center justify-center gap-1.5 overflow-hidden rounded-md border border-gray-200 bg-white text-sm shadow-xs font-light transition-all duration-200 focus:outline-none", className)}
                onClick={(e) => {
                   e.preventDefault();
                   if (fileInputRef.current && !disabled) {
@@ -218,7 +193,7 @@ const FileUpload = ({
                   className="relative z-9 object-contain"
                />
 
-               <p className={cn("relative z-9 text-sm", styles.placeholder)}>
+               <p className={cn("relative z-9 text-sm text-foreground")}>
                   {isUploading
                      ? `${progress}% Uploading...`
                      : disabled
