@@ -253,11 +253,12 @@ export default function EventEnrollmentTable({
                   <TableRow>
                      <TableHead className="w-10 min-w-[40px] text-center">
                         <Checkbox
+                           className="bg-black/50"
                            checked={isAllSelected}
                            onCheckedChange={handleSelectAll}
                         />
                      </TableHead>
-                     <TableHead className="min-w-[150px] text-center">
+                     <TableHead className="min-w-[150px] pl-7">
                         Event Name
                      </TableHead>
                      <TableHead className="min-w-[180px] text-center">
@@ -291,12 +292,12 @@ export default function EventEnrollmentTable({
                               }
                            />
                         </TableCell>
-                        <TableCell className="group min-w-[150px] text-center">
+                        <TableCell className="group min-w-[150px] pl-7">
                            <Link
                               href={`/admin/events/${enrollment.event.id}/details`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="group flex items-center justify-center space-x-2"
+                              className="group flex items-center justify-start space-x-2"
                            >
                               <div className="line-clamp-1 font-medium text-blue-600 hover:text-blue-700">
                                  {enrollment.event.title}

@@ -60,115 +60,127 @@ export default function EventRolesTable({
 
    return (
       <Card
-         className={`w-full overflow-hidden bg-transparent backdrop-blur-2xl ${className || ""}`}
+         className={`h-[60vh] w-full bg-transparent pb-0 backdrop-blur-2xl ${className || ""}`}
       >
-         <CardContent className="p-0">
-            <div className="overflow-x-auto">
-               <Table className="min-w-[700px]">
-                  <TableHeader>
-                     <TableRow className="pointer-events-none border-y bg-black/15">
-                        {showSelection && (
-                           <TableHead className="min-w-[60px] text-center font-semibold">
-                              Select
-                           </TableHead>
-                        )}
-                        <TableHead className="min-w-[80px] text-center font-semibold">
-                           Actions
-                        </TableHead>
-                        <TableHead className="min-w-[150px] text-center font-semibold">
-                           Role Name
-                        </TableHead>
-                        <TableHead className="min-w-[100px] text-center font-semibold">
-                           Volunteers
-                        </TableHead>
-                        <TableHead className="min-w-[200px] text-center font-semibold">
-                           Description
-                        </TableHead>
-                        <TableHead className="min-w-[120px] text-center font-semibold">
-                           Payout (₹)
-                        </TableHead>
-                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                     {eventRoles.map((role) => (
-                        <TableRow key={role.id}>
+         <CardContent className="h-full p-0">
+            <div className="flex h-full flex-col">
+               {/* Fixed Header */}
+               <div className="overflow-x-auto [scrollbar-color:black_gray-100] [scrollbar-width:thin] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-black [&::-webkit-scrollbar-thumb]:hover:bg-black [&::-webkit-scrollbar-track]:bg-gray-100">
+                  <Table className="min-w-[700px]">
+                     <TableHeader>
+                        <TableRow className="pointer-events-none border-y bg-black/15">
                            {showSelection && (
-                              <TableCell className="min-w-[60px] p-4 text-center">
-                                 <RadioGroup
-                                    value={selectedRoleId || ""}
-                                    onValueChange={onRoleSelect}
-                                 >
-                                    <div className="flex items-center justify-center">
-                                       <RadioGroupItem
-                                          value={role.id}
-                                          id={role.id}
-                                          disabled={
-                                             role.enrollments.length >=
-                                             role.maxCount
-                                          }
-                                       />
-                                    </div>
-                                 </RadioGroup>
-                              </TableCell>
+                              <TableHead className="min-w-[60px] text-center font-semibold">
+                                 Select
+                              </TableHead>
                            )}
-                           <TableCell
-                              className="hover:bg-muted/50 min-w-[80px] cursor-pointer p-4 text-center transition-colors"
-                              onClick={() => toggleRow(role.id)}
-                              title={
-                                 expandedRows[role.id]
-                                    ? "Collapse description"
-                                    : "Expand description"
-                              }
-                           >
-                              {expandedRows[role.id] ? (
-                                 <ChevronDown className="text-muted-foreground mx-auto h-4 w-4" />
-                              ) : (
-                                 <ChevronRight className="text-muted-foreground mx-auto h-4 w-4" />
-                              )}
-                           </TableCell>
-                           <TableCell
-                              className="h-24 max-w-[12rem] min-w-[150px] p-4 font-medium"
-                              title={role.name}
-                           >
-                              <div className="leading-relaxed break-words whitespace-normal">
-                                 {expandedRows[role.id] ? (
-                                    <div className="leading-relaxed break-words whitespace-normal">
-                                       {role.name}
-                                    </div>
-                                 ) : (
-                                    <div className="line-clamp-2 leading-relaxed break-words whitespace-normal">
-                                       {role.name}
-                                    </div>
-                                 )}
-                              </div>
-                           </TableCell>
-                           <TableCell className="h-24 min-w-[100px] p-4 text-center">
-                              <span className="font-medium">
-                                 {role.enrollments.length || 0}
-                              </span>
-                              <span className="text-muted-foreground"> / </span>
-                              <span>{role.maxCount}</span>
-                           </TableCell>
-                           <TableCell className="h-24 max-w-[15rem] min-w-[200px] p-4">
-                              <div className="leading-relaxed break-words whitespace-normal">
-                                 {expandedRows[role.id] ? (
-                                    <div className="leading-relaxed break-words whitespace-normal">
-                                       {role.description}
-                                    </div>
-                                 ) : (
-                                    <div className="line-clamp-2 leading-relaxed break-words whitespace-normal">
-                                       {role.description}
-                                    </div>
-                                 )}
-                              </div>
-                           </TableCell>
-                           <TableCell className="h-24 min-w-[120px] p-4 text-center">
-                              {role.payout.toLocaleString("en-IN")}
-                           </TableCell>
+                           <TableHead className="min-w-[80px] text-center font-semibold">
+                              Actions
+                           </TableHead>
+                           <TableHead className="min-w-[150px] pl-5 font-semibold">
+                              Role Name
+                           </TableHead>
+                           <TableHead className="min-w-[100px] text-center font-semibold">
+                              Volunteers
+                           </TableHead>
+                           <TableHead className="min-w-[200px] text-center font-semibold">
+                              Description
+                           </TableHead>
+                           <TableHead className="min-w-[120px] text-center font-semibold">
+                              Payout (₹)
+                           </TableHead>
                         </TableRow>
-                     ))}
-                  </TableBody>
-               </Table>
+                     </TableHeader>
+                  </Table>
+               </div>
+               {/* Scrollable Body */}
+               <div className="flex-1 overflow-x-auto overflow-y-auto [scrollbar-color:black_gray-100] [scrollbar-width:thin] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-black [&::-webkit-scrollbar-thumb]:hover:bg-black [&::-webkit-scrollbar-track]:bg-gray-100">
+                  <Table className="min-w-[700px]">
+                     <TableBody>
+                        {eventRoles.map((role) => (
+                           <TableRow key={role.id}>
+                              {showSelection && (
+                                 <TableCell className="min-w-[60px] p-4 text-center">
+                                    <RadioGroup
+                                       value={selectedRoleId || ""}
+                                       onValueChange={onRoleSelect}
+                                    >
+                                       <div className="flex items-center justify-center">
+                                          <RadioGroupItem
+                                             className="bg-black/10"
+                                             value={role.id}
+                                             id={role.id}
+                                             disabled={
+                                                role.enrollments.length >=
+                                                role.maxCount
+                                             }
+                                          />
+                                       </div>
+                                    </RadioGroup>
+                                 </TableCell>
+                              )}
+                              <TableCell
+                                 className="hover:bg-muted/50 min-w-[80px] cursor-pointer p-4 text-center transition-colors"
+                                 onClick={() => toggleRow(role.id)}
+                                 title={
+                                    expandedRows[role.id]
+                                       ? "Collapse description"
+                                       : "Expand description"
+                                 }
+                              >
+                                 {expandedRows[role.id] ? (
+                                    <ChevronDown className="text-muted-foreground mx-auto h-4 w-4" />
+                                 ) : (
+                                    <ChevronRight className="text-muted-foreground mx-auto h-4 w-4" />
+                                 )}
+                              </TableCell>
+                              <TableCell
+                                 className="h-24 max-w-[12rem] min-w-[150px] p-4 pl-5 font-medium"
+                                 title={role.name}
+                              >
+                                 <div className="leading-relaxed break-words whitespace-normal">
+                                    {expandedRows[role.id] ? (
+                                       <div className="leading-relaxed break-words whitespace-normal">
+                                          {role.name}
+                                       </div>
+                                    ) : (
+                                       <div className="line-clamp-2 leading-relaxed break-words whitespace-normal">
+                                          {role.name}
+                                       </div>
+                                    )}
+                                 </div>
+                              </TableCell>
+                              <TableCell className="h-24 min-w-[100px] p-4 text-center">
+                                 <span className="font-medium">
+                                    {role.enrollments.length || 0}
+                                 </span>
+                                 <span className="text-muted-foreground">
+                                    {" "}
+                                    /{" "}
+                                 </span>
+                                 <span>{role.maxCount}</span>
+                              </TableCell>
+                              <TableCell className="h-24 max-w-[15rem] min-w-[200px] p-4">
+                                 <div className="leading-relaxed break-words whitespace-normal">
+                                    {expandedRows[role.id] ? (
+                                       <div className="leading-relaxed break-words whitespace-normal">
+                                          {role.description}
+                                       </div>
+                                    ) : (
+                                       <div className="line-clamp-2 leading-relaxed break-words whitespace-normal">
+                                          {role.description}
+                                       </div>
+                                    )}
+                                 </div>
+                              </TableCell>
+                              <TableCell className="h-24 min-w-[120px] p-4 text-center">
+                                 {role.payout.toLocaleString("en-IN")}
+                              </TableCell>
+                           </TableRow>
+                        ))}
+                     </TableBody>
+                  </Table>
+               </div>
             </div>
          </CardContent>
       </Card>

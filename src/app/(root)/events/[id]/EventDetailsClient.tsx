@@ -155,7 +155,7 @@ export default function EventDetailsClient({
                         cancellationCount={cancellationCount}
                         className="w-full rounded-lg"
                         selectedRoleId={selectedRoleId}
-                        onRoleSelect={handleRoleSelect}
+                        // onRoleSelect={handleRoleSelect}
                         hasRoles={hasRoles}
                      />
                   </div>

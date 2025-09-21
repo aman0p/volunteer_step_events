@@ -79,13 +79,11 @@ export default function VerificationTable({
       null
    );
 
-   // Filter to only show pending and rejected requests (exclude approved)
+   // Filter to only show pending requests (exclude approved and rejected)
    const filteredRequests = verificationRequests.filter(
-      (req) => req.status !== "APPROVED"
-   );
-   const pendingRequests = filteredRequests.filter(
       (req) => req.status === "PENDING"
    );
+   const pendingRequests = filteredRequests;
    const paginatedData = filteredRequests.slice(
       (page - 1) * rowsPerPage,
       page * rowsPerPage
@@ -102,12 +100,6 @@ export default function VerificationTable({
    };
 
    const handleSelectRow = (id: string, checked: boolean) => {
-      // Only allow selecting pending requests
-      const request = filteredRequests.find((req) => req.id === id);
-      if (request && request.status !== "PENDING") {
-         return;
-      }
-
       if (checked) {
          setSelectedRows((prev) => [...prev, id]);
       } else {
@@ -342,6 +334,7 @@ export default function VerificationTable({
                            <Checkbox
                               checked={isAllSelected}
                               onCheckedChange={handleSelectAll}
+                              className="bg-black/50"
                            />
                         </div>
                      </TableHead>
@@ -381,14 +374,13 @@ export default function VerificationTable({
                                        checked as boolean
                                     )
                                  }
-                                 disabled={request.status !== "PENDING"}
                               />
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[192px]">
+                        <TableCell className="min-w-[192px] pl-7">
                            <Link
-                              href={`/admin/account-verification/${request.id}`}
-                              className="flex items-center space-x-3"
+                              href={`/admin/volunteer/${request.user.id}`}
+                              className="flex items-center justify-start space-x-3"
                            >
                               <div className="flex-shrink-0">
                                  {request.user.profileImage ? (
@@ -405,7 +397,7 @@ export default function VerificationTable({
                                  ) : (
                                     <div className="bg-muted flex h-8 w-8 items-center justify-center rounded-full">
                                        <Link
-                                          href={`/admin/account-verification/${request.id}`}
+                                          href={`/admin/volunteer/${request.user.id}`}
                                           className="text-xs font-medium"
                                        >
                                           {request.user.fullName
@@ -453,46 +445,30 @@ export default function VerificationTable({
                         </TableCell>
                         <TableCell className="min-w-[192px]">
                            <div className="flex justify-center">
-                              {request.status === "PENDING" ? (
-                                 <div className="flex items-center gap-2">
-                                    <Button
-                                       size="sm"
-                                       variant="default"
-                                       onClick={() => handleApprove(request.id)}
-                                       loading={approveProcessingIds.includes(
-                                          request.id
-                                       )}
-                                       className="h-8 w-20 px-2 text-xs"
-                                    >
-                                       Approve
-                                    </Button>
-                                    <Button
-                                       size="sm"
-                                       variant="destructive"
-                                       onClick={() => handleReject(request.id)}
-                                       loading={rejectProcessingIds.includes(
-                                          request.id
-                                       )}
-                                       className="h-8 w-20 px-2 text-xs"
-                                    >
-                                       Reject
-                                    </Button>
-                                 </div>
-                              ) : (
-                                 <div className="flex items-center gap-2">
-                                    <span className="text-sm font-medium text-red-600 dark:text-red-400">
-                                       Rejected
-                                    </span>
-                                    {request.rejectionReason && (
-                                       <span
-                                          className="text-muted-foreground max-w-32 truncate text-xs"
-                                          title={request.rejectionReason}
-                                       >
-                                          Reason: {request.rejectionReason}
-                                       </span>
+                              <div className="flex items-center gap-2">
+                                 <Button
+                                    size="sm"
+                                    variant="default"
+                                    onClick={() => handleApprove(request.id)}
+                                    loading={approveProcessingIds.includes(
+                                       request.id
                                     )}
-                                 </div>
-                              )}
+                                    className="h-8 w-20 px-2 text-xs"
+                                 >
+                                    Approve
+                                 </Button>
+                                 <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    onClick={() => handleReject(request.id)}
+                                    loading={rejectProcessingIds.includes(
+                                       request.id
+                                    )}
+                                    className="h-8 w-20 px-2 text-xs"
+                                 >
+                                    Reject
+                                 </Button>
+                              </div>
                            </div>
                         </TableCell>
                         <TableCell className="min-w-[40px]">
@@ -506,22 +482,20 @@ export default function VerificationTable({
                                  <DropdownMenuContent align="end">
                                     <DropdownMenuItem asChild>
                                        <Link
-                                          href={`/admin/account-verification/${request.id}`}
+                                          href={`/admin/volunteer/${request.user.id}`}
                                        >
                                           <Eye className="mr-2 h-4 w-4" />
                                           View Details
                                        </Link>
                                     </DropdownMenuItem>
-                                    {request.status === "PENDING" && (
-                                       <DropdownMenuItem
-                                          onClick={() =>
-                                             handleRejectWithReason(request.id)
-                                          }
-                                       >
-                                          <XCircle className="mr-2 h-4 w-4" />
-                                          Reject with Reason
-                                       </DropdownMenuItem>
-                                    )}
+                                    <DropdownMenuItem
+                                       onClick={() =>
+                                          handleRejectWithReason(request.id)
+                                       }
+                                    >
+                                       <XCircle className="mr-2 h-4 w-4" />
+                                       Reject with Reason
+                                    </DropdownMenuItem>
                                  </DropdownMenuContent>
                               </DropdownMenu>
                            </div>

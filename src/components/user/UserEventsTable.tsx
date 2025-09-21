@@ -137,7 +137,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                            onCheckedChange={handleSelectAll}
                         />
                      </TableHead>
-                     <TableHead className="w-48 min-w-[192px] text-center">
+                     <TableHead className="w-48 min-w-[192px] pl-7">
                         Event Name
                      </TableHead>
                      <TableHead className="w-32 min-w-[128px] text-center">
@@ -168,10 +168,10 @@ export function UserEventsTable({ events }: UserEventsProps) {
                               }
                            />
                         </TableCell>
-                        <TableCell className="min-w-[192px] text-center">
+                        <TableCell className="min-w-[192px] pl-7">
                            <Link
                               href={`/events/${event.id}`}
-                              className="group flex items-center justify-center space-x-2"
+                              className="group flex items-center justify-start space-x-2"
                            >
                               <div className="line-clamp-1 font-medium text-blue-600 hover:text-blue-700">
                                  {event.title}

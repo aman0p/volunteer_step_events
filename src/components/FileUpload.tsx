@@ -162,7 +162,9 @@ const FileUpload = ({
          {!file.filePath ? (
             <Button
                className={cn(
-                  "relative flex min-h-9 w-full items-center justify-center gap-1.5 overflow-hidden rounded-md border border-gray-200 bg-white text-sm shadow-xs font-light transition-all duration-200 focus:outline-none", className)}
+                  "relative flex min-h-9 w-full items-center justify-center gap-1.5 overflow-hidden rounded-md border border-gray-200 bg-white text-sm font-light shadow-xs transition-all duration-200 focus:outline-none",
+                  className
+               )}
                onClick={(e) => {
                   e.preventDefault();
                   if (fileInputRef.current && !disabled) {
@@ -193,7 +195,7 @@ const FileUpload = ({
                   className="relative z-9 object-contain"
                />
 
-               <p className={cn("relative z-9 text-sm text-foreground")}>
+               <p className={cn("text-foreground relative z-9 text-sm")}>
                   {isUploading
                      ? `${progress}% Uploading...`
                      : disabled

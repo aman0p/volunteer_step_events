@@ -226,7 +226,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                     Event Title
                                  </FormLabel>
                                  <FormControl>
-                                    <div className="w-full rounded-md border border-gray-400 border-dashed">
+                                    <div className="w-full rounded-md border border-dashed border-gray-400">
                                        <Input
                                           required
                                           placeholder="Event title"
@@ -272,7 +272,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                              onBlur={field.onBlur}
                                              name={field.name}
                                              ref={field.ref}
-                                             className="w-full rounded-md border border-gray-400 border-dashed px-3 py-2 text-sm transition-all duration-200"
+                                             className="w-full rounded-md border border-dashed border-gray-400 px-3 py-2 text-sm transition-all duration-200"
                                           />
                                        </div>
                                     </FormControl>
@@ -311,7 +311,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                              onBlur={field.onBlur}
                                              name={field.name}
                                              ref={field.ref}
-                                             className="w-full rounded-md border border-gray-400 border-dashed px-3 py-2 text-sm transition-all duration-200"
+                                             className="w-full rounded-md border border-dashed border-gray-400 px-3 py-2 text-sm transition-all duration-200"
                                           />
                                        </div>
                                     </FormControl>
@@ -330,7 +330,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                        Dress Code
                                     </FormLabel>
                                     <FormControl>
-                                       <div className="w-full rounded-md border border-gray-400 border-dashed">
+                                       <div className="w-full rounded-md border border-dashed border-gray-400">
                                           <Input
                                              placeholder="Dress code"
                                              {...field}
@@ -399,7 +399,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                        Categories (press Enter to add, max 3)
                                     </FormLabel>
                                     <FormControl>
-                                       <div className="flex h-10 w-full flex-wrap items-center justify-center gap-2 rounded-md border border-gray-400 border-dashed px-2 text-sm">
+                                       <div className="flex h-10 w-full flex-wrap items-center justify-center gap-2 rounded-md border border-dashed border-gray-400 px-2 text-sm">
                                           {Array.isArray(field.value) &&
                                              field.value.length > 0 &&
                                              field.value.map((cat) => (
@@ -427,7 +427,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                                 Array.isArray(field.value) &&
                                                 field.value.length >= 3
                                              }
-                                             className="min-w-[160px] flex-1 bg-transparent text-sm outline-none placeholder:pl-1 placeholder:text-foreground"
+                                             className="placeholder:text-foreground min-w-[160px] flex-1 bg-transparent text-sm outline-none placeholder:pl-1"
                                           />
                                        </div>
                                     </FormControl>
@@ -452,7 +452,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                           placeholder="Event description"
                                           {...field}
                                           rows={8}
-                                          className="w-full rounded-md border border-gray-400 border-dashed bg-transparent px-3 py-2 text-sm transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0"
+                                          className="w-full rounded-md border border-dashed border-gray-400 bg-transparent px-3 py-2 text-sm transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0 active:ring-0 active:ring-offset-0"
                                        />
                                     </div>
                                  </FormControl>
@@ -484,7 +484,7 @@ const EventForm = ({ type, ...event }: Props) => {
                               {fields.map((field, index) => (
                                  <div
                                     key={field.id}
-                                    className="space-y-4 rounded-lg border border-gray-400 border-dashed p-4"
+                                    className="space-y-4 rounded-lg border border-dashed border-gray-400 p-4"
                                  >
                                     <div className="mb-4 flex items-center justify-between">
                                        <h4 className="font-medium text-gray-900">
@@ -706,7 +706,7 @@ const EventForm = ({ type, ...event }: Props) => {
                               {quickLinkFields.map((field, index) => (
                                  <div
                                     key={field.id}
-                                    className="space-y-4 rounded-lg border border-gray-400 border-dashed p-4"
+                                    className="space-y-4 rounded-lg border border-dashed border-gray-400 p-4"
                                  >
                                     <div className="mb-4 flex items-center justify-between">
                                        <h4 className="font-medium text-gray-900">
@@ -840,7 +840,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                  </FormLabel>
                                  <div className="">
                                     <FormControl>
-                                       <div className="w-full max-w-[450px] min-w-[310px] rounded-md ">
+                                       <div className="w-full max-w-[450px] min-w-[310px] rounded-md">
                                           <FileUpload
                                              type="image"
                                              accept="image/*"
@@ -848,7 +848,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                              folder="events/covers"
                                              onFileChange={field.onChange}
                                              value={field.value}
-                                             className="aspect-video w-full bg-gray-50 hover:bg-gray-200 h-full max-w-[450px] min-w-[310px] rounded-md border-dashed border-gray-400 object-cover"
+                                             className="aspect-video h-full w-full max-w-[450px] min-w-[310px] rounded-md border-dashed border-gray-400 bg-gray-50 object-cover hover:bg-gray-200"
                                           />
                                        </div>
                                     </FormControl>
@@ -874,7 +874,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                              required
                                              placeholder="Event location"
                                              {...field}
-                                             className="w-full rounded-md border border-gray-400 border-dashed px-3 py-2 text-sm transition-all duration-200"
+                                             className="w-full rounded-md border border-dashed border-gray-400 px-3 py-2 text-sm transition-all duration-200"
                                           />
                                        </div>
                                     </FormControl>
@@ -893,7 +893,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                        Max Volunteers (Auto-calculated)
                                     </FormLabel>
                                     <FormControl>
-                                       <div className="w-full rounded-md bg-gray-50 border border-gray-400 border-dashed">
+                                       <div className="w-full rounded-md border border-dashed border-gray-400 bg-gray-50">
                                           <Input
                                              type="number"
                                              placeholder="Auto-calculated from roles"
@@ -939,7 +939,7 @@ const EventForm = ({ type, ...event }: Props) => {
                                              folder="events/videos"
                                              onFileChange={field.onChange}
                                              value={field.value}
-                                             className="aspect-video w-full bg-gray-50 hover:bg-gray-200 h-full max-w-[450px] min-w-[310px] rounded-md border-dashed border-gray-400 object-cover"
+                                             className="aspect-video h-full w-full max-w-[450px] min-w-[310px] rounded-md border-dashed border-gray-400 bg-gray-50 object-cover hover:bg-gray-200"
                                           />
                                        </div>
                                     </FormControl>
