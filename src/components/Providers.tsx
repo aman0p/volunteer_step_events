@@ -13,7 +13,7 @@ interface ProvidersProps {
 export function Providers({ children, session }: ProvidersProps) {
    return (
       <SessionProvider session={session}>
-         <Toaster />
+         <Toaster position="top-center" />
          {/* <LenisScroll /> */}
          {children}
       </SessionProvider>

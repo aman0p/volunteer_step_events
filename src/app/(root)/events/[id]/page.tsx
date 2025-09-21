@@ -22,7 +22,7 @@ export default async function EventDetailsPage({
          include: {
             enrollments: {
                where: { userId: session.user.id },
-               select: { status: true },
+               select: { status: true, cancellationCount: true },
                take: 1,
             },
             eventRoles: {
@@ -44,7 +44,9 @@ export default async function EventDetailsPage({
       notFound();
    }
 
-   const enrollmentStatus = event.enrollments[0]?.status ?? null;
+   const enrollment = event.enrollments[0];
+   const enrollmentStatus = enrollment?.status ?? null;
+   const cancellationCount = enrollment?.cancellationCount ?? 0;
    const isEnrolled = enrollmentStatus === "APPROVED";
    const isEventCreator = event.createdById === session.user.id;
 
@@ -53,6 +55,7 @@ export default async function EventDetailsPage({
          event={event}
          approvedCount={approvedCount}
          enrollmentStatus={enrollmentStatus}
+         cancellationCount={cancellationCount}
          isEnrolled={isEnrolled}
          isEventCreator={isEventCreator}
       />

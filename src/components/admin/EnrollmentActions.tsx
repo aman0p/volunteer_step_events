@@ -57,17 +57,17 @@ export default function EnrollmentActions({
       <div className="flex gap-2">
          <Button
             onClick={handleApprove}
-            disabled={isLoading}
+            loading={isLoading}
             className="bg-green-500 text-white hover:bg-green-600"
          >
-            {isLoading ? "Approving..." : "Approve"}
+            Approve
          </Button>
          <Button
             onClick={handleReject}
-            disabled={isLoading}
+            loading={isLoading}
             variant="destructive"
          >
-            {isLoading ? "Rejecting..." : "Reject"}
+            Reject
          </Button>
       </div>
    );

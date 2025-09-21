@@ -257,13 +257,21 @@ export default function EventEnrollmentTable({
                            onCheckedChange={handleSelectAll}
                         />
                      </TableHead>
-                     <TableHead className="min-w-[150px] text-center">Event Name</TableHead>
+                     <TableHead className="min-w-[150px] text-center">
+                        Event Name
+                     </TableHead>
                      <TableHead className="min-w-[180px] text-center">
                         Volunteer Name
                      </TableHead>
-                     <TableHead className="min-w-[200px] text-center">Email ID</TableHead>
-                     <TableHead className="min-w-[140px] text-center">Selected Role</TableHead>
-                     <TableHead className="min-w-[160px] text-center">Actions</TableHead>
+                     <TableHead className="min-w-[200px] text-center">
+                        Email ID
+                     </TableHead>
+                     <TableHead className="min-w-[140px] text-center">
+                        Selected Role
+                     </TableHead>
+                     <TableHead className="min-w-[160px] text-center">
+                        Actions
+                     </TableHead>
                   </TableRow>
                </TableHeader>
                <TableBody>
@@ -339,7 +347,7 @@ export default function EventEnrollmentTable({
                               </div>
                            </Link>
                         </TableCell>
-                        <TableCell className="min-w-[200px] text-sm text-center">
+                        <TableCell className="min-w-[200px] text-center text-sm">
                            <div
                               className="line-clamp-1"
                               title={enrollment.user.email}
@@ -347,19 +355,24 @@ export default function EventEnrollmentTable({
                               {enrollment.user.email}
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[140px] text-sm text-center">
+                        <TableCell className="min-w-[140px] text-center text-sm">
                            <div className="line-clamp-1">
                               {enrollment.eventRole ? (
                                  <div>
-                                    <div className="line-clamp-1 font-medium text-foreground">
+                                    <div className="text-foreground line-clamp-1 font-medium">
                                        {enrollment.eventRole.name}
                                     </div>
-                                    <div className="line-clamp-1 text-xs text-muted-foreground">
-                                       ₹{enrollment.eventRole.payout.toLocaleString("en-IN")}
+                                    <div className="text-muted-foreground line-clamp-1 text-xs">
+                                       ₹
+                                       {enrollment.eventRole.payout.toLocaleString(
+                                          "en-IN"
+                                       )}
                                     </div>
                                  </div>
                               ) : (
-                                 <span className="text-muted-foreground">No role selected</span>
+                                 <span className="text-muted-foreground">
+                                    No role selected
+                                 </span>
                               )}
                            </div>
                         </TableCell>

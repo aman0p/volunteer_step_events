@@ -12,11 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { StatusBadge } from "@/components/ui/status-badge";
-import {
-   Calendar,
-   MapPin,
-   ArrowRight,
-} from "lucide-react";
+import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import {
    Select,
    SelectContent,
@@ -49,6 +45,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
    const [page, setPage] = useState(1);
    const [selectedRows, setSelectedRows] = useState<string[]>([]);
    const [rowsPerPage, setRowsPerPage] = useState(10);
+   const [isLoading, setIsLoading] = useState(false);
 
    const paginatedData = events.slice(
       (page - 1) * rowsPerPage,
@@ -72,6 +69,16 @@ export function UserEventsTable({ events }: UserEventsProps) {
       }
    };
 
+   const handleClearSelection = async () => {
+      setIsLoading(true);
+      try {
+         // Simulate any potential async operation
+         await new Promise((resolve) => setTimeout(resolve, 300));
+         setSelectedRows([]);
+      } finally {
+         setIsLoading(false);
+      }
+   };
 
    const formatDateRange = (startDate: Date, endDate: Date) => {
       const start = new Date(startDate);
@@ -107,7 +114,8 @@ export function UserEventsTable({ events }: UserEventsProps) {
                <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setSelectedRows([])}
+                  onClick={handleClearSelection}
+                  loading={isLoading}
                   className="text-xs"
                >
                   Clear Selection
@@ -204,8 +212,8 @@ export function UserEventsTable({ events }: UserEventsProps) {
                                  </span>
                               ) : (
                                  <span className="text-muted-foreground text-sm">
-                                    {event.enrollmentStatus === "NOT_ENROLLED" 
-                                       ? "Not enrolled" 
+                                    {event.enrollmentStatus === "NOT_ENROLLED"
+                                       ? "Not enrolled"
                                        : "No role selected"}
                                  </span>
                               )}
@@ -215,12 +223,15 @@ export function UserEventsTable({ events }: UserEventsProps) {
                            <div className="line-clamp-1">
                               {event.eventRole ? (
                                  <span className="text-sm font-medium text-green-600">
-                                    ₹{event.eventRole.payout.toLocaleString("en-IN")}
+                                    ₹
+                                    {event.eventRole.payout.toLocaleString(
+                                       "en-IN"
+                                    )}
                                  </span>
                               ) : (
                                  <span className="text-muted-foreground text-sm">
-                                    {event.enrollmentStatus === "NOT_ENROLLED" 
-                                       ? "-" 
+                                    {event.enrollmentStatus === "NOT_ENROLLED"
+                                       ? "-"
                                        : "₹0"}
                                  </span>
                               )}

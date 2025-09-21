@@ -20,11 +20,9 @@ import {
 import { Image } from "@imagekit/next";
 import Link from "next/link";
 import config from "@/lib/config";
-import { Badge } from "@/components/ui/badge";
 import VolunteerSearch from "@/components/admin/VolunteerSearch";
 import { GripVertical } from "lucide-react";
 import { Status } from "@/generated/prisma";
-import { EnrollmentWithEvent } from "@/types";
 
 type Volunteer = {
    id: string;
@@ -84,7 +82,6 @@ export default function VolunteerMgmtTable({
       page * rowsPerPage
    );
    const totalPages = Math.ceil(volunteers.length / rowsPerPage);
-
 
    const allowedRoles =
       currentUserRole === "ADMIN"
@@ -146,10 +143,11 @@ export default function VolunteerMgmtTable({
                   variant="default"
                   size="sm"
                   onClick={handleSave}
-                  disabled={isSaving || Object.keys(pendingRoles).length === 0}
+                  disabled={Object.keys(pendingRoles).length === 0}
+                  loading={isSaving}
                   className="order-first w-28 bg-black hover:bg-black/90 md:order-last"
                >
-                  {isSaving ? "Saving..." : "Save changes"}
+                  Save changes
                </Button>
             </div>
          </div>
@@ -160,7 +158,7 @@ export default function VolunteerMgmtTable({
                <TableHeader className="border-b border-black bg-black/10">
                   <TableRow>
                      <TableHead className="w-8 min-w-[32px] text-center"></TableHead>
-                     <TableHead className="w-48 min-w-[192px]  pl-7">
+                     <TableHead className="w-48 min-w-[192px] pl-7">
                         Volunteer
                      </TableHead>
                      <TableHead className="w-48 min-w-[192px] text-center">
@@ -169,8 +167,12 @@ export default function VolunteerMgmtTable({
                      <TableHead className="w-32 min-w-[128px] text-center">
                         Phone
                      </TableHead>
-                     <TableHead className="w-24 min-w-[96px] text-center">Gender</TableHead>
-                     <TableHead className="w-10 min-w-[40px] text-center">Role</TableHead>
+                     <TableHead className="w-24 min-w-[96px] text-center">
+                        Gender
+                     </TableHead>
+                     <TableHead className="w-10 min-w-[40px] text-center">
+                        Role
+                     </TableHead>
                   </TableRow>
                </TableHeader>
                <TableBody>
@@ -245,7 +247,7 @@ export default function VolunteerMgmtTable({
                            </TableCell>
                            <TableCell className="w-24 min-w-[96px]">
                               <div className="flex items-center justify-center">
-                                 <span className="line-clamp-1 text-sm capitalize text-center">
+                                 <span className="line-clamp-1 text-center text-sm capitalize">
                                     {volunteer.gender?.toLowerCase() ||
                                        "Not specified"}
                                  </span>
@@ -255,10 +257,14 @@ export default function VolunteerMgmtTable({
                               <div className="flex justify-center">
                                  <Select
                                     value={
-                                       pendingRoles[volunteer.id] ?? volunteer.role
+                                       pendingRoles[volunteer.id] ??
+                                       volunteer.role
                                     }
                                     onValueChange={(newRole) =>
-                                       handleLocalRoleChange(volunteer.id, newRole)
+                                       handleLocalRoleChange(
+                                          volunteer.id,
+                                          newRole
+                                       )
                                     }
                                  >
                                     <SelectTrigger className="w-full">

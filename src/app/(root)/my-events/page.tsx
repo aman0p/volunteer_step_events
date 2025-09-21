@@ -35,15 +35,15 @@ export default async function VolunteerEventsPage() {
       include: {
          enrollments: {
             where: { userId: session.user.id },
-            select: { 
+            select: {
                status: true,
                eventRole: {
                   select: {
                      id: true,
                      name: true,
                      payout: true,
-                  }
-               }
+                  },
+               },
             },
          },
       },
@@ -62,9 +62,8 @@ export default async function VolunteerEventsPage() {
          event.enrollments.length > 0
             ? event.enrollments[0].status
             : "NOT_ENROLLED",
-      eventRole: event.enrollments.length > 0 
-         ? event.enrollments[0].eventRole 
-         : null,
+      eventRole:
+         event.enrollments.length > 0 ? event.enrollments[0].eventRole : null,
    }));
 
    return (

@@ -64,6 +64,7 @@ const EventForm = ({ type, ...event }: Props) => {
    const router = useRouter();
    const isUpdate = type === "update" && !!event.id;
    const [categoryInput, setCategoryInput] = useState("");
+   const [isSubmitting, setIsSubmitting] = useState(false);
 
    const form = useForm({
       resolver: zodResolver(eventSchema),
@@ -138,47 +139,56 @@ const EventForm = ({ type, ...event }: Props) => {
    const onSubmit: SubmitHandler<z.infer<typeof eventSchema>> = async (
       values
    ) => {
-      // Calculate maxVolunteers from event roles
-      const calculatedMaxVolunteers = fields.reduce((sum, _, index) => {
-         const maxCount = form.watch(`eventRoles.${index}.maxCount`) || 0;
-         return sum + maxCount;
-      }, 0);
+      setIsSubmitting(true);
 
-      // Normalize schema values to match EventParams shape
-      const payload: EventParams = {
-         title: values.title,
-         description: values.description,
-         location: values.location,
-         startDate: values.startDate,
-         endDate: values.endDate,
-         dressCode: values.dressCode,
-         category: values.category,
-         coverUrl: values.coverUrl,
-         videoUrl: values.videoUrl ?? null,
-         eventImages: values.eventImages,
-         maxVolunteers: calculatedMaxVolunteers,
-         createdAt: values.createdAt,
-         updatedAt: values.updatedAt,
-         eventRoles: values.eventRoles,
-         quickLinks: values.quickLinks,
-      };
+      try {
+         // Calculate maxVolunteers from event roles
+         const calculatedMaxVolunteers = fields.reduce((sum, _, index) => {
+            const maxCount = form.watch(`eventRoles.${index}.maxCount`) || 0;
+            return sum + maxCount;
+         }, 0);
 
-      const result =
-         isUpdate && event.id
-            ? await updateEvent(event.id as string, payload)
-            : await createEvent(payload);
+         // Normalize schema values to match EventParams shape
+         const payload: EventParams = {
+            title: values.title,
+            description: values.description,
+            location: values.location,
+            startDate: values.startDate,
+            endDate: values.endDate,
+            dressCode: values.dressCode,
+            category: values.category,
+            coverUrl: values.coverUrl,
+            videoUrl: values.videoUrl ?? null,
+            eventImages: values.eventImages,
+            maxVolunteers: calculatedMaxVolunteers,
+            createdAt: values.createdAt,
+            updatedAt: values.updatedAt,
+            eventRoles: values.eventRoles,
+            quickLinks: values.quickLinks,
+         };
 
-      if (result.success) {
-         toast.success(
-            isUpdate
-               ? "Event updated successfully"
-               : "Event created successfully"
-         );
-         form.reset();
-         router.push(`/admin/events`);
-         router.refresh();
-      } else {
-         toast.error(result.message);
+         const result =
+            isUpdate && event.id
+               ? await updateEvent(event.id as string, payload)
+               : await createEvent(payload);
+
+         if (result.success) {
+            toast.success(
+               isUpdate
+                  ? "Event updated successfully"
+                  : "Event created successfully"
+            );
+            form.reset();
+            router.push(`/admin/events`);
+            router.refresh();
+         } else {
+            toast.error(result.message);
+         }
+      } catch (error) {
+         console.error("Error submitting form:", error);
+         toast.error("An error occurred while saving the event");
+      } finally {
+         setIsSubmitting(false);
       }
    };
 
@@ -197,6 +207,7 @@ const EventForm = ({ type, ...event }: Props) => {
                      {/* Submit Button */}
                      <Button
                         type="submit"
+                        loading={isSubmitting}
                         className="hidden w-fit bg-black text-white md:block"
                      >
                         {isUpdate ? "Update Event" : "Create Event"}
@@ -1021,6 +1032,7 @@ const EventForm = ({ type, ...event }: Props) => {
                <Button
                   type="submit"
                   onClick={form.handleSubmit(onSubmit)}
+                  loading={isSubmitting}
                   className="mt-5 block w-full bg-black text-white md:hidden"
                >
                   {isUpdate ? "Update Event" : "Create Event"}

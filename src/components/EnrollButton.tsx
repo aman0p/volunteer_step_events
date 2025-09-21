@@ -22,9 +22,9 @@ interface EnrollButtonProps {
       | "CANCELLED"
       | "WAITLISTED"
       | null;
+   cancellationCount?: number;
    className?: string;
    selectedRoleId?: string;
-   onRoleSelect?: (roleId: string) => void;
    hasRoles?: boolean;
 }
 
@@ -32,9 +32,9 @@ export default function EnrollButton({
    eventId,
    isFull,
    enrollmentStatus,
+   cancellationCount = 0,
    className,
    selectedRoleId,
-   onRoleSelect,
    hasRoles = false,
 }: EnrollButtonProps) {
    const [isEnrolling, setIsEnrolling] = useState(false);
@@ -45,7 +45,7 @@ export default function EnrollButton({
 
    const handleEnroll = async () => {
       if (isFull || localStatus) return;
-      
+
       // Check if role selection is required but no role is selected
       if (hasRoles && !selectedRoleId) {
          toast.error("Please select a volunteer role before enrolling");
@@ -120,11 +120,11 @@ export default function EnrollButton({
             <Button
                variant="destructive"
                onClick={handleCancel}
-               disabled={isEnrolling}
+               loading={isEnrolling}
                className="w-full"
                title="Cancel your enrollment request"
             >
-               {isEnrolling ? "Cancelling..." : "Cancel Request"}
+               Cancel Request
             </Button>
          </div>
       );
@@ -132,17 +132,36 @@ export default function EnrollButton({
 
    if (localStatus === "REJECTED") {
       return (
-         <Button disabled variant="destructive" className={className}>
-            Enrollment Rejected
-         </Button>
+         <div className="space-y-2">
+            <Button disabled variant="destructive" className={className}>
+               Enrollment Permanently Rejected
+            </Button>
+            {cancellationCount >= 10 && (
+               <p className="text-center text-xs text-red-600">
+                  You have exceeded the maximum cancellation limit (10/10)
+               </p>
+            )}
+         </div>
       );
    }
 
    if (localStatus === "CANCELLED") {
       return (
-         <Button disabled className={className}>
-            Enrollment Cancelled
-         </Button>
+         <div className="space-y-2">
+            <Button disabled className={className}>
+               Enrollment Cancelled
+            </Button>
+            {cancellationCount > 0 && (
+               <p className="text-center text-xs text-amber-600">
+                  Cancellations: {cancellationCount}/10
+                  {cancellationCount >= 7 && (
+                     <span className="block font-semibold">
+                        Warning: You&apos;re approaching the limit!
+                     </span>
+                  )}
+               </p>
+            )}
+         </div>
       );
    }
 
@@ -203,22 +222,34 @@ export default function EnrollButton({
    // Only show enroll button for VOLUNTEER role
    if (session.user.role === "VOLUNTEER") {
       const isRoleRequired = hasRoles && !selectedRoleId;
-      
+
       return (
-         <Button
-            onClick={handleEnroll}
-            disabled={isEnrolling || isRoleRequired}
-            variant="default"
-            className={className}
-            title={isRoleRequired ? "Please select a volunteer role first" : undefined}
-         >
-            {isEnrolling 
-               ? "Enrolling..." 
-               : isRoleRequired 
-                  ? "Select a Role First" 
-                  : "Enroll as Volunteer"
-            }
-         </Button>
+         <div className="space-y-2">
+            <Button
+               onClick={handleEnroll}
+               disabled={isRoleRequired}
+               loading={isEnrolling}
+               variant="default"
+               className={className}
+               title={
+                  isRoleRequired
+                     ? "Please select a volunteer role first"
+                     : undefined
+               }
+            >
+               {isRoleRequired ? "Select a Role First" : "Enroll as Volunteer"}
+            </Button>
+            {cancellationCount > 0 && cancellationCount < 10 && (
+               <p className="text-center text-xs text-amber-600">
+                  Previous cancellations: {cancellationCount}/10
+                  {cancellationCount >= 7 && (
+                     <span className="block font-semibold">
+                        Warning: You&apos;re approaching the limit!
+                     </span>
+                  )}
+               </p>
+            )}
+         </div>
       );
    }
 

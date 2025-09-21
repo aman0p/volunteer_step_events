@@ -7,7 +7,10 @@ import { notifyAdminsOnEnrollmentApplication } from "@/lib/actions/admin/notific
 import { NotificationType, Status } from "@/generated/prisma";
 import { revalidatePath } from "next/cache";
 
-export const requestEnrollment = async (eventId: string, eventRoleId?: string) => {
+export const requestEnrollment = async (
+   eventId: string,
+   eventRoleId?: string
+) => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
@@ -39,7 +42,10 @@ export const requestEnrollment = async (eventId: string, eventRoleId?: string) =
       }
 
       if (eventRole.eventId !== eventId) {
-         return { success: false, message: "Selected role does not belong to this event" };
+         return {
+            success: false,
+            message: "Selected role does not belong to this event",
+         };
       }
    }
 
@@ -50,11 +56,19 @@ export const requestEnrollment = async (eventId: string, eventRoleId?: string) =
       });
 
       if (existing) {
-         if (
-            existing.status === "CANCELLED" &&
-            (existing as { cancellationCount: number }).cancellationCount === 1
-         ) {
-            // Allow one-time reapply by flipping back to PENDING on the same record
+         const cancellationCount =
+            (existing as { cancellationCount: number }).cancellationCount ?? 0;
+
+         if (existing.status === "REJECTED" && cancellationCount >= 10) {
+            return {
+               success: false,
+               message:
+                  "You have exceeded the maximum cancellation limit (10). You cannot re-enroll in this event.",
+            };
+         }
+
+         if (existing.status === "CANCELLED" && cancellationCount < 10) {
+            // Allow reapply by flipping back to PENDING on the same record
             await prisma.enrollment.update({
                where: { id: existing.id },
                data: { status: Status.PENDING, cancelledAt: null },
@@ -72,10 +86,20 @@ export const requestEnrollment = async (eventId: string, eventRoleId?: string) =
                success: true,
                message: "Enrollment request sent successfully",
             };
-         } else {
+         } else if (
+            existing.status === "PENDING" ||
+            existing.status === "APPROVED" ||
+            existing.status === "WAITLISTED"
+         ) {
             return {
                success: false,
                message: "Already enrolled in this event",
+            };
+         } else {
+            return {
+               success: false,
+               message:
+                  "You have exceeded the maximum cancellation limit (10). You cannot re-enroll in this event.",
             };
          }
       }
@@ -104,8 +128,12 @@ export const requestEnrollment = async (eventId: string, eventRoleId?: string) =
             userId: session.user.id,
             status: "PENDING",
             eventRoleId: eventRoleId || null,
-            payoutAmount: eventRoleId ? 
-               (await prisma.eventRole.findUnique({ where: { id: eventRoleId } }))?.payout || null 
+            payoutAmount: eventRoleId
+               ? (
+                    await prisma.eventRole.findUnique({
+                       where: { id: eventRoleId },
+                    })
+                 )?.payout || null
                : null,
          },
       });
@@ -152,21 +180,12 @@ export const cancelEnrollment = async (eventId: string) => {
       const currentCount =
          (existing as { cancellationCount: number }).cancellationCount ?? 0;
       const nextCount = currentCount + 1;
-      const nextStatus = nextCount >= 2 ? Status.REJECTED : Status.CANCELLED;
+      const nextStatus = nextCount >= 10 ? Status.REJECTED : Status.CANCELLED;
 
       await prisma.enrollment.update({
          where: { id: existing.id },
          data: {
             status: nextStatus,
-            cancelledAt: new Date(),
-            cancellationCount: nextCount,
-         },
-      });
-
-      await prisma.enrollment.update({
-         where: { id: existing.id },
-         data: {
-            status: Status.CANCELLED,
             cancelledAt: new Date(),
             cancellationCount: nextCount,
          },
@@ -186,8 +205,8 @@ export const cancelEnrollment = async (eventId: string) => {
                   : "Enrollment Cancelled",
             message:
                nextStatus === Status.REJECTED
-                  ? "You cancelled twice. Your enrollment is now rejected."
-                  : "You have cancelled your enrollment request.",
+                  ? `You have cancelled ${nextCount} times. You have exceeded the maximum cancellation limit (10) and your enrollment is now permanently rejected.`
+                  : `You have cancelled your enrollment request. (${nextCount}/10 cancellations)`,
             relatedEventId: eventId,
             relatedEnrollmentId: existing.id,
          },
@@ -199,8 +218,8 @@ export const cancelEnrollment = async (eventId: string) => {
          nextStatus,
          message:
             nextStatus === Status.REJECTED
-               ? "Enrollment rejected due to repeated cancellation"
-               : "Enrollment cancelled",
+               ? `Enrollment permanently rejected due to exceeding cancellation limit (${nextCount}/10)`
+               : `Enrollment cancelled (${nextCount}/10 cancellations)`,
       };
    } catch (error) {
       console.error("Cancel error:", error);

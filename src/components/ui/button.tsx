@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Loader2 } from "lucide-react";
+import { PiSpinner } from "react-icons/pi";
 
 import { cn } from "@/lib/utils";
 
@@ -59,7 +59,7 @@ function Button({
          disabled={loading || props.disabled}
          {...props}
       >
-         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : children}
+         {loading ? <PiSpinner className="h-4 w-4 animate-spin" /> : children}
       </Comp>
    );
 }

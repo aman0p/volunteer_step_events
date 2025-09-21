@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Image as IKImage, Video as IKVideo } from "@imagekit/next";
 import useSingleFileUpload from "@/hooks/useSingleFileUpload";
+import { Button } from "@/components/ui/button";
 
 // Get ImageKit config - handle potential undefined values
 const getImageKitConfig = () => {
@@ -181,12 +182,11 @@ const FileUpload = ({
          />
 
          {!file.filePath ? (
-            <button
+            <Button
                className={cn(
                   "relative flex min-h-9 w-full items-center justify-center gap-1.5 overflow-hidden rounded-md border border-gray-200 bg-white text-sm shadow-xs transition-all duration-200 focus:outline-none",
                   styles.button,
-                  className,
-                  disabled && "cursor-not-allowed bg-gray-100 opacity-50"
+                  className
                )}
                onClick={(e) => {
                   e.preventDefault();
@@ -195,6 +195,7 @@ const FileUpload = ({
                   }
                }}
                disabled={isUploading || disabled}
+               loading={isUploading}
             >
                {/* Progress bar background */}
                {isUploading && (
@@ -224,7 +225,7 @@ const FileUpload = ({
                        ? "File uploaded - cannot be changed"
                        : placeholder}
                </p>
-            </button>
+            </Button>
          ) : (
             <div className={cn("relative", className)}>
                <div

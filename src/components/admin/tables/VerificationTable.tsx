@@ -376,7 +376,10 @@ export default function VerificationTable({
                               <Checkbox
                                  checked={selectedRows.includes(request.id)}
                                  onCheckedChange={(checked) =>
-                                    handleSelectRow(request.id, checked as boolean)
+                                    handleSelectRow(
+                                       request.id,
+                                       checked as boolean
+                                    )
                                  }
                                  disabled={request.status !== "PENDING"}
                               />
@@ -423,7 +426,10 @@ export default function VerificationTable({
                         </TableCell>
                         <TableCell className="min-w-[120px] text-sm">
                            <div className="flex items-center justify-center">
-                              <div className="line-clamp-1 text-center" title={request.user.email}>
+                              <div
+                                 className="line-clamp-1 text-center"
+                                 title={request.user.email}
+                              >
                                  {request.user.email}
                               </div>
                            </div>
@@ -497,27 +503,27 @@ export default function VerificationTable({
                                        <MoreHorizontal className="h-4 w-4" />
                                     </Button>
                                  </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                 <DropdownMenuItem asChild>
-                                    <Link
-                                       href={`/admin/account-verification/${request.id}`}
-                                    >
-                                       <Eye className="mr-2 h-4 w-4" />
-                                       View Details
-                                    </Link>
-                                 </DropdownMenuItem>
-                                 {request.status === "PENDING" && (
-                                    <DropdownMenuItem
-                                       onClick={() =>
-                                          handleRejectWithReason(request.id)
-                                       }
-                                    >
-                                       <XCircle className="mr-2 h-4 w-4" />
-                                       Reject with Reason
+                                 <DropdownMenuContent align="end">
+                                    <DropdownMenuItem asChild>
+                                       <Link
+                                          href={`/admin/account-verification/${request.id}`}
+                                       >
+                                          <Eye className="mr-2 h-4 w-4" />
+                                          View Details
+                                       </Link>
                                     </DropdownMenuItem>
-                                 )}
-                              </DropdownMenuContent>
-                           </DropdownMenu>
+                                    {request.status === "PENDING" && (
+                                       <DropdownMenuItem
+                                          onClick={() =>
+                                             handleRejectWithReason(request.id)
+                                          }
+                                       >
+                                          <XCircle className="mr-2 h-4 w-4" />
+                                          Reject with Reason
+                                       </DropdownMenuItem>
+                                    )}
+                                 </DropdownMenuContent>
+                              </DropdownMenu>
                            </div>
                         </TableCell>
                      </TableRow>

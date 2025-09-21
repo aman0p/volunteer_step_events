@@ -44,9 +44,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
       statusConfig["NOT_ENROLLED"];
 
    return (
-      <Badge
-         className={`${config.className} ${className || ""}`}
-      >
+      <Badge className={`${config.className} ${className || ""}`}>
          {config.label}
       </Badge>
    );

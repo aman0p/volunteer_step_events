@@ -38,7 +38,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
    const hasItems = notifications.length > 0;
 
    return (
-      <div className={cn("relative z-50", className)}>
+      <div className={cn("relative", className)}>
          <button onClick={() => setOpen(true)} aria-label="Open notifications">
             <NotificationBell count={unreadCount} />
          </button>
@@ -48,7 +48,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
             {open && (
                <motion.div
                   key="overlay"
-                  className="fixed inset-0 z-40 bg-black/50"
+                  className="fixed inset-0 z-40 h-screen"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -62,7 +62,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
             {open && (
                <motion.aside
                   key="drawer"
-                  className="fixed top-0 right-0 z-50 h-full w-[92%] rounded-l-3xl border-l border-white/15 bg-white/50 shadow-xl backdrop-blur-md sm:w-[460px] dark:bg-neutral-950"
+                  className="fixed top-[-8] right-0 z-[60] flex h-screen w-[90%] flex-col overflow-hidden scroll-smooth rounded-l-2xl border border-white/15 bg-white shadow-xl md:w-[30%] lg:rounded-l-3xl"
                   initial={{ x: "100%" }}
                   animate={{ x: 0 }}
                   exit={{ x: "100%" }}
@@ -119,7 +119,7 @@ export function NotificationDrawer({ className }: { className?: string }) {
                      </div>
                   </div>
 
-                  <div className="h-full overflow-y-auto p-3">
+                  <div className="bg-foreground/20 scrollbar-hide flex-1 overflow-y-auto p-3">
                      {!hasItems && (
                         <div className="text-muted-foreground py-10 text-center text-sm">
                            You have no notifications.

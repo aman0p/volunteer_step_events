@@ -74,6 +74,9 @@ export default function EventEnrollmentTable({
    const [page, setPage] = useState(1);
    const [rowsPerPage, setRowsPerPage] = useState(10);
    const [statusFilter, setStatusFilter] = useState<string>("ALL");
+   const [loadingEnrollments, setLoadingEnrollments] = useState<Set<string>>(
+      new Set()
+   );
    const router = useRouter();
    const formatDate = (date: Date) => {
       return new Intl.DateTimeFormat("en-US", {
@@ -149,6 +152,24 @@ export default function EventEnrollmentTable({
          .length,
       CANCELLED: enrollments.filter((e) => e.status === Status.CANCELLED)
          .length,
+   };
+
+   const handleApprove = async (enrollmentId: string) => {
+      setLoadingEnrollments((prev) => new Set(prev).add(enrollmentId));
+      try {
+         // TODO: Implement approve enrollment API call
+         console.log("Approving enrollment:", enrollmentId);
+         // Simulate API call
+         await new Promise((resolve) => setTimeout(resolve, 1000));
+      } catch (error) {
+         console.error("Error approving enrollment:", error);
+      } finally {
+         setLoadingEnrollments((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(enrollmentId);
+            return newSet;
+         });
+      }
    };
 
    return (
@@ -421,6 +442,10 @@ export default function EventEnrollmentTable({
                                     variant="default"
                                     size="sm"
                                     className="w-full bg-green-600 hover:bg-green-700"
+                                    onClick={() => handleApprove(enrollment.id)}
+                                    loading={loadingEnrollments.has(
+                                       enrollment.id
+                                    )}
                                  >
                                     Approve
                                  </Button>

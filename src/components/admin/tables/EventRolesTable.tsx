@@ -102,7 +102,10 @@ export default function EventRolesTable({
                                        <RadioGroupItem
                                           value={role.id}
                                           id={role.id}
-                                          disabled={role.enrollments.length >= role.maxCount}
+                                          disabled={
+                                             role.enrollments.length >=
+                                             role.maxCount
+                                          }
                                        />
                                     </div>
                                  </RadioGroup>

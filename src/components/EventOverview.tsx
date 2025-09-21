@@ -168,10 +168,10 @@ export default function EventOverview({
       return (
          <Button
             onClick={() => handleEnroll(events[0].id)}
-            disabled={isEnrolling}
+            loading={isEnrolling}
             className="flex w-40 cursor-pointer items-center gap-2 bg-black px-10 py-5 text-white hover:bg-gray-800"
          >
-            {isEnrolling ? "Enrolling..." : "Enroll Now"}
+            Enroll Now
          </Button>
       );
    };

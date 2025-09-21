@@ -58,6 +58,7 @@ export function AuthForm<T extends FieldValues>({
    const router = useRouter();
    const isSignIn = type === "SIGN_IN";
    const [showPassword, setShowPassword] = useState(false);
+   const [isLoading, setIsLoading] = useState(false);
 
    const form = useForm({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,9 +67,11 @@ export function AuthForm<T extends FieldValues>({
    });
 
    const handleSubmit: SubmitHandler<T> = async (data) => {
-      if (isSignIn) {
-         // Handle sign-in with NextAuth
-         try {
+      setIsLoading(true);
+
+      try {
+         if (isSignIn) {
+            // Handle sign-in with NextAuth
             const result = await signIn("credentials", {
                email: data.email,
                password: data.password,
@@ -89,27 +92,29 @@ export function AuthForm<T extends FieldValues>({
                // Force a page refresh to ensure the session is properly set
                window.location.href = "/";
             }
-         } catch (error) {
-            console.error("Sign in error:", error);
-            toast.error("Sign in failed", {
-               description: "An error occurred during sign in.",
-            });
-         }
-      } else {
-         // Handle sign-up with server action
-         const result = await onSubmit(data);
-
-         if (result.success) {
-            toast.success("Success", {
-               description: "You have successfully signed up.",
-            });
-            // After successful signup, redirect to sign-in
-            router.push("/sign-in");
          } else {
-            toast.error("Error signing up", {
-               description: result.error ?? "An error occurred.",
-            });
+            // Handle sign-up with server action
+            const result = await onSubmit(data);
+
+            if (result.success) {
+               toast.success("Success", {
+                  description: "You have successfully signed up.",
+               });
+               // After successful signup, redirect to sign-in
+               router.push("/sign-in");
+            } else {
+               toast.error("Error signing up", {
+                  description: result.error ?? "An error occurred.",
+               });
+            }
          }
+      } catch (error) {
+         console.error("Auth error:", error);
+         toast.error(`${isSignIn ? "Sign in" : "Sign up"} failed`, {
+            description: "An error occurred during authentication.",
+         });
+      } finally {
+         setIsLoading(false);
       }
    };
 
@@ -305,7 +310,11 @@ export function AuthForm<T extends FieldValues>({
                         </>
                      )}
 
-                     <Button type="submit" className="mt-4 w-full">
+                     <Button
+                        type="submit"
+                        loading={isLoading}
+                        className="mt-4 w-full"
+                     >
                         {isSignIn ? "Sign In" : "Sign Up"}
                      </Button>
                   </form>

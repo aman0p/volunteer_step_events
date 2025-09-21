@@ -155,32 +155,34 @@ export function Navbar({ session }: { session: Session | null }) {
 
                   {/* User Actions */}
                   {session ? (
-                     <div className="flex scale-85 items-center gap-6 md:scale-100">
+                     <>
                         <NotificationDrawer />
 
-                        <Link
-                           href="/profile"
-                           className="transition-opacity hover:opacity-80"
-                        >
-                           <Avatar className="h-8 w-8">
-                              <AvatarFallback className="text-sm">
-                                 {getInitials(session.user.name || "V")}
-                              </AvatarFallback>
-                           </Avatar>
-                        </Link>
+                        <div className="flex scale-85 items-center gap-6 md:ml-3 md:scale-100">
+                           <Link
+                              href="/profile"
+                              className="transition-opacity hover:opacity-80"
+                           >
+                              <Avatar className="h-8 w-8">
+                                 <AvatarFallback className="text-sm">
+                                    {getInitials(session.user.name || "V")}
+                                 </AvatarFallback>
+                              </Avatar>
+                           </Link>
 
-                        <button
-                           onClick={handleLogout}
-                           disabled={isLoggingOut}
-                           className="hover:bg-accent hidden items-center gap-2 rounded-md px-3 py-2 disabled:opacity-50 md:flex"
-                           title="Sign out"
-                        >
-                           <LogOut className="h-4 w-4" />
-                           <span className="text-sm">
-                              {isLoggingOut ? "Signing out..." : "Sign out"}
-                           </span>
-                        </button>
-                     </div>
+                           <button
+                              onClick={handleLogout}
+                              disabled={isLoggingOut}
+                              className="hover:bg-accent hidden items-center gap-2 rounded-md px-3 py-2 disabled:opacity-50 md:flex"
+                              title="Sign out"
+                           >
+                              <LogOut className="h-4 w-4" />
+                              <span className="text-sm">
+                                 {isLoggingOut ? "Signing out..." : "Sign out"}
+                              </span>
+                           </button>
+                        </div>
+                     </>
                   ) : (
                      <div className="hidden items-center gap-3 md:flex">
                         <Link

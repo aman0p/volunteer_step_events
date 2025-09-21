@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { FaTrash } from "react-icons/fa";
 import { useState } from "react";
-import { PiSpinner, PiX } from "react-icons/pi";
+import { PiX } from "react-icons/pi";
 import { createPortal } from "react-dom";
 import { deleteEvent } from "@/lib/actions/admin/events";
 import { toast } from "sonner";
@@ -88,10 +88,10 @@ function DeleteEventModal({
                </Button>
                <Button
                   type="submit"
-                  disabled={loading}
+                  loading={loading}
                   className="flex w-full cursor-pointer items-center justify-center rounded-md bg-red-500 p-2 text-sm text-white/80 transition-all duration-300 hover:bg-red-500/80 md:text-base"
                >
-                  {loading ? <PiSpinner className="animate-spin" /> : "Delete"}
+                  Delete
                </Button>
             </form>
          </div>
@@ -102,13 +102,24 @@ function DeleteEventModal({
 
 export function DeleteEvent({ eventId, eventTitle }: DeleteEventTriggerProps) {
    const [open, setOpen] = useState(false);
+   const [isOpening, setIsOpening] = useState(false);
+
+   const handleOpenModal = () => {
+      setIsOpening(true);
+      // Small delay to show loading state before modal opens
+      setTimeout(() => {
+         setOpen(true);
+         setIsOpening(false);
+      }, 150);
+   };
 
    return (
       <div>
          <Button
-            onClick={() => setOpen(true)}
+            onClick={handleOpenModal}
             variant="destructive"
             size="icon"
+            loading={isOpening}
             className="z-5 cursor-pointer hover:bg-red-500"
          >
             <FaTrash className="h-4 w-4" />

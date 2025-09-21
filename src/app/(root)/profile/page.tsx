@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/FileUpload";
 import Tag from "@/components/ui/tag";
 import { GOV_ID_OPTIONS } from "@/constants";
-import { UserCheck, Loader2, RefreshCw, XCircle } from "lucide-react";
+import { UserCheck, RefreshCw, XCircle } from "lucide-react";
 import { useProfile } from "@/hooks/useProfile";
 import Section from "@/components/ui/section";
 
@@ -72,16 +72,12 @@ export default function Profile() {
                            </Button>
                            <Button
                               onClick={refreshVerificationStatus}
-                              disabled={isRefreshingVerification}
+                              loading={isRefreshingVerification}
                               variant="outline"
                               size="sm"
                               title="Refresh verification status"
                            >
-                              {isRefreshingVerification ? (
-                                 <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                 <RefreshCw className="h-4 w-4" />
-                              )}
+                              <RefreshCw className="h-4 w-4" />
                            </Button>
                         </div>
                      ) : hasRejectedRequest ? (
@@ -96,24 +92,19 @@ export default function Profile() {
                            </Button>
                            <Button
                               onClick={refreshVerificationStatus}
-                              disabled={isRefreshingVerification}
+                              loading={isRefreshingVerification}
                               variant="outline"
                               size="sm"
                               title="Refresh verification status"
                            >
-                              {isRefreshingVerification ? (
-                                 <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                 <RefreshCw className="h-4 w-4" />
-                              )}
+                              <RefreshCw className="h-4 w-4" />
                            </Button>
                         </div>
                      ) : (
                         <Button
                            onClick={handleSubmitVerification}
-                           disabled={
-                              isSubmittingVerification || !areAllFieldsFilled()
-                           }
+                           disabled={!areAllFieldsFilled()}
+                           loading={isSubmittingVerification}
                            className={`${
                               areAllFieldsFilled()
                                  ? "bg-blue-600 hover:bg-blue-700"
@@ -125,11 +116,7 @@ export default function Profile() {
                                  : "Save profile and request verification"
                            }
                         >
-                           {isSubmittingVerification ? (
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                           ) : (
-                              <UserCheck className="mr-2 h-4 w-4" />
-                           )}
+                           <UserCheck className="mr-2 h-4 w-4" />
                            Request Verification
                         </Button>
                      )}
@@ -144,7 +131,7 @@ export default function Profile() {
 
                {/* Rejection Reason Display */}
                {hasRejectedRequest && (
-                  <div className="mt-4 rounded-lg border-2 border-dashed border-destructive/50 backdrop-blur-2xl bg-destructive/10 p-4 font-light">
+                  <div className="border-destructive/50 bg-destructive/10 mt-4 rounded-lg border-2 border-dashed p-4 font-light backdrop-blur-2xl">
                      <div className="flex items-start gap-3">
                         <XCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
                         <div className="flex-1">
@@ -166,10 +153,8 @@ export default function Profile() {
                            <div className="flex items-center gap-3">
                               <Button
                                  onClick={handleSubmitVerification}
-                                 disabled={
-                                    isSubmittingVerification ||
-                                    !areAllFieldsFilled()
-                                 }
+                                 disabled={!areAllFieldsFilled()}
+                                 loading={isSubmittingVerification}
                                  size="sm"
                                  className="bg-blue-600 text-white hover:bg-blue-700"
                                  title={
@@ -178,26 +163,20 @@ export default function Profile() {
                                        : "Submit new verification request"
                                  }
                               >
-                                 {isSubmittingVerification ? (
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                 ) : (
-                                    <UserCheck className="mr-2 h-4 w-4" />
-                                 )}
+                                 <UserCheck className="mr-2 h-4 w-4" />
                                  Apply for Verification Again
                               </Button>
                               <Button
                                  onClick={refreshVerificationStatus}
-                                 disabled={isRefreshingVerification}
+                                 loading={isRefreshingVerification}
                                  variant="outline"
                                  size="sm"
                                  title="Refresh verification status"
                               >
-                                 {isRefreshingVerification ? (
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                 ) : (
-                                    <RefreshCw className="h-4 w-4" />
-                                 )}
-                                 <span className="hidden md:block">Refresh Status</span>
+                                 <RefreshCw className="h-4 w-4" />
+                                 <span className="hidden md:block">
+                                    Refresh Status
+                                 </span>
                               </Button>
                            </div>
                         </div>

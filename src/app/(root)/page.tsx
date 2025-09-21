@@ -16,7 +16,7 @@ export default async function HomePage() {
    });
 
    return (
-      <div className="mx-auto w-full space-y-20">
+      <div className="mx-auto w-full space-y-5 md:space-y-10 lg:space-y-20">
          {/* Event Carousel */}
          <EventCarousel events={events} />
 
@@ -25,9 +25,25 @@ export default async function HomePage() {
             <h1 className="mb-2 text-xl font-bold uppercase md:mb-6 md:text-3xl lg:text-4xl">
                Upcoming Events
             </h1>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-10">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-10">
                {events.map((event) => (
-                  <EventCard key={event.id} event={event} />
+                  <EventCard key={event.id} event={event} showUpcoming={true} />
+               ))}
+            </div>
+         </Section>
+
+         {/* Past Events */}
+         <Section>
+            <h1 className="mb-2 text-xl font-bold uppercase md:mb-6 md:text-3xl lg:text-4xl">
+               Past Events
+            </h1>
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-10">
+               {events.map((event) => (
+                  <EventCard
+                     key={event.id}
+                     event={event}
+                     showUpcoming={false}
+                  />
                ))}
             </div>
          </Section>

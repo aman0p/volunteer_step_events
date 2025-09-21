@@ -34,25 +34,29 @@ const events = [
       eventRoles: [
          {
             name: "Medical Assistant",
-            description: "Assist doctors with patient checkups, maintain records, and help with basic medical procedures. Prior medical knowledge preferred but not required.",
+            description:
+               "Assist doctors with patient checkups, maintain records, and help with basic medical procedures. Prior medical knowledge preferred but not required.",
             payout: 1500,
             maxCount: 8,
          },
          {
             name: "Registration Coordinator",
-            description: "Manage patient registration, collect basic information, and maintain organized flow of patients through the camp.",
+            description:
+               "Manage patient registration, collect basic information, and maintain organized flow of patients through the camp.",
             payout: 800,
             maxCount: 4,
          },
          {
             name: "Health Educator",
-            description: "Conduct health awareness sessions, distribute educational materials, and answer basic health questions from community members.",
+            description:
+               "Conduct health awareness sessions, distribute educational materials, and answer basic health questions from community members.",
             payout: 1200,
             maxCount: 6,
          },
          {
             name: "Logistics Support",
-            description: "Help with setup, equipment management, crowd control, and ensure smooth operations throughout the event.",
+            description:
+               "Help with setup, equipment management, crowd control, and ensure smooth operations throughout the event.",
             payout: 600,
             maxCount: 7,
          },
@@ -96,31 +100,36 @@ const events = [
       eventRoles: [
          {
             name: "Cleanup Coordinator",
-            description: "Lead cleanup activities, coordinate teams, and ensure proper waste segregation. Experience in environmental work preferred.",
+            description:
+               "Lead cleanup activities, coordinate teams, and ensure proper waste segregation. Experience in environmental work preferred.",
             payout: 2000,
             maxCount: 3,
          },
          {
             name: "Beach Cleaner",
-            description: "Collect and segregate waste from beach areas, work in teams to cover assigned zones efficiently.",
+            description:
+               "Collect and segregate waste from beach areas, work in teams to cover assigned zones efficiently.",
             payout: 800,
             maxCount: 25,
          },
          {
             name: "Safety Monitor",
-            description: "Ensure volunteer safety, monitor weather conditions, and provide first aid if needed. Basic first aid certification required.",
+            description:
+               "Ensure volunteer safety, monitor weather conditions, and provide first aid if needed. Basic first aid certification required.",
             payout: 1500,
             maxCount: 4,
          },
          {
             name: "Data Recorder",
-            description: "Record cleanup data, take photos for documentation, and maintain records of collected waste quantities.",
+            description:
+               "Record cleanup data, take photos for documentation, and maintain records of collected waste quantities.",
             payout: 1000,
             maxCount: 3,
          },
          {
             name: "Equipment Manager",
-            description: "Distribute and maintain cleanup equipment, ensure proper storage, and manage supplies throughout the event.",
+            description:
+               "Distribute and maintain cleanup equipment, ensure proper storage, and manage supplies throughout the event.",
             payout: 1200,
             maxCount: 5,
          },
@@ -176,25 +185,29 @@ const events = [
       eventRoles: [
          {
             name: "Workshop Instructor",
-            description: "Lead digital literacy sessions, teach basic computer and smartphone skills to senior citizens. Patience and clear communication essential.",
+            description:
+               "Lead digital literacy sessions, teach basic computer and smartphone skills to senior citizens. Patience and clear communication essential.",
             payout: 2500,
             maxCount: 2,
          },
          {
             name: "One-on-One Assistant",
-            description: "Provide individual support to participants, help them practice skills, and ensure everyone can follow along with the lessons.",
+            description:
+               "Provide individual support to participants, help them practice skills, and ensure everyone can follow along with the lessons.",
             payout: 1200,
             maxCount: 8,
          },
          {
             name: "Technical Support",
-            description: "Troubleshoot technical issues, set up devices, and ensure all equipment works properly throughout the workshop.",
+            description:
+               "Troubleshoot technical issues, set up devices, and ensure all equipment works properly throughout the workshop.",
             payout: 1500,
             maxCount: 3,
          },
          {
             name: "Registration Helper",
-            description: "Assist with participant check-in, distribute materials, and help with any administrative tasks during the event.",
+            description:
+               "Assist with participant check-in, distribute materials, and help with any administrative tasks during the event.",
             payout: 800,
             maxCount: 2,
          },
@@ -238,43 +251,50 @@ const events = [
       eventRoles: [
          {
             name: "Medical Technician",
-            description: "Assist with blood collection, pre-donation screening, and post-donation care. Medical background preferred.",
+            description:
+               "Assist with blood collection, pre-donation screening, and post-donation care. Medical background preferred.",
             payout: 2000,
             maxCount: 4,
          },
          {
             name: "Registration Coordinator",
-            description: "Manage donor registration, verify eligibility, and maintain donor records throughout the camp.",
+            description:
+               "Manage donor registration, verify eligibility, and maintain donor records throughout the camp.",
             payout: 1000,
             maxCount: 3,
          },
          {
             name: "Donor Care Assistant",
-            description: "Provide refreshments, monitor donor recovery, and ensure donor comfort after donation.",
+            description:
+               "Provide refreshments, monitor donor recovery, and ensure donor comfort after donation.",
             payout: 800,
             maxCount: 6,
          },
          {
             name: "Logistics Coordinator",
-            description: "Manage blood storage, transportation, and ensure proper handling of collected blood units.",
+            description:
+               "Manage blood storage, transportation, and ensure proper handling of collected blood units.",
             payout: 1500,
             maxCount: 2,
          },
          {
             name: "Crowd Manager",
-            description: "Maintain orderly flow of donors, manage waiting areas, and ensure smooth operations.",
+            description:
+               "Maintain orderly flow of donors, manage waiting areas, and ensure smooth operations.",
             payout: 700,
             maxCount: 8,
          },
          {
             name: "Health Counselor",
-            description: "Provide pre-donation counseling, answer health questions, and educate donors about blood donation.",
+            description:
+               "Provide pre-donation counseling, answer health questions, and educate donors about blood donation.",
             payout: 1200,
             maxCount: 4,
          },
          {
             name: "Data Entry Specialist",
-            description: "Record donor information, maintain digital records, and ensure data accuracy.",
+            description:
+               "Record donor information, maintain digital records, and ensure data accuracy.",
             payout: 900,
             maxCount: 3,
          },
@@ -318,37 +338,43 @@ const events = [
       eventRoles: [
          {
             name: "Art Instructor",
-            description: "Teach various art and craft techniques to children, guide creative activities, and inspire artistic expression.",
+            description:
+               "Teach various art and craft techniques to children, guide creative activities, and inspire artistic expression.",
             payout: 1800,
             maxCount: 3,
          },
          {
             name: "Child Care Assistant",
-            description: "Supervise children during activities, ensure safety, and provide individual attention to participants.",
+            description:
+               "Supervise children during activities, ensure safety, and provide individual attention to participants.",
             payout: 1000,
             maxCount: 8,
          },
          {
             name: "Materials Manager",
-            description: "Distribute art supplies, maintain inventory, and ensure all children have necessary materials.",
+            description:
+               "Distribute art supplies, maintain inventory, and ensure all children have necessary materials.",
             payout: 800,
             maxCount: 2,
          },
          {
             name: "Event Photographer",
-            description: "Capture memorable moments, document children's artwork, and create lasting memories of the event.",
+            description:
+               "Capture memorable moments, document children's artwork, and create lasting memories of the event.",
             payout: 1200,
             maxCount: 2,
          },
          {
             name: "Setup Coordinator",
-            description: "Arrange workstations, prepare materials, and ensure the venue is ready for creative activities.",
+            description:
+               "Arrange workstations, prepare materials, and ensure the venue is ready for creative activities.",
             payout: 700,
             maxCount: 3,
          },
          {
             name: "Parent Liaison",
-            description: "Communicate with parents, provide updates on children's progress, and handle any concerns.",
+            description:
+               "Communicate with parents, provide updates on children's progress, and handle any concerns.",
             payout: 900,
             maxCount: 2,
          },
@@ -392,61 +418,71 @@ const events = [
       eventRoles: [
          {
             name: "Training Instructor",
-            description: "Lead disaster preparedness training sessions, teach first aid and emergency response techniques. Medical or emergency services background required.",
+            description:
+               "Lead disaster preparedness training sessions, teach first aid and emergency response techniques. Medical or emergency services background required.",
             payout: 3000,
             maxCount: 2,
          },
          {
             name: "First Aid Assistant",
-            description: "Assist with first aid demonstrations, help participants practice techniques, and provide hands-on guidance.",
+            description:
+               "Assist with first aid demonstrations, help participants practice techniques, and provide hands-on guidance.",
             payout: 1500,
             maxCount: 4,
          },
          {
             name: "Equipment Specialist",
-            description: "Manage training equipment, demonstrate proper use of emergency tools, and ensure equipment safety.",
+            description:
+               "Manage training equipment, demonstrate proper use of emergency tools, and ensure equipment safety.",
             payout: 1200,
             maxCount: 3,
          },
          {
             name: "Scenario Coordinator",
-            description: "Organize practice scenarios, simulate emergency situations, and guide participants through realistic training exercises.",
+            description:
+               "Organize practice scenarios, simulate emergency situations, and guide participants through realistic training exercises.",
             payout: 1800,
             maxCount: 3,
          },
          {
             name: "Safety Monitor",
-            description: "Ensure participant safety during training, monitor for any risks, and provide immediate assistance if needed.",
+            description:
+               "Ensure participant safety during training, monitor for any risks, and provide immediate assistance if needed.",
             payout: 1000,
             maxCount: 4,
          },
          {
             name: "Registration Assistant",
-            description: "Handle participant check-in, distribute materials, and manage training documentation.",
+            description:
+               "Handle participant check-in, distribute materials, and manage training documentation.",
             payout: 800,
             maxCount: 3,
          },
          {
             name: "Logistics Coordinator",
-            description: "Manage venue setup, coordinate refreshments, and ensure smooth operation of all training activities.",
+            description:
+               "Manage venue setup, coordinate refreshments, and ensure smooth operation of all training activities.",
             payout: 1000,
             maxCount: 2,
          },
          {
             name: "Documentation Specialist",
-            description: "Record training progress, maintain participant records, and prepare certificates of completion.",
+            description:
+               "Record training progress, maintain participant records, and prepare certificates of completion.",
             payout: 900,
             maxCount: 2,
          },
          {
             name: "Group Facilitator",
-            description: "Lead small group activities, facilitate discussions, and ensure all participants are engaged in learning.",
+            description:
+               "Lead small group activities, facilitate discussions, and ensure all participants are engaged in learning.",
             payout: 1100,
             maxCount: 6,
          },
          {
             name: "Emergency Contact",
-            description: "Serve as emergency contact point, coordinate with local emergency services, and manage any real emergencies.",
+            description:
+               "Serve as emergency contact point, coordinate with local emergency services, and manage any real emergencies.",
             payout: 1500,
             maxCount: 2,
          },
@@ -490,43 +526,50 @@ const events = [
       eventRoles: [
          {
             name: "Distribution Coordinator",
-            description: "Lead food distribution activities, coordinate teams, and ensure efficient distribution to all areas.",
+            description:
+               "Lead food distribution activities, coordinate teams, and ensure efficient distribution to all areas.",
             payout: 2000,
             maxCount: 2,
          },
          {
             name: "Food Server",
-            description: "Serve meals to beneficiaries, maintain hygiene standards, and ensure everyone receives adequate portions.",
+            description:
+               "Serve meals to beneficiaries, maintain hygiene standards, and ensure everyone receives adequate portions.",
             payout: 1000,
             maxCount: 8,
          },
          {
             name: "Crowd Manager",
-            description: "Maintain orderly distribution lines, ensure safety, and manage crowd flow during the event.",
+            description:
+               "Maintain orderly distribution lines, ensure safety, and manage crowd flow during the event.",
             payout: 800,
             maxCount: 4,
          },
          {
             name: "Logistics Assistant",
-            description: "Help with food preparation, packaging, and transportation of supplies to distribution points.",
+            description:
+               "Help with food preparation, packaging, and transportation of supplies to distribution points.",
             payout: 900,
             maxCount: 3,
          },
          {
             name: "Community Liaison",
-            description: "Engage with beneficiaries, provide information about other services, and build community connections.",
+            description:
+               "Engage with beneficiaries, provide information about other services, and build community connections.",
             payout: 1200,
             maxCount: 3,
          },
          {
             name: "Safety Monitor",
-            description: "Ensure volunteer and beneficiary safety, monitor for any issues, and provide immediate assistance.",
+            description:
+               "Ensure volunteer and beneficiary safety, monitor for any issues, and provide immediate assistance.",
             payout: 1000,
             maxCount: 2,
          },
          {
             name: "Documentation Helper",
-            description: "Record distribution data, take photos for documentation, and maintain records of beneficiaries served.",
+            description:
+               "Record distribution data, take photos for documentation, and maintain records of beneficiaries served.",
             payout: 700,
             maxCount: 3,
          },
@@ -570,43 +613,50 @@ const events = [
       eventRoles: [
          {
             name: "Sports Coach",
-            description: "Lead sports training sessions, teach fundamental skills in football, cricket, and athletics. Sports background preferred.",
+            description:
+               "Lead sports training sessions, teach fundamental skills in football, cricket, and athletics. Sports background preferred.",
             payout: 2500,
             maxCount: 2,
          },
          {
             name: "Assistant Coach",
-            description: "Support main coaches, work with small groups of children, and help with skill development activities.",
+            description:
+               "Support main coaches, work with small groups of children, and help with skill development activities.",
             payout: 1500,
             maxCount: 4,
          },
          {
             name: "Equipment Manager",
-            description: "Manage sports equipment, ensure proper setup, and maintain equipment throughout the session.",
+            description:
+               "Manage sports equipment, ensure proper setup, and maintain equipment throughout the session.",
             payout: 1000,
             maxCount: 2,
          },
          {
             name: "Child Supervisor",
-            description: "Supervise children during activities, ensure safety, and provide encouragement and support.",
+            description:
+               "Supervise children during activities, ensure safety, and provide encouragement and support.",
             payout: 800,
             maxCount: 6,
          },
          {
             name: "Warm-up Coordinator",
-            description: "Lead warm-up exercises, stretching routines, and prepare children for physical activities.",
+            description:
+               "Lead warm-up exercises, stretching routines, and prepare children for physical activities.",
             payout: 900,
             maxCount: 2,
          },
          {
             name: "Event Photographer",
-            description: "Capture action shots, document children's progress, and create memories of the sports session.",
+            description:
+               "Capture action shots, document children's progress, and create memories of the sports session.",
             payout: 1200,
             maxCount: 1,
          },
          {
             name: "Parent Coordinator",
-            description: "Communicate with parents, provide updates on children's progress, and handle any concerns.",
+            description:
+               "Communicate with parents, provide updates on children's progress, and handle any concerns.",
             payout: 1000,
             maxCount: 1,
          },
@@ -650,31 +700,36 @@ const events = [
       eventRoles: [
          {
             name: "Companion Volunteer",
-            description: "Spend one-on-one time with elderly residents, engage in conversations, reading, and recreational activities.",
+            description:
+               "Spend one-on-one time with elderly residents, engage in conversations, reading, and recreational activities.",
             payout: 1000,
             maxCount: 6,
          },
          {
             name: "Activity Coordinator",
-            description: "Organize group activities, games, and entertainment for elderly residents. Creativity and patience required.",
+            description:
+               "Organize group activities, games, and entertainment for elderly residents. Creativity and patience required.",
             payout: 1500,
             maxCount: 2,
          },
          {
             name: "Health Monitor",
-            description: "Monitor residents' well-being, assist with basic needs, and alert staff to any health concerns.",
+            description:
+               "Monitor residents' well-being, assist with basic needs, and alert staff to any health concerns.",
             payout: 1200,
             maxCount: 2,
          },
          {
             name: "Facility Liaison",
-            description: "Coordinate with facility staff, understand resident needs, and ensure smooth volunteer operations.",
+            description:
+               "Coordinate with facility staff, understand resident needs, and ensure smooth volunteer operations.",
             payout: 1000,
             maxCount: 1,
          },
          {
             name: "Memory Keeper",
-            description: "Help residents with memory exercises, record their stories, and create meaningful connections.",
+            description:
+               "Help residents with memory exercises, record their stories, and create meaningful connections.",
             payout: 1100,
             maxCount: 1,
          },
@@ -718,49 +773,57 @@ const events = [
       eventRoles: [
          {
             name: "Plantation Coordinator",
-            description: "Lead tree planting activities, coordinate teams, and ensure proper planting techniques. Horticulture knowledge preferred.",
+            description:
+               "Lead tree planting activities, coordinate teams, and ensure proper planting techniques. Horticulture knowledge preferred.",
             payout: 2000,
             maxCount: 2,
          },
          {
             name: "Tree Planter",
-            description: "Plant trees according to guidelines, ensure proper spacing, and follow environmental best practices.",
+            description:
+               "Plant trees according to guidelines, ensure proper spacing, and follow environmental best practices.",
             payout: 800,
             maxCount: 25,
          },
          {
             name: "Equipment Manager",
-            description: "Distribute gardening tools, maintain equipment, and ensure all volunteers have necessary supplies.",
+            description:
+               "Distribute gardening tools, maintain equipment, and ensure all volunteers have necessary supplies.",
             payout: 1000,
             maxCount: 3,
          },
          {
             name: "Watering Coordinator",
-            description: "Oversee watering of newly planted trees, ensure proper hydration, and maintain watering schedule.",
+            description:
+               "Oversee watering of newly planted trees, ensure proper hydration, and maintain watering schedule.",
             payout: 1200,
             maxCount: 4,
          },
          {
             name: "Site Preparation",
-            description: "Prepare planting sites, clear debris, and ensure optimal conditions for tree growth.",
+            description:
+               "Prepare planting sites, clear debris, and ensure optimal conditions for tree growth.",
             payout: 900,
             maxCount: 5,
          },
          {
             name: "Documentation Specialist",
-            description: "Record planting data, take photos, and maintain records of planted trees and their locations.",
+            description:
+               "Record planting data, take photos, and maintain records of planted trees and their locations.",
             payout: 1000,
             maxCount: 2,
          },
          {
             name: "Safety Monitor",
-            description: "Ensure volunteer safety, monitor for hazards, and provide first aid if needed.",
+            description:
+               "Ensure volunteer safety, monitor for hazards, and provide first aid if needed.",
             payout: 1200,
             maxCount: 2,
          },
          {
             name: "Community Educator",
-            description: "Educate volunteers and community members about environmental benefits and tree care.",
+            description:
+               "Educate volunteers and community members about environmental benefits and tree care.",
             payout: 1100,
             maxCount: 2,
          },
@@ -804,61 +867,71 @@ const events = [
       eventRoles: [
          {
             name: "Self-Defense Instructor",
-            description: "Lead self-defense training sessions, teach techniques, and ensure participant safety. Martial arts background required.",
+            description:
+               "Lead self-defense training sessions, teach techniques, and ensure participant safety. Martial arts background required.",
             payout: 3000,
             maxCount: 2,
          },
          {
             name: "Assistant Instructor",
-            description: "Support main instructors, help participants with techniques, and provide individual guidance.",
+            description:
+               "Support main instructors, help participants with techniques, and provide individual guidance.",
             payout: 1800,
             maxCount: 3,
          },
          {
             name: "Safety Coordinator",
-            description: "Ensure participant safety during training, monitor for any risks, and provide immediate assistance.",
+            description:
+               "Ensure participant safety during training, monitor for any risks, and provide immediate assistance.",
             payout: 1500,
             maxCount: 2,
          },
          {
             name: "Registration Assistant",
-            description: "Handle participant check-in, distribute materials, and manage workshop documentation.",
+            description:
+               "Handle participant check-in, distribute materials, and manage workshop documentation.",
             payout: 800,
             maxCount: 2,
          },
          {
             name: "Equipment Manager",
-            description: "Manage training equipment, ensure proper setup, and maintain safety equipment throughout the session.",
+            description:
+               "Manage training equipment, ensure proper setup, and maintain safety equipment throughout the session.",
             payout: 1000,
             maxCount: 2,
          },
          {
             name: "Group Facilitator",
-            description: "Lead small group activities, facilitate discussions about safety, and ensure all participants are engaged.",
+            description:
+               "Lead small group activities, facilitate discussions about safety, and ensure all participants are engaged.",
             payout: 1200,
             maxCount: 4,
          },
          {
             name: "Counselor",
-            description: "Provide emotional support, address concerns, and help participants feel comfortable and empowered.",
+            description:
+               "Provide emotional support, address concerns, and help participants feel comfortable and empowered.",
             payout: 1500,
             maxCount: 2,
          },
          {
             name: "Documentation Specialist",
-            description: "Record workshop progress, maintain participant records, and prepare certificates of completion.",
+            description:
+               "Record workshop progress, maintain participant records, and prepare certificates of completion.",
             payout: 900,
             maxCount: 2,
          },
          {
             name: "Community Liaison",
-            description: "Engage with community members, promote the workshop, and build connections for future programs.",
+            description:
+               "Engage with community members, promote the workshop, and build connections for future programs.",
             payout: 1000,
             maxCount: 2,
          },
          {
             name: "Photography Coordinator",
-            description: "Document the workshop (with consent), capture empowering moments, and create awareness materials.",
+            description:
+               "Document the workshop (with consent), capture empowering moments, and create awareness materials.",
             payout: 1200,
             maxCount: 1,
          },
@@ -902,37 +975,43 @@ const events = [
       eventRoles: [
          {
             name: "Animal Care Specialist",
-            description: "Provide direct care to animals, including feeding, grooming, and basic medical assistance. Animal care experience preferred.",
+            description:
+               "Provide direct care to animals, including feeding, grooming, and basic medical assistance. Animal care experience preferred.",
             payout: 1500,
             maxCount: 4,
          },
          {
             name: "Kennel Assistant",
-            description: "Clean animal enclosures, maintain hygiene standards, and ensure comfortable living conditions for animals.",
+            description:
+               "Clean animal enclosures, maintain hygiene standards, and ensure comfortable living conditions for animals.",
             payout: 1000,
             maxCount: 6,
          },
          {
             name: "Animal Socializer",
-            description: "Spend time socializing with animals, help with behavioral training, and provide companionship to shelter residents.",
+            description:
+               "Spend time socializing with animals, help with behavioral training, and provide companionship to shelter residents.",
             payout: 800,
             maxCount: 5,
          },
          {
             name: "Adoption Coordinator",
-            description: "Assist with adoption processes, interact with potential adopters, and help match animals with families.",
+            description:
+               "Assist with adoption processes, interact with potential adopters, and help match animals with families.",
             payout: 1200,
             maxCount: 2,
          },
          {
             name: "Veterinary Assistant",
-            description: "Assist with basic medical procedures, help with vaccinations, and support veterinary staff. Medical background helpful.",
+            description:
+               "Assist with basic medical procedures, help with vaccinations, and support veterinary staff. Medical background helpful.",
             payout: 1800,
             maxCount: 2,
          },
          {
             name: "Facility Maintenance",
-            description: "Help with general maintenance, repairs, and improvements to shelter facilities and equipment.",
+            description:
+               "Help with general maintenance, repairs, and improvements to shelter facilities and equipment.",
             payout: 900,
             maxCount: 1,
          },
@@ -976,43 +1055,50 @@ const events = [
       eventRoles: [
          {
             name: "Music Therapist",
-            description: "Lead music therapy sessions, work with children with special needs, and use music for therapeutic purposes. Music therapy background required.",
+            description:
+               "Lead music therapy sessions, work with children with special needs, and use music for therapeutic purposes. Music therapy background required.",
             payout: 3000,
             maxCount: 1,
          },
          {
             name: "Music Assistant",
-            description: "Support music therapy activities, help children with instruments, and assist with therapeutic exercises.",
+            description:
+               "Support music therapy activities, help children with instruments, and assist with therapeutic exercises.",
             payout: 1500,
             maxCount: 3,
          },
          {
             name: "Child Support Specialist",
-            description: "Provide one-on-one support to children, help them participate in activities, and ensure their comfort and safety.",
+            description:
+               "Provide one-on-one support to children, help them participate in activities, and ensure their comfort and safety.",
             payout: 1200,
             maxCount: 4,
          },
          {
             name: "Instrument Coordinator",
-            description: "Manage musical instruments, ensure proper setup, and help children learn to use different instruments.",
+            description:
+               "Manage musical instruments, ensure proper setup, and help children learn to use different instruments.",
             payout: 1000,
             maxCount: 2,
          },
          {
             name: "Parent Liaison",
-            description: "Communicate with parents, provide updates on children's progress, and address any concerns or questions.",
+            description:
+               "Communicate with parents, provide updates on children's progress, and address any concerns or questions.",
             payout: 1100,
             maxCount: 2,
          },
          {
             name: "Activity Recorder",
-            description: "Document therapy sessions, record children's progress, and maintain records for therapeutic assessment.",
+            description:
+               "Document therapy sessions, record children's progress, and maintain records for therapeutic assessment.",
             payout: 900,
             maxCount: 2,
          },
          {
             name: "Behavioral Support",
-            description: "Help manage challenging behaviors, provide positive reinforcement, and support children's emotional needs.",
+            description:
+               "Help manage challenging behaviors, provide positive reinforcement, and support children's emotional needs.",
             payout: 1300,
             maxCount: 1,
          },
@@ -1056,61 +1142,71 @@ const events = [
       eventRoles: [
          {
             name: "Event Coordinator",
-            description: "Lead the cycling event, coordinate participants, and ensure smooth execution of the awareness campaign.",
+            description:
+               "Lead the cycling event, coordinate participants, and ensure smooth execution of the awareness campaign.",
             payout: 2500,
             maxCount: 2,
          },
          {
             name: "Route Guide",
-            description: "Guide cyclists along the route, ensure safety, and provide directions and support during the ride.",
+            description:
+               "Guide cyclists along the route, ensure safety, and provide directions and support during the ride.",
             payout: 1500,
             maxCount: 8,
          },
          {
             name: "Safety Marshal",
-            description: "Ensure cyclist safety, monitor traffic, and provide immediate assistance if needed. Cycling experience required.",
+            description:
+               "Ensure cyclist safety, monitor traffic, and provide immediate assistance if needed. Cycling experience required.",
             payout: 1200,
             maxCount: 6,
          },
          {
             name: "Awareness Campaigner",
-            description: "Distribute educational materials, engage with the public, and promote environmental awareness during the event.",
+            description:
+               "Distribute educational materials, engage with the public, and promote environmental awareness during the event.",
             payout: 1000,
             maxCount: 10,
          },
          {
             name: "Refreshment Coordinator",
-            description: "Manage water stations, provide refreshments, and ensure participants stay hydrated throughout the ride.",
+            description:
+               "Manage water stations, provide refreshments, and ensure participants stay hydrated throughout the ride.",
             payout: 800,
             maxCount: 4,
          },
          {
             name: "Photography Team",
-            description: "Document the event, capture awareness moments, and create content for environmental advocacy.",
+            description:
+               "Document the event, capture awareness moments, and create content for environmental advocacy.",
             payout: 1200,
             maxCount: 3,
          },
          {
             name: "Registration Assistant",
-            description: "Handle participant registration, distribute event materials, and manage check-in processes.",
+            description:
+               "Handle participant registration, distribute event materials, and manage check-in processes.",
             payout: 700,
             maxCount: 4,
          },
          {
             name: "Medical Support",
-            description: "Provide first aid support, handle any medical emergencies, and ensure participant well-being.",
+            description:
+               "Provide first aid support, handle any medical emergencies, and ensure participant well-being.",
             payout: 1500,
             maxCount: 2,
          },
          {
             name: "Equipment Manager",
-            description: "Manage cycling equipment, provide bike maintenance support, and ensure all participants have proper gear.",
+            description:
+               "Manage cycling equipment, provide bike maintenance support, and ensure all participants have proper gear.",
             payout: 1000,
             maxCount: 3,
          },
          {
             name: "Community Engagement",
-            description: "Engage with local communities along the route, explain the event purpose, and build environmental awareness.",
+            description:
+               "Engage with local communities along the route, explain the event purpose, and build environmental awareness.",
             payout: 900,
             maxCount: 8,
          },
@@ -1154,55 +1250,64 @@ const events = [
       eventRoles: [
          {
             name: "Nutrition Instructor",
-            description: "Lead nutrition education sessions, teach about balanced diets, and provide dietary guidance. Nutrition background preferred.",
+            description:
+               "Lead nutrition education sessions, teach about balanced diets, and provide dietary guidance. Nutrition background preferred.",
             payout: 2500,
             maxCount: 1,
          },
          {
             name: "Cooking Instructor",
-            description: "Demonstrate cooking techniques, teach healthy recipes, and guide participants in hands-on cooking activities.",
+            description:
+               "Demonstrate cooking techniques, teach healthy recipes, and guide participants in hands-on cooking activities.",
             payout: 2000,
             maxCount: 2,
          },
          {
             name: "Kitchen Assistant",
-            description: "Assist with food preparation, help participants with cooking tasks, and maintain kitchen safety and hygiene.",
+            description:
+               "Assist with food preparation, help participants with cooking tasks, and maintain kitchen safety and hygiene.",
             payout: 1200,
             maxCount: 6,
          },
          {
             name: "Ingredient Coordinator",
-            description: "Manage ingredients, ensure proper quantities, and help participants understand local ingredient availability.",
+            description:
+               "Manage ingredients, ensure proper quantities, and help participants understand local ingredient availability.",
             payout: 1000,
             maxCount: 2,
          },
          {
             name: "Family Liaison",
-            description: "Work with families, understand their dietary needs, and provide personalized nutrition advice.",
+            description:
+               "Work with families, understand their dietary needs, and provide personalized nutrition advice.",
             payout: 1500,
             maxCount: 3,
          },
          {
             name: "Safety Monitor",
-            description: "Ensure kitchen safety, monitor for hazards, and provide immediate assistance if needed.",
+            description:
+               "Ensure kitchen safety, monitor for hazards, and provide immediate assistance if needed.",
             payout: 1000,
             maxCount: 2,
          },
          {
             name: "Recipe Coordinator",
-            description: "Prepare recipe materials, distribute cooking guides, and help participants document their learning.",
+            description:
+               "Prepare recipe materials, distribute cooking guides, and help participants document their learning.",
             payout: 800,
             maxCount: 2,
          },
          {
             name: "Cleanup Coordinator",
-            description: "Manage kitchen cleanup, ensure proper sanitation, and maintain a clean working environment.",
+            description:
+               "Manage kitchen cleanup, ensure proper sanitation, and maintain a clean working environment.",
             payout: 700,
             maxCount: 2,
          },
          {
             name: "Community Educator",
-            description: "Engage with community members, promote healthy eating habits, and build awareness about nutrition.",
+            description:
+               "Engage with community members, promote healthy eating habits, and build awareness about nutrition.",
             payout: 1100,
             maxCount: 2,
          },
@@ -1236,28 +1341,32 @@ export async function seedEvents() {
       // Select 5 random events to seed
       const shuffled = [...events].sort(() => Math.random() - 0.5);
       const eventsToSeed = shuffled.slice(0, 5);
-      console.log(`🎲 Selected 5 random events out of ${events.length} total events`);
+      console.log(
+         `🎲 Selected 5 random events out of ${events.length} total events`
+      );
 
       console.log("🎉 Creating events...");
 
       // Use the specified user ID for all events
       const creatorId = "55225ee6-c8c6-47b5-b93b-f72e0a51740e";
-      
+
       // Verify the user exists
       const creator = await prisma.user.findUnique({
-         where: { id: creatorId }
+         where: { id: creatorId },
       });
-      
+
       if (!creator) {
-         console.log(`❌ User with ID ${creatorId} not found. Please ensure the user exists in the database.`);
+         console.log(
+            `❌ User with ID ${creatorId} not found. Please ensure the user exists in the database.`
+         );
          throw new Error(`User with ID ${creatorId} not found`);
       }
-      
+
       console.log(`👤 Using creator: ${creator.fullName} (${creator.email})`);
 
       for (const eventData of eventsToSeed) {
          const { eventRoles, quickLinks, ...eventFields } = eventData;
-         
+
          // Check if event already exists
          const existingEvent = await prisma.event.findFirst({
             where: {
@@ -1266,12 +1375,14 @@ export async function seedEvents() {
                startDate: eventData.startDate,
             },
          });
-         
+
          if (existingEvent) {
-            console.log(`⏭️  Skipping existing event: ${eventData.title} (${eventData.location})`);
+            console.log(
+               `⏭️  Skipping existing event: ${eventData.title} (${eventData.location})`
+            );
             continue;
          }
-         
+
          const event = await prisma.event.create({
             data: {
                ...eventFields,
@@ -1282,7 +1393,7 @@ export async function seedEvents() {
                   create: eventRoles || [],
                },
                quickLinks: {
-                  create: (quickLinks || []).map(link => ({
+                  create: (quickLinks || []).map((link) => ({
                      ...link,
                      createdById: creatorId,
                   })),

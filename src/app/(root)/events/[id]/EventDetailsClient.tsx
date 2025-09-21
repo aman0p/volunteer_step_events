@@ -49,7 +49,14 @@ interface Event {
 interface EventDetailsClientProps {
    event: Event;
    approvedCount: number;
-   enrollmentStatus: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED" | "WAITLISTED" | null;
+   enrollmentStatus:
+      | "PENDING"
+      | "APPROVED"
+      | "REJECTED"
+      | "CANCELLED"
+      | "WAITLISTED"
+      | null;
+   cancellationCount: number;
    isEnrolled: boolean;
    isEventCreator: boolean;
 }
@@ -58,6 +65,7 @@ export default function EventDetailsClient({
    event,
    approvedCount,
    enrollmentStatus,
+   cancellationCount,
    isEnrolled,
    isEventCreator,
 }: EventDetailsClientProps) {
@@ -144,6 +152,7 @@ export default function EventDetailsClient({
                         eventId={event.id}
                         isFull={isFull}
                         enrollmentStatus={enrollmentStatus}
+                        cancellationCount={cancellationCount}
                         className="w-full rounded-lg"
                         selectedRoleId={selectedRoleId}
                         onRoleSelect={handleRoleSelect}
@@ -162,8 +171,8 @@ export default function EventDetailsClient({
                      <h2 className="text-xl font-bold md:text-2xl">
                         Event Roles
                      </h2>
-                     <EventRolesTable 
-                        eventRoles={event.eventRoles ?? []} 
+                     <EventRolesTable
+                        eventRoles={event.eventRoles ?? []}
                         selectedRoleId={selectedRoleId}
                         onRoleSelect={handleRoleSelect}
                         showSelection={true}

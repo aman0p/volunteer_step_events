@@ -7,8 +7,17 @@ import config from "@/lib/config";
 import { Image } from "@imagekit/next";
 import { DeleteEvent } from "@/components/admin/forms/DeleteEvent";
 import { Event } from "@/types";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function EventCard({ event }: { event: Event }) {
+   const [isNavigating, setIsNavigating] = useState(false);
+   const router = useRouter();
+
+   const handleEditClick = () => {
+      setIsNavigating(true);
+      router.push(`/admin/events/${event.id}/update`);
+   };
    return (
       <div
          key={event.id}
@@ -18,15 +27,15 @@ export default function EventCard({ event }: { event: Event }) {
       >
          <div className="absolute top-4 right-4 flex flex-col gap-2">
             <DeleteEvent eventId={event.id} eventTitle={event.title} />
-            <Link href={`/admin/events/${event.id}/update`}>
-               <Button
-                  variant="default"
-                  size="icon"
-                  className="cursor-pointer hover:bg-black"
-               >
-                  <Pencil className="h-4 w-4" />
-               </Button>
-            </Link>
+            <Button
+               onClick={handleEditClick}
+               variant="default"
+               size="icon"
+               loading={isNavigating}
+               className="cursor-pointer hover:bg-black"
+            >
+               <Pencil className="h-4 w-4" />
+            </Button>
          </div>
          <Link
             href={`/admin/events/${event.id}/details`}

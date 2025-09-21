@@ -15,19 +15,28 @@ interface EventCardProps {
       maxVolunteers: number | null;
       enrollments?: { id: string }[];
    };
+   showUpcoming?: boolean; // true for upcoming events, false for past events
 }
 
-export default function EventCard({ event }: EventCardProps) {
+export default function EventCard({
+   event,
+   showUpcoming = true,
+}: EventCardProps) {
    const start = new Date(event.startDate);
    const diffMs = start.getTime() - Date.now();
    const daysRemaining = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+   const isUpcoming = diffMs > 0;
+
+   // Don't render if the event doesn't match the filter criteria
+   if (showUpcoming && !isUpcoming) return null;
+   if (!showUpcoming && isUpcoming) return null;
 
    return (
       <Link
          href={`/events/${event.id}`}
          className="group bg-muted-foreground/5 shadow-background/50 relative overflow-hidden rounded-xl shadow-sm backdrop-blur-xl duration-300 hover:shadow-xl md:rounded-2xl lg:rounded-3xl"
       >
-         <div className="relative h-[12rem] w-full md:h-[18rem] lg:h-[30rem]">
+         <div className="relative h-[12rem] w-full md:h-[18rem] lg:h-[25rem]">
             <Image
                urlEndpoint={config.env.imagekit.urlEndpoint}
                src={event.coverUrl || "/events.jpg"}
@@ -52,7 +61,7 @@ export default function EventCard({ event }: EventCardProps) {
                </Badge>
             </div>
 
-            <div className="bg-foreground/50 absolute bottom-0 flex w-full flex-col px-2.5 py-1.5 md:px-5 md:py-3 gap-1">
+            <div className="bg-foreground/50 absolute bottom-0 flex w-full flex-col gap-1 px-2.5 py-1.5 md:px-5 md:py-3">
                <h2 className="text-background order-2 mb-1 line-clamp-1 text-xs md:order-1 md:line-clamp-2 md:text-sm">
                   {event.title}
                </h2>
@@ -64,7 +73,11 @@ export default function EventCard({ event }: EventCardProps) {
                         year: "numeric",
                      })}
                   </span>
-                  <span>{daysRemaining} days left</span>
+                  <span>
+                     {isUpcoming
+                        ? `${daysRemaining} days left`
+                        : `${Math.abs(daysRemaining)} days ago`}
+                  </span>
                </div>
             </div>
          </div>
@@ -83,7 +96,7 @@ export default function EventCard({ event }: EventCardProps) {
                      <Badge
                         key={cat}
                         variant="secondary"
-                        className="from-foreground/30 via-background/30 to-foreground/30 rounded-sm border-none bg-gradient-to-tr px-2 py-1 backdrop-blur-md"
+                        className="from-background/70 via-background/20 to-background/70 rounded-sm border-none bg-gradient-to-tr px-2 py-1 backdrop-blur-md"
                      >
                         <span className="text-xxs md:text-xs">{cat}</span>
                      </Badge>
