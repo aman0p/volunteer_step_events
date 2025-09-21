@@ -52,7 +52,7 @@ export default function EventCard({ event }: EventCardProps) {
                </Badge>
             </div>
 
-            <div className="bg-foreground/50 absolute bottom-0 flex w-full flex-col px-2.5 py-1.5 md:px-5 md:py-3">
+            <div className="bg-foreground/50 absolute bottom-0 flex w-full flex-col px-2.5 py-1.5 md:px-5 md:py-3 gap-1">
                <h2 className="text-background order-2 mb-1 line-clamp-1 text-xs md:order-1 md:line-clamp-2 md:text-sm">
                   {event.title}
                </h2>

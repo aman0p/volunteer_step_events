@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface EventRole {
    id: string;
@@ -24,11 +25,17 @@ interface EventRole {
 interface EventRolesTableProps {
    eventRoles: EventRole[];
    className?: string;
+   selectedRoleId?: string;
+   onRoleSelect?: (roleId: string) => void;
+   showSelection?: boolean;
 }
 
 export default function EventRolesTable({
    eventRoles,
    className,
+   selectedRoleId,
+   onRoleSelect,
+   showSelection = false,
 }: EventRolesTableProps) {
    const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>(
       {}
@@ -60,6 +67,11 @@ export default function EventRolesTable({
                <Table className="min-w-[700px]">
                   <TableHeader>
                      <TableRow className="pointer-events-none border-y bg-black/15">
+                        {showSelection && (
+                           <TableHead className="min-w-[60px] text-center font-semibold">
+                              Select
+                           </TableHead>
+                        )}
                         <TableHead className="min-w-[80px] text-center font-semibold">
                            Actions
                         </TableHead>
@@ -80,6 +92,22 @@ export default function EventRolesTable({
                   <TableBody>
                      {eventRoles.map((role) => (
                         <TableRow key={role.id}>
+                           {showSelection && (
+                              <TableCell className="min-w-[60px] p-4 text-center">
+                                 <RadioGroup
+                                    value={selectedRoleId || ""}
+                                    onValueChange={onRoleSelect}
+                                 >
+                                    <div className="flex items-center justify-center">
+                                       <RadioGroupItem
+                                          value={role.id}
+                                          id={role.id}
+                                          disabled={role.enrollments.length >= role.maxCount}
+                                       />
+                                    </div>
+                                 </RadioGroup>
+                              </TableCell>
+                           )}
                            <TableCell
                               className="hover:bg-muted/50 min-w-[80px] cursor-pointer p-4 text-center transition-colors"
                               onClick={() => toggleRow(role.id)}

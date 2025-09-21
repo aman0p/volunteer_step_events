@@ -11,13 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-   DropdownMenu,
-   DropdownMenuContent,
-   DropdownMenuItem,
-   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Eye, GripVertical, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import {
    Select,
    SelectContent,
@@ -48,6 +42,11 @@ type EventEnrollment = {
       profileImage: string;
    };
    status: string;
+   eventRole?: {
+      id: string;
+      name: string;
+      payout: number;
+   } | null;
 };
 
 interface EventEnrollmentTableProps {
@@ -252,21 +251,19 @@ export default function EventEnrollmentTable({
             <Table className="min-w-[800px]">
                <TableHeader className="border-b border-black bg-black/10">
                   <TableRow>
-                     <TableHead className="w-10 min-w-[40px]"></TableHead>
-                     <TableHead className="w-10 min-w-[40px]">
+                     <TableHead className="w-10 min-w-[40px] text-center">
                         <Checkbox
                            checked={isAllSelected}
                            onCheckedChange={handleSelectAll}
                         />
                      </TableHead>
-                     <TableHead className="min-w-[150px]">Event Name</TableHead>
-                     <TableHead className="min-w-[180px]">
+                     <TableHead className="min-w-[150px] text-center">Event Name</TableHead>
+                     <TableHead className="min-w-[180px] text-center">
                         Volunteer Name
                      </TableHead>
-                     <TableHead className="min-w-[200px]">Email ID</TableHead>
-                     <TableHead className="min-w-[120px]">Phone No</TableHead>
-                     <TableHead className="min-w-[160px]">Actions</TableHead>
-                     <TableHead className="w-10 min-w-[40px]"></TableHead>
+                     <TableHead className="min-w-[200px] text-center">Email ID</TableHead>
+                     <TableHead className="min-w-[140px] text-center">Selected Role</TableHead>
+                     <TableHead className="min-w-[160px] text-center">Actions</TableHead>
                   </TableRow>
                </TableHeader>
                <TableBody>
@@ -275,12 +272,7 @@ export default function EventEnrollmentTable({
                         key={enrollment.id}
                         className="hover:bg-muted/50"
                      >
-                        <TableCell className="w-10 min-w-[40px]">
-                           <div className="flex cursor-grab items-center justify-center active:cursor-grabbing">
-                              <GripVertical className="h-4 w-4 text-gray-400" />
-                           </div>
-                        </TableCell>
-                        <TableCell className="w-10 min-w-[40px]">
+                        <TableCell className="w-10 min-w-[40px] text-center">
                            <Checkbox
                               checked={selectedRows.includes(enrollment.id)}
                               onCheckedChange={(checked) =>
@@ -291,25 +283,25 @@ export default function EventEnrollmentTable({
                               }
                            />
                         </TableCell>
-                        <TableCell className="group min-w-[150px]">
+                        <TableCell className="group min-w-[150px] text-center">
                            <Link
                               href={`/admin/events/${enrollment.event.id}/details`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="group flex items-center space-x-2"
+                              className="group flex items-center justify-center space-x-2"
                            >
-                              <div className="truncate font-medium text-blue-600 hover:text-blue-700">
+                              <div className="line-clamp-1 font-medium text-blue-600 hover:text-blue-700">
                                  {enrollment.event.title}
                               </div>
                               <ArrowRight className="relative -top-2 -left-1 h-3 w-3 flex-shrink-0 rotate-[-45deg] text-blue-600 transition-all duration-150 group-hover:-top-2.5 group-hover:-left-0.5 hover:text-blue-700" />
                            </Link>
                         </TableCell>
-                        <TableCell className="min-w-[180px]">
+                        <TableCell className="min-w-[180px] text-center">
                            <Link
                               href={`/admin/volunteer/${enrollment.user.id}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center space-x-3"
+                              className="flex items-center justify-center gap-2"
                            >
                               <div className="flex-shrink-0">
                                  {enrollment.user.profileImage ? (
@@ -340,31 +332,39 @@ export default function EventEnrollmentTable({
                                     </div>
                                  )}
                               </div>
-                              <div className="min-w-0 flex-1">
-                                 <div className="truncate font-medium">
+                              <div className="min-w-0">
+                                 <div className="line-clamp-1 font-medium">
                                     {enrollment.user.fullName}
                                  </div>
                               </div>
                            </Link>
                         </TableCell>
-                        <TableCell className="min-w-[200px] text-sm">
+                        <TableCell className="min-w-[200px] text-sm text-center">
                            <div
-                              className="truncate"
+                              className="line-clamp-1"
                               title={enrollment.user.email}
                            >
                               {enrollment.user.email}
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[120px] text-sm">
-                           <div
-                              className="truncate"
-                              title={enrollment.user.phoneNumber}
-                           >
-                              {enrollment.user.phoneNumber}
+                        <TableCell className="min-w-[140px] text-sm text-center">
+                           <div className="line-clamp-1">
+                              {enrollment.eventRole ? (
+                                 <div>
+                                    <div className="line-clamp-1 font-medium text-foreground">
+                                       {enrollment.eventRole.name}
+                                    </div>
+                                    <div className="line-clamp-1 text-xs text-muted-foreground">
+                                       ₹{enrollment.eventRole.payout.toLocaleString("en-IN")}
+                                    </div>
+                                 </div>
+                              ) : (
+                                 <span className="text-muted-foreground">No role selected</span>
+                              )}
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[160px]">
-                           <div className="flex items-center gap-2">
+                        <TableCell className="min-w-[160px] text-center">
+                           <div className="flex items-center justify-center gap-2">
                               <Button
                                  size="sm"
                                  variant="default"
@@ -388,37 +388,6 @@ export default function EventEnrollmentTable({
                                  Reject
                               </Button>
                            </div>
-                        </TableCell>
-                        <TableCell className="w-10 min-w-[40px]">
-                           <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                 <Button variant="ghost" size="icon">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                 </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                 <DropdownMenuItem asChild>
-                                    <Link
-                                       href={`/admin/events/${enrollment.event.id}/details`}
-                                       target="_blank"
-                                       rel="noopener noreferrer"
-                                    >
-                                       <Eye className="mr-2 h-4 w-4" />
-                                       View Event
-                                    </Link>
-                                 </DropdownMenuItem>
-                                 <DropdownMenuItem asChild>
-                                    <Link
-                                       href={`/admin/volunteer/${enrollment.user.id}`}
-                                       target="_blank"
-                                       rel="noopener noreferrer"
-                                    >
-                                       <Eye className="mr-2 h-4 w-4" />
-                                       View Volunteer Profile
-                                    </Link>
-                                 </DropdownMenuItem>
-                              </DropdownMenuContent>
-                           </DropdownMenu>
                         </TableCell>
                      </TableRow>
                   ))}

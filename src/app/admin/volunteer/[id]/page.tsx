@@ -3,12 +3,12 @@ import { authOptions } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Users, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Users, Edit, Trash2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Image } from "@imagekit/next";
 import config from "@/lib/config";
 import { Badge } from "@/components/ui/badge";
-import { StatusBadge } from "@/components/ui/StatusBadge";
+import { StatusBadge } from "@/components/ui/status-badge";
 import {
    Table,
    TableBody,
@@ -64,6 +64,13 @@ export default async function VolunteerDetailsPage({
                      },
                   },
                },
+               eventRole: {
+                  select: {
+                     id: true,
+                     name: true,
+                     payout: true,
+                  },
+               },
             },
             orderBy: { enrolledAt: "desc" },
          },
@@ -85,34 +92,6 @@ export default async function VolunteerDetailsPage({
       }).format(date);
    };
 
-   // const getTimeRange = (startDate: Date, endDate: Date) => {
-   //    const start = new Intl.DateTimeFormat("en-US", {
-   //       hour: "2-digit",
-   //       minute: "2-digit",
-   //    }).format(startDate);
-
-   //    const end = new Intl.DateTimeFormat("en-US", {
-   //       hour: "2-digit",
-   //       minute: "2-digit",
-   //    }).format(endDate);
-
-   //    return `${start} - ${end}`;
-   // };
-
-   const getEnrollmentStats = (enrollments: EnrollmentWithEvent[]) => {
-      const approved = enrollments.filter(
-         (e) => e.status === Status.APPROVED
-      ).length;
-      const pending = enrollments.filter(
-         (e) => e.status === Status.PENDING
-      ).length;
-      const rejected = enrollments.filter(
-         (e) => e.status === Status.REJECTED
-      ).length;
-      return { approved, pending, rejected, total: enrollments.length };
-   };
-
-   const stats = getEnrollmentStats(volunteer.enrollments);
 
    return (
       <div className="space-y-6">
@@ -127,126 +106,122 @@ export default async function VolunteerDetailsPage({
             </Link>
          </div>
 
-         <div className="flex w-full justify-between">
+         <div className="flex flex-col gap-1">
             {/* Header */}
-            <div className="space-y-1">
                <h1 className="text-3xl font-bold tracking-tight">
                   {volunteer.fullName}
                </h1>
                <p className="text-muted-foreground">
                   View volunteer profile and event history
                </p>
-            </div>
-            <div className="flex gap-2">
-               <Button variant="outline" size="sm">
-                  <Edit className="mr-2 h-4 w-4" />
-                  Edit Profile
-               </Button>
-               <Button variant="destructive" size="sm">
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete Volunteer
-               </Button>
-            </div>
+
          </div>
 
-         <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-            <div className="space-y-6">
+         <div className="grid gap-10 lg:grid-cols-[1.3fr_auto]">
+            <div className="space-y-10">
                {/* Profile Information */}
-               <div className="rounded-lg border bg-black/10 p-6">
-                  <h2 className="mb-4 text-xl font-semibold">
+               <div className="rounded-lg">
+                  <h2 className="mb-2 text-xl font-semibold">
                      Profile Information
                   </h2>
-                  <div className="grid grid-cols-2 gap-4">
-                     <div>
-                        <label className="text-muted-foreground text-sm font-medium">
-                           Name
-                        </label>
-                        <p className="text-sm">{volunteer.fullName}</p>
-                     </div>
-
-                     <div>
-                        <label className="text-muted-foreground text-sm font-medium">
-                           Email
-                        </label>
-                        <p className="text-sm">{volunteer.email}</p>
-                     </div>
-
-                     <div>
-                        <label className="text-muted-foreground text-sm font-medium">
-                           Phone Number
-                        </label>
-                        <p className="text-sm">
-                           <span className="text-gray-700 select-none">
-                              +91
-                           </span>
-                           {volunteer.phoneNumber}
-                        </p>
-                     </div>
-
-                     <div>
-                        <label className="text-muted-foreground text-sm font-medium">
-                           Gender
-                        </label>
-                        <p className="text-sm">{volunteer.gender}</p>
-                     </div>
-
-                     <div>
-                        <label className="text-muted-foreground text-sm font-medium">
-                           Address
-                        </label>
-                        <p className="text-sm">{volunteer.address}</p>
-                     </div>
-
-                     <div>
-                        <label className="text-muted-foreground text-sm font-medium">
-                           Role
-                        </label>
-                        <p className="text-sm">
-                           <Badge variant="outline">{volunteer.role}</Badge>
-                        </p>
-                     </div>
-
-                     <div>
-                        <label className="text-muted-foreground text-sm font-medium">
-                           Member Since
-                        </label>
-                        <p className="text-sm">
-                           {formatDate(volunteer.createdAt)}
-                        </p>
-                     </div>
-
-                     <div>
-                        <label className="text-muted-foreground text-sm font-medium">
-                           Volunteer ID
-                        </label>
-                        <p className="text-sm">{volunteer.id}</p>
-                     </div>
+                  <div className="overflow-hidden rounded-lg border">
+                     <table className="w-full">
+                        <tbody>
+                           <tr className="border-b">
+                              <td className="text-muted-foreground bg-muted/50 px-4 py-3 text-sm font-medium w-1/3">
+                                 Name
+                              </td>
+                              <td className="px-4 py-3 text-sm">
+                                 {volunteer.fullName}
+                              </td>
+                           </tr>
+                           <tr className="border-b">
+                              <td className="text-muted-foreground bg-muted/50 px-4 py-3 text-sm font-medium">
+                                 Email
+                              </td>
+                              <td className="px-4 py-3 text-sm">
+                                 {volunteer.email}
+                              </td>
+                           </tr>
+                           <tr className="border-b">
+                              <td className="text-muted-foreground bg-muted/50 px-4 py-3 text-sm font-medium">
+                                 Phone Number
+                              </td>
+                              <td className="px-4 py-3 text-sm">
+                                 <span className="text-gray-700 select-none">
+                                    +91
+                                 </span>
+                                 {volunteer.phoneNumber}
+                              </td>
+                           </tr>
+                           <tr className="border-b">
+                              <td className="text-muted-foreground bg-muted/50 px-4 py-3 text-sm font-medium">
+                                 Gender
+                              </td>
+                              <td className="px-4 py-3 text-sm">
+                                 {volunteer.gender}
+                              </td>
+                           </tr>
+                           <tr className="border-b">
+                              <td className="text-muted-foreground bg-muted/50 px-4 py-3 text-sm font-medium">
+                                 Address
+                              </td>
+                              <td className="px-4 py-3 text-sm">
+                                 {volunteer.address}
+                              </td>
+                           </tr>
+                           <tr className="border-b">
+                              <td className="text-muted-foreground bg-muted/50 px-4 py-3 text-sm font-medium">
+                                 Role
+                              </td>
+                              <td className="px-4 py-3 text-sm">
+                                 <Badge variant="outline">{volunteer.role}</Badge>
+                              </td>
+                           </tr>
+                           <tr className="border-b">
+                              <td className="text-muted-foreground bg-muted/50 px-4 py-3 text-sm font-medium">
+                                 Member Since
+                              </td>
+                              <td className="px-4 py-3 text-sm">
+                                 {formatDate(volunteer.createdAt)}
+                              </td>
+                           </tr>
+                           <tr className="border-b">
+                              <td className="text-muted-foreground bg-muted/50 px-4 py-3 text-sm font-medium">
+                                 Volunteer ID
+                              </td>
+                              <td className="px-4 py-3 text-sm">
+                                 {volunteer.id}
+                              </td>
+                           </tr>
+                           {volunteer.skills && volunteer.skills.length > 0 && (
+                              <tr>
+                                 <td className="text-muted-foreground bg-muted/50 px-4 py-3 text-sm font-medium">
+                                    Skills
+                                 </td>
+                                 <td className="px-4 py-3 text-sm">
+                                    <div className="flex flex-wrap gap-1">
+                                       {volunteer.skills.map((skill, index) => (
+                                          <Badge
+                                             key={index}
+                                             variant="default"
+                                             className="px-2 py-1 text-xs"
+                                          >
+                                             {skill}
+                                          </Badge>
+                                       ))}
+                                    </div>
+                                 </td>
+                              </tr>
+                           )}
+                        </tbody>
+                     </table>
                   </div>
-
-                  {/* Skills */}
-                  {volunteer.skills && volunteer.skills.length > 0 && (
-                     <div className="mt-4">
-                        <label className="text-muted-foreground text-sm font-medium">
-                           Skills
-                        </label>
-                        <div className="mt-1 flex flex-wrap gap-1">
-                           {volunteer.skills.map((skill, index) => (
-                              <Badge
-                                 key={index}
-                                 variant="default"
-                                 className="px-2 py-1 text-xs"
-                              >
-                                 {skill}
-                              </Badge>
-                           ))}
-                        </div>
-                     </div>
-                  )}
                </div>
 
                {/* Event History */}
-               <div className="rounded-lg border bg-black/10 p-6">
-                  <h2 className="mb-4 text-xl font-semibold">
+               <div className="rounded-lg">
+                  <h2 className="mb-2 text-xl font-semibold">
                      Event History ({volunteer.enrollments.length})
                   </h2>
 
@@ -262,58 +237,80 @@ export default async function VolunteerDetailsPage({
                         </p>
                      </div>
                   ) : (
-                     <Table>
-                        <TableHeader>
-                           <TableRow>
-                              <TableHead>Event Name</TableHead>
-                              <TableHead>Location</TableHead>
-                           </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                           {volunteer.enrollments.map((enrollment) => (
-                              <TableRow
-                                 key={enrollment.id}
-                                 className="hover:bg-muted/50"
-                              >
-                                 <TableCell className="group">
-                                    <div className="flex items-center gap-3">
-                                       <div className="flex-1">
-                                          <h3 className="font-medium text-gray-900">
-                                             {enrollment.event.title}
-                                          </h3>
-                                          <div className="mt-1 flex items-center gap-2">
-                                             <StatusBadge
-                                                status={
-                                                   enrollment.status as Status
-                                                }
-                                             />
-                                             <span className="text-xs text-gray-500">
-                                                Enrolled:{" "}
-                                                {formatDate(
-                                                   enrollment.enrolledAt
-                                                )}
-                                             </span>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </TableCell>
-                                 <TableCell className="text-gray-600">
-                                    {enrollment.event.location}
-                                 </TableCell>
+                     <div className="overflow-x-auto rounded-md border">
+                        <Table className="min-w-[600px]">
+                           <TableHeader className="border-b border-black bg-black/10">
+                              <TableRow>
+                                 <TableHead className="min-w-[150px] text-center">Event Name</TableHead>
+                                 <TableHead className="min-w-[120px] text-center">Status</TableHead>
+                                 <TableHead className="min-w-[140px] text-center">Role</TableHead>
+                                 <TableHead className="min-w-[120px] text-center">Payout</TableHead>
                               </TableRow>
-                           ))}
-                        </TableBody>
-                     </Table>
+                           </TableHeader>
+                           <TableBody>
+                              {volunteer.enrollments.map((enrollment) => (
+                                 <TableRow
+                                    key={enrollment.id}
+                                    className="hover:bg-muted/50"
+                                 >
+                                    <TableCell className="min-w-[150px] text-center">
+                                       <Link
+                                          href={`/admin/events/${enrollment.event.id}/details`}
+                                          className="group flex items-center justify-center space-x-2"
+                                       >
+                                          <div className="line-clamp-1 font-medium text-blue-600 hover:text-blue-700">
+                                             {enrollment.event.title}
+                                          </div>
+                                          <ArrowRight className="relative -top-2 -left-1 h-3 w-3 rotate-[-45deg] text-blue-600 transition-all duration-150 group-hover:-top-2.5 group-hover:-left-0.5 hover:text-blue-700" />
+                                       </Link>
+                                    </TableCell>
+                                    <TableCell className="min-w-[120px] text-center">
+                                       <StatusBadge
+                                          status={
+                                             enrollment.status as Status
+                                          }
+                                       />
+                                    </TableCell>
+                                    <TableCell className="min-w-[140px] text-sm text-center">
+                                       <div className="line-clamp-1">
+                                          {enrollment.eventRole ? (
+                                             <div>
+                                                <div className="line-clamp-1 font-medium text-foreground">
+                                                   {enrollment.eventRole.name}
+                                                </div>
+                                             </div>
+                                          ) : (
+                                             <span className="text-muted-foreground">No role selected</span>
+                                          )}
+                                       </div>
+                                    </TableCell>
+                                    <TableCell className="min-w-[120px] text-sm text-center">
+                                       <div className="line-clamp-1">
+                                          {enrollment.eventRole ? (
+                                             <span className="font-medium text-green-600">
+                                                ₹{enrollment.eventRole.payout.toLocaleString("en-IN")}
+                                             </span>
+                                          ) : (
+                                             <span className="text-muted-foreground">
+                                                ₹0
+                                             </span>
+                                          )}
+                                       </div>
+                                    </TableCell>
+                                 </TableRow>
+                              ))}
+                           </TableBody>
+                        </Table>
+                     </div>
                   )}
                </div>
             </div>
 
             {/* Right Side - Statistics & Profile Image */}
-            <div className="space-y-6">
+            <div className="space-y-10 w-md">
                {/* Profile Image */}
-               <div className="rounded-lg border bg-black/10 p-6">
-                  <h2 className="mb-4 text-xl font-semibold">Profile Image</h2>
-                  <div className="relative">
+               <div className="rounded-lg">
+                  <h2 className="mb-2 text-xl font-semibold">Profile Image</h2>
                      {volunteer.profileImage ? (
                         <Image
                            urlEndpoint={config.env.imagekit.urlEndpoint}
@@ -321,71 +318,32 @@ export default async function VolunteerDetailsPage({
                            alt={volunteer.fullName}
                            width={1000}
                            height={1000}
-                           className="aspect-video rounded-lg object-cover object-top"
+                           className="aspect-video rounded-lg object-contain border"
                         />
                      ) : (
                         <div className="flex h-48 w-full items-center justify-center rounded-lg bg-gray-200">
-                           <span className="text-6xl text-gray-400">
-                              {volunteer.gender.charAt(0).toUpperCase()}
-                           </span>
+                           <span className="text-gray-400">No Profile Image uploaded</span>
                         </div>
                      )}
-                  </div>
                </div>
 
-               {/* Enrollment Statistics */}
-               <div className="rounded-lg border bg-black/10 p-6">
-                  <h2 className="mb-4 text-xl font-semibold">
-                     Enrollment Statistics
-                  </h2>
-                  <div className="space-y-4">
-                     <div className="flex items-center justify-between rounded-lg bg-green-50 p-3">
-                        <div className="flex items-center gap-3">
-                           <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                           <span className="text-sm font-medium text-gray-700">
-                              Approved
-                           </span>
+               {/* Government ID Image */}
+               <div className="rounded-lg ">
+                  <h2 className="mb-2 text-xl font-semibold">Government ID</h2>
+                     {volunteer.govIdImage ? (
+                        <Image
+                           urlEndpoint={config.env.imagekit.urlEndpoint}
+                           src={volunteer.govIdImage}
+                           alt={`${volunteer.fullName} - Government ID`}
+                           width={1000}
+                           height={1000}
+                           className="aspect-video rounded-lg object-contain border"
+                        />
+                     ) : (
+                        <div className="flex h-48 w-full items-center justify-center rounded-lg bg-gray-200">
+                           <span className="text-gray-400">No Government ID uploaded</span>
                         </div>
-                        <span className="text-lg font-bold text-green-600">
-                           {stats.approved}
-                        </span>
-                     </div>
-
-                     <div className="flex items-center justify-between rounded-lg bg-yellow-50 p-3">
-                        <div className="flex items-center gap-3">
-                           <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                           <span className="text-sm font-medium text-gray-700">
-                              Pending
-                           </span>
-                        </div>
-                        <span className="text-lg font-bold text-yellow-600">
-                           {stats.pending}
-                        </span>
-                     </div>
-
-                     <div className="flex items-center justify-between rounded-lg bg-red-50 p-3">
-                        <div className="flex items-center gap-3">
-                           <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                           <span className="text-sm font-medium text-gray-700">
-                              Rejected
-                           </span>
-                        </div>
-                        <span className="text-lg font-bold text-red-600">
-                           {stats.rejected}
-                        </span>
-                     </div>
-
-                     <div className="border-t border-gray-200 pt-3">
-                        <div className="flex items-center justify-between">
-                           <span className="text-sm font-medium text-gray-700">
-                              Total Events
-                           </span>
-                           <span className="text-lg font-bold text-gray-900">
-                              {stats.total}
-                           </span>
-                        </div>
-                     </div>
-                  </div>
+                     )}
                </div>
             </div>
          </div>

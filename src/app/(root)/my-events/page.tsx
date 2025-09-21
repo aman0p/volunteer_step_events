@@ -35,13 +35,22 @@ export default async function VolunteerEventsPage() {
       include: {
          enrollments: {
             where: { userId: session.user.id },
-            select: { status: true },
+            select: { 
+               status: true,
+               eventRole: {
+                  select: {
+                     id: true,
+                     name: true,
+                     payout: true,
+                  }
+               }
+            },
          },
       },
       orderBy: { startDate: "asc" },
    });
 
-   // Transform data to include enrollment status
+   // Transform data to include enrollment status and role information
    const eventsData = eventsWithEnrollmentStatus.map((event) => ({
       id: event.id,
       title: event.title,
@@ -49,11 +58,13 @@ export default async function VolunteerEventsPage() {
       startDate: event.startDate,
       endDate: event.endDate,
       location: event.location,
-      maxVolunteers: event.maxVolunteers,
       enrollmentStatus:
          event.enrollments.length > 0
             ? event.enrollments[0].status
             : "NOT_ENROLLED",
+      eventRole: event.enrollments.length > 0 
+         ? event.enrollments[0].eventRole 
+         : null,
    }));
 
    return (

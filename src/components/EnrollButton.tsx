@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Role, Status } from "@/generated/prisma";
+import { cn } from "@/lib/utils";
 
 interface EnrollButtonProps {
    eventId: string;
@@ -22,6 +23,9 @@ interface EnrollButtonProps {
       | "WAITLISTED"
       | null;
    className?: string;
+   selectedRoleId?: string;
+   onRoleSelect?: (roleId: string) => void;
+   hasRoles?: boolean;
 }
 
 export default function EnrollButton({
@@ -29,6 +33,9 @@ export default function EnrollButton({
    isFull,
    enrollmentStatus,
    className,
+   selectedRoleId,
+   onRoleSelect,
+   hasRoles = false,
 }: EnrollButtonProps) {
    const [isEnrolling, setIsEnrolling] = useState(false);
    const [localStatus, setLocalStatus] = useState<
@@ -38,10 +45,16 @@ export default function EnrollButton({
 
    const handleEnroll = async () => {
       if (isFull || localStatus) return;
+      
+      // Check if role selection is required but no role is selected
+      if (hasRoles && !selectedRoleId) {
+         toast.error("Please select a volunteer role before enrolling");
+         return;
+      }
 
       setIsEnrolling(true);
       try {
-         const result = await requestEnrollment(eventId);
+         const result = await requestEnrollment(eventId, selectedRoleId);
          if (result.success) {
             toast.success(result.message);
             setLocalStatus("PENDING");
@@ -92,7 +105,7 @@ export default function EnrollButton({
    // Show different states based on enrollment status
    if (localStatus === "APPROVED") {
       return (
-         <Button disabled className={className}>
+         <Button disabled className={cn("bg-green-600", className)}>
             Enrollment Approved
          </Button>
       );
@@ -189,14 +202,22 @@ export default function EnrollButton({
 
    // Only show enroll button for VOLUNTEER role
    if (session.user.role === "VOLUNTEER") {
+      const isRoleRequired = hasRoles && !selectedRoleId;
+      
       return (
          <Button
             onClick={handleEnroll}
-            disabled={isEnrolling}
+            disabled={isEnrolling || isRoleRequired}
             variant="default"
             className={className}
+            title={isRoleRequired ? "Please select a volunteer role first" : undefined}
          >
-            {isEnrolling ? "Enrolling..." : "Enroll as Volunteer"}
+            {isEnrolling 
+               ? "Enrolling..." 
+               : isRoleRequired 
+                  ? "Select a Role First" 
+                  : "Enroll as Volunteer"
+            }
          </Button>
       );
    }

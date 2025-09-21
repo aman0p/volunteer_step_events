@@ -7,7 +7,7 @@ import { notifyAdminsOnEnrollmentApplication } from "@/lib/actions/admin/notific
 import { NotificationType, Status } from "@/generated/prisma";
 import { revalidatePath } from "next/cache";
 
-export const requestEnrollment = async (eventId: string) => {
+export const requestEnrollment = async (eventId: string, eventRoleId?: string) => {
    const session = await getServerSession(authOptions);
 
    if (!session?.user?.id) {
@@ -21,6 +21,26 @@ export const requestEnrollment = async (eventId: string) => {
          message:
             "Only verified volunteers can enroll in events. Please complete your profile and request verification first.",
       };
+   }
+
+   // If eventRoleId is provided, validate it exists and is available
+   if (eventRoleId) {
+      const eventRole = await prisma.eventRole.findUnique({
+         where: { id: eventRoleId },
+         include: { enrollments: { where: { status: "APPROVED" } } },
+      });
+
+      if (!eventRole) {
+         return { success: false, message: "Selected role not found" };
+      }
+
+      if (eventRole.enrollments.length >= eventRole.maxCount) {
+         return { success: false, message: "Selected role is full" };
+      }
+
+      if (eventRole.eventId !== eventId) {
+         return { success: false, message: "Selected role does not belong to this event" };
+      }
    }
 
    try {
@@ -83,6 +103,10 @@ export const requestEnrollment = async (eventId: string) => {
             eventId,
             userId: session.user.id,
             status: "PENDING",
+            eventRoleId: eventRoleId || null,
+            payoutAmount: eventRoleId ? 
+               (await prisma.eventRole.findUnique({ where: { id: eventRoleId } }))?.payout || null 
+               : null,
          },
       });
 

@@ -11,19 +11,11 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { StatusBadge } from "@/components/ui/status-badge";
 import {
-   DropdownMenu,
-   DropdownMenuContent,
-   DropdownMenuItem,
-   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-   MoreHorizontal,
-   Eye,
    Calendar,
    MapPin,
    ArrowRight,
-   GripVertical,
 } from "lucide-react";
 import {
    Select,
@@ -41,8 +33,12 @@ type EventData = {
    startDate: Date;
    endDate: Date;
    location: string;
-   maxVolunteers: number | null;
    enrollmentStatus: string;
+   eventRole?: {
+      id: string;
+      name: string;
+      payout: number;
+   } | null;
 };
 
 interface UserEventsProps {
@@ -76,52 +72,6 @@ export function UserEventsTable({ events }: UserEventsProps) {
       }
    };
 
-   const getStatusBadge = (status: string) => {
-      const statusConfig = {
-         NOT_ENROLLED: {
-            label: "Not Enrolled",
-            className:
-               "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400",
-         },
-         PENDING: {
-            label: "Pending",
-            className:
-               "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400",
-         },
-         APPROVED: {
-            label: "Approved",
-            className:
-               "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400",
-         },
-         REJECTED: {
-            label: "Rejected",
-            className:
-               "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400",
-         },
-         WAITLISTED: {
-            label: "Waitlisted",
-            className:
-               "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400",
-         },
-         CANCELLED: {
-            label: "Cancelled",
-            className:
-               "bg-gray-100 text-gray-600 dark:bg-gray-900/20 dark:text-gray-400",
-         },
-      };
-
-      const config =
-         statusConfig[status as keyof typeof statusConfig] ||
-         statusConfig["NOT_ENROLLED"];
-
-      return (
-         <span
-            className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${config.className}`}
-         >
-            {config.label}
-         </span>
-      );
-   };
 
    const formatDateRange = (startDate: Date, endDate: Date) => {
       const start = new Date(startDate);
@@ -170,7 +120,6 @@ export function UserEventsTable({ events }: UserEventsProps) {
             <Table className="min-w-[900px]">
                <TableHeader className="pointer-events-none border-b border-black bg-black/20">
                   <TableRow>
-                     <TableHead className="w-10 min-w-[40px] text-center"></TableHead>
                      <TableHead className="w-10 min-w-[40px] text-center">
                         <Checkbox
                            checked={
@@ -193,22 +142,16 @@ export function UserEventsTable({ events }: UserEventsProps) {
                         Location
                      </TableHead>
                      <TableHead className="w-32 min-w-[128px] text-center">
-                        Max Volunteers
+                        Applied Role
                      </TableHead>
-                     <TableHead className="w-48 min-w-[192px] text-center">
-                        Actions
+                     <TableHead className="w-32 min-w-[128px] text-center">
+                        Payout
                      </TableHead>
-                     <TableHead className="w-10 min-w-[40px] text-center"></TableHead>
                   </TableRow>
                </TableHeader>
                <TableBody>
                   {paginatedData.map((event) => (
                      <TableRow key={event.id} className="hover:bg-muted/50">
-                        <TableCell className="w-10 min-w-[40px] text-center">
-                           <div className="flex cursor-grab items-center justify-center active:cursor-grabbing">
-                              <GripVertical className="h-4 w-4 text-gray-400" />
-                           </div>
-                        </TableCell>
                         <TableCell className="w-10 min-w-[40px] text-center">
                            <Checkbox
                               checked={selectedRows.includes(event.id)}
@@ -222,19 +165,19 @@ export function UserEventsTable({ events }: UserEventsProps) {
                               href={`/events/${event.id}`}
                               className="group flex items-center justify-center space-x-2"
                            >
-                              <div className="font-medium text-blue-600 hover:text-blue-700">
+                              <div className="line-clamp-1 font-medium text-blue-600 hover:text-blue-700">
                                  {event.title}
                               </div>
                               <ArrowRight className="relative -top-2 -left-1 h-3 w-3 rotate-[-45deg] text-blue-600 transition-all duration-150 group-hover:-top-2.5 group-hover:-left-0.5 hover:text-blue-700" />
                            </Link>
                         </TableCell>
                         <TableCell className="min-w-[128px] text-center">
-                           {getStatusBadge(event.enrollmentStatus)}
+                           <StatusBadge status={event.enrollmentStatus} />
                         </TableCell>
                         <TableCell className="min-w-[160px] text-center">
                            <div className="flex items-center justify-center gap-2">
                               <Calendar className="h-4 w-4 text-gray-500" />
-                              <span className="text-sm">
+                              <span className="line-clamp-1 text-sm">
                                  {formatDateRange(
                                     event.startDate,
                                     event.endDate
@@ -246,7 +189,7 @@ export function UserEventsTable({ events }: UserEventsProps) {
                            <div className="flex items-center justify-center gap-2">
                               <MapPin className="h-4 w-4 text-gray-500" />
                               <span
-                                 className="truncate text-sm"
+                                 className="line-clamp-1 text-sm"
                                  title={event.location}
                               >
                                  {event.location}
@@ -254,64 +197,34 @@ export function UserEventsTable({ events }: UserEventsProps) {
                            </div>
                         </TableCell>
                         <TableCell className="min-w-[128px] text-center">
-                           <span className="text-muted-background text-sm font-medium">
-                              {event.maxVolunteers
-                                 ? `${event.maxVolunteers} volunteers`
-                                 : "Unlimited"}
-                           </span>
-                        </TableCell>
-                        <TableCell className="min-w-[192px] text-center">
-                           <div className="flex items-center justify-center gap-2">
-                              <Button
-                                 size="sm"
-                                 variant="outline"
-                                 asChild
-                                 className="h-8 px-2 text-xs"
-                              >
-                                 <Link href={`/events/${event.id}`}>
-                                    <Eye className="mr-1 h-3 w-3" />
-                                    View
-                                 </Link>
-                              </Button>
-                              {event.enrollmentStatus === "NOT_ENROLLED" && (
-                                 <Button
-                                    size="sm"
-                                    variant="default"
-                                    asChild
-                                    className="h-8 px-2 text-xs"
-                                 >
-                                    <Link href={`/events/${event.id}`}>
-                                       <Calendar className="mr-1 h-3 w-3" />
-                                       Enroll
-                                    </Link>
-                                 </Button>
+                           <div className="line-clamp-1">
+                              {event.eventRole ? (
+                                 <span className="text-sm font-medium">
+                                    {event.eventRole.name}
+                                 </span>
+                              ) : (
+                                 <span className="text-muted-foreground text-sm">
+                                    {event.enrollmentStatus === "NOT_ENROLLED" 
+                                       ? "Not enrolled" 
+                                       : "No role selected"}
+                                 </span>
                               )}
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[40px] text-center">
-                           <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                 <Button variant="ghost" size="icon">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                 </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                 <DropdownMenuItem asChild>
-                                    <Link href={`/events/${event.id}`}>
-                                       <Eye className="mr-2 h-4 w-4" />
-                                       View Event Details
-                                    </Link>
-                                 </DropdownMenuItem>
-                                 {event.enrollmentStatus === "NOT_ENROLLED" && (
-                                    <DropdownMenuItem asChild>
-                                       <Link href={`/events/${event.id}`}>
-                                          <Calendar className="mr-2 h-4 w-4" />
-                                          Enroll Now
-                                       </Link>
-                                    </DropdownMenuItem>
-                                 )}
-                              </DropdownMenuContent>
-                           </DropdownMenu>
+                        <TableCell className="min-w-[128px] text-center">
+                           <div className="line-clamp-1">
+                              {event.eventRole ? (
+                                 <span className="text-sm font-medium text-green-600">
+                                    ₹{event.eventRole.payout.toLocaleString("en-IN")}
+                                 </span>
+                              ) : (
+                                 <span className="text-muted-foreground text-sm">
+                                    {event.enrollmentStatus === "NOT_ENROLLED" 
+                                       ? "-" 
+                                       : "₹0"}
+                                 </span>
+                              )}
+                           </div>
                         </TableCell>
                      </TableRow>
                   ))}

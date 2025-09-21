@@ -22,7 +22,7 @@ import Link from "next/link";
 import config from "@/lib/config";
 import { Badge } from "@/components/ui/badge";
 import VolunteerSearch from "@/components/admin/VolunteerSearch";
-import { GripVertical, Mail, Phone } from "lucide-react";
+import { GripVertical } from "lucide-react";
 import { Status } from "@/generated/prisma";
 import { EnrollmentWithEvent } from "@/types";
 
@@ -85,18 +85,6 @@ export default function VolunteerMgmtTable({
    );
    const totalPages = Math.ceil(volunteers.length / rowsPerPage);
 
-   const getEnrollmentStats = (enrollments: EnrollmentWithEvent[]) => {
-      const approved = enrollments.filter(
-         (e) => e.status === Status.APPROVED
-      ).length;
-      const pending = enrollments.filter(
-         (e) => e.status === Status.PENDING
-      ).length;
-      const rejected = enrollments.filter(
-         (e) => e.status === Status.REJECTED
-      ).length;
-      return { approved, pending, rejected, total: enrollments.length };
-   };
 
    const allowedRoles =
       currentUserRole === "ADMIN"
@@ -168,26 +156,25 @@ export default function VolunteerMgmtTable({
 
          {/* Table */}
          <div className="overflow-x-auto rounded-md border">
-            <Table className="min-w-[900px]">
+            <Table className="min-w-[800px]">
                <TableHeader className="border-b border-black bg-black/10">
                   <TableRow>
-                     <TableHead className="w-8 min-w-[32px]"></TableHead>
-                     <TableHead className="w-48 min-w-[192px]">
+                     <TableHead className="w-8 min-w-[32px] text-center"></TableHead>
+                     <TableHead className="w-48 min-w-[192px]  pl-7">
                         Volunteer
                      </TableHead>
-                     <TableHead className="w-48 min-w-[192px]">
-                        Contact Info
+                     <TableHead className="w-48 min-w-[192px] text-center">
+                        Email
                      </TableHead>
-                     <TableHead className="w-24 min-w-[96px]">Gender</TableHead>
-                     <TableHead className="w-40 min-w-[160px]">
-                        Enrollment Stats
+                     <TableHead className="w-32 min-w-[128px] text-center">
+                        Phone
                      </TableHead>
-                     <TableHead className="w-10 min-w-[40px]">Role</TableHead>
+                     <TableHead className="w-24 min-w-[96px] text-center">Gender</TableHead>
+                     <TableHead className="w-10 min-w-[40px] text-center">Role</TableHead>
                   </TableRow>
                </TableHeader>
                <TableBody>
                   {paginatedData.map((volunteer) => {
-                     const stats = getEnrollmentStats(volunteer.enrollments);
                      return (
                         <TableRow
                            key={volunteer.id}
@@ -199,139 +186,113 @@ export default function VolunteerMgmtTable({
                               </div>
                            </TableCell>
                            <TableCell className="w-48 min-w-[192px]">
-                              <Link
-                                 href={`/admin/volunteer/${volunteer.id}`}
-                                 className="flex items-center space-x-3"
-                              >
-                                 <div className="flex-shrink-0">
-                                    {volunteer.profileImage ? (
-                                       <Image
-                                          urlEndpoint={
-                                             config.env.imagekit.urlEndpoint
-                                          }
-                                          src={volunteer.profileImage}
-                                          alt={volunteer.fullName}
-                                          width={70}
-                                          height={70}
-                                          className="aspect-square h-10 w-10 rounded-full object-cover"
-                                       />
-                                    ) : (
-                                       <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
-                                          <span className="text-sm font-medium">
-                                             {volunteer.fullName
-                                                .split(" ")
-                                                .map((n: string) => n[0])
-                                                .join("")
-                                                .toUpperCase()}
-                                          </span>
-                                       </div>
-                                    )}
-                                 </div>
-                                 <div className="min-w-0 flex-1">
-                                    <div className="truncate font-medium">
-                                       {volunteer.fullName}
+                              <div className="flex items-center">
+                                 <Link
+                                    href={`/admin/volunteer/${volunteer.id}`}
+                                    className="flex items-center space-x-2"
+                                 >
+                                    <div className="flex-shrink-0">
+                                       {volunteer.profileImage ? (
+                                          <Image
+                                             urlEndpoint={
+                                                config.env.imagekit.urlEndpoint
+                                             }
+                                             src={volunteer.profileImage}
+                                             alt={volunteer.fullName}
+                                             width={70}
+                                             height={70}
+                                             className="aspect-square h-10 w-10 rounded-full object-cover"
+                                          />
+                                       ) : (
+                                          <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
+                                             <span className="text-sm font-medium">
+                                                {volunteer.fullName
+                                                   .split(" ")
+                                                   .map((n: string) => n[0])
+                                                   .join("")
+                                                   .toUpperCase()}
+                                             </span>
+                                          </div>
+                                       )}
                                     </div>
-                                    {/* <div className="text-sm text-muted-foreground">ID: {volunteer.id.slice(0, 8)}...</div> */}
-                                 </div>
-                              </Link>
+                                    <div className="min-w-0">
+                                       <div className="line-clamp-1 font-medium">
+                                          {volunteer.fullName}
+                                       </div>
+                                    </div>
+                                 </Link>
+                              </div>
                            </TableCell>
                            <TableCell className="w-48 min-w-[192px]">
-                              <div className="space-y-1">
-                                 <div className="flex items-center gap-2 text-sm">
-                                    <Mail className="text-muted-foreground h-3 w-3 flex-shrink-0" />
-                                    <span
-                                       className="truncate"
-                                       title={volunteer.email}
-                                    >
-                                       {volunteer.email}
-                                    </span>
-                                 </div>
-                                 <div className="flex items-center gap-2 text-sm">
-                                    <Phone className="text-muted-foreground h-3 w-3 flex-shrink-0" />
-                                    <span
-                                       className="truncate"
-                                       title={volunteer.phoneNumber}
-                                    >
-                                       {volunteer.phoneNumber}
-                                    </span>
-                                 </div>
+                              <div className="flex items-center justify-center text-sm">
+                                 <span
+                                    className="line-clamp-1 text-center"
+                                    title={volunteer.email}
+                                 >
+                                    {volunteer.email}
+                                 </span>
+                              </div>
+                           </TableCell>
+                           <TableCell className="w-32 min-w-[128px]">
+                              <div className="flex items-center justify-center text-sm">
+                                 <span
+                                    className="line-clamp-1 text-center"
+                                    title={volunteer.phoneNumber}
+                                 >
+                                    {volunteer.phoneNumber}
+                                 </span>
                               </div>
                            </TableCell>
                            <TableCell className="w-24 min-w-[96px]">
-                              <div className="flex items-center gap-2">
-                                 <span className="truncate text-sm capitalize">
+                              <div className="flex items-center justify-center">
+                                 <span className="line-clamp-1 text-sm capitalize text-center">
                                     {volunteer.gender?.toLowerCase() ||
                                        "Not specified"}
                                  </span>
                               </div>
                            </TableCell>
-                           <TableCell className="w-40 min-w-[160px]">
-                              <div className="space-y-2">
-                                 <div className="flex items-center gap-2">
-                                    <Badge
-                                       variant="secondary"
-                                       className="bg-green-100 text-green-800 hover:bg-green-100"
-                                    >
-                                       {stats.approved}
-                                    </Badge>
-                                    <Badge
-                                       variant="secondary"
-                                       className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
-                                    >
-                                       {stats.pending}
-                                    </Badge>
-                                    <Badge
-                                       variant="secondary"
-                                       className="bg-red-100 text-red-800 hover:bg-red-100"
-                                    >
-                                       {stats.rejected}
-                                    </Badge>
-                                 </div>
-                                 <div className="text-muted-foreground text-xs">
-                                    Total: {stats.total} enrollments
-                                 </div>
-                              </div>
-                           </TableCell>
                            <TableCell className="w-24 min-w-[96px]">
-                              <Select
-                                 value={
-                                    pendingRoles[volunteer.id] ?? volunteer.role
-                                 }
-                                 onValueChange={(newRole) =>
-                                    handleLocalRoleChange(volunteer.id, newRole)
-                                 }
-                              >
-                                 <SelectTrigger className="w-full">
-                                    <SelectValue>
-                                       <span className="text-sm">
-                                          {pendingRoles[volunteer.id] ??
-                                             volunteer.role}
-                                       </span>
-                                    </SelectValue>
-                                 </SelectTrigger>
-                                 <SelectContent>
-                                    {allowedRoles.includes("USER") && (
-                                       <SelectItem value="USER">
-                                          User
-                                       </SelectItem>
-                                    )}
-                                    {allowedRoles.includes("VOLUNTEER") && (
-                                       <SelectItem value="VOLUNTEER">
-                                          Volunteer
-                                       </SelectItem>
-                                    )}
-                                    {allowedRoles.includes("ADMIN") && (
-                                       <SelectItem value="ADMIN">
-                                          Admin
-                                       </SelectItem>
-                                    )}
-                                    {allowedRoles.includes("ORGANIZER") && (
-                                       <SelectItem value="ORGANIZER">
-                                          Organizer
-                                       </SelectItem>
-                                    )}
-                                 </SelectContent>
-                              </Select>
+                              <div className="flex justify-center">
+                                 <Select
+                                    value={
+                                       pendingRoles[volunteer.id] ?? volunteer.role
+                                    }
+                                    onValueChange={(newRole) =>
+                                       handleLocalRoleChange(volunteer.id, newRole)
+                                    }
+                                 >
+                                    <SelectTrigger className="w-full">
+                                       <SelectValue>
+                                          <span className="text-sm">
+                                             {pendingRoles[volunteer.id] ??
+                                                volunteer.role}
+                                          </span>
+                                       </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                       {allowedRoles.includes("USER") && (
+                                          <SelectItem value="USER">
+                                             User
+                                          </SelectItem>
+                                       )}
+                                       {allowedRoles.includes("VOLUNTEER") && (
+                                          <SelectItem value="VOLUNTEER">
+                                             Volunteer
+                                          </SelectItem>
+                                       )}
+                                       {allowedRoles.includes("ADMIN") && (
+                                          <SelectItem value="ADMIN">
+                                             Admin
+                                          </SelectItem>
+                                       )}
+                                       {allowedRoles.includes("ORGANIZER") && (
+                                          <SelectItem value="ORGANIZER">
+                                             Organizer
+                                          </SelectItem>
+                                       )}
+                                    </SelectContent>
+                                 </Select>
+                              </div>
                            </TableCell>
                         </TableRow>
                      );

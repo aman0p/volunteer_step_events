@@ -144,22 +144,22 @@ export default function Profile() {
 
                {/* Rejection Reason Display */}
                {hasRejectedRequest && (
-                  <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950/20">
+                  <div className="mt-4 rounded-lg border-2 border-dashed border-destructive/50 backdrop-blur-2xl bg-destructive/10 p-4 font-light">
                      <div className="flex items-start gap-3">
-                        <XCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600 dark:text-red-400" />
+                        <XCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
                         <div className="flex-1">
                            {rejectionReason ? (
-                              <p className="mb-2 text-sm text-red-700 dark:text-red-300">
-                                 <span className="font-medium">Reason:</span>{" "}
+                              <p className="mb-2 text-sm text-red-600">
+                                 Reason:&nbsp;
                                  {rejectionReason}
                               </p>
                            ) : (
-                              <p className="mb-2 text-sm text-red-700 dark:text-red-300">
+                              <p className="mb-2 text-sm text-red-600">
                                  No specific reason was provided for the
                                  rejection.
                               </p>
                            )}
-                           <p className="mb-3 text-xs text-red-600 dark:text-red-400">
+                           <p className="mb-3 text-xs text-red-600">
                               You can update your profile and submit a new
                               verification request.
                            </p>
@@ -197,7 +197,7 @@ export default function Profile() {
                                  ) : (
                                     <RefreshCw className="h-4 w-4" />
                                  )}
-                                 Refresh Status
+                                 <span className="hidden md:block">Refresh Status</span>
                               </Button>
                            </div>
                         </div>

@@ -42,6 +42,13 @@ export default async function EnrollmentsPage() {
                profileImage: true,
             },
          },
+         eventRole: {
+            select: {
+               id: true,
+               name: true,
+               payout: true,
+            },
+         },
       },
       orderBy: { enrolledAt: "desc" },
    });

@@ -280,8 +280,6 @@ export default function VerificationTable({
          year: "numeric",
          month: "short",
          day: "numeric",
-         hour: "2-digit",
-         minute: "2-digit",
       }).format(date);
    };
 
@@ -339,29 +337,30 @@ export default function VerificationTable({
                <TableHeader className="border-b border-black bg-black/10">
                   <TableRow>
                      <TableHead className="w-10 min-w-[40px]"></TableHead>
-                     <TableHead className="w-10 min-w-[40px]">
-                        <Checkbox
-                           checked={isAllSelected}
-                           onCheckedChange={handleSelectAll}
-                        />
+                     <TableHead className="w-10 min-w-[40px] text-center">
+                        <div className="flex justify-center">
+                           <Checkbox
+                              checked={isAllSelected}
+                              onCheckedChange={handleSelectAll}
+                           />
+                        </div>
                      </TableHead>
-                     <TableHead className="w-48 min-w-[192px]">
+                     <TableHead className="w-48 min-w-[192px] pl-7">
                         Volunteer Name
                      </TableHead>
-                     <TableHead className="w-30 min-w-[120px]">
+                     <TableHead className="w-30 min-w-[120px] text-center">
                         Email ID
                      </TableHead>
-                     <TableHead className="w-30 min-w-[120px]">
+                     <TableHead className="w-30 min-w-[120px] text-center">
                         Phone No
                      </TableHead>
-                     <TableHead className="w-24 min-w-[96px]">Status</TableHead>
-                     <TableHead className="w-40 min-w-[160px]">
+                     <TableHead className="w-40 min-w-[160px] text-center">
                         Submitted
                      </TableHead>
-                     <TableHead className="w-48 min-w-[192px]">
+                     <TableHead className="w-48 min-w-[192px] text-center">
                         Actions
                      </TableHead>
-                     <TableHead className="w-10 min-w-[40px]"></TableHead>
+                     <TableHead className="w-10 min-w-[40px] text-center"></TableHead>
                   </TableRow>
                </TableHeader>
                <TableBody>
@@ -373,13 +372,15 @@ export default function VerificationTable({
                            </div>
                         </TableCell>
                         <TableCell className="w-10 min-w-[40px]">
-                           <Checkbox
-                              checked={selectedRows.includes(request.id)}
-                              onCheckedChange={(checked) =>
-                                 handleSelectRow(request.id, checked as boolean)
-                              }
-                              disabled={request.status !== "PENDING"}
-                           />
+                           <div className="flex justify-center">
+                              <Checkbox
+                                 checked={selectedRows.includes(request.id)}
+                                 onCheckedChange={(checked) =>
+                                    handleSelectRow(request.id, checked as boolean)
+                                 }
+                                 disabled={request.status !== "PENDING"}
+                              />
+                           </div>
                         </TableCell>
                         <TableCell className="min-w-[192px]">
                            <Link
@@ -421,81 +422,81 @@ export default function VerificationTable({
                            </Link>
                         </TableCell>
                         <TableCell className="min-w-[120px] text-sm">
-                           <div className="truncate" title={request.user.email}>
-                              {request.user.email}
+                           <div className="flex items-center justify-center">
+                              <div className="line-clamp-1 text-center" title={request.user.email}>
+                                 {request.user.email}
+                              </div>
                            </div>
                         </TableCell>
                         <TableCell className="min-w-[120px] text-sm">
-                           <div
-                              className="truncate"
-                              title={request.user.phoneNumber}
-                           >
-                              {request.user.phoneNumber}
+                           <div className="flex items-center justify-center">
+                              <div
+                                 className="line-clamp-1 text-center"
+                                 title={request.user.phoneNumber}
+                              >
+                                 {request.user.phoneNumber}
+                              </div>
                            </div>
                         </TableCell>
-                        <TableCell className="min-w-[96px]">
-                           <span
-                              className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                                 request.status === "PENDING"
-                                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400"
-                                    : "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
-                              }`}
-                           >
-                              {request.status}
-                           </span>
-                        </TableCell>
                         <TableCell className="text-muted-foreground min-w-[160px] text-sm">
-                           {formatDate(request.submittedAt)}
+                           <div className="flex items-center justify-center">
+                              <span className="line-clamp-1 text-center">
+                                 {formatDate(request.submittedAt)}
+                              </span>
+                           </div>
                         </TableCell>
                         <TableCell className="min-w-[192px]">
-                           {request.status === "PENDING" ? (
-                              <div className="flex items-center gap-2">
-                                 <Button
-                                    size="sm"
-                                    variant="default"
-                                    onClick={() => handleApprove(request.id)}
-                                    loading={approveProcessingIds.includes(
-                                       request.id
-                                    )}
-                                    className="h-8 w-20 px-2 text-xs"
-                                 >
-                                    Approve
-                                 </Button>
-                                 <Button
-                                    size="sm"
-                                    variant="destructive"
-                                    onClick={() => handleReject(request.id)}
-                                    loading={rejectProcessingIds.includes(
-                                       request.id
-                                    )}
-                                    className="h-8 w-20 px-2 text-xs"
-                                 >
-                                    Reject
-                                 </Button>
-                              </div>
-                           ) : (
-                              <div className="flex items-center gap-2">
-                                 <span className="text-sm font-medium text-red-600 dark:text-red-400">
-                                    Rejected
-                                 </span>
-                                 {request.rejectionReason && (
-                                    <span
-                                       className="text-muted-foreground max-w-32 truncate text-xs"
-                                       title={request.rejectionReason}
+                           <div className="flex justify-center">
+                              {request.status === "PENDING" ? (
+                                 <div className="flex items-center gap-2">
+                                    <Button
+                                       size="sm"
+                                       variant="default"
+                                       onClick={() => handleApprove(request.id)}
+                                       loading={approveProcessingIds.includes(
+                                          request.id
+                                       )}
+                                       className="h-8 w-20 px-2 text-xs"
                                     >
-                                       Reason: {request.rejectionReason}
+                                       Approve
+                                    </Button>
+                                    <Button
+                                       size="sm"
+                                       variant="destructive"
+                                       onClick={() => handleReject(request.id)}
+                                       loading={rejectProcessingIds.includes(
+                                          request.id
+                                       )}
+                                       className="h-8 w-20 px-2 text-xs"
+                                    >
+                                       Reject
+                                    </Button>
+                                 </div>
+                              ) : (
+                                 <div className="flex items-center gap-2">
+                                    <span className="text-sm font-medium text-red-600 dark:text-red-400">
+                                       Rejected
                                     </span>
-                                 )}
-                              </div>
-                           )}
+                                    {request.rejectionReason && (
+                                       <span
+                                          className="text-muted-foreground max-w-32 truncate text-xs"
+                                          title={request.rejectionReason}
+                                       >
+                                          Reason: {request.rejectionReason}
+                                       </span>
+                                    )}
+                                 </div>
+                              )}
+                           </div>
                         </TableCell>
                         <TableCell className="min-w-[40px]">
-                           <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                 <Button variant="ghost" size="icon">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                 </Button>
-                              </DropdownMenuTrigger>
+                           <div className="flex justify-center">
+                              <DropdownMenu>
+                                 <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon">
+                                       <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                 </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                  <DropdownMenuItem asChild>
                                     <Link
@@ -517,6 +518,7 @@ export default function VerificationTable({
                                  )}
                               </DropdownMenuContent>
                            </DropdownMenu>
+                           </div>
                         </TableCell>
                      </TableRow>
                   ))}
